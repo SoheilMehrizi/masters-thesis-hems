@@ -1,0 +1,102 @@
+[
+  {
+    "check": "version_and_provenance",
+    "status": "PASS",
+    "evidence": {
+      "commit": "fd86484b8b438f03eb40c3ec06dc90caa349842d",
+      "source_hashes_verified": 82,
+      "python": "3.11.9"
+    }
+  },
+  {
+    "check": "artifact_integrity",
+    "status": "PASS",
+    "evidence": {
+      "verified_files": 29
+    }
+  },
+  {
+    "check": "official_dataset",
+    "status": "PASS",
+    "evidence": {
+      "official_files_verified": 6,
+      "building_id": "resstock-amy2018-2021-release-1-102040",
+      "official_pricing": null,
+      "official_carbon_intensity": null
+    }
+  },
+  {
+    "check": "schema_and_data",
+    "status": "PASS",
+    "evidence": {
+      "custom_rows": 8760,
+      "frozen_rows": 8760,
+      "reference_paths_verified": true
+    }
+  },
+  {
+    "check": "lstm_artifact",
+    "status": "PASS",
+    "evidence": {
+      "lookback": 13,
+      "weights_sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1"
+    }
+  },
+  {
+    "check": "environment_initialization",
+    "status": "PASS",
+    "evidence": {
+      "class": "LSTMDynamicsBuilding",
+      "action_count": 3,
+      "observation_count": 44,
+      "ratings": {
+        "cooling_device": {
+          "nominal_power": 3.1479172706604004
+        },
+        "heating_device": {
+          "nominal_power": 7.029416561126709
+        },
+        "pv": {
+          "nominal_power": 10.08
+        },
+        "electrical_storage": {
+          "nominal_power": 1.61
+        }
+      },
+      "battery_capacity_kwh": 9.899999999999999
+    }
+  },
+  {
+    "check": "bounded_rollout",
+    "status": "PASS",
+    "evidence": {
+      "transitions": 48,
+      "final_temperature_C": 18.47085189819336
+    }
+  },
+  {
+    "check": "determinism",
+    "status": "PASS",
+    "evidence": {
+      "comparison": "Exact equality of all actions, observations, rewards, temperatures and termination flags",
+      "seed": 2022
+    }
+  },
+  {
+    "check": "thermal_response",
+    "status": "PASS",
+    "evidence": {
+      "transitions": 48,
+      "first_dynamic_controlled_step": 14,
+      "maximum_heating_temperature_difference_C": 5.706839561462402,
+      "numerical_threshold_C": 8.62184097059071e-05,
+      "agent_temperature_matches_internal_prediction": true,
+      "scope": "Frozen scenario, winter availability smoke test; not the 72-transition reference campaign."
+    }
+  },
+  {
+    "check": "audit_completeness",
+    "status": "PASS",
+    "evidence": "All nine required checks attempted and individually classified."
+  }
+]

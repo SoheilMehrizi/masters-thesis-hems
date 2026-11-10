@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local research runtimes and recovered binary artifacts
+.python/
+.tools/
+.uv-cache/
+.build-tmp/
+vendor/
+data/recovered/
+exports/*.zip

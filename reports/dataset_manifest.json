@@ -1,0 +1,223 @@
+{
+  "archive_sha256": "615825f4527dc9ebf06bf304d7b145ed24e7e5283889ba2cdac4949a8ee452e1",
+  "files": [
+    {
+      "path": "data/recovered/custom_alameda/action.csv",
+      "bytes": 198,
+      "sha256": "c930e03371fd0b2047d650ff2ee2ddb80bebda7d5ddab454abf5dec0ffab86b6",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/building.csv",
+      "bytes": 780718,
+      "sha256": "597a1e23f0ef53a99359b4f55889adddfad225bb0fad7fea220a70ed84d32237",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/ev_schedule.csv",
+      "bytes": 166643,
+      "sha256": "4893bf87aa3ee0e281e23bbbc99ec7d17123176fc9af2e4f133b161a69d0f5de",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/forecast.csv",
+      "bytes": 215,
+      "sha256": "8fa6e79471823f953af58c7309ba9c320866ec82e32829dd665d0efc2b0167b9",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/kpis.csv",
+      "bytes": 61026,
+      "sha256": "4035f11a9318eac5e2520e1ed2c5ad4617f3beca1d309b5f947e4a92a23db46d",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/preference.csv",
+      "bytes": 166643,
+      "sha256": "de574c1d6388b6f13ec664f9a0558b77f77a76bec2c3ee10149a86dfc30bdfc0",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/provenance.json",
+      "bytes": 494,
+      "sha256": "59d424191b964628aabbbe3ce636ad7653b6a9c0296217e22e54892f44a9534d",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/resstock-amy2018-2021-release-1-102040.pth",
+      "bytes": 8966,
+      "sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/schema.json",
+      "bytes": 13281,
+      "sha256": "8745722212ec54232ca2c09f5f3f848e83b9ac621dfcd9de95dee43f336fcb4f",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/synthetic_tariff.csv",
+      "bytes": 184077,
+      "sha256": "dbe0d9932a95c2646c897e43402cc0804a30509bdf11defd22748a7539e61251",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/custom_alameda/weather.csv",
+      "bytes": 1067810,
+      "sha256": "e2e8fa839cfc38fd99ca1aa0a4ea74f4d2659267a432f263ab1245bcfefffc08",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/demo.py",
+      "bytes": 1182,
+      "sha256": "136f4f6a0dc0631c35a1d818d2d7cedbbba586df7373ac59a1749a649b9b7604",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/environment.json",
+      "bytes": 492,
+      "sha256": "9dc38eb75729e6281eaeb4f21122015109316a9fb9d2f8132a73e76fca7e1b9b",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/extensions.py",
+      "bytes": 7346,
+      "sha256": "e9b4c4eed5b639a95c80d041ead8712cd263627f82d6b40af613d35ad45b26ec",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/freeze_sizing.py",
+      "bytes": 2362,
+      "sha256": "14d1189062ad212d4bda7086f54df00a70b74931306ee28a727871751f6e472d",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/frozen_alameda/building_with_sized_pv.csv",
+      "bytes": 780718,
+      "sha256": "597a1e23f0ef53a99359b4f55889adddfad225bb0fad7fea220a70ed84d32237",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/frozen_alameda/resstock-amy2018-2021-release-1-102040.pth",
+      "bytes": 8966,
+      "sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/frozen_alameda/schema.json",
+      "bytes": 11639,
+      "sha256": "80fa6992047b22f488c187c22cffb7d39cf9af6b7209ffda064e5cd41194a610",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/frozen_alameda/sizing.json",
+      "bytes": 4196,
+      "sha256": "072e035efb41b5b81a8b0ea3fd6373e9a12acb9805568239c237cadddc7bb6c5",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/frozen_alameda/weather.csv",
+      "bytes": 1067810,
+      "sha256": "e2e8fa839cfc38fd99ca1aa0a4ea74f4d2659267a432f263ab1245bcfefffc08",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/manifest.json",
+      "bytes": 16133,
+      "sha256": "2cc86e5c308e4d743c577aac1d273db5cf262ec9f4156adfaea29a3ce6d24df1",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/manifest.py",
+      "bytes": 1920,
+      "sha256": "6c571933375ebf2244780d8305aa5361bed9a3eb03507827610298ee1643ef91",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/probe.py",
+      "bytes": 5599,
+      "sha256": "90e822166e5b321282a486536e79d881651dd53b01402605e4a186afb7bd607c",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/README.md",
+      "bytes": 4214,
+      "sha256": "34592bd9d837e82b3e1ca31c27e5ba798048fa1520adcd2ad8c55b5e1c3fb622",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/requirements-lock.txt",
+      "bytes": 561,
+      "sha256": "33723fd2263ffc886d0d1b580a5c4b6f0b22a363328bced1eea845835d7a63ac",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/scan.py",
+      "bytes": 1249,
+      "sha256": "014323ce39280a90d0c32a1843e1d95e7da12dc96810506ea79f66cd5e03b996",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/targeted.py",
+      "bytes": 1810,
+      "sha256": "a5e350c4720a543bfcba72f3e7af80ea4fedebdfed28e63148363049c1d3119c",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/verification.json",
+      "bytes": 2281,
+      "sha256": "513cbe8e3fcf669c277061b57afc51e5758061cfc931b681e816d36d5dcfa04c",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/verify.py",
+      "bytes": 4750,
+      "sha256": "45967b3ecec032125c744e154eb24a539413e43a212c47aec06abd6c362d4e86",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": true
+    },
+    {
+      "path": "data/recovered/PACKAGE_MANIFEST.json",
+      "bytes": 4385,
+      "sha256": "4741fa45fd89dba96a309c152447696f5d6e8105cb8cb8cd6a73845d357920bb",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": false
+    },
+    {
+      "path": "data/recovered/PACKAGE_README_FA.txt",
+      "bytes": 851,
+      "sha256": "2561c788f072b9933cfadea14af6d7ce1fb7542c2dc264d5650b89772c2cdcb9",
+      "source": "exports/custom_alameda_complete.zip",
+      "package_manifest_verified": false
+    }
+  ],
+  "note": "Package integrity verifies consistency, not independent provenance authenticity."
+}

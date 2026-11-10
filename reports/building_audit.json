@@ -1,0 +1,428 @@
+{
+  "custom": {
+    "rows": 8760,
+    "columns": [
+      "month",
+      "hour",
+      "day_type",
+      "daylight_savings_status",
+      "indoor_dry_bulb_temperature",
+      "indoor_relative_humidity",
+      "non_shiftable_load",
+      "dhw_demand",
+      "cooling_demand",
+      "heating_demand",
+      "solar_generation",
+      "occupant_count",
+      "indoor_dry_bulb_temperature_cooling_set_point",
+      "indoor_dry_bulb_temperature_heating_set_point",
+      "hvac_mode"
+    ],
+    "seconds_per_step": 3600,
+    "hvac_modes": [
+      3
+    ],
+    "references": [
+      {
+        "field": "energy_simulation",
+        "file": "building.csv",
+        "sha256": "597a1e23f0ef53a99359b4f55889adddfad225bb0fad7fea220a70ed84d32237"
+      },
+      {
+        "field": "weather",
+        "file": "weather.csv",
+        "sha256": "e2e8fa839cfc38fd99ca1aa0a4ea74f4d2659267a432f263ab1245bcfefffc08"
+      },
+      {
+        "field": "pricing",
+        "file": "synthetic_tariff.csv",
+        "sha256": "dbe0d9932a95c2646c897e43402cc0804a30509bdf11defd22748a7539e61251"
+      },
+      {
+        "field": "filename",
+        "file": "resstock-amy2018-2021-release-1-102040.pth",
+        "sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1"
+      },
+      {
+        "field": "charger_simulation",
+        "file": "ev_schedule.csv",
+        "sha256": "4893bf87aa3ee0e281e23bbbc99ec7d17123176fc9af2e4f133b161a69d0f5de"
+      }
+    ],
+    "building_definition": {
+      "type": "citylearn.building.LSTMDynamicsBuilding",
+      "include": true,
+      "energy_simulation": "building.csv",
+      "weather": "weather.csv",
+      "carbon_intensity": null,
+      "pricing": "synthetic_tariff.csv",
+      "inactive_observations": [
+        "dhw_storage_soc",
+        "dhw_storage_electricity_consumption"
+      ],
+      "inactive_actions": [
+        "dhw_storage"
+      ],
+      "cooling_device": {
+        "type": "citylearn.energy_model.HeatPump",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 3.1479172706604004,
+          "efficiency": 0.2704278632024285,
+          "target_cooling_temperature": 9.112835896072855,
+          "target_heating_temperature": 48.52139316012143
+        }
+      },
+      "heating_device": {
+        "type": "citylearn.energy_model.HeatPump",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 7.029416561126709,
+          "efficiency": 0.2868753172307438,
+          "target_cooling_temperature": 9.606259516922314,
+          "target_heating_temperature": 49.34376586153719
+        }
+      },
+      "dhw_device": {
+        "type": "citylearn.energy_model.ElectricHeater",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 13.984025001525879,
+          "efficiency": 0.9109843900920663
+        }
+      },
+      "cooling_storage": null,
+      "heating_storage": null,
+      "dhw_storage": null,
+      "electrical_storage": {
+        "type": "citylearn.energy_model.Battery",
+        "autosize": false,
+        "attributes": {
+          "capacity": 9.899999999999999,
+          "nominal_power": 1.61,
+          "efficiency": 0.9288256259699021,
+          "depth_of_discharge": 1.0,
+          "loss_coefficient": 0.0015981699999999543,
+          "capacity_loss_coefficient": 4.242882921613989e-05,
+          "power_efficiency_curve": [
+            [
+              0.0,
+              0.8062355196278347
+            ],
+            [
+              0.28603203246237763,
+              0.8526768009263298
+            ],
+            [
+              0.6860320324623777,
+              0.9169426084718713
+            ],
+            [
+              0.7860320324623776,
+              0.9288256259699021
+            ],
+            [
+              1.0,
+              0.8924245872034577
+            ]
+          ],
+          "capacity_power_curve": [
+            [
+              0.0,
+              0.9680160162311888
+            ],
+            [
+              0.7860320324623776,
+              0.9180160162311888
+            ],
+            [
+              1.0,
+              0.23603203246237767
+            ]
+          ]
+        }
+      },
+      "pv": {
+        "type": "citylearn.energy_model.PV",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 10.08,
+          "efficiency": 0.9590970172265051,
+          "generation_mode": "per_kw"
+        }
+      },
+      "dynamics": {
+        "type": "citylearn.dynamics.LSTMDynamics",
+        "attributes": {
+          "input_size": null,
+          "hidden_size": 8,
+          "num_layers": 2,
+          "lookback": 13,
+          "filename": "resstock-amy2018-2021-release-1-102040.pth",
+          "input_normalization_minimum": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            8.263237554872054
+          ],
+          "input_normalization_maximum": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            21.15806369653833,
+            26.33786999296823,
+            1007.5,
+            465.5,
+            28.9,
+            3.0,
+            34.3472898111364
+          ],
+          "input_observation_names": [
+            "month_sin",
+            "month_cos",
+            "day_type_sin",
+            "day_type_cos",
+            "hour_sin",
+            "hour_cos",
+            "cooling_demand",
+            "heating_demand",
+            "direct_solar_irradiance",
+            "diffuse_solar_irradiance",
+            "outdoor_dry_bulb_temperature",
+            "occupant_count",
+            "indoor_dry_bulb_temperature"
+          ]
+        }
+      },
+      "chargers": {
+        "audit_charger": {
+          "type": "citylearn.electric_vehicle_charger.Charger",
+          "charger_simulation": "ev_schedule.csv",
+          "autosize": false,
+          "attributes": {
+            "nominal_power": 7.2,
+            "efficiency": 0.95,
+            "charger_type": 0,
+            "max_charging_power": 7.2,
+            "min_charging_power": 0.0,
+            "max_discharging_power": 0.0,
+            "min_discharging_power": 0.0
+          }
+        }
+      }
+    },
+    "calendar": "Hourly non-leap 8760-row simulation calendar; no verified civil timezone or measurement timestamps."
+  },
+  "frozen": {
+    "rows": 8760,
+    "columns": [
+      "month",
+      "hour",
+      "day_type",
+      "daylight_savings_status",
+      "indoor_dry_bulb_temperature",
+      "indoor_relative_humidity",
+      "non_shiftable_load",
+      "dhw_demand",
+      "cooling_demand",
+      "heating_demand",
+      "solar_generation",
+      "occupant_count",
+      "indoor_dry_bulb_temperature_cooling_set_point",
+      "indoor_dry_bulb_temperature_heating_set_point",
+      "hvac_mode"
+    ],
+    "seconds_per_step": 3600,
+    "hvac_modes": [
+      3
+    ],
+    "references": [
+      {
+        "field": "energy_simulation",
+        "file": "building_with_sized_pv.csv",
+        "sha256": "597a1e23f0ef53a99359b4f55889adddfad225bb0fad7fea220a70ed84d32237"
+      },
+      {
+        "field": "weather",
+        "file": "weather.csv",
+        "sha256": "e2e8fa839cfc38fd99ca1aa0a4ea74f4d2659267a432f263ab1245bcfefffc08"
+      },
+      {
+        "field": "filename",
+        "file": "resstock-amy2018-2021-release-1-102040.pth",
+        "sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1"
+      }
+    ],
+    "building_definition": {
+      "type": "citylearn.building.LSTMDynamicsBuilding",
+      "include": true,
+      "energy_simulation": "building_with_sized_pv.csv",
+      "weather": "weather.csv",
+      "carbon_intensity": null,
+      "pricing": null,
+      "inactive_observations": [
+        "dhw_storage_soc",
+        "dhw_storage_electricity_consumption"
+      ],
+      "inactive_actions": [
+        "dhw_storage"
+      ],
+      "cooling_device": {
+        "type": "citylearn.energy_model.HeatPump",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 3.1479172706604004,
+          "efficiency": 0.2704278632024285,
+          "target_cooling_temperature": 9.112835896072855,
+          "target_heating_temperature": 48.52139316012143
+        }
+      },
+      "heating_device": {
+        "type": "citylearn.energy_model.HeatPump",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 7.029416561126709,
+          "efficiency": 0.2868753172307438,
+          "target_cooling_temperature": 9.606259516922314,
+          "target_heating_temperature": 49.34376586153719
+        }
+      },
+      "dhw_device": {
+        "type": "citylearn.energy_model.ElectricHeater",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 13.984025001525879,
+          "efficiency": 0.9109843900920663
+        }
+      },
+      "cooling_storage": null,
+      "heating_storage": null,
+      "dhw_storage": null,
+      "electrical_storage": {
+        "type": "citylearn.energy_model.Battery",
+        "autosize": false,
+        "attributes": {
+          "capacity": 9.899999999999999,
+          "nominal_power": 1.61,
+          "efficiency": 0.9288256259699021,
+          "depth_of_discharge": 1.0,
+          "loss_coefficient": 0.0015981699999999543,
+          "capacity_loss_coefficient": 4.242882921613989e-05,
+          "power_efficiency_curve": [
+            [
+              0.0,
+              0.8062355196278347
+            ],
+            [
+              0.28603203246237763,
+              0.8526768009263298
+            ],
+            [
+              0.6860320324623777,
+              0.9169426084718713
+            ],
+            [
+              0.7860320324623776,
+              0.9288256259699021
+            ],
+            [
+              1.0,
+              0.8924245872034577
+            ]
+          ],
+          "capacity_power_curve": [
+            [
+              0.0,
+              0.9680160162311888
+            ],
+            [
+              0.7860320324623776,
+              0.9180160162311888
+            ],
+            [
+              1.0,
+              0.23603203246237767
+            ]
+          ]
+        }
+      },
+      "pv": {
+        "type": "citylearn.energy_model.PV",
+        "autosize": false,
+        "attributes": {
+          "nominal_power": 10.08,
+          "efficiency": 0.9590970172265051,
+          "generation_mode": "per_kw"
+        }
+      },
+      "dynamics": {
+        "type": "citylearn.dynamics.LSTMDynamics",
+        "attributes": {
+          "input_size": null,
+          "hidden_size": 8,
+          "num_layers": 2,
+          "lookback": 13,
+          "filename": "resstock-amy2018-2021-release-1-102040.pth",
+          "input_normalization_minimum": [
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            -1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            8.263237554872054
+          ],
+          "input_normalization_maximum": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            21.15806369653833,
+            26.33786999296823,
+            1007.5,
+            465.5,
+            28.9,
+            3.0,
+            34.3472898111364
+          ],
+          "input_observation_names": [
+            "month_sin",
+            "month_cos",
+            "day_type_sin",
+            "day_type_cos",
+            "hour_sin",
+            "hour_cos",
+            "cooling_demand",
+            "heating_demand",
+            "direct_solar_irradiance",
+            "diffuse_solar_irradiance",
+            "outdoor_dry_bulb_temperature",
+            "occupant_count",
+            "indoor_dry_bulb_temperature"
+          ]
+        }
+      }
+    },
+    "calendar": "Hourly non-leap 8760-row simulation calendar; no verified civil timezone or measurement timestamps."
+  }
+}

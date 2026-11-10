@@ -1,0 +1,17 @@
+{
+  "citylearn_source": "vendor/CityLearn",
+  "expected_commit": "fd86484b8b438f03eb40c3ec06dc90caa349842d",
+  "expected_version": "3.2.0",
+  "dataset": "ca_alameda_county_neighborhood",
+  "building_id": "resstock-amy2018-2021-release-1-102040",
+  "schema_path": "data/recovered/custom_alameda/schema.json",
+  "thermal_schema_path": "data/recovered/frozen_alameda/schema.json",
+  "python_environment": ".venv",
+  "random_seed": 2022,
+  "simulation_start_time_step": 0,
+  "simulation_end_time_step": 48,
+  "interface": "flat",
+  "render_mode": "none",
+  "strict_artifact_validation": true,
+  "torch_threads": 1
+}

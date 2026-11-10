@@ -1,0 +1,87 @@
+{
+  "class": "LSTMDynamicsBuilding",
+  "action_names": [
+    [
+      "electrical_storage",
+      "cooling_or_heating_device",
+      "electric_vehicle_storage_audit_charger"
+    ]
+  ],
+  "observation_names": [
+    [
+      "month",
+      "hour",
+      "day_type",
+      "outdoor_dry_bulb_temperature",
+      "outdoor_relative_humidity",
+      "diffuse_solar_irradiance",
+      "direct_solar_irradiance",
+      "outdoor_dry_bulb_temperature_predicted_1",
+      "outdoor_dry_bulb_temperature_predicted_2",
+      "outdoor_dry_bulb_temperature_predicted_3",
+      "outdoor_relative_humidity_predicted_1",
+      "outdoor_relative_humidity_predicted_2",
+      "outdoor_relative_humidity_predicted_3",
+      "diffuse_solar_irradiance_predicted_1",
+      "diffuse_solar_irradiance_predicted_2",
+      "diffuse_solar_irradiance_predicted_3",
+      "direct_solar_irradiance_predicted_1",
+      "direct_solar_irradiance_predicted_2",
+      "direct_solar_irradiance_predicted_3",
+      "electricity_pricing",
+      "electricity_pricing_predicted_1",
+      "electricity_pricing_predicted_2",
+      "electricity_pricing_predicted_3",
+      "indoor_dry_bulb_temperature",
+      "indoor_relative_humidity",
+      "solar_generation",
+      "indoor_dry_bulb_temperature_cooling_set_point",
+      "indoor_dry_bulb_temperature_heating_set_point",
+      "comfort_band",
+      "indoor_dry_bulb_temperature_cooling_delta",
+      "indoor_dry_bulb_temperature_heating_delta",
+      "hvac_mode",
+      "power_outage",
+      "electrical_storage_soc",
+      "net_electricity_consumption",
+      "cooling_electricity_consumption",
+      "heating_electricity_consumption",
+      "dhw_electricity_consumption",
+      "electrical_storage_electricity_consumption",
+      "electric_vehicle_charger_audit_charger_connected_state",
+      "connected_electric_vehicle_at_charger_audit_charger_departure_time",
+      "connected_electric_vehicle_at_charger_audit_charger_required_soc_departure",
+      "connected_electric_vehicle_at_charger_audit_charger_soc",
+      "connected_electric_vehicle_at_charger_audit_charger_battery_capacity"
+    ]
+  ],
+  "action_bounds": [
+    {
+      "low": [
+        -1.0,
+        -1.0,
+        0.0
+      ],
+      "high": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "ratings": {
+    "cooling_device": {
+      "nominal_power": 3.1479172706604004
+    },
+    "heating_device": {
+      "nominal_power": 7.029416561126709
+    },
+    "pv": {
+      "nominal_power": 10.08
+    },
+    "electrical_storage": {
+      "nominal_power": 1.61
+    }
+  },
+  "battery_capacity_kwh": 9.899999999999999
+}

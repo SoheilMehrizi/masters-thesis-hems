@@ -1,0 +1,61 @@
+{
+  "path": "data\\recovered\\custom_alameda\\resstock-amy2018-2021-release-1-102040.pth",
+  "sha256": "7a7fde3e0ecf74e16735601bc4d60146588be6ff2c92e711b9cd01dc9c6c0ce1",
+  "lookback": 13,
+  "input_features": [
+    "month_sin",
+    "month_cos",
+    "day_type_sin",
+    "day_type_cos",
+    "hour_sin",
+    "hour_cos",
+    "cooling_demand",
+    "heating_demand",
+    "direct_solar_irradiance",
+    "diffuse_solar_irradiance",
+    "outdoor_dry_bulb_temperature",
+    "occupant_count",
+    "indoor_dry_bulb_temperature"
+  ],
+  "input_size": 13,
+  "state_shapes": {
+    "l_lstm.weight_ih_l0": [
+      32,
+      13
+    ],
+    "l_lstm.weight_hh_l0": [
+      32,
+      8
+    ],
+    "l_lstm.bias_ih_l0": [
+      32
+    ],
+    "l_lstm.bias_hh_l0": [
+      32
+    ],
+    "l_lstm.weight_ih_l1": [
+      32,
+      8
+    ],
+    "l_lstm.weight_hh_l1": [
+      32,
+      8
+    ],
+    "l_lstm.bias_ih_l1": [
+      32
+    ],
+    "l_lstm.bias_hh_l1": [
+      32
+    ],
+    "l_linear.weight": [
+      1,
+      8
+    ],
+    "l_linear.bias": [
+      1
+    ]
+  },
+  "output": "Min-max normalized indoor temperature, inverse transformed to degrees C.",
+  "warmup": "History buffer has lookback+1 slots; predictions require a full buffer.",
+  "visibility": "Predictions overwrite the controlled interval and are held in the next observation slot."
+}
