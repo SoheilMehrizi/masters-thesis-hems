@@ -4,14 +4,14 @@
 
 
 
-##1: Reproducible CityLearn HEMS research setup
+## 1:Reproducible CityLearn HEMS research setup
 
 This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 `fd86484b8b438f03eb40c3ec06dc90caa349842d`, recovery of the supplied Custom
 Alameda package, and bounded validation of building
 `resstock-amy2018-2021-release-1-102040` and its LSTM thermal model.
 
-## Start using the installed environment
+### Start using the installed environment
 
 Open PowerShell and run:
 
@@ -57,7 +57,7 @@ Each example run replaces `reports/example_rollout.json`; copy it if you need
 to retain multiple runs. Indices are zero-based simulation hours, not verified
 civil timestamps.
 
-## Use it from Python
+### Use it from Python
 
 Use `.venv/Scripts/python.exe` as your editor's Python interpreter. For example:
 
@@ -130,7 +130,7 @@ No NREL-PySAM installation is needed: the recovered scenarios contain fixed
 device ratings and the previously sized PV profile. PySAM would be required
 for relevant future autosizing work, which is outside this setup.
 
-## Scientific boundaries
+### Scientific boundaries
 
 The original Alameda dataset, recovered custom scenario and frozen sizing
 scenario are distinct artifacts. EV schedules and tariff inputs are synthetic;
@@ -154,7 +154,7 @@ setup result as evidence of a causal forecasting evaluation.
 No fault framework, controller, digital twin service, causal model or LLM agent
 is implemented. Later P1 tasks require separate authorization.
 
-## References
+### References
 
 - [Official release](https://github.com/citylearn-project/CityLearn/releases/tag/v3.2.0)
 - [Schema reference](https://www.citylearn.net/guides/schema_reference.html)
