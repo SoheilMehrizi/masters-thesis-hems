@@ -4,7 +4,7 @@
 
 
 
-## 1:Reproducible CityLearn HEMS research setup
+## Reproducible CityLearn HEMS research setup
 
 This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 `fd86484b8b438f03eb40c3ec06dc90caa349842d`, recovery of the supplied Custom
