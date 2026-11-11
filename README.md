@@ -1,4 +1,10 @@
-# Reproducible CityLearn HEMS research setup
+# Digital-Twin-Guided Diagnostic Adaptation for Fast and Reliable Preference-Aware Home Energy Management Using LLM-Based Multi-Agent Systems
+
+
+
+
+
+##1: Reproducible CityLearn HEMS research setup
 
 This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 `fd86484b8b438f03eb40c3ec06dc90caa349842d`, recovery of the supplied Custom
