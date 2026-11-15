@@ -1,0 +1,913 @@
+
+=== PDF PAGE 1 ===
+Jev versus Large Language Models for Energy-Audit
+Recommendations: Accuracy, Calibration, and Cost
+Eliseo Curcio
+QuarluxAI • New York
+Abstract. Decision models such as T ypeSafe’s Jev return probabilities for a fixed set of questions instead
+of generating text, and are positioned as fast, inexpensive alternatives to large language models (LLMs).
+We test this positioning on one task with auditor-recorded reference labels: predicting which of 19 energy-
+conservation-measure categories a certified auditor recorded for a New Y ork City building under Local Law
+87. In a pre-registered study of 7,296 buildings with a building-grouped split, we compare Jev 1.13 with
+four LLMs, each with and without retrieval of five similar audited buildings, and with three local baselines;
+two of the LLMs were added post hoc. In the measured configurations, Jev was far cheaper and faster than
+every LLM, but its probability quality depended on the comparator: without retrieval it was worse than
+Claude Sonnet 5.5 and GPT-6.1 Sol and better than Grok 4.7 and Kimi K3, and with retrieval no significant
+difference from Grok and Kimi was detected. A gradient-boosted model trained on the labeled audits gave
+the best probabilities, and an exploratory cascade that sent Jev’s uncertain buildings to an LLM showed
+no consistent advantage over random routing. Jev offers substantial eﬀiciency advantages on this task; its
+predictive competitiveness depends on the comparator and the metric.
+Key findings
+• Large efficiency gap. In the measured configurations, Jev was 29–90 × cheaper per prediction than
+four LLMs and roughly 10–70 × faster at the median.
+• Accuracy depends on the comparator. Without retrieval, Jev’s probabilities were significantly worse
+than Claude’s and GPT’s but significantly better than Grok’s and Kimi’s Holm 𝑝 ≤ 0.0024 ).
+• Simple baselines were strongest. No pretrained model without retrieval beat a constant base rate
+estimated from the training labels, and a gradient-boosted model trained on the audits had the best
+probabilities Brier 0.090 against 0.102–0.108 for every pretrained model with retrieval).
+• Cascades: no consistent routing gain. Sending Jev’s uncertain buildings to an LLM showed no con-
+sistent advantage over random routing with the tested uncertainty rule (exploratory).
+1 Introduction
+Automated workflows increasingly delegate small decisions to pretrained models: whether a document is
+relevant, which tool to call, whether a record needs review. T wo kinds of models compete for these steps.
+General-purpose large language models (LLMs) answer in text and must be asked to state a probability. A
+newer class of decision models, of which T ypeSafe’s Jev is a prominent example, accepts a description of a
+situation together with a set of typed questions and returns a probability for each answer directly [ 1, 2]. Jev
+is priced at $0.042 per million input tokens with no charge for output [ 6], a small fraction of LLM list prices,
+and is described as fast, inexpensive and accurate. Section 2 explains how it works and how it differs from
+an LLM.
+1
+
+
+=== PDF PAGE 2 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+0.10 0.12 0.14 0.16 0.18
+Brier score (lower is better)
+Kimi K3
+Jev
+Grok 4.7
+GPT-6.1 Sol
+Claude Sonnet 5.5
+XGBoost Base rate
+a   Probability quality, 200 test buildings
+no retrieval
+with retrieval
+$0.01 $0.10 $1.00
+API cost per 1,000 predictions (log scale)
+0.090
+0.095
+0.100
+0.105
+Brier score
+ClaudeGPT
+Jev
+Grok
+Kimi
+Base rate (no API cost)
+XGBoost (no API cost)
+b   Cost and quality, with retrieval
+Figure 1. Headline results on the 200 test buildings scored by every model. (a) Brier score of each pretrained model
+without retrieval (open) and with retrieval of five similar audited buildings (filled); lower is better. (b) Brier score against
+billed API cost with retrieval. Dashed and dotted lines are a gradient-boosted model trained on the labeled audits and
+a constant base-rate predictor, neither of which has an API cost. Grok and Kimi are from a post hoc addendum.
+Speed and price are easy to verify. Accuracy is a property of a model on a task, and it matters most where
+decisions carry money. We therefore test a decision model on a task with real stakes and auditor-recorded
+reference labels: predicting which categories of energy-conservation measures a certified auditor recorded
+for a New Y ork City building under Local Law 87 (LL87), the city’s energy-audit mandate. A model that
+anticipated auditors’ recommendations from basic building data could help owners and programs prioritize
+audits and retrofits. The task is also a demanding test for pretrained models. Its inputs are short and mostly
+numeric, its labels are multiple and imbalanced, and labeled records exist, so a supervised model trained on
+past audits is a natural competitor.
+The study was pre-registered before any model was called and revised after two independent methodolog-
+ical reviews. Jev has been benchmarked on general-purpose classification and reasoning datasets [ 20]. This
+study adds a structured, domain-specific prediction task with a labeled history, where supervised models are
+natural competitors. It makes five contributions. First, it compares a decision model with four LLMs and
+three local baselines on identical buildings, with retrieval of similar audited buildings as a controlled factor;
+two of the LLMs were added in a post hoc addendum. Second, it measures cost and latency from billed usage
+rather than list prices alone. Third, it separates two sources of probabilistic error, scale and ranking, which
+explains where the decision model falls short. Fourth, it tests, as an exploratory analysis, whether Jev can
+reduce LLM spending as the first stage of a two-stage cascade. Fifth, it documents that the evaluation split
+in prior work on this dataset allowed the same buildings into training and test sets, and reports results on a
+corrected split.
+2 Background: what Jev is and how it differs from an LLM
+Decision models. Jev is the first model in what its vendor calls the System One class, a term borrowed from
+Kahneman’s distinction between fast, intuitive judgments and slower, deliberate reasoning [ 3]. A System
+One model “evaluates a state and returns typed answers and probabilities” rather than generated text; it does
+2
+
+
+=== PDF PAGE 3 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+not write replies, produce code or explain its reasoning [3]. A request has two parts (Figure 2, top). The state
+describes the situation, here the 11 fields of one building record. The questions say what to decide. Three
+question types exist: a Noul question returns the probability that a yes/no statement is true, a Choice question
+returns one of several options, and a Score question returns a position on a spectrum, the last two with a
+separate confidence value [ 4]. Each question carries an instruction and, for a Noul, criteria for “true” and
+“false”. Jev reads the state once and evaluates every question against it in parallel, with up to 64,000 tokens
+per request [ 1]. The vendor states that Jev is trained to return calibrated decisions, that calibration holds
+across groups of predictions rather than for each answer, and that the same weights serve every customer,
+with no fine-tuning on customer data [ 1, 3]. It charges $0.042 per million input tokens, and output is not
+billed [1].
+LLMs used for the same decision. A large language model is a general text generator. To obtain a probability
+from it, the question and the data must be written into a prompt, the model must be asked to state a number,
+and that number arrives as text that has to be parsed (Figure 2, bottom). Current models may first produce
+hidden reasoning, which is billed as output; every generated token adds cost and time. The stated number is
+a verbalized probability, which prior work finds to be informative but often overconfident and sensitive to the
+prompt [14, 15]. In exchange, an LLM can answer any question that can be written down, explain its answer,
+and handle tasks outside a fixed set of question types.
+What this means for the comparison. In this study both kinds of model received identical information: the
+same building fields, the same 19 category questions with equivalent wording, and, when retrieval was on,
+the same five neighbors. Only the packaging differed. For Jev, each category became a Noul question;
+for the LLMs, the 19 categories were listed in one prompt with a fixed JSON schema for the answer. The
+comparison therefore isolates the model rather than the information it sees. It asks two questions that the
+positioning raises: whether native probabilities are better than verbalized ones on this task, and whether a
+decision model is faster and cheaper per decision. The vendor recommends gating actions on confidence and
+handing uncertain cases to a person [ 5]; our exploratory cascade tests a variant in which uncertain cases go
+to an LLM instead.
+3 Related work
+Evaluating probabilistic predictions. The Brier score [7] is the standard proper scoring rule for binary prob-
+abilities. It rewards both calibration, the agreement between stated probabilities and observed frequencies,
+and resolution, the ability to separate cases that turn out differently [ 8]. Ranking measures such as the area
+under the ROC curve (AUC) isolate the second property. Classifiers are frequently miscalibrated, and post-
+hoc methods such as Platt scaling, isotonic regression and temperature scaling correct much of the error
+without changing a model’s ranking [ 9, 10, 11].
+Confidence of pretrained language models. Pretrained transformers can be well calibrated in-domain but
+less so out of domain [ 12]. LLMs can be prompted to state their confidence, and verbalized probabilities
+are sometimes better calibrated than token probabilities, but they are often overconfident and sensitive to the
+elicitation method [13, 14, 15]. Decision models instead return probabilities as their native output (Section 2).
+Deußer et al. [ 20] evaluated the same Jev version zero-shot on 37 text datasets: its choice probabilities were
+well calibrated and supported selective prediction, while its binary probabilities ranked well but were poorly
+placed relative to a 0.5 threshold. Our task uses binary probabilities on short numeric records, and we find
+the misplacement but not the strong ranking.
+3
+
+
+=== PDF PAGE 4 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+DECISION MODEL JEV
+State
+building fields as
+JSON, e.g. "Borough":
+"Manhattan"
+19 typed questions
+type noul (yes/no),
+instruction, true/false
+criteria
+Jev 1.13
+returns answers; no
+text generation
+Probabilities
+"c01": {"noul":
+0.2}
+used as returned
+LARGE LANGUAGE MODEL CLAUDE, GPT, GROK, KIMI
+Text prompt
+task, 19 categories,
+“give your probability” ,
+building fields, JSON
+schema
+LLM
+optional hidden rea-
+soning, then writes
+tokens one by one
+JSON text
+{"c01": 0.45, …}
+Parse and validate
+19 numbers in 0,1;
+invalid output re-sent
+up to twice
+Jev (decision model) LLM
+What it returns A probability, a choice among fixed
+options or a rubric position, per typed
+question
+Free text; here, JSON text containing
+19 numbers
+Where the probability
+comes from
+The model’s returned answer A number the model writes as text
+What is billed Input tokens only $0.042 per million) Input and output tokens, including
+reasoning
+Measured here (median
+latency; cost per
+building)
+0.18–0.20 s; $0.0001–0.0002 1.8–13.2 s; $0.003–0.011
+Flexibility Fixed question types Any question expressible in text
+Figure 2. How Jev and an LLM answer the same request in this study. Top: request flow for one building (19 categories),
+from the frozen request templates and logged responses; the example values are the two models’ answers for Lighting
+Improvements (c01) on test building 1-00010-0023 with retrieval (Jev 0.2, Claude 0.45; the auditor recorded this
+category). Bottom: practical differences. Question types follow the vendor documentation [ 1] and [ 20]; latency and
+cost are this study’s measurements with and without retrieval.
+Retrieval and nearest neighbors. Supplying a model with retrieved examples improves performance on
+knowledge-intensive tasks [ 16]. When the retrieved examples carry labels, a simple vote among them is
+the classical nearest-neighbor rule [ 17]. It is therefore the natural control for any claim that a model adds
+value beyond its retrieved context.
+Learning from tabular records. Gradient-boosted trees remain among the strongest methods for medium-
+sized tabular data [ 18, 19]. A prior benchmark on LL87 audits found that a supervised tree model outper-
+formed all LLM variants, and that retrieval improved every LLM while explicit reasoning did not [ 21]. The
+present study extends that work to decision models, adds a calibration analysis, and corrects its evaluation
+split (Section 7).
+4 Study design
+Figure 3 summarizes the design. The protocol fixed the data handling, arms, metrics, primary contrasts,
+sample-size rule and statistical tests before any model was called.
+4.1 Data and split
+The LL87 file contains 10,702 audit records. As in the prior benchmark, the target for each record is the set of
+measure categories in its recommended packages, restricted to the 19 categories that occur at least 50 times;
+10,422 records carry at least one. Many buildings, identified by their Borough–Block–Lot number (BBL),
+4
+
+
+=== PDF PAGE 5 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+Building record
+11 fields: borough,
+floor areas, floors,
+use type, occupants,
+dwelling units,
+annual energy use
+Retrieval (factor)
+5 nearest training
+buildings with their
+recorded categories
+Arms
+Pretrained: Jev,
+Claude, GPT, Grok,
+Kimi
+Local: XGBoost,
+neighbor voting,
+frequency
+Output
+𝑃 (yes) for each of
+the 19 categories
+retrieval off
+Evaluation against auditor-recorded categories. Primary: Brier score, paired permutation test,
+Holm-corrected. Secondary: micro-F1, AUC, calibration, cost, latency.
+Training: 5,536 buildings XGBoost fitting, retrieval index) Test: 1,460
+Calibration: 300
+includes the 200 common buildings scored by all arms
+Figure 3. Study design. Each building is posed as 19 yes/no questions answered by every arm. Buildings are split by
+Borough–Block–Lot identifier so that no building appears in both training and test data; all fitted transformations use
+training data only.
+appear in several records, mostly as resubmissions. We use one unit per BBL, the latest labeled submission,
+which yields 7,296 buildings. These were split 80/20 by building and stratified on building type into 5,536
+training, 300 calibration and 1,460 test buildings. The calibration buildings were excluded from model fitting
+and from the retrieval index.
+Each building is described by 11 fields: the prior benchmark’s 12-field feature list without its only cost
+field (borough; gross and conditioned floor area; floors above and below grade; buildings on the lot; primary
+use type with its floor area, occupants and dwelling units; and total annual energy use). No measure, recom-
+mendation, savings, cost or payback field was shown to any model, which an automated check confirmed for
+all 9,180 model requests of the main study.
+4.2 Task and arms
+Each building is posed as 19 yes/no questions (“Did the auditor record at least one measure in category
+𝑋?”), sent together in one request so that every model receives identical packaging, and every arm returns a
+probability per category. The pretrained arms are Jev 1.13.0, and Claude Sonnet 5.5 and GPT-6.1 Sol, which
+were asked to state a probability per category in a fixed JSON schema. All versions were pinned. Both LLM
+providers rejected requests for deterministic output with reasoning disabled. Under a protocol amendment
+approved before the main runs, each LLM therefore ran at its lowest accepted reasoning setting and default
+temperature; no reasoning output was observed for Claude, and GPT used a mean of 7.6 reasoning tokens
+per call.
+Grok 4.7 (xAI) and Kimi K3 (Moonshot) were added after the main study was complete (addendum
+A1), because the author’s original arm list included them. They received the frozen prompt, rebuilt byte for
+byte and checked by hash, the same JSON schema and parsing rules, and the same 300 calibration and 200
+common test buildings. Request identifiers were taken from each provider’s live model list, and the lowest
+accepted reasoning setting was established by live probes as in the amendment: Grok accepted reasoning
+effort “low” and used a mean of 880–1,014 reasoning tokens per call, which are billed as output. Kimi ac-
+cepted reasoning effort “none”, a value its API does not document, and no Kimi response contained reasoning
+output.
+5
+
+
+=== PDF PAGE 6 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+0.000 0.005 0.010 0.015 0.020 0.025
+Difference in Brier score, Jev minus comparator (95% CI)
+P1a  Jev vs Claude, no retrieval (n = 200)
+P1b  Jev vs GPT, no retrieval (n = 200)
+P2  Jev vs neighbor vote, with retrieval (n = 1,460)
+0.0003
+0.0024
+0.2744
+Holm p← Jev better      Jev worse →
+Figure 4. Pre-registered primary contrasts. Points are mean per-building differences in Brier score with 95% paired
+bootstrap intervals. The shaded region marks differences that favor the comparator.
+The local arms require no API calls. XGBoost fits one classifier per category with hyperparameters
+fixed in advance and Platt calibration on out-of-fold predictions [ 18, 9]. Neighbor voting predicts the share
+of a building’s five nearest training buildings whose auditor recorded the category. The frequency baseline
+predicts each category’s training prevalence for every building. Retrieval is a factor for the pretrained models.
+When it is on, the prompt lists the same five neighbors used by neighbor voting, with their recorded categories.
+4.3 Statistical analysis
+The primary metric is the Brier score of raw probabilities, averaged over buildings and categories. Three
+contrasts were pre-registered: Jev against Claude (P1a) and against GPT (P1b), both without retrieval, and
+Jev with retrieval against neighbor voting (P2). Each uses a paired sign-flip permutation test on per-building
+differences (10,000 permutations) with Holm correction across the three contrasts; confidence intervals are
+paired bootstrap percentiles over buildings (10,000 resamples). Jev and the local baselines were evaluated
+on all 1,460 test buildings and the LLMs on a stratified subset of 200, after a pre-registered sample-size
+rule based only on the variability of pilot differences required 129. Analyses other than the three primary
+contrasts are exploratory. The addendum compares Jev with Grok and Kimi at matched retrieval settings in
+a family of four contrasts with the same tests and Holm correction within the family.
+4.4 Execution and quality control
+The study was run by an autonomous pipeline: an executor agent (Claude Opus 5.5) wrote and ran all code,
+and each stage was approved by an independent reviewer model (GPT-6 Astra) before the next began. Head-
+line metrics were recomputed by a separate verifier agent without access to the scoring code, and again for
+this paper, with no mismatches. T wo procedural deviations, one extra review round in the scoring stage and
+an addendum run interrupted when provider accounts ran out of funds, did not change any reported metric.
+The total cost of the study was $72.16, of which $34.34 was model API charges.
+5 Results
+5.1 Primary comparisons
+Without retrieval, Jev’s probabilities were significantly worse than those of Claude and GPT (Figure 4): its
+Brier score exceeded Claude’s by 0.022 and GPT’s by 0.008. With retrieval, Jev’s Brier score was 0.0008
+lower than that of neighbor voting, with a confidence interval spanning zero. The study therefore provides
+no evidence that Jev adds value beyond its retrieved neighbors, and it does not establish equivalence either.
+6
+
+
+=== PDF PAGE 7 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+Table 1. All arms on the 200 common test buildings. Cost in USD per 1,000 category predictions (local baselines have
+no API charge); latency is the median over evaluation calls. Tuned cutoffs and macro AUC are in Appendix Table 6.
+†Post hoc addendum, run under identical conditions after the main study.
+Arm USD / 1k pred. p50 latency (s) Brier F1@0.5
+Jev, retrieval off 0.0048 0.18 0.1546 0.060
+Jev, retrieval on 0.0092 0.20 0.1066 0.175
+Claude, retrieval off 0.2198 1.79 0.1327 0.368
+Claude, retrieval on 0.3894 2.11 0.1017 0.362
+GPT, retrieval off 0.1407 4.33 0.1466 0.377
+GPT, retrieval on 0.2837 3.95 0.1023 0.426
+Grok†, retrieval off 0.4310 13.17 0.1706 0.375
+Grok†, retrieval on 0.5863 13.15 0.1053 0.416
+Kimi†, retrieval off 0.2054 6.45 0.1850 0.374
+Kimi†, retrieval on 0.3656 6.45 0.1082 0.412
+XGBoost (5,536 labels) none – 0.0899 0.394
+Neighbor voting (𝑘 = 5 ) none – 0.1088 0.399
+Frequency baseline none – 0.1033 0.246
+5.2 Accuracy and cost
+Table 1 and Figure 1 compare all arms on the same 200 buildings, and Figure 5 breaks down tokens and cost
+per model. Cost is computed from billed tokens at documented list prices and expressed per 1,000 category
+predictions, so one building corresponds to 19 predictions. At matched retrieval settings Jev was 29–46 times
+cheaper than Claude and GPT and 40–90 times cheaper than Grok and Kimi. Its median latency was 0.18–
+0.20 s against 1.8–4.3 s for Claude and GPT and 6.4–13.2 s for Kimi and Grok, although its 95th-percentile
+latency (3.3 s without retrieval, 7.2 s with it) was no better than Claude’s (3.3–3.5 s; Appendix Figure 10).
+Jev’s requests were the longest, about 2,170 input tokens without retrieval and 4,150 with it, because each of
+the 19 questions is sent as a structured object; its price of $0.042 per million input tokens with unbilled output
+nevertheless made it the cheapest arm, at about $0.0001–0.0002 per building. Grok was the most expensive,
+because it used 880–1,014 reasoning tokens per request, billed as output, at $0.008–0.011 per building.
+T wo patterns stand out. Without retrieval, all five pretrained models had a higher Brier score than the
+constant frequency baseline (0.103), so none of them improved on simply predicting each category’s base
+rate. Retrieval lowered every pretrained model’s Brier score. Claude and GPT moved marginally below the
+frequency baseline; Grok, Jev and Kimi remained just above it. XGBoost had the lowest Brier score of all
+arms. At the pre-registered 0.5 cutoff, Jev’s micro-F1 (0.060 without retrieval, 0.175 with) was the lowest of
+all arms, below even the frequency baseline (0.246).
+5.3 Two further LLMs (post hoc addendum)
+Table 2 reports the addendum contrasts. Without retrieval, Jev’s probabilities were significantly better than
+those of Grok and Kimi, whose Brier scores (0.171 and 0.185) were the highest of all arms. With retrieval,
+no statistically significant difference between Jev and either model was detected; equivalence was not tested.
+At the same time, Jev cost 1.1–2.5% as much as Grok and Kimi and answered roughly 30–70 times faster at
+the median. Grok and Kimi in turn had higher Brier scores than both Claude and GPT under both retrieval
+settings, with every paired 95% interval excluding zero. The advantage is specific to probability quality: at
+the 0.5 cutoff Grok and Kimi reached micro-F1 of 0.37–0.42 against Jev’s 0.06–0.18, and with tuned cutoffs
+Grok and Kimi (0.465 and 0.468 with retrieval) were close to Jev (0.450), a comparison that was not tested
+7
+
+
+=== PDF PAGE 8 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+0 1k 2k 3k 4k 5k
+Tokens per request (one request = one building)
+Claude, no retrieval
+Claude, retrieval
+GPT, no retrieval
+GPT, retrieval
+Jev, no retrieval
+Jev, retrieval
+Grok, no retrieval
+Grok, retrieval
+Kimi, no retrieval
+Kimi, retrieval
+1,472
+3,084
+757
+1,729
+2,516
+4,495
+2,996
+4,183
+898
+1,911
+a   Tokens per request
+input
+output
+reasoning
+$0.01 $0.10 $1.00
+USD per 1,000 predictions (log)
+$0.220
+$0.389
+$0.141
+$0.284
+$0.0048
+$0.0092
+$0.431
+$0.586
+$0.205
+$0.366
+b   Billed API cost
+Figure 5. Tokens and billed cost per model. (a) Mean tokens per request, split into input, visible output and reasoning;
+reasoning is billed as output. Each provider counts tokens with its own tokenizer, so counts are not comparable unit for
+unit across providers. Jev’s output tokens are not billed. (b) Billed cost per 1,000 category predictions at documented
+prices; open markers without retrieval, filled with retrieval. Jev on the 1,460 test buildings, the LLMs on the 200
+common buildings.
+Table 2. Post hoc addendum: Jev against Grok and Kimi on the 200 common buildings. Paired sign-flip permutation
+test (10,000 permutations) with Holm correction within these four contrasts; 95% paired bootstrap intervals.
+Contrast (Brier) Jev Other Δ (Jev−other) [95% CI] Holm 𝑝
+Jev vs Grok, retrieval off 0.1546 0.1706 −0.0160 [−0.0219, −0.0103] 0.0004
+Jev vs Kimi, retrieval off 0.1546 0.1850 −0.0305 [−0.0390, −0.0223] 0.0004
+Jev vs Grok, retrieval on 0.1066 0.1053 +0.0013 [−0.0024, +0.0050] 0.83
+Jev vs Kimi, retrieval on 0.1066 0.1082 −0.0016 [−0.0053, +0.0021] 0.83
+(Appendix Table 6).
+5.4 Calibration
+Reliability diagrams (Figure 6) show why the pretrained models trail the base rate without retrieval: all five
+overstate the probability that a measure was recommended. Grok and Kimi overstate it most, with mean
+probabilities of 0.35 and 0.38 against a prevalence of 0.146 on these buildings. Jev’s probabilities are also
+compressed. Across the test set they average 0.33, more than twice the true prevalence of 0.146, yet only
+3.3% of them reach 0.5, which explains its very low micro-F1 at that cutoff. With retrieval, Claude, GPT
+and Jev track observed frequencies closely below a predicted probability of about 0.4, while Grok and Kimi
+remain below the diagonal over most of the range.
+5.5 Ranking and tuned cutoffs (exploratory)
+Calibration and ranking can fail independently. Jev’s ranking without retrieval was close to chance, with a
+macro AUC of 0.55 on the full test set, rising to 0.63 with retrieval (Appendix Table 7). To assess sensitivity
+8
+
+
+=== PDF PAGE 9 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+0
+.25
+.5
+.75
+1
+Observed frequency
+Claude Sonnet 5.5 GPT-6.1 Sol
+0 .25 .5 .75 1
+Mean predicted probability
+Jev
+0 .25 .5 .75 1
+Mean predicted probability
+0
+.25
+.5
+.75
+1
+Observed frequency
+Grok 4.7
+0 .25 .5 .75 1
+Mean predicted probability
+Kimi K3
+Marker area is proportional to
+the number of predictions per bin.
+Below the diagonal = overstated.
+no retrieval
+with retrieval
+perfect calibration
+Figure 6. Reliability diagrams for the five pretrained models on the 200 common buildings × 19 categories, without
+retrieval (open markers, dashed) and with it (filled, solid). Marker area is proportional to the number of predictions in
+each bin; bins with fewer than 20 are omitted. Points below the diagonal indicate overstated probabilities.
+to the decision threshold, we chose one decision cutoff per arm on the calibration set and applied it unchanged
+to the common buildings (Figure 7). Without retrieval, Jev remained significantly below every comparator,
+including the frequency baseline. With retrieval, its differences from Claude with retrieval, neighbor voting
+and the frequency baseline were not significant after Holm correction across nine comparisons, while GPT
+with retrieval and XGBoost remained significantly better. A tuned cutoff therefore removes much of Jev’s
+deficit at 0.5, but it improves the baselines as well and reveals no added value from Jev. Grok and Kimi,
+which were not part of this family, reached tuned micro-F1 of 0.375 and 0.381 without retrieval and 0.465
+and 0.468 with it (Appendix Table 6).
+5.6 Labeled data needed by a supervised model
+Pre-registered hypothesis H3 states: “Full-data XGBoost beats Jev on micro-F1; a crossover exists at a train-
+ing size of 200 or fewer.” The scoring stage judged it supported, reading the crossover as the training size
+at which XGBoost overtakes Jev. At the 0.5 cutoff, XGBoost trained on only 50 labeled buildings exceeded
+Jev in every one of five training runs (Figure 8). Any size at which Jev would lead therefore lies below 50
+labels, which was not tested. At each size, fitting and calibration used only that size’s labeled buildings.
+T wo qualifications apply. On Brier score, Jev with retrieval (0.106) is better than XGBoost trained on 50
+buildings (mean 0.109) but worse than XGBoost trained on 200 (0.099). But Jev with retrieval is not label-
+free: its prompts include the recorded categories of five neighbors drawn from all 5,536 labeled training
+9
+
+
+=== PDF PAGE 10 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+−0.20 −0.15 −0.10 −0.05 0.00 0.05
+Difference in micro-F1 at tuned cutoffs, Jev minus comparator (95% CI)
+Jev no retr. vs Claude, no retr.
+Jev no retr. vs GPT, no retr.
+Jev no retr. vs Base rate
+Jev no retr. vs XGBoost
+Jev retr. vs Claude, retr.
+Jev retr. vs GPT, retr.
+Jev retr. vs Neighbor vote
+Jev retr. vs Base rate
+Jev retr. vs XGBoost
+0.0009
+0.0009
+0.0009
+0.0009
+0.6996
+0.0048
+1.0000
+1.0000
+0.0009
+Holm p← Jev worse      Jev better →
+Figure 7 . Exploratory comparison at cutoffs tuned on the calibration set (200 common buildings). Differences in
+micro-F1 with 95% paired bootstrap intervals; 𝑝-values are Holm-adjusted across the nine comparisons, and 0.0009 is
+the smallest attainable value.
+50 200 1,000 5,536
+Labeled training buildings (log scale)
+0.0
+0.1
+0.2
+0.3
+0.4Micro-F1 at cutoff 0.5
+XGBoost
+Jev, with retrieval (0.176)
+Jev, no retrieval (0.086)
+Figure 8. Micro-F1 at the 0.5 cutoff on 1,460 test buildings against the number of labeled buildings used to train
+XGBoost. Five independent training runs at 50 and 200 buildings; the band spans their minimum and maximum.
+Horizontal lines show Jev, which uses no training labels without retrieval.
+buildings. The label-free arm, Jev without retrieval, is below XGBoost at every tested size on both metrics.
+5.7 Robustness
+No model outperformed the frequency baseline when given only the building identifier, so there is no signal
+of memorization, although this does not prove the data were unseen. Jev was the most repeatable model but
+not deterministic: identical requests changed its probabilities by up to 0.04, and Claude and GPT changed
+their decision at 0.5 on 3–6% of predictions for identical requests. These checks were not repeated for Grok
+and Kimi. Giving Jev numbers as quintile labels rather than raw values did not help (Brier 0.165 vs. 0.154).
+Appendix Table 10 reports the details, and Appendix Figure 11 reports results by category.
+10
+
+
+=== PDF PAGE 11 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+Table 3. Selected cascade operating points (Jev with retrieval first). Difference from random routing at the same
+escalation rate, with 95% paired bootstrap intervals; cost in USD per 1,000 predictions. The full grid is in cascade/-
+cascade_results.csv.
+Second stage, escalated Brier Random Routing − random [95% CI] Cost
+Claude, 5.5% 0.1057 0.1064 −0.0006 [−0.0013, −0.0001] 0.031
+Claude, 44.5% 0.1038 0.1044 −0.0006 [−0.0019, +0.0007] 0.183
+Claude, 72.5% 0.1016 0.1030 −0.0014 [−0.0027, −0.0001] 0.292
+Claude alone 0.1017 – – 0.389
+GPT, 44.5% 0.1045 0.1047 −0.0002 [−0.0020, +0.0015] 0.136
+GPT, 72.5% 0.1032 0.1035 −0.0003 [−0.0020, +0.0015] 0.215
+GPT alone 0.1023 – – 0.284
+5.8 Jev as the first stage of a cascade (exploratory)
+A decision model need not replace an LLM to be useful: it could answer the cases it is confident about and
+pass the rest to an LLM. We tested this with saved outputs only, without new model calls. The first stage
+was Jev with retrieval or, for comparison, XGBoost; the second stage was Claude or GPT with retrieval. A
+building was escalated when the first stage’s mean uncertainty over the 19 categories, ̄ 𝑢 = 119 ∑𝑐 𝑝𝑐(1 −
+𝑝𝑐), exceeded a threshold. Thresholds for target escalation rates of 0–100% were set as quantiles of ̄ 𝑢on
+the 300 calibration buildings and then applied unchanged to the 200 common buildings. Cost counts the
+first stage on every building and the LLM on escalated buildings, from each building’s billed usage. The
+comparison for routing is random escalation of the same number of buildings, whose expected Brier score is
+the escalation-weighted average of the two stages. Intervals are paired bootstrap intervals over buildings with
+routing decisions held fixed. A feasibility check had already examined these test buildings, so this analysis
+is exploratory and was not pre-registered.
+Figure 9 and Table 3 show the results. Uncertainty routing from Jev showed no consistent advantage
+over random routing: with Claude, the interval excluded zero at 2 of 9 intermediate rates, by at most 0.0014,
+without correction for the number of rates examined; with GPT, at none. The reason is visible at the level of
+buildings. The LLM improved on Jev for 61–64% of buildings, but Jev’s uncertainty was almost unrelated
+to where it did (Spearman correlation between ̄ 𝑢and the per-building Brier gain of −0.10 to 0.09 on the
+calibration and test sets). No Jev–LLM operating point was significantly better than the frequency baseline,
+and all were significantly worse than XGBoost alone, by 0.012–0.017. Escalating from XGBoost only made
+results worse than XGBoost alone, significantly so at most rates from about 30%.
+One operating point is descriptively attractive. Escalating 72.5% of buildings from Jev to Claude gave
+a Brier score of 0.1016 against 0.1017 for Claude alone, at $0.292 rather than $0.389 per 1,000 predictions,
+about 25% less. Equivalence was not tested, the point was selected after examining several, and so the result
+shows only that no loss was detected. A cascade also costs more than the LLM alone when every building is
+escalated ($0.399 against $0.389 for Claude), because Jev is paid on every building. Replayed from logged
+call times, the cascade’s median latency at that point was 2.25 s, against 2.11 s for Claude alone; the cascade
+was therefore slightly slower than Claude alone in this replay, which is an estimate rather than a measurement
+of a live cascade.
+11
+
+
+=== PDF PAGE 12 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+$0 $0.10 $0.20 $0.30 $0.40
+API cost per 1,000 predictions
+0.090
+0.095
+0.100
+0.105
+Brier score
+Base rate
+XGBoost alone
+Claude
+GPT
+a   Jev first
+$0 $0.10 $0.20 $0.30 $0.40
+API cost per 1,000 predictions
+Base rate
+XGBoost alone
+ClaudeGPT
+b   XGBoost first
+Route uncertain buildings to the LLM Random routing, same share escalated
+Figure 9. Exploratory cascades on the 200 common buildings. Each point is one target escalation rate (0–100% in
+steps of 10%), with thresholds fixed on the calibration set. Solid lines route by first-stage uncertainty; dashed lines
+show the expected result of random routing at the same escalation rate. Cost includes the first stage on every building.
+6 Discussion
+6.1 Efficiency and predictive competitiveness
+In the configurations we measured, Jev’s eﬀiciency advantage held against every LLM. Its predictive standing
+did not hold uniformly. On probability quality without retrieval, it was worse than Claude and GPT and better
+than Grok and Kimi, so the answer to “is a decision model as good as an LLM?” depends on which LLM
+is meant. On classification at the 0.5 cutoff it was worse than all four LLMs, because its probabilities rarely
+reach 0.5. And it was worse than a constant base-rate predictor and a supervised model on Brier score and on
+F1 at the 0.5 cutoff. On this task, then, a decision model can be preferable to some LLMs where probabilities
+are consumed directly and cost or latency matters, but it was not the most accurate option available.
+6.2 Probability scale and ranking
+The Brier score penalizes two different errors: probabilities on the wrong scale, and a failure to rank buildings
+that received a measure above buildings that did not [ 8]. In an imbalanced multi-label task, the frequency
+baseline is a demanding reference: it has no ranking ability at all, but its probabilities are correct on average
+for every category. A model beats it only if its ranking gain exceeds its scale error. Without retrieval, all five
+pretrained models failed that test. Jev’s probabilities sat far above the base rate, and its ranking was close to
+chance; Grok’s and Kimi’s sat further still above the base rate, which is why their Brier scores were worse
+than Jev’s despite similar ranking (macro AUC 0.574–0.577 against Jev’s 0.559). The two problems call for
+different remedies, and our analysis tests only some of them. A monotone recalibration fitted on labeled data
+could reduce the scale error without changing the ranking; we did not fit one, so its effect on Jev’s Brier
+score is untested. Threshold tuning, which we did test, changes decisions but not the probabilities or their
+Brier score. With a tuned cutoff, Jev without retrieval remained below the frequency baseline in micro-F1,
+which is consistent with its weak ranking (macro AUC 0.55–0.56). Deußer et al. [ 20] also found Jev’s binary
+probabilities poorly placed relative to 0.5 but well ranked on text tasks; on these numeric records the ranking
+was weak as well. The practical consequence is that Jev’s raw probabilities should not be taken at face value
+12
+
+
+=== PDF PAGE 13 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+Table 4. What the evidence from this task supports. These are findings for one structured prediction task, not general
+prescriptions.
+Situation Supported choice and evidence
+Labeled records available Here, a supervised model was strongest: XGBoost had the best Brier
+score and, at the 0.5 cutoff, outperformed Jev with 50 labels.
+A labeled reference set exists, but
+no model has been trained
+Retrieval from the reference set lowered every model’s Brier score,
+and neighbor voting alone matched Jev with retrieval.
+Few or no labels Without retrieval, no pretrained model beat the base rate, which was
+itself estimated from labeled records. A small labeled sample is
+needed to estimate base rates, check a pretrained model’s ranking and
+recalibrate it.
+Very high volume, cost-bound Jev’s price and median latency are real advantages, and its probabili-
+ties were better than those of two of the four LLMs without retrieval.
+It is suitable where its accuracy is shown to be adequate; routing its
+uncertain cases to an LLM showed no consistent advantage over ran-
+dom routing here.
+on this task.
+6.3 The role of retrieval
+Retrieval lowered every pretrained model’s Brier score and raised its macro AUC and tuned F1, and its effect
+was larger than the differences between models. (The one exception is Claude’s F1 at the 0.5 cutoff, which
+was essentially unchanged: 0.368 without retrieval, 0.362 with it.) With retrieval, the five pretrained models’
+Brier scores fell within 0.007 of each other (0.102–0.108), and neighbor voting (0.109) was close behind,
+and Jev’s difference from neighbor voting was not significant either at the primary metric or at tuned cutoffs.
+A plausible interpretation is that, with retrieval, the pretrained models mostly aggregate the labels of the
+retrieved neighbors. Their value then depends on whether they aggregate better than a vote. For Jev, this
+study finds no evidence that it does. Retrieval also changes the nature of the comparison: a model that reads
+labeled neighbors is drawing on the same labeled data a supervised model would use.
+6.4 A trained model was strongest on this task
+The supervised baseline was the strongest arm on probability quality and was competitive on every other
+metric, with no API charge, although training and serving it have costs of their own that we did not measure.
+At the pre-registered cutoff it outperformed Jev with as few as 50 training buildings. This agrees with the
+prior benchmark on the same records [ 21] and with the broader evidence that tree ensembles remain strong
+on tabular data [ 19]. It also changes how the cost advantage should be read. Measured per building, the
+differences between pretrained models are small: with retrieval, Claude cost about $0.0074 and Jev about
+$0.0002 per building, or about $10.80 and $0.25 for the full test set. At the scale of a building portfolio, these
+amounts are small enough that accuracy, rather than inference price, is likely to decide which approach is
+preferable.
+Table 4 summarizes what this evidence supports. It comes from one task with short, structured, mostly
+numeric inputs and a labeled history, and may not transfer to others.
+6.5 Scope
+These results concern one kind of task: short, mostly numeric records with a labeled history. They do not
+speak to decision models on free text or to multi-step agentic decisions, the uses their designers emphasize.
+13
+
+
+=== PDF PAGE 14 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+A fair assessment of those uses requires tasks with reliable reference labels in which inputs are textual and
+labels are scarce, which we leave to follow-up work.
+7 Implication for the prior benchmark
+The prior LL87 benchmark [ 21] split records rather than buildings, and 44.6% of its test records share a
+BBL with a training record. Its tree model reproduces a micro-F1 of 0.577 on that split (0.571 reported),
+and the same code scores 0.481 on the building-grouped split used here. The difference combines grouping,
+deduplication to one record per building, and the resulting change in training and test populations, so we
+do not attribute it to leakage alone. The overlap is nevertheless large enough that the prior headline results
+should be regarded as optimistic and re-evaluated on a grouped split. All results in this paper use the grouped
+split.
+8 Limitations
+The task predicts auditor-recorded categories, not the effectiveness or savings of the measures, and an un-
+recorded category is not evidence that a measure is unsuitable. Grok and Kimi were added after the main
+results were known; their comparisons are exploratory, and the robustness checks were not repeated for
+them. Kimi’s reasoning setting is an undocumented value that its API accepted. Other providers, including
+open-weight models, were not evaluated. The cascade analysis is exploratory: the test buildings had been
+examined in a feasibility check, several operating points were inspected, and its latencies are replayed from
+logged call times rather than measured in a live cascade. The LLM comparisons use 200 buildings; this
+was suﬀicient for the primary contrasts under the pre-registered rule but leaves wide intervals for exploratory
+LLM comparisons. The LLMs could not be run deterministically, and GPT used some reasoning tokens. The
+tuned-cutoff analysis is post hoc and relies on 300 labeled calibration buildings. The reviewer model and
+one evaluated model come from the same vendor; the reviewer assessed methods and arithmetic, not model
+outputs. The verifier and executor agents are the same model. Recorded savings in the LL87 file include
+at least one implausible value (about $963 billion per year for one building), so savings-weighted analyses
+were omitted.
+9 Conclusion
+On the prediction of energy-audit recommendations, Jev delivered large speed and price advantages in the
+configurations we measured, and its predictive competitiveness depended on the comparator and the metric.
+Without retrieval, its probabilities were worse than those of Claude and GPT and better than those of Grok
+and Kimi, at 1–4% of the cost of any of them; with retrieval, no significant difference from Grok, Kimi
+or a vote among the same neighbors was detected. Its decisions at the 0.5 cutoff were the weakest of all
+arms, and no pretrained model without retrieval improved on a constant base-rate predictor. Using Jev’s
+uncertainty to decide which buildings to send to an LLM showed no consistent advantage over random routing.
+A supervised model trained on the labeled audits gave the best probabilities and, at the pre-registered cutoff,
+outperformed Jev with as few as 50 training buildings. Jev offers substantial eﬀiciency advantages, but its
+predictive competitiveness depends on the comparator and the metric; on this task, a model trained on the
+labeled audits and retrieval of similar buildings were the stronger choices.
+References
+[1] T ypeSafe AI. Jev models documentation.https://docs.typesafe.ai/models.md, accessed October 2026.
+14
+
+
+=== PDF PAGE 15 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+[2] InfoQ. T ypeSafe AI releases Jev. https://infoq.com/news/2026/10/typesafe-ai-jev-released , Oc-
+tober 2026.
+[3] T ypeSafe AI. System One. https://docs.typesafe.ai/concepts/system-one.md, accessed October
+2026.
+[4] T ypeSafe AI. Noul questions.https://docs.typesafe.ai/primitives/noul.md, accessed October 2026.
+[5] T ypeSafe AI. Confidence routing. https://docs.typesafe.ai/patterns/confidence-routing.md, ac-
+cessed October 2026.
+[6] F. Copes. How much does Jev cost? https://flaviocopes.com/jev-pricing/, September 2026.
+[7] G. W. Brier. Verification of forecasts expressed in terms of probability. Monthly Weather Review , 78(1):1–3,
+1950.
+[8] A. H. Murphy. A new vector partition of the probability score. Journal of Applied Meteorology , 12(4):595–600,
+1973.
+[9] J. Platt. Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods. In
+Advances in Large Margin Classifiers, 1999.
+[10] A. Niculescu-Mizil and R. Caruana. Predicting good probabilities with supervised learning. In ICML, 2005.
+[11] C. Guo, G. Pleiss, Y . Sun, and K. Q. Weinberger. On calibration of modern neural networks. In ICML, 2017.
+[12] S. Desai and G. Durrett. Calibration of pre-trained transformers. In EMNLP, 2020.
+[13] S. Kadavath et al. Language models (mostly) know what they know. arXiv:2207.05221, 2022.
+[14] K. Tian et al. Just ask for calibration: Strategies for eliciting calibrated confidence scores from language models
+fine-tuned with human feedback. In EMNLP, 2023.
+[15] M. Xiong et al. Can LLMs express their uncertainty? An empirical evaluation of confidence elicitation in LLMs.
+In ICLR, 2024.
+[16] P . Lewis et al. Retrieval-augmented generation for knowledge-intensive NLP tasks. In NeurIPS, 2020.
+[17] T. Cover and P . Hart. Nearest neighbor pattern classification.IEEE Transactions on Information Theory, 13(1):21–
+27, 1967.
+[18] T. Chen and C. Guestrin. XGBoost: A scalable tree boosting system. In KDD, 2016.
+[19] L. Grinsztajn, E. Oyallon, and G. Varoquaux. Why do tree-based models still outperform deep learning on typical
+tabular data? In NeurIPS Datasets and Benchmarks, 2022.
+[20] T. Deußer, L. Sparrenberg, and R. Sifa. Evaluating and benchmarking the System One model Jev.
+arXiv:2609.37647, 2026.
+[21] E. Curcio. Retrieval over reasoning: A cost-controlled benchmark of language models for energy-retrofit recom-
+mendation. arXiv:2607.05440, 2026.
+15
+
+
+=== PDF PAGE 16 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+A Supplementary results
+Table 5. Pre-registered primary contrasts (values plotted in Figure 4).
+Contrast 𝑛 Brier A Brier B Δ (A−B) [95% CI] Holm 𝑝 Outcome
+P1a: Jev vs Claude, retrieval off 200 0.1546 0.1327 0.0219 [0.0174, 0.0265] 0.0003 Jev worse
+P1b: Jev vs GPT, retrieval off 200 0.1546 0.1466 0.0079 [0.0031, 0.0129] 0.0024 Jev worse
+P2: Jev (retrieval on) vs neighbor voting 1,460 0.1057 0.1065 -0.0008 [-0.0023, 0.0007] 0.2744 Inconclusive
+Table 6. All arms on the 200 common test buildings, full metrics. Exploratory tuned cutoffs, chosen on the calibration
+set, are in parentheses. †Post hoc addendum.
+Arm USD / 1k pred. p50 latency (s) Brier F1@0.5 F1, tuned (cutoff) Macro AUC
+Jev, retrieval off 0.0048 0.18 0.1546 0.060 0.338 (0.38) 0.559
+Jev, retrieval on 0.0092 0.20 0.1066 0.175 0.450 (0.26) 0.687
+Claude, retrieval off 0.2198 1.79 0.1327 0.368 0.404 (0.36) 0.578
+Claude, retrieval on 0.3894 2.11 0.1017 0.362 0.465 (0.26) 0.658
+GPT, retrieval off 0.1407 4.33 0.1466 0.377 0.428 (0.43) 0.581
+GPT, retrieval on 0.2837 3.95 0.1023 0.426 0.485 (0.26) 0.691
+Grok†, retrieval off 0.4310 13.17 0.1706 0.375 0.375 (0.52) 0.577
+Grok†, retrieval on 0.5863 13.15 0.1053 0.416 0.465 (0.36) 0.650
+Kimi†, retrieval off 0.2054 6.45 0.1850 0.374 0.381 (0.53) 0.574
+Kimi†, retrieval on 0.3656 6.45 0.1082 0.412 0.468 (0.31) 0.631
+XGBoost (5,536 labels) none – 0.0899 0.394 0.516 (0.22) 0.678
+Neighbor voting (𝑘 = 5 ) none – 0.1088 0.399 0.455 (0.21) 0.606
+Frequency baseline none – 0.1033 0.246 0.444 (0.20) 0.500
+Table 7 .Jev and the local baselines on all 1,460 test buildings. Prevalence across all predictions is 0.146.
+Arm (1,460 test buildings) Brier F1@0.5 F1, tuned Macro AUC Mean 𝑃
+Jev, retrieval off 0.1545 0.086 0.343 0.551 0.332
+Jev, retrieval on 0.1057 0.176 0.467 0.626 0.190
+Jev, binned numbers 0.1650 0.106 – 0.571 0.360
+XGBoost (5,536 labels) 0.0882 0.417 0.521 0.703 0.147
+Neighbor voting (𝑘 = 5 ) 0.1065 0.412 0.472 0.594 0.147
+Frequency baseline 0.1018 0.287 0.450 0.500 0.147
+16
+
+
+=== PDF PAGE 17 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+Table 8. Exploratory tuned-cutoff comparisons (values plotted in Figure 7).
+Comparison (tuned-cutoff micro-F1) Difference 95% CI (unadjusted) Holm 𝑝 (9 tests)
+Jev, retrieval off − Claude, retrieval off -0.066 [-0.093, -0.038] 0.0009
+Jev, retrieval off − GPT, retrieval off -0.090 [-0.114, -0.066] 0.0009
+Jev, retrieval off − Frequency baseline -0.106 [-0.128, -0.085] 0.0009
+Jev, retrieval off − XGBoost (5,536 labels) -0.177 [-0.206, -0.148] 0.0009
+Jev, retrieval on − Claude, retrieval on -0.015 [-0.040, +0.009] 0.6996
+Jev, retrieval on − GPT, retrieval on -0.035 [-0.057, -0.013] 0.0048
+Jev, retrieval on − Neighbor voting (𝑘 = 5 ) -0.005 [-0.028, +0.017] 1.0000
+Jev, retrieval on − Frequency baseline +0.006 [-0.029, +0.040] 1.0000
+Jev, retrieval on − XGBoost (5,536 labels) -0.065 [-0.098, -0.035] 0.0009
+Table 9. XGBoost learning curve on the 1,460 test buildings.
+Training buildings Repeats F1@0.5, mean F1@0.5, range Brier, mean
+50 5 0.281 0.196–0.362 0.1094
+200 5 0.323 0.295–0.347 0.0987
+1,000 1 0.365 0.365–0.365 0.0929
+5,536 1 0.417 0.417–0.417 0.0882
+Table 10. Stability on 100 buildings and identifier-only check. Flip rate is the share of predictions crossing 0.5 between
+two sends.
+Identical repeat Reformatted input BBL-only
+Model Flip rate Mean |Δ𝑃 | Flip rate Mean |Δ𝑃 | Brier
+Jev 0.5% 0.008 1.2% 0.018 0.2031
+Claude 3.3% 0.019 5.6% 0.032 0.1240
+GPT 5.9% 0.027 5.1% 0.029 0.1380
+Frequency baseline (same 100) 0.1024
+Table 11. Data funnel.
+Step Count
+Audit records in the LL87 file 10,702
+Records with ≥ 1 category in the 19-category vocabulary 10,422
+Labeled records with missing BBL (dropped) 27
+BBLs with more than one labeled record 1,994
+Buildings (one unit per BBL, latest submission) 7,296
+Training / calibration / test 5,536 / 300 / 1,460
+17
+
+
+=== PDF PAGE 18 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+0.1 0.3 1 3 10 30
+Seconds per request: circle = median, tick = 95th percentile (log scale)
+Claude, no retrieval
+Claude, retrieval
+GPT, no retrieval
+GPT, retrieval
+Jev, no retrieval
+Jev, retrieval
+Grok, no retrieval
+Grok, retrieval
+Kimi, no retrieval
+Kimi, retrieval
+Figure 10. Latency of live evaluation calls (Jev on the test set, the LLMs on the 200 common buildings); open markers
+without retrieval, filled with retrieval.
+18
+
+
+=== PDF PAGE 19 ===
+Jev versus LLMs for energy-audit recommendations Curcio, 2026
+no r. retr. no r. retr. no r. retr. no r. retr. no r. retr.
+Nbr.
+vote
+XG-
+Boost
+Lighting Improvements  (93)
+Boiler Plant Improvements  (88)
+Chilled/hot water & steam distribution  (64)
+Building Envelope Modifications  (56)
+Control Systems  (55)
+Renewable Energy Systems  (51)
+Service Hot Water System  (40)
+Heating, ventilating & air conditioning  (34)
+Water & sewer conservation  (29)
+Ventilation System  (13)
+Electric Motors and Drives  (11)
+Appliance & plug-load reductions  (4)
+Chiller Plant Improvements  (4)
+Conveyance Systems  (4)
+Advanced Metering Systems  (3)
+Electrical peak shaving / load shifting  (3)
+Refrigeration System Improvements  (3)
+Jev Claude GPT Grok Kimi
+0.68 0.70 0.48 0.63 0.60 0.66 0.57 0.64 0.48 0.65 0.63 0.76
+0.49 0.72 0.45 0.72 0.49 0.74 0.44 0.73 0.44 0.71 0.73 0.76
+0.56 0.68 0.53 0.63 0.53 0.63 0.46 0.61 0.50 0.58 0.59 0.69
+0.39 0.60 0.42 0.63 0.38 0.67 0.36 0.67 0.40 0.64 0.64 0.76
+0.48 0.54 0.52 0.58 0.49 0.61 0.51 0.59 0.52 0.60 0.57 0.64
+0.34 0.62 0.48 0.65 0.49 0.67 0.53 0.66 0.46 0.66 0.64 0.73
+0.63 0.65 0.70 0.63 0.70 0.64 0.65 0.61 0.55 0.56 0.58 0.77
+0.49 0.57 0.54 0.64 0.55 0.64 0.57 0.65 0.55 0.62 0.61 0.66
+0.62 0.76 0.67 0.74 0.65 0.77 0.68 0.74 0.61 0.70 0.71 0.81
+0.55 0.66 0.48 0.69 0.53 0.70 0.62 0.71 0.62 0.67 0.60 0.69
+0.68 0.59 0.66 0.67 0.65 0.59 0.56 0.54 0.65 0.54 0.53 0.56
+0.60 0.65 0.59 0.57 0.78 0.61 0.39 0.68 0.73 0.51 0.52 0.54
+0.65 0.94 0.90 0.92 0.87 0.95 0.76 0.90 0.86 0.92 0.83 0.95
+0.60 0.72 0.63 0.58 0.52 0.57 0.84 0.58 0.63 0.59 0.48 0.38
+0.47 0.87 0.56 0.74 0.65 0.85 0.57 0.81 0.73 0.72 0.66 0.65
+0.65 0.81 0.66 0.47 0.48 0.65 0.74 0.52 0.49 0.51 0.48 0.87
+0.62 0.59 0.55 0.71 0.51 0.80 0.56 0.42 0.52 0.54 0.48 0.31
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
+0.8
+AUC (0.5 = chance)
+Figure 11. Per-category AUC of every arm on the 200 common buildings (no r.: without retrieval; retr.: with retrieval).
+Categories are ordered by prevalence; the number of buildings with the category recorded is in parentheses. Rows
+below the rule have three or four positive buildings; they are muted because their values are not interpretable. Nbr.
+vote: neighbor voting.
+19

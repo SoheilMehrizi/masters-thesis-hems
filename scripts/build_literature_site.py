@@ -19,6 +19,8 @@ available_ids={'la-upahem','article-02'} | {p.stem for p in (ROOT/'reports/liter
 analysis_figure_count=25+sum(len(json.loads(p.read_text(encoding='utf-8')).get('figures',[])) for p in (ROOT/'reports/literature/analyses').glob('article-*.json'))
 # Merge byte-identical files and copies with the same first-page DOI/title.
 inventory=[]
+previous_inventory=json.loads((OUT/'inventory.json').read_text(encoding='utf-8')) if (OUT/'inventory.json').exists() else []
+previous_ids={item['key']:item['id'] for item in previous_inventory}
 for p in sorted(SOURCE.rglob('*.pdf')):
     reader=PdfReader(p)
     first='\n'.join(x.extract_text() or '' for x in reader.pages[:2])
@@ -29,7 +31,8 @@ for p in sorted(SOURCE.rglob('*.pdf')):
     old=next((x for x in inventory if x['key']==key),None)
     if old: old['copies'].append(str(p));continue
     category='Reviews & context'
-    if any(s in title.lower() for s in ['fault','causality','bayesian']): category='Causal & probabilistic diagnosis'
+    if any(s in title.lower() for s in ['jev','system-1 decision']): category='Decision models & agent efficiency'
+    elif any(s in title.lower() for s in ['fault','causality','bayesian']): category='Causal & probabilistic diagnosis'
     elif any(s in title.lower() for s in ['darc','preference','scheduling','adaptive home']): category='Preferences, scheduling & planning'
     elif 'citylearn' in title.lower(): category='Simulation & benchmark'
     elif 'review' not in title.lower() and 'digital twin' in title.lower().replace('-', ' '): category='Digital Twins & safety'
@@ -39,8 +42,14 @@ for item in inventory:
     if '10.1016/j.isci.2025.113867' in item['doi']:item['category']='Modeling & automation'
     if '10.1016/j.ecmx.2025.101329' in item['doi']:item['category']='Reviews & context'
 inventory.sort(key=lambda x:next((i for i,v in enumerate(priority) if v in x['doi']),50))
+new_priority=['Jev versus','JevAgentHarness','REFLEX with','Evaluating and Benchmarking','Fast Models','When Faster']
+inventory.sort(key=lambda x:(0,int(previous_ids[x['key']].split('-')[-1]) if previous_ids[x['key']]!='la-upahem' else 1) if x['key'] in previous_ids else (1,next((i for i,v in enumerate(new_priority) if Path(x['path']).stem.startswith(v)),99)))
+next_id=max([int(v.split('-')[-1]) for v in previous_ids.values() if v.startswith('article-')]+[0])+1
 for i,x in enumerate(inventory):
-    x['id']='la-upahem' if '127976' in x['doi'] else f'article-{i+1:02}'
+    if x['key'] in previous_ids:x['id']=previous_ids[x['key']]
+    else:
+        x['id']='la-upahem' if '127976' in x['doi'] else f'article-{next_id if previous_ids else i+1:02}'
+        next_id+=1
     analysis_path=ROOT/'reports/literature/analyses'/f"{x['id']}.json"
     if analysis_path.exists():x['title']=json.loads(analysis_path.read_text(encoding='utf-8'))['title']['en']
     if x['id']=='la-upahem':x['title']='Adaptive home energy management to self-motivated user preferences via iterative LLM-augmented reinforcement learning'
@@ -61,6 +70,7 @@ def shell(title,body):
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} · HEMS evidence library</title><link rel="stylesheet" href="style.css?v=4"><link rel="stylesheet" href="design.css?v=4"><link rel="stylesheet" href="theme.css?v=4"><link rel="stylesheet" href="figures.css?v=4"></head><body data-lang="en"><nav><div><b>HEMS / Evidence library</b><a href="index.html">{pair('All articles','همه مقالات')}</a><a href="../PROJECT_BACKLOG.html">{pair('Project backlog','فهرست کارها')}</a><select id="language" aria-label="Report language"><option value="en">English</option><option value="both">English + فارسی</option><option value="fa">فارسی</option></select><button onclick="window.print()">{pair('Print','چاپ')}</button></div></nav><main>{body}<footer>{pair('Local research library · Source evidence and critical commentary are labeled separately. Review status reflects actual coverage.','کتابخانه محلی پژوهش · شواهد مقاله و تحلیل انتقادی جداگانه مشخص شده‌اند. وضعیت مرور بر اساس پوشش واقعی است.')}</footer></main><script src="shared.js?v=4"></script><script src="experience.js?v=4"></script></body></html>'''
 
 categories={
+'Decision models & agent efficiency':'مدل‌های تصمیم و کارایی عامل‌ها',
 'Modeling & automation':'مدل‌سازی و خودکارسازی',
 'Preferences, scheduling & planning':'ترجیحات، زمان‌بندی و برنامه‌ریزی',
 'Causal & probabilistic diagnosis':'تشخیص علّی و احتمالاتی',

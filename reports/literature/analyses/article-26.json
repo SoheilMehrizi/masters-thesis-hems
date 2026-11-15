@@ -1,0 +1,574 @@
+{
+  "id": "article-26",
+  "short_title": "REFLEX · selective agent control",
+  "title": {
+    "en": "REFLEX with Jev for Efficient Selective Control in LLM Agents",
+    "fa": "REFLEX با Jev برای کنترل انتخابی کارآمد در عامل‌های LLM"
+  },
+  "bibliography_start_page": 10,
+  "bibliography_end_page": 11,
+  "coverage_notes": {
+    "en": "Analysis of the supplied 19-page manuscript, including its methods, reported experiments, limitations, appendices, 6 numbered figure views and 20 table records. Captions below are bilingual summaries; original complete captions, tables, and pages remain available. Only explicitly printed values are transcribed. Publication status, external code, datasets and API claims have not been independently authenticated or executed. Prices, model names and versions are historical statements of this source, not current service guidance.",
+    "fa": "تحلیل نسخه 19 صفحه‌ای ارائه‌شده، شامل روش، آزمایش‌های گزارش‌شده، محدودیت‌ها، پیوست‌ها، 6 نمای شکل شماره‌دار و 20 رکورد جدول. عنوان‌ها خلاصه دوزبانه‌اند؛ عنوان کامل، جدول و صفحات اصلی در دسترس‌اند. فقط مقادیر چاپ‌شده نقل می‌شوند. وضعیت انتشار، کد بیرونی، داده و ادعای API مستقلاً تأیید یا اجرا نشده‌اند. قیمت، نام و نسخه مدل، گزارش تاریخی همین منبع است و راهنمای سرویس فعلی نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, research question & tested claims",
+        "fa": "مشخصات، پرسش و ادعاهای آزموده"
+      },
+      "paragraphs": [
+        {
+          "en": "Tiantong Wu and Wei Yang Bryan Lim, Nanyang Technological University; supplied arXiv:2609.26532v1, 22 September 2026. The paper asks when a typed decision model can handle bounded control while a strong LLM handles uncertainty and generation. It tests a twelve-claim register rather than presenting all positive claims as confirmed.",
+          "fa": "Tiantong Wu و Wei Yang Bryan Lim، دانشگاه NTU؛ نسخه ارائه‌شده arXiv: 2609.26532v1 مورخ ۲۲ سپتامبر ۲۰۲۶. پرسش این است که چه زمانی مدل تصمیم نوع‌دار کنترل محدود و LLM قوی عدم‌قطعیت و تولید را انجام دهد. دفتر ۱۲ ادعایی آزموده شده و همه ادعای مثبت تأییدشده نیست.",
+          "pages": [
+            1,
+            2,
+            19
+          ]
+        },
+        {
+          "en": "Four claims are retired: cardinality×ambiguity interaction, a general deferral-failure tendency, superiority to cheap self-escalation on τ²-bench, and a benefit from hierarchical routing at large action sets. Corrected hierarchical routing improves over its broken implementation, not over corrected flat routing.",
+          "fa": "چهار ادعا کنار گذاشته‌اند: تعامل تعداد×ابهام، گرایش عمومی خطا به تعویق، برتری بر ارجاع خودکار ارزان در τ²-bench و مزیت ارجاع سلسله‌مراتبی با گزینه زیاد. اصلاح پیاده‌سازی سلسله‌مراتبی نسبت به نسخه خراب بهتر است، نه نسبت به ارجاع تخت اصلاح‌شده.",
+          "pages": [
+            11,
+            16,
+            17,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Selective-control mechanism & implementation contract",
+        "fa": "سازوکار کنترل انتخابی و قرارداد اجرا"
+      },
+      "paragraphs": [
+        {
+          "en": "At step t, Jev reads observable state and a typed action set, returning a choice and confidence. Execute directly only when c≥τ and executable; otherwise use the strong LLM. Bounded control, argument synthesis and free generation are separate. In external tasks a cheap generative executor supplies arguments/text, because Jev cannot generate them.",
+          "fa": "در گام t، Jev حالت مشاهده‌پذیر و مجموعه اقدام نوع‌دار را می‌خواند و انتخاب و اطمینان می‌دهد. فقط اگر c≥τ و قابل اجرا باشد مستقیم اجرا می‌کند، وگرنه LLM قوی. کنترل محدود، ساخت آرگومان و تولید آزاد جدا هستند؛ در وظیفه بیرونی مولد ارزان آرگومان/متن می‌سازد چون Jev تولید نمی‌کند.",
+          "pages": [
+            2,
+            3
+          ]
+        },
+        {
+          "en": "Pinned jev-1.13.0 is paired with Qwen3.8-Flash/Max and then Kimi K3 or DeepSeek-V4-Pro fallbacks. The frozen REFLEX-Sim v1.2.0 test has 100 tasks with terminal-state and policy assertions; all final main runs report zero harness errors. It compares strong-only B0, cheap-only B1, cheap self-escalation B3 and REFLEX R1 over τ=.5,.7,.8,.9,.95, with .5 as the primary point.",
+          "fa": "نسخه jev-1.13.0 با Qwen3.8-Flash/Max و سپس Kimi K3 یا DeepSeek-V4-Pro جفت می‌شود. آزمون ثابت REFLEX-Sim v1.2.0 شامل ۱۰۰ وظیفه با بررسی حالت نهایی و سیاست است؛ اجرای نهایی خطای عامل صفر گزارش می‌کند. B0 قوی، B1 ارزان، B3 خودارجاع ارزان و R1 در آستانه‌های ۰٫۵/۰٫۷/۰٫۸/۰٫۹/۰٫۹۵ مقایسه می‌شوند؛ ۰٫۵ نقطه اصلی است.",
+          "pages": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Interventions, external validation & uncertainty",
+        "fa": "مداخله، اعتبارسنجی بیرونی و عدم‌قطعیت"
+      },
+      "paragraphs": [
+        {
+          "en": "RF-5C crosses K=10/25/50 with four procedural ambiguity levels over 60 families and two realizations per cell: 1,440 decisions. A separate 240-decision matched intervention swaps a near-valid read competitor for an irreversible write while fixing other factors. Procedural distance is based on required state/policy changes, not embedding similarity. Paired family bootstrap preserves all variants of a family.",
+          "fa": "RF-5C تعداد K=۱۰/۲۵/۵۰ را با چهار سطح ابهام روی ۶۰ خانواده و دو بازنویسی هر سلول ترکیب می‌کند: ۱۴۴۰ تصمیم. مداخله جفتی ۲۴۰ تصمیمی رقیب خواندنی نزدیک را با نوشتن برگشت‌ناپذیر عوض و عوامل دیگر را ثابت می‌کند. فاصله روی تغییر لازم حالت/سیاست تعریف می‌شود، نه شباهت برداری. بازنمونه‌گیری خانواده همه نسخه‌ها را کنار هم نگه می‌دارد.",
+          "pages": [
+            4,
+            6,
+            12,
+            13,
+            17
+          ]
+        },
+        {
+          "en": "BFCL tests 1,800 function choices and 100 function-relevance cases. External τ²-bench v1.0.1 validation uses 60 matched tasks×5 arms=300 episodes across three domains, native terminal reward and a separate control/argument failure audit. Main intervals use 10,000 task/family resamples; McNemar tests paired episode outcomes. External validation is not a full repeated leaderboard evaluation.",
+          "fa": "BFCL دارای ۱۸۰۰ انتخاب تابع و ۱۰۰ مورد ارتباط تابع است. اعتبارسنجی بیرونی τ²-bench v1.0.1 از ۶۰ وظیفه×۵ روش=۳۰۰ اپیزود درسه‌دامنه با پاداش بومی و ممیزی جدا خطای کنترل/آرگومان استفاده می‌کند. بازه اصلی با ۱۰۰۰۰ بازنمونه و آزمون McNemar برای پیامد جفتی است. اعتبارسنجی بیرونی ارزیابی کامل تکراری جدول رتبه‌بندی نیست.",
+          "pages": [
+            4,
+            5,
+            7,
+            10,
+            12,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results-context",
+      "title": {
+        "en": "Results, non-inferiority & reproducibility caveats",
+        "fa": "نتیجه، عدم‌افت و محدودیت بازتولید"
+      },
+      "paragraphs": [
+        {
+          "en": "At τ=.5, main-run success is 95% versus 88% for B0, with 1.12 versus 4.10 strong calls/task (72.7% reduction). Paired outcomes are 87 both succeed,8 R1-only,1 B0-only,4 both fail; exact McNemar p=.0391. Cost/task is $.00763 versus $.01508 and cost/success $.00803 versus $.01713. These are dated source measurements.",
+          "fa": "در آستانه ۰٫۵ موفقیت اجرای اصلی ۹۵٪ در برابر ۸۸٪ و فراخوانی قوی/وظیفه ۱٫۱۲ در برابر ۴٫۱۰ است (کاهش ۷۲٫۷٪). پیامد جفتی ۸۷ موفقیت مشترک، ۸ فقط R1، ۱ فقط B0 و ۴ شکست مشترک؛ p=۰٫۰۳۹۱. هزینه وظیفه ۰٫۰۰۷۶۳ در برابر ۰٫۰۱۵۰۸ و هزینه موفقیت ۰٫۰۰۸۰۳ در برابر ۰٫۰۱۷۱۳ دلار است؛ اندازه‌گیری تاریخی منبع است.",
+          "pages": [
+            5,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "en": "Across fallback families, strong-call reduction is66.1–71.9%. The original criterion checks the observed success difference against−.02; formal lower-bound non-inferiority passes Qwen/DeepSeek but not Kimi. The same 66 autonomous tasks are shared across families, not three independent sets. Repeated Qwen B0 runs differ by three success points despite temperature zero.",
+          "fa": "کاهش فراخوانی در خانواده‌ها ۶۶٫۱–۷۱٫۹٪ است. معیار اولیه فقط اختلاف مشاهده‌شده را با ۰٫۰۲− مقایسه می‌کند؛ عدم‌افت بر پایه کران پایین برای Qwen/DeepSeek پذیرفته و برای Kimi ثابت نمی‌شود. همان ۶۶ وظیفه خودکار بین خانواده‌ها مشترک‌اند، نه سه‌مجموعه مستقل. تکرار B0 مربوط به Qwen با دمای صفر سه‌واحددرصد اختلاف دارد.",
+          "pages": [
+            8,
+            9,
+            15,
+            16,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limits, negative evidence & future work",
+        "fa": "محدودیت، شاهد منفی و آینده از دید نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "BFCL is98.4% for which function but52.0% for whether any function applies. On τ², REFLEX costs $.0572 versus B0 $.2111 but succeeds85% versus 90%, with the paired difference unresolved. B3 costs $.0411 with 91.7% success; superiority to it is not established. The failure audit finds no control/argument failures in any arm, limiting what this benchmark can show about a routing improvement.",
+          "fa": "BFCL در انتخاب کدام تابع ۹۸٫۴٪ و در اینکه آیا تابعی لازم است ۵۲٪ دارد. درτ² هزینه REFLEX برابر ۰٫۰۵۷۲ در برابر B0 برابر ۰٫۲۱۱۱ دلار ولی موفقیت ۸۵٪ در برابر ۹۰٪ با اختلاف نامشخص است. B3 با ۰٫۰۴۱۱ دلار و ۹۱٫۷٪موفقیت است؛ برتری برآن ثابت نیست. ممیزی هیچ خطای کنترل/آرگومان درهیچ روش ندارد و توان سنجش مزیت روتر را محدود می‌کند.",
+          "pages": [
+            6,
+            7,
+            15,
+            18
+          ]
+        },
+        {
+          "en": "Limits: one proprietary decision model, ceiling effects, authority-sensitive error concentration, a limited external sample, imperfect native reward and dated prices. Suggested future benchmarks annotate why an action is valid, including evidence, permission and reversibility. Zero unsafe events in these runs is empirical absence, not an assurance of zero deployment risk.",
+          "fa": "محدودیت: یک مدل تصمیم اختصاصی، اثرسقف، تمرکز خطا در تصمیم اختیار، نمونه بیرونی محدود، پاداش بومی ناقص و قیمت تاریخی. معیار آینده باید دلیل اعتبار اقدام شامل شاهد، اختیار و برگشت‌پذیری را ثبت کند. نبود رخداد ناایمن در این اجراها تضمین ریسک صفر استقرار نیست.",
+          "pages": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Figure 1: Bounded control, cheap execution and strong fallback (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 1: کنترل محدود، اجرای ارزان و بازگشت قوی (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Follow the confidence gate, executor and observation loop. The decision model chooses, while generation/argument synthesis may still require another model.",
+        "fa": "دروازه اطمینان، اجراگر و حلقه مشاهده را دنبال کنید. مدل تصمیم انتخاب می‌کند، ولی تولید/آرگومان هنوز می‌تواند به مدل دیگر نیاز داشته باشد."
+      },
+      "data": {
+        "en": "Architectural diagram; confidence threshold alone does not enforce operation safety.",
+        "fa": "نمودار معماری است؛ آستانه اطمینان به تنهایی ایمنی عملیات را اعمال نمی‌کند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Figure 2: Main success–strong-call frontier (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 2: مرز موفقیت–فراخوانی قوی (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Every point is a separately executed threshold run on the frozen100 tasks. Higher confidence thresholds need not increase total task success because fallback behavior also matters.",
+        "fa": "هرنقطه اجرای مستقل آستانه روی ۱۰۰ وظیفه ثابت است. آستانه بالاتر لزوماً موفقیت نهایی را بالا نمی‌برد زیرا رفتار بازگشت نیز مؤثر است."
+      },
+      "data": {
+        "en": "τ=.5:95%,1.12 calls/task; B0:88%,4.10;τ=.95:88%,2.30 (Table1).",
+        "fa": "آستانه ۰٫۵: ۹۵٪ و ۱٫۱۲ فراخوانی؛ B0: ۸۸٪ و ۴٫۱۰؛ آستانه ۰٫۹۵: ۸۸٪ و ۲٫۳۰ (جدول ۱)."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "caption": {
+        "en": "Figure 3: Action-set size×procedural ambiguity (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 3: تعداد گزینه×ابهام رویه‌ای (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Rows varyK; columns vary the number/distance of near-valid competitors. The aggregate marginal effects are significant, their interaction is not. Effects concentrate in risk and clarification tasks.",
+        "fa": "ردیف K و ستون تعداد/فاصله رقیب نزدیک معتبر را تغییر می‌دهد. اثرحاشیه‌ای معنادار ولی تعامل نامعنادار است و اثر در وظیفه ریسک و رفع ابهام متمرکز است."
+      },
+      "data": {
+        "en": "K10→50:−6.7 points; A0→A3:−5.6; interaction+3.3 with CI crossing zero. Printed cells range .80–.93.",
+        "fa": "K از ۱۰ به ۵۰: ۶٫۷−واحد؛ A0 به A3: ۵٫۶−؛ تعامل ۳٫۳+ با بازه شامل صفر. سلول چاپ‌شده ۰٫۸۰–۰٫۹۳ است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "caption": {
+        "en": "Figure 4: Matched read/write competitor intervention (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 4: مداخله جفتی رقیب خواندن/نوشتن (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The intervention shifts the type of error while holding the correct action and other factors fixed. Rates are unconditional per decision, not conditional on being wrong.",
+        "fa": "مداخله با ثابت‌بودن اقدام درست و عوامل دیگر نوع خطا را تغییر می‌دهد. نرخ‌ها برای همه تصمیم‌هاست، نه مشروط به اشتباه."
+      },
+      "data": {
+        "en": "Irreversible error write/read .100/.017; deferral .058/.125; overall accuracy .833/.842 with unresolved difference.",
+        "fa": "خطای برگشت‌ناپذیر نوشتن/خواندن ۰٫۱۰۰/۰٫۰۱۷؛ تعویق ۰٫۰۵۸/۰٫۱۲۵؛ دقت کل ۰٫۸۳۳/۰٫۸۴۲ با اختلاف نامشخص."
+      }
+    },
+    {
+      "id": "5",
+      "page": 7,
+      "caption": {
+        "en": "Figure 5: External function selection and end-to-end validation (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 5: انتخاب تابع بیرونی و اعتبارسنجی نهایی (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Left separates which tool from whether a tool should run; right showsτ² cost/success. The cheap generative cascade remains a necessary competitor.",
+        "fa": "چپ کدام ابزار را از لزوم اجرای ابزار جدا می‌کند؛ راست هزینه/موفقیتτ² است. آبشار مولد ارزان همچنان رقیب ضروری است."
+      },
+      "data": {
+        "en": "BFCL .984(n1800) versus .520(n100);τ² REFLEX .850,$.0572; B0 .900,$.2111; B3 .917,$.0411.",
+        "fa": "BFCL برابر ۰٫۹۸۴(n ۱۸۰۰) و ۰٫۵۲۰(n ۱۰۰)؛ τ² برای REFLEX: ۰٫۸۵۰، ۰٫۰۵۷۲ دلار؛ B0: ۰٫۹۰۰، ۰٫۲۱۱۱؛ B3: ۰٫۹۱۷، ۰٫۰۴۱۱."
+      }
+    },
+    {
+      "id": "6",
+      "page": 8,
+      "caption": {
+        "en": "Figure 6: Cross-family paired differences and compute reductions (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 6: اختلاف جفتی خانواده و کاهش محاسبه (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The dashed margin is−.02. Kimi’s interval crosses it, so absence of a significant loss is not sufficient for formal non-inferiority. Call and token reductions have different denominators.",
+        "fa": "حاشیه خط‌چین ۰٫۰۲− است؛ بازه Kimi آن را قطع می‌کند، پس نبود افت معنادار برای عدم‌افت رسمی کافی نیست. مخرج کاهش فراخوانی و توکن متفاوت است."
+      },
+      "data": {
+        "en": "Success differences Qwen+.040, Kimi−.020, DeepSeek0; call reductions .719/.714/.661; token reductions .589/.641/.506.",
+        "fa": "اختلاف موفقیت Qwen: ۰٫۰۴۰+، Kimi: ۰٫۰۲۰−، DeepSeek: ۰؛ کاهش فراخوانی ۰٫۷۱۹/۰٫۷۱۴/۰٫۶۶۱ و توکن ۰٫۵۸۹/۰٫۶۴۱/۰٫۵۰۶."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 5,
+      "title": {
+        "en": "Frozen success and strong-call frontier",
+        "fa": "مرز ثابت موفقیت و فراخوانی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "title": {
+        "en": "Replaced decision functions",
+        "fa": "کارکرد تصمیم جایگزین‌شده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "title": {
+        "en": "300-episode external validation",
+        "fa": "اعتبارسنجی بیرونی ۳۰۰ اپیزودی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 9,
+      "title": {
+        "en": "Cross-family success and call reduction",
+        "fa": "موفقیت و کاهش فراخوانی هرخانواده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "title": {
+        "en": "Shared autonomous task subset",
+        "fa": "زیرمجموعه خودکار مشترک"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S1",
+      "page": 13,
+      "title": {
+        "en": "Selective risk/coverage by threshold",
+        "fa": "ریسک/پوشش هرآستانه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S2",
+      "page": 13,
+      "title": {
+        "en": "Factorial contrasts and sensitivity",
+        "fa": "مقایسه عاملی و حساسیت"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S3",
+      "page": 14,
+      "title": {
+        "en": "Matched competitor-type contrasts",
+        "fa": "مقایسه نوع رقیب جفتی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S4",
+      "page": 14,
+      "title": {
+        "en": "BFCL cardinality and relevance",
+        "fa": "تعداد گزینه و ارتباط BFCL"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S5",
+      "page": 15,
+      "title": {
+        "en": "Paired external success comparisons",
+        "fa": "مقایسه جفتی موفقیت بیرونی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S6",
+      "page": 15,
+      "title": {
+        "en": "Full cross-family calls/tokens/cost",
+        "fa": "فراخوانی/توکن/هزینه کامل خانواده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S7",
+      "page": 16,
+      "title": {
+        "en": "Implementation audit and corrections",
+        "fa": "ممیزی و اصلاح پیاده‌سازی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S8",
+      "page": 16,
+      "title": {
+        "en": "Paired100-task outcomes",
+        "fa": "پیامد جفتی ۱۰۰ وظیفه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S9",
+      "page": 17,
+      "title": {
+        "en": "Errors by decision type",
+        "fa": "خطا به تفکیک نوع تصمیم"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S10",
+      "page": 17,
+      "title": {
+        "en": "Embedding versus procedural distance",
+        "fa": "فاصله برداری در برابر رویه‌ای"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S11",
+      "page": 18,
+      "title": {
+        "en": "Every external episode failure",
+        "fa": "شکست همه اپیزودهای بیرونی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S12",
+      "page": 18,
+      "title": {
+        "en": "Formal non-inferiority and escalation",
+        "fa": "عدم‌افت رسمی و ارجاع"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S13",
+      "page": 18,
+      "title": {
+        "en": "Repeated execution differences",
+        "fa": "اختلاف اجرای تکراری"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S14",
+      "page": 18,
+      "title": {
+        "en": "Complete frontier cost accounting",
+        "fa": "حسابداری هزینه کل مرز"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "S15",
+      "page": 19,
+      "title": {
+        "en": "Supported and retired claim register",
+        "fa": "دفتر ادعای تأییدشده و کنارگذاشته"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Directly relevant to selective low-cost orchestration and the distinction between knowing which intervention exists and being authorized to execute it. It evaluates generic tools, not energy physics or causal diagnosis.",
+      "fa": "مستقیماً با هماهنگی انتخابی کم‌هزینه و تمایز دانستن مداخله موجود از اختیار اجرای آن مرتبط است. ابزار عمومی را می‌سنجد، نه فیزیک انرژی یا تشخیص علّی.",
+      "pages": [
+        3,
+        6,
+        7,
+        10
+      ]
+    },
+    "contribution": {
+      "en": "Supplies a bounded-control/generation split, strong-calls-per-success accounting, procedural ambiguity interventions and an explicit claim register. Its corrected non-inferiority analysis is especially useful for our reliability claims.",
+      "fa": "تفکیک کنترل/تولید، حسابداری فراخوانی به ازای موفقیت، مداخله ابهام رویه‌ای و دفتر ادعا را می‌دهد. تحلیل اصلاح‌شده عدم‌افت برای ادعای قابلیت اعتماد پروژه مهم است.",
+      "pages": [
+        3,
+        12,
+        16,
+        18,
+        19
+      ]
+    },
+    "employment": {
+      "en": "Proposed P6/P7 use: represent allowed operations with prerequisites, authorization and reversibility, then evaluate confidence-based delegation with deterministic checks and a strong fallback. In P8, include near-valid actions, held-out thresholds and repeated paired task runs; measure complete recovery, not just call reduction.",
+      "fa": "کاربرد پیشنهادی P6/P7: عملیات مجاز با پیش‌شرط، اختیار و برگشت‌پذیری و سنجش واگذاری اطمینان‌محور با بررسی قطعی و بازگشت قوی. در P8 اقدام نزدیک معتبر، آستانه نگه‌داشته‌شده و اجرای جفتی تکراری و بازیابی کامل را بسنجیم، نه فقط کاهش فراخوانی.",
+      "pages": [
+        3,
+        4,
+        10,
+        18
+      ]
+    },
+    "baseline": {
+      "en": "Conditional adapted component baseline if efficient decision allocation becomes part of our scope: strong-only, cheap-only, cheap self-escalation and REFLEX-style typed gating on identical HEMS states. REFLEX itself need not replace the main diagnosis/planning baselines or justify importingτ=.5 unchanged.",
+      "fa": "درصورت ورود تخصیص کارآمد تصمیم به دامنه، خط‌مبنای مؤلفه‌ای اقتباسی شامل قوی‌تنها، ارزان‌تنها، خودارجاع ارزان و دروازه نوع‌دار REFLEX روی حالت یکسان HEMS است. جایگزین پایه تشخیص/برنامه‌ریزی نیست و انتقال مستقیمτ=۰٫۵ توجیه ندارد.",
+      "pages": [
+        3,
+        4,
+        7,
+        10
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Strength: the paper reports failed claims and evaluator repairs rather than hiding them. Limitation: impressive main-run savings coexist with unresolved external quality and a competitive simpler cascade. Our contribution would need to improve the diagnostic/control objective, not only route familiar tools cheaply.",
+      "fa": "قوت: ادعای ردشده و اصلاح ارزیاب را پنهان نمی‌کند. محدودیت: صرفه‌جویی اجرای اصلی با کیفیت بیرونی نامشخص و آبشار ساده رقابتی همراه است. مشارکت ما باید هدف تشخیص/کنترل را بهتر کند، نه فقط ابزار آشنا را ارزان ارجاع دهد.",
+      "pages": [
+        7,
+        10,
+        16,
+        19
+      ]
+    },
+    {
+      "en": "The source’s Table S2 row text says A0→A3 atK=25, while the equation, caption and narrative define an average over all threeK values. This report follows the explicit estimator and preserves the original table for audit.",
+      "fa": "متن ردیف جدول S2 می‌گوید A0→A3 در K=۲۵، ولی معادله، عنوان و روایت میانگین سه K را تعریف می‌کنند. گزارش از برآوردگر صریح پیروی و جدول اصلی را برای ممیزی حفظ می‌کند.",
+      "pages": [
+        12,
+        13
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Main run:95% success with 72.7% fewer strong calls; externalτ²:85% versus 90% with 3.7× lower per-episode cost and unresolved success difference. Formal cross-family NI is not established for Kimi.",
+      "fa": "اجرای اصلی: ۹۵٪موفقیت با ۷۲٫۷٪فراخوانی قوی کمتر؛ τ² بیرونی: ۸۵٪در برابر ۹۰٪ با هزینه اپیزود ۳٫۷ برابر کمتر و اختلاف موفقیت نامشخص. عدم‌افت رسمی Kimi ثابت نیست.",
+      "pages": [
+        5,
+        7,
+        18
+      ]
+    }
+  ],
+  "bibliography_end_marker": "^A Hierarchical Routing Ablation\\s*$"
+}

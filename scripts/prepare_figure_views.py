@@ -1,21 +1,83 @@
 """Extract figure views using source PDF image geometry; retain safe page fallbacks."""
-import json,re
+import json,re,sys
 from pathlib import Path
 import pdfplumber
 from PIL import Image,ImageDraw,ImageOps
 
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'docs/literature'
 inventory=json.loads((OUT/'inventory.json').read_text(encoding='utf-8'))
-manifest={}
+selected=set(sys.argv[1:])
+manifest=json.loads((OUT/'figure-views.json').read_text(encoding='utf-8')) if selected else {}
 manual_views={
     ('article-06','1'):(.06,.09,.94,.435),
     ('article-07','1'):(.06,.065,.94,.305),
     ('article-11','1'):(.52,.70,.94,.905),
+    # Source-page crops checked against the Jev manuscript contact sheets.
+    ('article-24','1'):(.09,.12,.94,.45),
+    ('article-24','2'):(.10,.13,.93,.51),
+    ('article-24','3'):(.10,.13,.93,.39),
+    ('article-24','4'):(.10,.14,.93,.35),
+    ('article-24','5'):(.10,.12,.93,.49),
+    ('article-24','6'):(.10,.12,.93,.60),
+    ('article-24','7'):(.10,.12,.93,.40),
+    ('article-24','8'):(.10,.44,.93,.68),
+    ('article-24','9'):(.10,.12,.93,.43),
+    ('article-24','10'):(.10,.12,.93,.50),
+    ('article-24','11'):(.10,.12,.93,.73),
+    ('article-25','1'):(.50,.27,.94,.56),
+    ('article-25','2'):(.10,.08,.93,.35),
+    ('article-25','3'):(.10,.11,.93,.30),
+    ('article-25','4'):(.50,.08,.94,.61),
+    ('article-25','5'):(.10,.42,.50,.65),
+    ('article-25','6'):(.50,.44,.94,.70),
+    ('article-25','7'):(.10,.40,.94,.62),
+    ('article-25','8'):(.50,.29,.94,.51),
+    ('article-25','9'):(.50,.06,.94,.23),
+    ('article-25','10'):(.10,.28,.50,.52),
+    ('article-25','11'):(.10,.05,.94,.43),
+    ('article-25','12'):(.10,.45,.94,.91),
+    ('article-25','13'):(.10,.07,.94,.46),
+    ('article-26','1'):(.10,.12,.94,.30),
+    ('article-26','2'):(.10,.08,.50,.34),
+    ('article-26','3'):(.50,.24,.94,.52),
+    ('article-26','4'):(.50,.08,.94,.34),
+    ('article-26','5'):(.10,.08,.94,.33),
+    ('article-26','6'):(.10,.08,.94,.36),
+    ('article-27','1'):(.10,.12,.93,.26),
+    ('article-27','2'):(.10,.12,.93,.43),
+    ('article-27','3'):(.10,.32,.93,.65),
+    ('article-27','4'):(.10,.12,.93,.36),
+    ('article-27','5'):(.10,.12,.93,.54),
+    ('article-27','6'):(.10,.12,.93,.48),
+    ('article-28','1'):(.10,.34,.50,.63),
+    ('article-28','2'):(.50,.08,.94,.38),
+    ('article-28','3'):(.10,.07,.94,.32),
+    ('article-28','4'):(.10,.33,.94,.58),
+    ('article-28','5'):(.10,.49,.50,.72),
+    ('article-28','6'):(.50,.49,.94,.72),
+    ('article-28','7'):(.50,.08,.94,.30),
+    ('article-29','1'):(.10,.07,.50,.33),
+    ('article-29','2'):(.10,.57,.50,.84),
+    ('article-29','3'):(.10,.08,.94,.33),
+    ('article-29','4'):(.50,.36,.94,.60),
+    ('article-29','5'):(.50,.07,.94,.32),
+    ('article-29','6'):(.10,.07,.94,.31),
 }
-cover_preferences={'article-16':'2','article-15':'3'}
+cover_preferences={'article-16':'2','article-15':'3','article-25':'2','article-26':'1','article-27':'2','article-28':'2','article-29':'3'}
+# Keep titles, axis labels and legends inside the focused Jev views. The initial
+# tight bounds were compared against the full pages before adding this margin.
+for key,box in list(manual_views.items()):
+    if key[0] in {f'article-{n}' for n in range(24,30)}:
+        manual_views[key]=(box[0],max(.04,box[1]-.055),box[2],min(.96,box[3]+.035))
+manual_views[('article-25','10')]=(.10,.32,.50,.68)
+manual_views[('article-25','12')]=(.10,.51,.94,.94)
+manual_views[('article-28','5')]=(.10,.40,.50,.755)
+manual_views[('article-28','6')]=(.50,.40,.94,.755)
+manual_views[('article-29','2')]=(.10,.49,.50,.86)
 def norm(value):return re.sub(r'[^a-z0-9]','',str(value).lower())
 for item in inventory:
     identity=item['id'];folder='huang' if identity=='article-02' else identity
+    if selected and identity not in selected:continue
     if identity in ('la-upahem','article-02'):
         count=9 if identity=='la-upahem' else 16
         views={str(n):dict(image=f'assets/{folder}/figure-{n}.png',kind='figure') for n in range(1,count+1)}

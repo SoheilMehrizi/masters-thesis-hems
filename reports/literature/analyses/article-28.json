@@ -1,0 +1,430 @@
+{
+  "id": "article-28",
+  "short_title": "Fast Models, Slow Evidence · evaluation audit",
+  "title": {
+    "en": "Fast Models, Slow Evidence: A Paired and Self-Audited Evaluation of System-1 Decision Models for LLM Agent Harnesses",
+    "fa": "مدل سریع، شاهد کند: ارزیابی جفتی و خودممیزی مدل‌های تصمیم System-1 برای عامل‌های LLM"
+  },
+  "bibliography_start_page": 8,
+  "bibliography_end_page": 9,
+  "coverage_notes": {
+    "en": "Analysis of the supplied 11-page manuscript, including its methods, reported experiments, limitations, appendices, 7 numbered figure views and 8 table records. Captions below are bilingual summaries; original complete captions, tables, and pages remain available. Only explicitly printed values are transcribed. Publication status, external code, datasets and API claims have not been independently authenticated or executed. Prices, model names and versions are historical statements of this source, not current service guidance.",
+    "fa": "تحلیل نسخه 11 صفحه‌ای ارائه‌شده، شامل روش، آزمایش‌های گزارش‌شده، محدودیت‌ها، پیوست‌ها، 7 نمای شکل شماره‌دار و 8 رکورد جدول. عنوان‌ها خلاصه دوزبانه‌اند؛ عنوان کامل، جدول و صفحات اصلی در دسترس‌اند. فقط مقادیر چاپ‌شده نقل می‌شوند. وضعیت انتشار، کد بیرونی، داده و ادعای API مستقلاً تأیید یا اجرا نشده‌اند. قیمت، نام و نسخه مدل، گزارش تاریخی همین منبع است و راهنمای سرویس فعلی نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, research questions & scope",
+        "fa": "مشخصات، پرسش‌ها و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Jiawei Li’s supplied manuscript compares hosted Jev and open-weight LAYA on agent-harness decisions, then audits its own deployment conclusions. RQ1 concerns paired accuracy; RQ2 concerns order and wording sensitivity. Subsequent analyses address calibration, gating and accounting. No numbered preregistered hypothesis set is stated. These are classifier/decision-point studies, not live HEMS recovery experiments.",
+          "fa": "نسخه ارائه‌شده Jiawei Li، مدل میزبانی‌شده Jev و LAYA باز را در تصمیم‌های عامل مقایسه و سپس نتیجه استقرار خود را ممیزی می‌کند. RQ1 دقت جفتی و RQ2 حساسیت ترتیب و متن است؛ تحلیل بعدی کالیبراسیون، دروازه و حسابداری را می‌سنجد. فرضیه شماره‌دار از پیش ثبت‌شده بیان نشده است. این‌ها مطالعه تصمیم/طبقه‌بندند، نه بازیابی زنده HEMS.",
+          "pages": [
+            1,
+            3,
+            4,
+            5,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Interface, confidence semantics & experimental controls",
+        "fa": "قرارداد، معنای اطمینان و کنترل آزمایش"
+      },
+      "paragraphs": [
+        {
+          "en": "LAYA 0.3.21 and jev-1.13.0 receive byte-identical state and question objects. Choice confidence is max option probability; binary confidence is max(p,1−p). LAYA’s entropy-based confidence field differs in scale and must not be substituted. DeepSeek-V4.1-Flash appears as a control reference with necessarily different prompt packaging, not as an equally paired main competitor.",
+          "fa": "LAYA 0.3.21 و jev-1.13.0 حالت و پرسش یکسان در سطح بایت می‌گیرند. اطمینان Choice بیشینه احتمال و دودویی max(p,1−p) است. فیلد اطمینان آنتروپی LAYA مقیاس دیگری دارد و نباید جایگزین شود. DeepSeek-V4.1-Flash مرجع کنترل با قالب پرامپت متفاوت است، نه رقیب اصلی کاملاً جفت‌شده.",
+          "pages": [
+            2
+          ]
+        },
+        {
+          "en": "The paper reports 7,283 base cases plus 6,640 robustness variants from 18 public sources. Tracks include model routing, tool choice/guarding, RAG, injection in user/tool channels, many-label intents, groundedness, safety and PII, with B2/G2/J2 controls and a two-tier safety set. Use Table 1 for each track’s denominator rather than adding overlapping paired constructions as independent examples.",
+          "fa": "مقاله ۷۲۸۳ مورد پایه و ۶۶۴۰ نسخه استحکام از ۱۸ منبع عمومی گزارش می‌کند. مسیرها شامل ارجاع مدل، انتخاب/بررسی ابزار، RAG، تزریق در کانال کاربر/ابزار، نیت چندبرچسبی، اتکای شاهد، ایمنی و PII با کنترل B2/G2/J2 و مجموعه ایمنی دومرحله‌ای‌اند. مخرج هر مسیر در جدول ۱ است؛ ساخت‌های جفتی هم‌پوشان را نمونه مستقل جمع نکنید.",
+          "pages": [
+            1,
+            2,
+            3,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Accuracy, robustness, calibration & reproducibility",
+        "fa": "دقت، استحکام، کالیبراسیون و بازتولید"
+      },
+      "paragraphs": [
+        {
+          "en": "Accuracy uses Wilson intervals and exact paired McNemar tests; reported comparisons have no multiplicity correction. Jev leads on 9 of 11 decision points, while routing is near chance and RAG relevance is a tie. Similar-tool controls audit multiple valid labels; the unique-gold subset is LLM-filtered and may favor LLM-like judgments. Option reversal and four wordings×two samples expose sensitivity that a single prompt hides.",
+          "fa": "دقت از بازه Wilson و آزمون دقیق McNemar جفتی بدون تصحیح چندگانگی استفاده می‌کند. Jev در ۹ از ۱۱ نقطه برتر است؛ ارجاع نزدیک شانس و ارتباط RAG مساوی است. کنترل ابزار مشابه چند پاسخ معتبر را ممیزی می‌کند؛ زیرمجموعه تک‌پاسخ توسط LLM پالایش شده و ممکن است سوگیری داشته باشد. وارونگی گزینه و چهار متن×دو نمونه حساسیت پنهان پرامپت واحد را نشان می‌دهد.",
+          "pages": [
+            2,
+            3,
+            4,
+            6,
+            7
+          ]
+        },
+        {
+          "en": "Replicates test two days, an RTX 2080 Ti GPU and Apple M4 CPU. LAYA repeats 1,180/1,180 decisions across hardware; Jev changes 5/1,080 across days. Per-domain Platt calibration and held-out half-splits evaluate calibration and threshold transfer. The paper’s latency ranges depend on hardware and client site; they do not establish a universal speed ratio.",
+          "fa": "تکرار در دو روز، GPU مدل RTX 2080 Ti و CPU مدل Apple M4 است. LAYA در دو سخت‌افزار ۱۱۸۰/۱۱۸۰ تصمیم را تکرار و Jev در دو روز ۵/۱۰۸۰ را عوض می‌کند. کالیبراسیون Platt دامنه‌ای و تقسیم نیمه نگه‌داشته‌شده انتقال آستانه را می‌سنجد. دامنه تأخیر تابع سخت‌افزار و محل مشتری است و نسبت سرعت عمومی نیست.",
+          "pages": [
+            2,
+            4,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "title": {
+        "en": "Deployment audit: what changed and why",
+        "fa": "ممیزی استقرار: چه چیز و چرا تغییر کرد"
+      },
+      "paragraphs": [
+        {
+          "en": "The safety pre-screen’s apparent 23.9% saving becomes 4.3% after paying for its own tokens; τ=.05 costs 4.7% more than the reviewer alone. Gate accuracy 45–58% was wrongly labeled end-to-end correctness; the corrected conditional answer retention is 97.9% under the stated LLM assumption. Thresholds chosen and evaluated in-sample hide held-out misses: p95 reaches 16.7%, and the pre-screen adds misses in 47% of splits.",
+          "fa": "صرفه‌جویی ظاهری ۲۳٫۹٪ پیش‌غربال ایمنی پس از هزینه توکن خودش ۴٫۳٪ می‌شود؛ آستانه ۰٫۰۵ هزینه را ۴٫۷٪ بیشتر می‌کند. دقت دروازه ۴۵–۵۸٪ به اشتباه درستی نهایی نامیده شده بود؛ حفظ پاسخِ موارد پاسخ‌پذیر با فرض LLM بیان‌شده ۹۷٫۹٪ است. تنظیم و سنجش روی همان داده، عدم‌کشف نگه‌داشته‌شده را پنهان می‌کند: صدک ۹۵ تا ۱۶٫۷٪ و خطای بیشتر در ۴۷٪تقسیم‌ها.",
+          "pages": [
+            4,
+            5,
+            6,
+            11
+          ]
+        },
+        {
+          "en": "A user-versus-tool injection false-positive effect disappears for channel-native documents: Jev and the reference LLM have 0% false positives in both channels. The earlier benign user-query text looked anomalous inside a tool response. Conversely, similar-tool controls preserve Jev’s strong performance on unambiguous items, and natural-redaction PII controls do not repair LAYA’s reversed ranking. The audit reports both changed and unchanged conclusions.",
+          "fa": "اثر مثبت کاذب تزریق بین کانال کاربر/ابزار برای سند بومی کانال حذف می‌شود: Jev و LLM مرجع در هر دو کانال صفرند. متن پرسش بی‌خطر کاربر در پاسخ ابزار غیرعادی به نظر می‌رسید. در مقابل کنترل ابزار مشابه برتری Jev را روی مورد بدون ابهام حفظ و کنترل حذف طبیعی PII رتبه‌بندی معکوس LAYA را اصلاح نمی‌کند. ممیزی هم نتیجه عوض‌شده و هم ثابت را گزارش می‌کند.",
+          "pages": [
+            5,
+            6,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated recommendations, strengths & gaps",
+        "fa": "پیشنهاد، قوت و شکاف از دید نویسنده"
+      },
+      "paragraphs": [
+        {
+          "en": "The author recommends strong System-1 models for bounded tool/label/grounding tasks, but not zero-shot model routing, generation-skipping RAG gates, PII screening or sole safety gating. This recommendation is scoped to the evaluated tasks. LAYA fine-tuning and a typed-decisions checkpoint are not fully evaluated; small multilingual cells contain only ten cases.",
+          "fa": "نویسنده مدل System-1 قوی را برای ابزار/برچسب/اتکای شاهد محدود پیشنهاد و ارجاع صفرنمونه مدل، حذف تولید بر اساس RAG، غربال PII و تنها دروازه ایمنی را توصیه نمی‌کند. این پیشنهاد محدود به وظیفه آزموده‌شده است. تنظیم LAYA و نسخه تصمیم نوع‌دار کامل سنجیده نشده و سلول چندزبانه فقط ده مورد دارد.",
+          "pages": [
+            7
+          ]
+        },
+        {
+          "en": "Strength is self-audit from raw outputs with matched controls and explicit error direction. Limits include public-data contamination risk, synthetic class mixes, English dominance, LLM policy labels (72.8% agreement with dataset labels), wording variation and unknown production base rates. Threshold-level safety estimates are empirical; no confidence field guarantees safe execution.",
+          "fa": "قوت، خودممیزی خروجی خام با کنترل همسان و جهت صریح خطاست. محدودیت: احتمال آلودگی داده عمومی، ترکیب کلاس مصنوعی، غلبه انگلیسی، برچسب سیاست LLM با ۷۲٫۸٪ توافق با داده، تغییر متن و فراوانی تولید نامعلوم. برآورد ایمنی آستانه تجربی است؛ هیچ فیلد اطمینان اجرای ایمن را تضمین نمی‌کند.",
+          "pages": [
+            4,
+            6,
+            7,
+            11
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Figure 1: Paired decision-point accuracy (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 1: دقت جفتی هرنقطه تصمیم (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Bars use Wilson intervals; right-hand labels are paired Jev-minus-LAYA differences. A tie at chance for routing is different from a narrow tie for RAG.",
+        "fa": "میله‌ها بازه Wilson و برچسب راست اختلاف جفتی Jev منهای LAYA است. تساوی نزدیک شانس ارجاع با تساوی دارای بازه باریک RAG فرق دارد."
+      },
+      "data": {
+        "en": "Jev 76.7% versus 63.1% on the2,100-case suite; RAG61.0% versus 60.5%, CI of difference[−2.0,+3.0] points.",
+        "fa": "Jev درمجموعه ۲۱۰۰ موردی ۷۶٫۷٪ دربرابر ۶۳٫۱٪؛ RAG برابر ۶۱٪ دربرابر ۶۰٫۵٪ با بازه اختلاف[۲−، ۳+]واحد درصد."
+      }
+    },
+    {
+      "id": "2",
+      "page": 3,
+      "caption": {
+        "en": "Figure 2: Tool count and distractor similarity (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 2: تعداد ابزار و شباهت گزینه انحرافی (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Solid/dashed lines distinguish random and nearest-neighbor distractors. Candidate truncation in LAYA’s shared192-token budget and multiple valid tools matter when interpreting the decline.",
+        "fa": "خط پیوسته/گسسته گزینه تصادفی/نزدیک‌ترین همسایه را جدا می‌کند. برش گزینه دربودجه مشترک ۱۹۲ توکنی LAYA و چندابزار معتبر درتفسیر افت مهم‌اند."
+      },
+      "data": {
+        "en": "AtK50 nearest distractors LAYA31.3%; on all unique-nearest items Jev 98.9% versus LAYA61.6% (different denominators).",
+        "fa": "در K ۵۰ با رقیب نزدیک LAYA برابر ۳۱٫۳٪؛ روی کل موارد نزدیک تک‌پاسخ Jev ۹۸٫۹٪ دربرابر LAYA ۶۱٫۶٪؛ مخرج‌ها متفاوت‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "caption": {
+        "en": "Figure 3: Option-order and instruction sensitivity (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 3: حساسیت ترتیب گزینه و دستور (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Reversal changes only order, while wording/sample variants change the measured prompt realization. The spread is empirical variability, not a confidence interval for all future prompts.",
+        "fa": "وارونگی فقط ترتیب راعوض می‌کند؛ نسخه متن/نمونه صورت‌بندی پرامپت را تغییر می‌دهد. پراکندگی تغییرپذیری تجربی است، نه بازه همه پرامپت آینده."
+      },
+      "data": {
+        "en": "Overall reversal flips30.3% LAYA versus 1.8% Jev; wording ranges5–15 points pertrack.",
+        "fa": "وارونگی درکل ۳۰٫۳٪ تصمیم LAYA و ۱٫۸٪Jev راعوض می‌کند؛ دامنه تغییر متن ۵–۱۵ واحد درصد هر مسیر است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 5,
+      "caption": {
+        "en": "Figure 4: RAG operating curve and held-out misses (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 4: منحنی کار RAG و عدم‌کشف نگه‌داشته‌شده (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Left trades calls kept against answerable cases dropped; right selects thresholds on one half and measures the other. Do not read in-sample5% as a held-out risk guarantee.",
+        "fa": "چپ فراخوانی باقی‌مانده را دربرابر حذف موارد پاسخ‌پذیر و راست آستانه یک‌نیمه رادر نیمه دیگر می‌سنجد.۵٪ درون‌نمونه تضمین ریسک بیرونی نیست."
+      },
+      "data": {
+        "en": "At5% miss budget: LAYA keeps92.4% and Jev 79.8% calls;500 half-splits show held-out p95 up to 16.7%.",
+        "fa": "در بودجه عدم‌کشف ۵٪، LAYA ۹۲٫۴٪ و Jev ۷۹٫۸٪ فراخوانی را نگه می‌دارند؛ ۵۰۰ تقسیم نیمه صدک ۹۵ تا ۱۶٫۷٪ دارد."
+      }
+    },
+    {
+      "id": "5",
+      "page": 6,
+      "caption": {
+        "en": "Figure 5: Two-tier safety with corrected accounting (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 5: ایمنی دومرحله‌ای با حسابداری اصلاح‌شده (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The dashed curve omits pre-screen cost; the solid curve includes it. Matching miss rate is not sufficient to establish a useful saving without counting both stages.",
+        "fa": "منحنی گسسته هزینه پیش‌غربال را حذف و پیوسته آن را شامل می‌کند. عدم‌کشف همسان بدون هزینه هر دو مرحله صرفه‌جویی مفید را ثابت نمی‌کند."
+      },
+      "data": {
+        "en": "τ=.1: cost 95.7% of reviewer-only, not76.1%;τ=.05:104.7%; in-sampleFNR11.6%.",
+        "fa": "آستانه ۰٫۱ هزینه ۹۵٫۷٪ مرجع دارد، نه ۷۶٫۱٪؛ آستانه ۰٫۰۵ برابر ۱۰۴٫۷٪؛ عدم‌کشف درون‌نمونه ۱۱٫۶٪."
+      }
+    },
+    {
+      "id": "6",
+      "page": 6,
+      "caption": {
+        "en": "Figure 6: Channel-native content control (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 6: کنترل محتوای بومی کانال (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Compare the same delivery channels under transplanted short text and native documents. Content style confounded the original apparent channel effect.",
+        "fa": "همان کانال رابرای متن کوتاه منتقل‌شده وسند بومی مقایسه کنید. سبک محتوا اثرظاهری اولیه کانال را مخدوش می‌کرد."
+      },
+      "data": {
+        "en": "Jev native-document FPR0%→0%; LAYA6.7%→10.0%(p=.34); referenceLLM0%→0%.",
+        "fa": "مثبت کاذب Jev در سند بومی ۰٪→۰٪؛ LAYA ۶٫۷٪→۱۰٪ با p=۰٫۳۴؛ LLM مرجع ۰٪→۰٪."
+      }
+    },
+    {
+      "id": "7",
+      "page": 11,
+      "caption": {
+        "en": "Figure 7: Reliability diagrams by suite (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 7: نمودار قابلیت اعتماد هرمجموعه (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Each point has at least10 items in10 calibration bins. A good pooled ECE can hide a specific routing failure, so inspect domain rows and error directions.",
+        "fa": "هرنقطه حداقل ۱۰ مورد در ۱۰ سطل دارد. ECE تجمیعی مناسب ممکن است شکست ارجاع خاص را پنهان کند؛ ردیف دامنه و جهت خطا را بخوانید."
+      },
+      "data": {
+        "en": "A–F ECE: LAYA.158, Jev.143; G–J:.198,.080; Jev routing ECE.477 intext.",
+        "fa": "ECE در A–F: LAYA ۰٫۱۵۸ و Jev ۰٫۱۴۳؛ در G–J: ۰٫۱۹۸ و ۰٫۰۸۰؛ ECE ارجاع Jev درمتن ۰٫۴۷۷ است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 3,
+      "title": {
+        "en": "Decision points, sources and sample sizes",
+        "fa": "نقطه تصمیم، منبع واندازه نمونه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "title": {
+        "en": "Audit corrections and unchanged controls",
+        "fa": "اصلاح ممیزی وکنترل بدون تغییر"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 10,
+      "title": {
+        "en": "Binary AUC and error directions",
+        "fa": "AUC دودویی وجهت خطا"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 10,
+      "title": {
+        "en": "Large-label and language accuracy",
+        "fa": "دقت چندبرچسبی وزبان"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 10,
+      "title": {
+        "en": "Native-document channel control",
+        "fa": "کنترل کانال سندبومی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 11,
+      "title": {
+        "en": "Natural-redaction PII control",
+        "fa": "کنترل حذف طبیعی PII"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 11,
+      "title": {
+        "en": "Random/nearest tools and ambiguity",
+        "fa": "ابزار تصادفی/نزدیک وابهام"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 11,
+      "title": {
+        "en": "In-sample two-tier safety costs and errors",
+        "fa": "هزینه وخطای ایمنی دومرحله‌ای درون‌نمونه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Especially important for our experimental credibility: the paper shows how correct classifier outputs can still support wrong deployment claims through accounting, labels and threshold selection.",
+      "fa": "برایاعتبار آزمایش پروژه به‌ویژه مهم است: خروجی صحیح طبقه‌بند همچنان می‌تواند به علت حسابداری، برچسب وانتخاب آستانه ادعای استقرار غلط بسازد.",
+      "pages": [
+        4,
+        5,
+        6
+      ]
+    },
+    "contribution": {
+      "en": "Adds native-channel controls, matched-rate gating, complete first-stage cost accounting, option-order checks, confidence-field auditing and held-out miss evaluation. These complement our diagnostic calibration and matched-budget evaluation.",
+      "fa": "کنترل کانال بومی، دروازه هم‌نرخ، هزینه کامل مرحله اول، بررسی ترتیب گزینه، ممیزی فیلد اطمینان و سنجش عدم‌کشف نگه‌داشته‌شده را می‌دهد؛ مکمل کالیبراسیون تشخیص وارزیابی بودجه همسان ماست.",
+      "pages": [
+        2,
+        4,
+        5,
+        6
+      ]
+    },
+    "employment": {
+      "en": "Proposed P7/P8 checklist: pin versions and prompt hashes, randomize/control option order, include all model/Twin/checker costs, separate gate accuracy from recovery success, calibrate on held-out scenarios and audit native telemetry/tool content. Do not reuse an LLM safety classifier as our deterministic physical constraint checker.",
+      "fa": "چک‌لیست پیشنهادی P7/P8: ثبت نسخه وهش پرامپت، کنترل ترتیب، هزینه همه مدل/Twin/بررسی‌گر، تفکیک دقت دروازه از موفقیت بازیابی، کالیبراسیون سناریوی نگه‌داشته‌شده وممیزی محتوای بومی ابزار/تله‌متری. طبقه‌بند ایمنی LLM جای بررسی‌گر قطعی فیزیکی نیست.",
+      "pages": [
+        2,
+        4,
+        6,
+        7
+      ]
+    },
+    "baseline": {
+      "en": "No need to reproduce the full NLP/safety suite as a main HEMS baseline. If a System-1 layer is selected, use an adapted Jev/LLM or open-model decision comparator with random and always-escalate controls on the exact HEMS decision states.",
+      "fa": "بازسازی کل مجموعه NLP/ایمنی به عنوان پایه اصلی HEMS لازم نیست. اگرلایه System-1 انتخاب شد، مقایسه اقتباسی Jev/LLM یامدل باز با کنترل تصادفی وهمیشه‌ارجاع رویحالت تصمیم دقیق HEMS مناسب است.",
+      "pages": [
+        3,
+        4,
+        7
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Strength: explicit counterexamples, corrected accounting and negative controls are more transferable than headline model rankings. Limits: many labels and candidate-validity checks depend on LLM judgments; the study cannot certify our safety gate or diagnose physical faults.",
+      "fa": "قوت: ضدنمونه صریح، حسابداری اصلاح‌شده وکنترل منفی ازرتبه مدل انتقال‌پذیرترند. محدودیت: بسیاری برچسب‌ها وبررسی اعتبار گزینه بر داوری LLM تکیه دارد؛ ایمنی پروژه یا تشخیص خطای فیزیکی را تأیید نمی‌کند.",
+      "pages": [
+        5,
+        6,
+        7,
+        11
+      ]
+    },
+    {
+      "en": "Reported confidence semantics differ across these six papers. Log raw option probabilities, derived confidence formula and calibration version in our contracts, rather than treating every field called confidence as the same quantity.",
+      "fa": "معنای اطمینان بین شش‌مقاله متفاوت است. درقرارداد پروژه احتمال خام گزینه، فرمول اطمینان ونسخه کالیبراسیون را ثبت کنیم وهر فیلد confidence راکمیت یکسان ندانیم.",
+      "pages": [
+        2
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Jev wins9/11 decision points, but the corrected safety saving is4.3%, not23.9%, and held-out thresholds miss their nominal5% target frequently. Local model accuracy and complete-system value are separate outcomes.",
+      "fa": "Jev در ۹ از ۱۱ نقطه برتر است، ولی صرفه‌جویی اصلاح‌شده ایمنی ۴٫۳٪ است، نه ۲۳٫۹٪؛ آستانه نگه‌داشته‌شده اغلب هدف اسمی ۵٪ را رد می‌کند. دقت محلی وارزش سامانه کامل جدا هستند.",
+      "pages": [
+        3,
+        4,
+        6
+      ]
+    }
+  ],
+  "bibliography_end_marker": "^A Data Construction Details\\s*$"
+}

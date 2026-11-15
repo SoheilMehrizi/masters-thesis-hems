@@ -1,0 +1,954 @@
+{
+  "id": "article-25",
+  "short_title": "JevAgentHarness · calibrated delegation",
+  "title": {
+    "en": "JevAgentHarness: Benchmarking, Deploying and Training Decision Models That Share Control with LLMs",
+    "fa": "JevAgentHarness: سنجش، استقرار و آموزش مدل‌های تصمیم با کنترل مشترک با LLM"
+  },
+  "bibliography_start_page": 9,
+  "bibliography_end_page": 14,
+  "coverage_notes": {
+    "en": "Analysis of the supplied 44-page manuscript, including its methods, reported experiments, limitations, appendices, 13 numbered figure views and 41 table records. Captions below are bilingual summaries; original complete captions, tables, and pages remain available. Only explicitly printed values are transcribed. Publication status, external code, datasets and API claims have not been independently authenticated or executed. Prices, model names and versions are historical statements of this source, not current service guidance.",
+    "fa": "تحلیل نسخه 44 صفحه‌ای ارائه‌شده، شامل روش، آزمایش‌های گزارش‌شده، محدودیت‌ها، پیوست‌ها، 13 نمای شکل شماره‌دار و 41 رکورد جدول. عنوان‌ها خلاصه دوزبانه‌اند؛ عنوان کامل، جدول و صفحات اصلی در دسترس‌اند. فقط مقادیر چاپ‌شده نقل می‌شوند. وضعیت انتشار، کد بیرونی، داده و ادعای API مستقلاً تأیید یا اجرا نشده‌اند. قیمت، نام و نسخه مدل، گزارش تاریخی همین منبع است و راهنمای سرویس فعلی نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Research question, explicit hypothesis & claim status",
+        "fa": "پرسش، فرضیه صریح و وضعیت ادعا"
+      },
+      "paragraphs": [
+        {
+          "en": "Zhu, Feng, Han, Wang, Yang, Tang, You and Ji; supplied arXiv:2610.21412v1, 15 October 2026. The question is how a harness delegates routine choices while preserving task success. The main hypothesis requires testing inside the agent, confidence-selective use, and training on states the agent actually reaches, including after mistakes.",
+          "fa": "Zhu، Feng، Han، Wang، Yang، Tang، You و Ji؛ نسخه ارائه‌شده arXiv: 2610.21412v1 مورخ ۱۵ اکتبر ۲۰۲۶. پرسش، واگذاری انتخاب‌های تکراری با حفظ موفقیت است. فرضیه اصلی آزمون درون عامل، پذیرش انتخابی بر اساس اطمینان و آموزش روی حالت‌های واقعاً طی‌شده، از جمله پس از خطا، را لازم می‌داند.",
+          "pages": [
+            1,
+            2
+          ]
+        },
+        {
+          "en": "The appendix separately registers H1–H4. H1 combines threshold-regret and recalibration-frontier conditions; H2 concerns gain over matched random gates; H3 predicts which delegation types dominate; H4 compares Monte-Carlo and teacher-distillation targets. The authors report H1/H3 falsified, H2 not estimable and H4 not tested at matched accuracy. These outcomes must accompany the positive abstract.",
+          "fa": "پیوست H1 تا H4 را جدا ثبت می‌کند: H1 شروط پشیمانی آستانه و بازگشت به جبهه پس از کالیبراسیون، H2 سود نسبت به دروازه تصادفی هم‌نرخ، H3 نوع واگذاری غالب و H4 مقایسه هدف مونت‌کارلو و تقطیر معلم است. نویسندگان H1/H3 را ردشده، H2 را غیرقابل برآورد و H4 را در دقت همسان آزموده‌نشده گزارش می‌کنند؛ این وضعیت باید کنار چکیده مثبت بیاید.",
+          "pages": [
+            16,
+            17,
+            35
+          ]
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": {
+        "en": "Typed decisions, integration modes & thresholds",
+        "fa": "تصمیم نوع‌دار، حالت ادغام و آستانه"
+      },
+      "paragraphs": [
+        {
+          "en": "Eight points cover tool, argument, action, memory write/read, reflection, stop and model routing. Five modes are REPLACE, CASCADE, ASSIST, GUARD and TRIGGER. The cascade accepts the top option only above a decision-specific threshold; free-text arguments remain generative. Proposed thresholds are derived under additive loss and stated calibration/LLM-accuracy assumptions, not as universal safety guarantees.",
+          "fa": "هشت نقطه شامل ابزار، آرگومان، اقدام، نوشتن/خواندن حافظه، بازاندیشی، توقف و ارجاع مدل‌اند. پنج حالت REPLACE، CASCADE، ASSIST، GUARD و TRIGGER هستند. آبشار گزینه برتر را فقط بالای آستانه اختصاصی می‌پذیرد و آرگومان آزاد تولیدی می‌ماند. استخراج آستانه به فرض زیان جمع‌پذیر، کالیبراسیون و دقت LLM وابسته است؛ تضمین عمومی ایمنی نیست.",
+          "pages": [
+            3,
+            4,
+            16
+          ]
+        },
+        {
+          "en": "Shadow runs use 150 calibration tasks per agent LLM. Confidence bins contain at least 20 decisions; accept from the lowest bin for which all higher bins have nonnegative estimated advantage, otherwise always defer. Jev+Flash tool/argument fits are 1.00/.99. The state/question schema, gold-label isolation, prompts and adapter boundaries are detailed in pp.18–26. Adapter failure returns to the original harness and is not a security boundary.",
+          "fa": "اجرای سایه از ۱۵۰ وظیفه کالیبراسیون برای هر LLM عامل استفاده می‌کند. هر سطل اطمینان حداقل ۲۰ تصمیم دارد؛ از کمترین سطلی می‌پذیرد که همه سطل‌های بالاتر مزیت برآوردشده نامنفی دارند و در غیر این صورت همیشه واگذار می‌کند. آستانه ابزار/آرگومان Jev+Flash برابر ۱٫۰۰/۰٫۹۹ است. قرارداد حالت/پرسش، جداسازی برچسب، پرامپت و آداپتر در ص ۱۸–۲۶ آمده است. خرابی آداپتر به عامل اصلی بازمی‌گردد و مرز امنیتی نیست.",
+          "pages": [
+            4,
+            5,
+            9,
+            16,
+            18,
+            24,
+            25,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "id": "training",
+      "title": {
+        "en": "Training recipe, data boundaries & ablations",
+        "fa": "دستور آموزش، مرز داده و حذف مؤلفه"
+      },
+      "paragraphs": [
+        {
+          "en": "Qwen3-4B with rank-32 LoRA is trained for two epochs at 10⁻⁴ on 15,694 states from 587 tasks; 30.9% follow a mistake. Where Jev’s top answer is correct, targets mix 0.3 one-hot gold and 0.7 teacher probabilities; otherwise use gold alone. SFT adds a Brier term weighted .5. GRPO uses groups of 8, success minus LLM-call and irreversible-error penalties; the paper supplies equations and implementation prompts.",
+          "fa": "Qwen3-4B با LoRA رتبه ۳۲، دو دوره و نرخ ۱۰⁻⁴ روی ۱۵۶۹۴ حالت از ۵۸۷ وظیفه آموزش می‌بیند؛ ۳۰٫۹٪ پس از خطاست. اگر پاسخ اول Jev درست باشد هدف ترکیب ۰٫۳ برچسب و ۰٫۷ احتمال معلم است، وگرنه فقط برچسب. SFT جمله Brier با وزن ۰٫۵ دارد. GRPO با گروه ۸، موفقیت منهای جریمه فراخوانی LLM و خطای برگشت‌ناپذیر کار می‌کند؛ معادله‌ها و پرامپت‌ها در منبع‌اند.",
+          "pages": [
+            5,
+            27,
+            28,
+            30
+          ]
+        },
+        {
+          "en": "SFT accounts for most gains: shifted-task success rises 13.5%→96.0%; GRPO adds no measurable gain, and RL without SFT reaches 11.5%. Adding public tool data improves isolated accuracy but reduces shifted task success to 91.5%. Existing in-domain thresholds do not establish non-inferiority under shifted rules/tasks (Table 40). Training and evaluation use separate seeds but share a simulator generator; template baselines and disclosed exposure are discussed in D.10.",
+          "fa": "بیشتر بهبود از SFT است: موفقیت وظیفه جابه‌جاشده ۱۳٫۵٪→۹۶٪؛ GRPO بهبود قابل اندازه‌گیری ندارد و RL بدون SFT به ۱۱٫۵٪ می‌رسد. افزودن داده ابزار عمومی دقت منفرد را بهتر ولی موفقیت جابه‌جاشده را به ۹۱٫۵٪ کاهش می‌دهد. آستانه درون‌دامنه عدم‌افت را زیر تغییر وظیفه/قانون اثبات نمی‌کند (جدول ۴۰). بذرها مجزا ولی مولد شبیه‌ساز مشترک است؛ پایه قالب و مواجهه افشاشده در D.10 آمده است.",
+          "pages": [
+            8,
+            29,
+            31,
+            32,
+            40,
+            41
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Three evaluation levels, experiments & baselines",
+        "fa": "سه سطح ارزیابی، آزمایش و خط‌مبنا"
+      },
+      "paragraphs": [
+        {
+          "en": "AgentDecisionBench separates L1 isolated BFCL/When2Call questions, L2 shadow scoring on 5,314 recorded states, and L3 live task control. DecisionGym uses 68 tools plus finish with hidden acceptable-action labels; shifted and hard suites change wording, tools, request shapes and rules. Public settings include τ²-bench, ALFWorld, SWE-bench and terminal agents. Matched LLM-only, fixed thresholds, simple keyword/template/random controls and several open decision models prevent relying on isolated scores alone.",
+          "fa": "AgentDecisionBench سطح L1 پرسش منفرد BFCL/When2Call، L2 امتیازدهی سایه روی ۵۳۱۴ حالت و L3 کنترل زنده را جدا می‌کند. DecisionGym شامل ۶۸ ابزار و finish با برچسب معتبر پنهان است؛ مجموعه جابه‌جاشده/سخت متن، ابزار، شکل درخواست و قانون را تغییر می‌دهد. محیط عمومی شامل τ²-bench، ALFWorld، SWE-bench و عامل ترمینال است. LLM تنها، آستانه ثابت، کنترل واژه/قالب/تصادفی و چند مدل تصمیم باز مقایسه می‌شوند.",
+          "pages": [
+            4,
+            6,
+            17,
+            24,
+            32,
+            36,
+            38
+          ]
+        },
+        {
+          "en": "Stage 1 has 11 registered tests; a fixed selection rule chooses passing, cheaper delegations. Stage 2 tests their combination on 500 fresh tasks and telecom tasks with four Holm-corrected tests. Main success margins are 3 points, 5 on τ²-bench. Later extensions are marked exploratory; non-inferiority within a margin is not equality. Cost includes API and specified GPU serving, with shared-GPU delays and transfer failures reported.",
+          "fa": "مرحله ۱ دارای ۱۱ آزمون ثبت‌شده است؛ قانون انتخاب ثابت واگذاری ارزان‌تر و پذیرفته‌شده را برمی‌گزیند. مرحله ۲ ترکیب را روی ۵۰۰ وظیفه تازه و وظیفه مخابرات با چهار آزمون Holm می‌سنجد. حاشیه موفقیت ۳ واحد درصد و در τ²-bench برابر ۵ است. توسعه‌های بعدی اکتشافی‌اند؛ عدم‌افت در حاشیه به معنی برابری نیست. هزینه API و GPU مشخص و کندی GPU مشترک و شکست انتقال گزارش شده‌اند.",
+          "pages": [
+            5,
+            6,
+            7,
+            9,
+            33,
+            35,
+            36,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated strengths, limitations & research gaps",
+        "fa": "قوت‌ها، محدودیت‌ها و شکاف‌ها از دید نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The central strength is measuring isolated, encountered-state and live-task performance separately and releasing a typed interface, training recipe and evidence ledger. Limits include English-only tasks, mostly Gemini agent LLMs, generator-specific training, provider/hardware dependence, missing matched learned-router comparisons and no measurable GRPO benefit. A new task family or rule requires recalibration or training rather than assuming confidence transfers.",
+          "fa": "قوت اصلی تفکیک عملکرد منفرد، حالت طی‌شده و وظیفه زنده و ارائه قرارداد نوع‌دار، دستور آموزش و دفتر شواهد است. محدودیت‌ها: وظیفه انگلیسی، غلبه Gemini، آموزش وابسته به مولد، وابستگی ارائه‌دهنده/سخت‌افزار، نبود مقایسه روتر یادگرفته همسان و نبود سود GRPO. وظیفه یا قانون تازه به کالیبراسیون/آموزش مجدد نیاز دارد.",
+          "pages": [
+            2,
+            8,
+            9,
+            40,
+            41
+          ]
+        },
+        {
+          "en": "The authors explicitly reject decision-model guards as sole protection for irreversible operations: one stop guard accepts 40.7% of Flash-Lite’s own wrong finishes. Adversarial observations are untested. Releases are promised in this PDF; this report does not certify availability. Derived weights and teacher-output training carry license/terms restrictions, including CC BY-NC 4.0 for StartLux derivatives.",
+          "fa": "نویسندگان دروازه مدل تصمیم را تنها محافظ اقدام برگشت‌ناپذیر نمی‌دانند: یک نگهبان توقف ۴۰٫۷٪ پایان‌های اشتباه خود Flash-Lite را می‌پذیرد. مشاهده خصمانه آزموده نشده است. انتشار در PDF وعده داده شده و این گزارش دسترسی را تأیید نمی‌کند. آموزش خروجی معلم و وزن مشتق محدودیت مجوز/شرایط دارد؛ مشتقات StartLux شامل CC BY-NC 4.0 هستند.",
+          "pages": [
+            9,
+            25,
+            34
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 1,
+      "caption": {
+        "en": "Figure 1: Routine choices delegated, uncertain choices retained (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 1: واگذاری انتخاب تکراری و حفظ انتخاب نامطمئن (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The sketch contrasts a call at every step with selective typed decisions. It explains allocation of computation, not measured task success.",
+        "fa": "طرح فراخوانی در هر گام را با تصمیم نوع‌دار انتخابی مقایسه می‌کند؛ تخصیص محاسبه است، نه نتیجه سنجش موفقیت."
+      },
+      "data": {
+        "en": "Conceptual sketch; no quantitative effect should be read from arrow lengths.",
+        "fa": "طرح مفهومی است؛ طول پیکان اندازه اثر کمی نیست."
+      }
+    },
+    {
+      "id": "2",
+      "page": 2,
+      "caption": {
+        "en": "Figure 2: Evaluation, selection and post-training pipeline (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 2: زنجیره ارزیابی، انتخاب و پس‌آموزش (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Stage 1 isolates delegations; the frozen passing combination is evaluated on new Stage-2 tasks. Training uses visited states rather than only ideal demonstrations.",
+        "fa": "مرحله ۱ واگذاری‌ها را جدا می‌سنجد؛ ترکیب ثابت پذیرفته‌شده روی وظیفه تازه مرحله ۲ آزموده می‌شود. آموزش از حالت طی‌شده است، نه فقط نمایش ایده‌آل."
+      },
+      "data": {
+        "en": "Eight decision points, five modes and three benchmark levels; these design counts do not imply every mode is confirmatory.",
+        "fa": "هشت نقطه، پنج حالت و سه سطح؛ این شمارها به معنی تأییدی‌بودن همه حالت‌ها نیستند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 3,
+      "caption": {
+        "en": "Figure 3: Eight decision points and five control modes (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 3: هشت نقطه تصمیم و پنج حالت کنترل (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Trace who proposes and who has the final decision in REPLACE/CASCADE/ASSIST/GUARD/TRIGGER. A guard retaining the LLM has a different cost opportunity from a cascade removing calls.",
+        "fa": "در REPLACE/CASCADE/ASSIST/GUARD/TRIGGER مشخص کنید چه کسی پیشنهاد و چه کسی تصمیم نهایی می‌دهد. نگهبان با حفظ LLM فرصت هزینه‌ای متفاوت از حذف فراخوانی در آبشار دارد."
+      },
+      "data": {
+        "en": "Table 4 distinguishes registered combinations from later exploratory combinations.",
+        "fa": "جدول ۴ ترکیب ثبت‌شده را از ترکیب اکتشافی بعدی جدا می‌کند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "caption": {
+        "en": "Figure 4: Isolated accuracy versus in-agent success (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 4: دقت منفرد در برابر موفقیت درون عامل (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Panel (a) plots isolated accuracy and deployment-dependent price; panel (b) shows rankings changing between levels. It is unsafe to select the best controller by its isolated multiple-choice score alone.",
+        "fa": "پنل الف دقت منفرد و قیمت وابسته به استقرار، و پنل ب تغییر رتبه بین سطوح را نشان می‌دهد. انتخاب کنترل‌گر تنها با نمره چندگزینه‌ای منفرد توجیه نمی‌شود."
+      },
+      "data": {
+        "en": "StartLux-9B: L1 92.2%, L3 69.5%; AgentDecision-4B: 89.3%,91.5%; Jev:89.9%,82.0% (printed panel b).",
+        "fa": "StartLux-9B: سطح ۱ برابر ۹۲٫۲٪ و سطح ۳ برابر ۶۹٫۵٪؛ AgentDecision-4B: ۸۹٫۳٪/۹۱٫۵٪؛ Jev: ۸۹٫۹٪/۸۲٪."
+      }
+    },
+    {
+      "id": "5",
+      "page": 7,
+      "caption": {
+        "en": "Figure 5: Delegation mode map (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 5: نقشه حالت‌های واگذاری (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Each cell pairs success difference in percentage points with percentage cost saved. Negative savings mean higher cost. Green cells are not evidence of safety guarantees.",
+        "fa": "هر سلول اختلاف موفقیت برحسب واحد درصد و درصد صرفه‌جویی را جفت می‌کند. صرفه‌جویی منفی یعنی هزینه بیشتر؛ رنگ سبز تضمین ایمنی نیست."
+      },
+      "data": {
+        "en": "Tool REPLACE −19.0 points/67% saved; CASCADE +0.0/14%; argument REPLACE −20.0/88%.",
+        "fa": "جایگزینی ابزار ۱۹− واحد/۶۷٪ صرفه‌جویی؛ آبشار ابزار ۰+/۱۴٪؛ جایگزینی آرگومان ۲۰−/۸۸٪."
+      }
+    },
+    {
+      "id": "6",
+      "page": 17,
+      "caption": {
+        "en": "Figure 6: Recorded customer-service delegation trace (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 6: مسیر ثبت‌شده واگذاری در خدمات مشتری (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Follow choices, confidence and fallback through the live example. It illustrates a fitted-threshold case and does not independently estimate population risk.",
+        "fa": "انتخاب، اطمینان و بازگشت به LLM را در مثال زنده دنبال کنید. این یک مورد با آستانه برازش‌شده است، نه برآورد مستقل ریسک جمعیت."
+      },
+      "data": {
+        "en": "A single recorded trajectory; complete event labels are retained in the original source.",
+        "fa": "یک مسیر ثبت‌شده است؛ برچسب رویداد کامل در منبع حفظ شده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 19,
+      "caption": {
+        "en": "Figure 7: Computable choices mapped to typed questions (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 7: نگاشت انتخاب محاسبه‌پذیر به پرسش نوع‌دار (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The diagram maps branches in the harness to tools, arguments and loop-control questions. The local API contract must describe all candidates and retain OTHER/generation cases.",
+        "fa": "نمودار شاخه عامل را به ابزار، آرگومان و کنترل حلقه نگاشت می‌کند. قرارداد محلی باید همه گزینه‌ها و حالت OTHER/نیاز به تولید را پوشش دهد."
+      },
+      "data": {
+        "en": "Diagram and prompt examples are implementation evidence, not a measured comparison.",
+        "fa": "نمودار و نمونه پرامپت شاهد پیاده‌سازی‌اند، نه مقایسه عملکرد اندازه‌گیری‌شده."
+      }
+    },
+    {
+      "id": "8",
+      "page": 25,
+      "caption": {
+        "en": "Figure 8: Harness adapters, decisions and fallback (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 8: آداپترها، تصمیم و بازگشت عامل (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "A reference loop and real-harness hooks share the typed decision interface. The adapter’s fail-open behavior preserves the original workflow, which is why it cannot enforce a safety boundary alone.",
+        "fa": "حلقه مرجع و قلاب عامل واقعی قرارداد تصمیم نوع‌دار مشترک دارند. بازگشت آداپتر در خطا به گردش اصلی دلیل کافی‌نبودن آن برای مرز ایمنی است."
+      },
+      "data": {
+        "en": "Architecture; tested versus implemented-only hooks are distinguished in Tables 9 and 13.",
+        "fa": "معماری است؛ قلاب آزموده‌شده و فقط پیاده‌شده در جدول ۹ و ۱۳ جدا شده‌اند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 27,
+      "caption": {
+        "en": "Figure 9: AgentDecision-4B post-training (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 9: پس‌آموزش AgentDecision-4B (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Visited states and labels feed SFT, followed by in-loop RL. The arrows do not establish an added RL benefit; the ablation finds most improvement from SFT.",
+        "fa": "حالت طی‌شده و برچسب به SFT و سپس RL در حلقه وارد می‌شود. پیکان‌ها سود اضافه RL را ثابت نمی‌کنند؛ حذف مؤلفه بیشتر بهبود را به SFT نسبت می‌دهد."
+      },
+      "data": {
+        "en": "15,694 states,30.9% after mistakes; SFT 2.2 GPU-h; GRPO +4.5 GPU-h with no measurable success gain (Table 15).",
+        "fa": "۱۵۶۹۴ حالت، ۳۰٫۹٪ پس از خطا؛ SFT برابر ۲٫۲ ساعت GPU؛ GRPO افزوده ۴٫۵ ساعت بدون بهبود موفقیت قابل اندازه‌گیری (جدول ۱۵)."
+      }
+    },
+    {
+      "id": "10",
+      "page": 34,
+      "caption": {
+        "en": "Figure 10: Extended module map with all modes (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 10: نقشه گسترده مؤلفه با همه حالت‌ها (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "This expands Figure 5, including modes added after the registered tests. Read exploratory rows as descriptive results and keep their status separate from confirmatory claims.",
+        "fa": "این گسترش شکل ۵ شامل حالت افزوده پس از ثبت است. ردیف اکتشافی را توصیفی بخوانید و از ادعای تأییدی جدا کنید."
+      },
+      "data": {
+        "en": "Original cells retain success and cost pairs; no unprinted quantities reconstructed.",
+        "fa": "زوج موفقیت و هزینه در سلول اصلی حفظ شده؛ مقدار چاپ‌نشده بازسازی نشده است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 43,
+      "caption": {
+        "en": "Figure 11: A successful delegated shipping task (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 11: وظیفه ارسال موفق با واگذاری (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Blue decisions are from the trained model and orange text/uncertain arguments from the LLM. The case selection rule is disclosed, so this is an illustrative trace rather than random-sample evidence.",
+        "fa": "تصمیم آبی از مدل آموزش‌دیده و متن/آرگومان نامطمئن نارنجی از LLM است. قانون انتخاب مورد بیان شده، پس مسیر نمونه است نه شاهد نمونه‌گیری تصادفی."
+      },
+      "data": {
+        "en": "2 versus 5 LLM calls; $.0042 versus $.0301 including GPU; 3.7 versus 4.4 s for this task only.",
+        "fa": "فقط این مورد: ۲ در برابر ۵ فراخوانی؛ ۰٫۰۰۴۲ در برابر ۰٫۰۳۰۱ دلار با GPU؛ ۳٫۷ در برابر ۴٫۴ ثانیه."
+      }
+    },
+    {
+      "id": "12",
+      "page": 43,
+      "caption": {
+        "en": "Figure 12: Confident refund before required clarification (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 12: بازپرداخت مطمئن پیش از رفع ابهام لازم (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Jev takes an irreversible refund where asking is the only valid choice. The trained model asks first. Both models select every tool without a threshold, while the LLM supplies arguments.",
+        "fa": "Jev بازپرداخت برگشت‌ناپذیر می‌کند، در حالی که فقط پرسیدن معتبر است. مدل آموزش‌دیده ابتدا می‌پرسد. هر دو بدون آستانه همه ابزارها را انتخاب و LLM آرگومان را می‌سازد."
+      },
+      "data": {
+        "en": "Wrong Jev refund confidence .98; trained model ask confidence .89. A confident score is not authorization.",
+        "fa": "اطمینان بازپرداخت اشتباه Jev برابر ۰٫۹۸ و پرسش مدل آموزش‌دیده ۰٫۸۹ است. نمره اطمینان مجوز نیست."
+      }
+    },
+    {
+      "id": "13",
+      "page": 44,
+      "caption": {
+        "en": "Figure 13: ALFWorld solved without an LLM call (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 13: حل ALFWorld بدون فراخوانی LLM (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The model trained on ALFWorld executes all four actions because its fitted threshold is low enough. The example comes from valid_seen games; it must not be presented as the unseen-room aggregate.",
+        "fa": "مدل آموزش‌دیده روی ALFWorld به دلیل آستانه پایین هر چهار اقدام را اجرا می‌کند. مثال از valid_seen است و نباید با میانگین اتاق دیده‌نشده اشتباه شود."
+      },
+      "data": {
+        "en": "Threshold .12;0 versus 4 LLM calls;14.2 versus 24.1 s;$.0021 versus $.0036 including GPU.",
+        "fa": "آستانه ۰٫۱۲؛ ۰ در برابر ۴ فراخوانی؛ ۱۴٫۲ در برابر ۲۴٫۱ ثانیه؛ ۰٫۰۰۲۱ در برابر ۰٫۰۰۳۶ دلار با GPU."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 7,
+      "title": {
+        "en": "Hard-task and real-harness comparisons",
+        "fa": "مقایسه وظیفه سخت و عامل واقعی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "title": {
+        "en": "Threshold, verification and serving ablations",
+        "fa": "حذف مؤلفه آستانه، بررسی و میزبانی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 8,
+      "title": {
+        "en": "Training stages and shifted-task performance",
+        "fa": "مرحله آموزش و عملکرد زیر تغییر"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 16,
+      "title": {
+        "en": "Registered and exploratory point-mode pairs",
+        "fa": "زوج نقطه–حالت ثبت‌شده و اکتشافی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 17,
+      "title": {
+        "en": "Benchmark suite sizes and repetitions",
+        "fa": "اندازه و تکرار مجموعه‌ها"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 19,
+      "title": {
+        "en": "Generated development tasks and hidden answer keys",
+        "fa": "وظیفه توسعه و کلید پنهان"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 25,
+      "title": {
+        "en": "Guard false acceptance/rejection probes",
+        "fa": "آزمون پذیرش/رد اشتباه نگهبان"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 25,
+      "title": {
+        "en": "Common-state subset accuracy",
+        "fa": "دقت زیرمجموعه حالت مشترک"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "9",
+      "page": 25,
+      "title": {
+        "en": "Real-harness adapter capabilities",
+        "fa": "قابلیت آداپتر عامل واقعی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 26,
+      "title": {
+        "en": "Final exploratory harness",
+        "fa": "عامل نهایی اکتشافی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 26,
+      "title": {
+        "en": "mini-SWE-agent step routing",
+        "fa": "ارجاع گام در mini-SWE-agent"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "12",
+      "page": 26,
+      "title": {
+        "en": "pi and SWE-agent routing",
+        "fa": "ارجاع pi و SWE-agent"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "13",
+      "page": 28,
+      "title": {
+        "en": "Roles and actual evidence coverage",
+        "fa": "نقش‌ها و پوشش واقعی شواهد"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "14",
+      "page": 28,
+      "title": {
+        "en": "Development diagnostic comparison",
+        "fa": "مقایسه تشخیصی توسعه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "15",
+      "page": 29,
+      "title": {
+        "en": "Training cost and alternatives",
+        "fa": "هزینه و گزینه آموزش"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "16",
+      "page": 30,
+      "title": {
+        "en": "Full training-chain ledger",
+        "fa": "دفتر کامل زنجیره آموزش"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "17",
+      "page": 30,
+      "title": {
+        "en": "SFT ingredient ablations",
+        "fa": "حذف اجزای SFT"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "18",
+      "page": 30,
+      "title": {
+        "en": "Sub-1B scoring-head variants",
+        "fa": "مدل سر امتیاز زیر یک‌میلیارد"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "19",
+      "page": 30,
+      "title": {
+        "en": "Fresh hard-rule tasks",
+        "fa": "وظیفه تازه با قانون سخت"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "20",
+      "page": 31,
+      "title": {
+        "en": "Public benchmark encountered-state accuracy",
+        "fa": "دقت حالت طی‌شده معیار عمومی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "21",
+      "page": 31,
+      "title": {
+        "en": "τ² training-recipe transfer",
+        "fa": "انتقال دستور آموزش به τ²"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "22",
+      "page": 32,
+      "title": {
+        "en": "Template and decision baselines",
+        "fa": "پایه قالب و مدل تصمیم"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "23",
+      "page": 34,
+      "title": {
+        "en": "Artifact licenses and terms",
+        "fa": "مجوز و شرایط مصنوعات"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "24",
+      "page": 35,
+      "title": {
+        "en": "Every registered test and verdict",
+        "fa": "همه آزمون و نتیجه ثبت‌شده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "25",
+      "page": 35,
+      "title": {
+        "en": "Primaries by decision-model family",
+        "fa": "مقایسه اصلی هر خانواده مدل"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "26",
+      "page": 36,
+      "title": {
+        "en": "Isolated accuracy/calibration/cost",
+        "fa": "دقت، کالیبراسیون و هزینه منفرد"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "27",
+      "page": 36,
+      "title": {
+        "en": "Stage-2 primary tests",
+        "fa": "آزمون اصلی مرحله ۲"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "28",
+      "page": 37,
+      "title": {
+        "en": "Stage-2 secondary tests",
+        "fa": "آزمون تکمیلی مرحله ۲"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "29",
+      "page": 37,
+      "title": {
+        "en": "Near-ceiling cost/success results",
+        "fa": "هزینه/موفقیت نزدیک سقف"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "30",
+      "page": 37,
+      "title": {
+        "en": "Paired hard-setting tests",
+        "fa": "آزمون جفتی شرایط سخت"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "31",
+      "page": 38,
+      "title": {
+        "en": "Three evaluation levels",
+        "fa": "سه سطح ارزیابی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "32",
+      "page": 38,
+      "title": {
+        "en": "New decision-model rankings",
+        "fa": "رتبه مدل‌های تصمیم جدید"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "33",
+      "page": 39,
+      "title": {
+        "en": "GPU-served open decision models",
+        "fa": "مدل باز روی GPU"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "34",
+      "page": 39,
+      "title": {
+        "en": "Irreversible-error decomposition",
+        "fa": "تفکیک خطای برگشت‌ناپذیر"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "35",
+      "page": 39,
+      "title": {
+        "en": "Voting versus training",
+        "fa": "رأی‌گیری در برابر آموزش"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "36",
+      "page": 39,
+      "title": {
+        "en": "Trained open-model comparisons",
+        "fa": "مقایسه مدل باز آموزش‌دیده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "37",
+      "page": 40,
+      "title": {
+        "en": "Readout ablation on one backbone",
+        "fa": "حذف مؤلفه خوانش روی بدنه مشترک"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "38",
+      "page": 40,
+      "title": {
+        "en": "Learned deferral rules",
+        "fa": "قواعد واگذاری یادگرفته"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "39",
+      "page": 40,
+      "title": {
+        "en": "Shifted and renamed-tool evaluation",
+        "fa": "ارزیابی تغییر و نام‌گذاری ابزار"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "40",
+      "page": 41,
+      "title": {
+        "en": "In-domain thresholds under shift",
+        "fa": "آستانه درون‌دامنه زیر تغییر"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "41",
+      "page": 42,
+      "title": {
+        "en": "Hard coding and terminal tasks",
+        "fa": "وظیفه سخت کدنویسی و ترمینال"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Highest architectural relevance among the Jev additions: it operationalizes typed delegation inside agents and measures whether isolated accuracy survives stateful execution. It complements our P6/P7 contracts, not the physical HEMS model.",
+      "fa": "در میان منابع Jev بیشترین ارتباط معماری را دارد: واگذاری نوع‌دار درون عامل و بقای دقت منفرد در اجرای حالت‌مند را عملی می‌کند؛ مکمل قرارداد P6/P7 است، نه مدل فیزیکی HEMS.",
+      "pages": [
+        2,
+        3,
+        4,
+        6
+      ]
+    },
+    "contribution": {
+      "en": "Contributes decision-point/mode taxonomy, shadow calibration, encountered-state evaluation, independent Stage-2 testing and training on recovery states. Its shifted-threshold failures directly motivate drift checks rather than universal confidence assumptions.",
+      "fa": "رده‌بندی نقطه/حالت، کالیبراسیون سایه، ارزیابی حالت طی‌شده، مرحله ۲ مستقل و آموزش حالت بازیابی را می‌دهد. شکست آستانه زیر تغییر، بررسی رانش را به جای فرض اطمینان عمومی توجیه می‌کند.",
+      "pages": [
+        3,
+        4,
+        5,
+        40,
+        41
+      ]
+    },
+    "employment": {
+      "en": "Proposed adaptation: expose a finite operation library, log candidate sets and allowed evidence, evaluate a decision model in shadow, fit separate thresholds for low-risk tools, and measure accepted-error and end-to-end recovery. Keep deterministic safety and authorization outside any learned adapter. Training a 4B model is optional follow-up, not a prerequisite for our core SCM.",
+      "fa": "اقتـباس پیشنهادی: کتابخانه عملیات محدود، ثبت گزینه/شاهد مجاز، آزمون سایه، آستانه جدا برای ابزار کم‌ریسک و سنجش خطای پذیرفته و بازیابی نهایی. ایمنی و اختیار قطعی بیرون آداپتر یادگرفته بماند. آموزش ۴ B پیگیری اختیاری است، نه پیش‌نیاز SCM اصلی.",
+      "pages": [
+        4,
+        5,
+        9,
+        16,
+        24
+      ]
+    },
+    "baseline": {
+      "en": "Conditional P7/P8 component baseline: LLM-only versus fitted per-point cascade versus a fixed-threshold cascade on the same HEMS operations and budgets. Do not replace our causal diagnosis baseline with this customer-service benchmark. Add an open-model comparison only if decision-model efficiency becomes an agreed contribution.",
+      "fa": "خط‌مبنای مؤلفه‌ای مشروط P7/P8: LLM تنها، آبشار آستانه اختصاصی و آبشار آستانه ثابت روی عملیات و بودجه HEMS یکسان. معیار خدمات مشتری جای پایه تشخیص علّی را نمی‌گیرد؛ مدل باز فقط در صورت انتخاب کارایی مدل تصمیم به عنوان مشارکت اضافه شود.",
+      "pages": [
+        3,
+        6,
+        7,
+        9
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Strength: explicit registered failures and negative transfer results prevent treating the headline savings as universal. A stateful HEMS rollout would need its own calibration and independent safety tests; synthetic customer-service labels do not establish physical causal correctness.",
+      "fa": "قوت: شکست فرضیه ثبت‌شده و انتقال منفی مانع تعمیم صرفه‌جویی چکیده می‌شود. اجرای HEMS کالیبراسیون و آزمون ایمنی مستقل خود را لازم دارد؛ برچسب مصنوعی خدمات مشتری درستی علّی فیزیکی را اثبات نمی‌کند.",
+      "pages": [
+        9,
+        16,
+        17,
+        40,
+        41
+      ]
+    },
+    {
+      "en": "The supplied appendix contains two adjacent Table 14 labels/notes. Both source contexts are retained instead of silently renumbering the manuscript. GPU savings, API savings, success margins and exploratory model variants must retain their separate denominators.",
+      "fa": "پیوست ارائه‌شده دو برچسب/یادداشت مجاور جدول ۱۴ دارد. هر دو بافت منبع حفظ شده و متن بی‌صدا بازشماری نشده است. صرفه‌جویی GPU، API، حاشیه موفقیت و نسخه اکتشافی مدل باید مخرج جدا داشته باشند.",
+      "pages": [
+        7,
+        28,
+        34,
+        41
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Jev+Flash’s fitted single tool/argument cascade saves 14.2% with no changed outcomes on 500 tasks; the selected Jev combination later fails non-inferiority. Replacing Jev with the trained Stage-2 4B model passes at 81.1% lower cost. Old thresholds under shift do not preserve the same conclusion.",
+      "fa": "آبشار منفرد ابزار/آرگومان Jev+Flash با آستانه برازش‌شده ۱۴٫۲٪ صرفه‌جویی و هیچ نتیجه تغییرکرده روی ۵۰۰ وظیفه دارد؛ ترکیب منتخب Jev بعداً عدم‌افت را رد می‌کند. مدل ۴ B آموزش‌دیده مرحله ۲ با ۸۱٫۱٪ هزینه کمتر پذیرفته می‌شود. آستانه قدیمی زیر تغییر همان نتیجه را حفظ نمی‌کند.",
+      "pages": [
+        6,
+        7,
+        8,
+        40,
+        41
+      ]
+    }
+  ]
+}

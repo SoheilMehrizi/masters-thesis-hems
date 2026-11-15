@@ -187,5 +187,59 @@
     "bibliography_entries": 103,
     "bibliography_format": "numbered",
     "status": "Report available"
+  },
+  {
+    "id": "article-24",
+    "figures": 11,
+    "tables": 11,
+    "pages": 19,
+    "bibliography_entries": 21,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-25",
+    "figures": 13,
+    "tables": 41,
+    "pages": 44,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-26",
+    "figures": 6,
+    "tables": 20,
+    "pages": 19,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-27",
+    "figures": 6,
+    "tables": 14,
+    "pages": 25,
+    "bibliography_entries": 78,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-28",
+    "figures": 7,
+    "tables": 8,
+    "pages": 11,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-29",
+    "figures": 6,
+    "tables": 12,
+    "pages": 16,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
   }
 ]

@@ -1,0 +1,472 @@
+{
+  "id": "article-29",
+  "short_title": "Faster decisions · recovery and delivered success",
+  "title": {
+    "en": "When Faster Decisions Do Not Make Better Agents: An Empirical Study of Jev in Agent Workflows",
+    "fa": "وقتی تصمیم سریع‌تر عامل بهتری نمی‌سازد: مطالعه تجربی Jev در گردش‌کار عامل‌ها"
+  },
+  "bibliography_start_page": 9,
+  "bibliography_end_page": 11,
+  "coverage_notes": {
+    "en": "Analysis of the supplied 16-page manuscript, including its methods, reported experiments, limitations, appendices, 6 numbered figure views and 12 table records. Captions below are bilingual summaries; original complete captions, tables, and pages remain available. Only explicitly printed values are transcribed. Publication status, external code, datasets and API claims have not been independently authenticated or executed. Prices, model names and versions are historical statements of this source, not current service guidance.",
+    "fa": "تحلیل نسخه 16 صفحه‌ای ارائه‌شده، شامل روش، آزمایش‌های گزارش‌شده، محدودیت‌ها، پیوست‌ها، 6 نمای شکل شماره‌دار و 12 رکورد جدول. عنوان‌ها خلاصه دوزبانه‌اند؛ عنوان کامل، جدول و صفحات اصلی در دسترس‌اند. فقط مقادیر چاپ‌شده نقل می‌شوند. وضعیت انتشار، کد بیرونی، داده و ادعای API مستقلاً تأیید یا اجرا نشده‌اند. قیمت، نام و نسخه مدل، گزارش تاریخی همین منبع است و راهنمای سرویس فعلی نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, explicit research questions & scope",
+        "fa": "مشخصات، پرسش صریح و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Yuchen Ling, Shengcheng Yu, Zhenyu Chen and Chunrong Fang; the supplied manuscript studies whether decision-level savings transfer to complete agent tasks. RQ1 asks about effectiveness, RQ2 about efficiency transfer and RQ3 about failure/recovery. It reports an empirical study rather than a numbered preregistered hypothesis test.",
+          "fa": "Yuchen Ling، Shengcheng Yu، Zhenyu Chen و Chunrong Fang؛ نسخه ارائه‌شده انتقال صرفه‌جویی تصمیم به وظیفه کامل را می‌سنجد. RQ1 اثربخشی، RQ2 انتقال کارایی و RQ3 شکست/بازیابی است. مطالعه تجربی است، نه آزمون فرضیه شماره‌دار از پیش ثبت‌شده.",
+          "pages": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "title": {
+        "en": "Agents, shared-interface controls & repetitions",
+        "fa": "عامل‌ها، کنترل قرارداد مشترک و تکرار"
+      },
+      "paragraphs": [
+        {
+          "en": "Five families use text-only observations: ReAct/Reflexion on all 134 ALFWorld valid_unseen tasks and T3A/AutoDroid/FastAgent on 116 fixed AndroidWorld task instances. Each configuration runs three times at seed0, giving4,500 executions across 12 configurations. Original B, Jev J and ALFWorld-only LLM-Choice C distinguish changing the selection interface from changing the model.",
+          "fa": "پنج‌خانواده مشاهده فقط‌متن دارند: ReAct/Reflexion روی ۱۳۴ وظیفه valid_unseen در ALFWorld و T3A/AutoDroid/FastAgent روی ۱۱۶ نمونه ثابت AndroidWorld. هرپیکربندی سه‌بار بابذر ۰ ودرکل ۱۲ پیکربندی ۴۵۰۰ اجرا دارد. B اصلی، J مربوط به Jev و C انتخاب LLM فقط در ALFWorld تغییرقرارداد انتخاب رااز تغییرمدل جدا می‌کنند.",
+          "pages": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "en": "Jev 1.13.0 selects admissible commands or THINK in ALFWorld and UI events/tools in mobile agents; gpt-5.6-luna performs LLM decisions and auxiliary generation/reflection. Budgets are matched within families, not across them: ReAct49 steps/600 s, Reflexion up to 10 trials of 49 steps/6,000 s, AndroidWorld600 s and complexity-based steps. FastAgent-J executes one tool per step while B may batch calls, so B–J is an integration comparison.",
+          "fa": "Jev1.13.0 در ALFWorld فرمان مجاز یا THINK ودرموبایل رویداد/ابزار را انتخاب می‌کند؛ gpt-5.6-luna تصمیم LLM وتولید/بازاندیشی کمکی دارد. بودجه درون‌خانواده برابر است نه میان‌خانواده: ReAct ۴۹ گام/۶۰۰ ثانیه، Reflexion حداکثر ۱۰ تلاش ۴۹ گامی/۶۰۰۰ ثانیه، AndroidWorld ۶۰۰ ثانیه وگام تابع پیچیدگی. FastAgent-J تک‌ابزار و B گاهی دسته‌ای است؛ پس B–J مقایسه ادغام است.",
+          "pages": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metrics",
+      "title": {
+        "en": "Outcome metrics, accounting & statistical inference",
+        "fa": "معیار پیامد، حسابداری و استنباط آماری"
+      },
+      "paragraphs": [
+        {
+          "en": "Task costs include every decision and auxiliary call; decision costs cover action selection only. Report all attempts, each configuration’s own successes, matched task–run successes and resources per delivered success separately. The last divides all attempted resources, including failures, by successful executions. A cheaper failed attempt is not automatically an efficiency improvement.",
+          "fa": "هزینه وظیفه همه فراخوانی تصمیم وکمکی و هزینه تصمیم فقط انتخاب اقدام راشامل می‌شود. همه تلاش‌ها، موفقیت خاص هرپیکربندی، موفقیت جفتی وظیفه–تکرار و منبع به‌ازای موفقیت تحویل‌شده جدا هستند. مورد آخر همه منبع حتی شکست رابر تعداد موفقیت تقسیم می‌کند. تلاش شکست‌خورده ارزان الزاماً بهبودکارایی نیست.",
+          "pages": [
+            4,
+            6,
+            7,
+            11
+          ]
+        },
+        {
+          "en": "Means and sample SD are over three runs. Paired task-cluster bootstrap uses20,000 replicates retaining all three runs of both variants within each sampled task; intervals are pointwise with no multiplicity correction. The fixed task instance/seed design measures repeat variability on these instances, not new environment distributions. Units mUSD and µUSD must remain distinct.",
+          "fa": "میانگین وانحراف معیار نمونه رویسه‌تکرار است. بازنمونه جفتی خوشه‌وظیفه ۲۰۰۰۰ بار هر سه‌تکرار دو نسخه راکنارهم نگه می‌دارد؛ بازه نقطه‌ای وبدون تصحیح چندگانگی است. نمونه/بذرثابت تغییرپذیری همان نمونه رامی‌سنجد، نه توزیع محیط تازه. واحد mUSD وµUSD باید جدا بماند.",
+          "pages": [
+            4,
+            9,
+            11,
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Effectiveness, efficiency transfer & failure analysis",
+        "fa": "اثربخشی، انتقال کارایی و تحلیل شکست"
+      },
+      "paragraphs": [
+        {
+          "en": "ReAct-J/Reflexion-J success is96.02%/98.01%, versus 97.51%/99.75% for B; with shared C the differences narrow to−1.00/0.00 points. T3A-J and FastAgent-J lose13.22/18.10 points relative to B with intervals excluding zero. Lower decision cost 66.1–78.4% and latency73.9–81.5% do not guarantee whole-task gains: FastAgent task time rises0.7% and T3A cost per success rises7.7%, the latter interval including zero.",
+          "fa": "موفقیت ReAct-J/Reflexion-J برابر ۹۶٫۰۲٪/۹۸٫۰۱٪ دربرابر B برابر ۹۷٫۵۱٪/۹۹٫۷۵٪؛ با C مشترک اختلاف ۱−/۰ واحد می‌شود. T3A-J و FastAgent-J نسبت به B افت ۱۳٫۲۲/۱۸٫۱۰ واحد با بازه غیرصفر دارند. کاهش هزینه تصمیم ۶۶٫۱–۷۸٫۴٪ وتأخیر ۷۳٫۹–۸۱٫۵٪ بهبودکل را تضمین نمی‌کند: زمان وظیفه FastAgent برابر ۰٫۷٪ بیشتر وهزینه موفقیت T3A برابر ۷٫۷٪ بیشتر با بازه شامل صفر است.",
+          "pages": [
+            4,
+            5,
+            6,
+            7,
+            12,
+            14
+          ]
+        },
+        {
+          "en": "Outcome-selected trace groups contain19 persistent Jev-loss pairs,3 reverse-gain pairs and21 mixed pairs:258 executions, of which251 have codable substantive actions. Two annotators apply seven overlapping behavior labels and a third adjudicates. Recovery, search, target/prerequisite errors and premature completion are connected to observed cases; these selected-group frequencies are not population failure rates.",
+          "fa": "گروه مسیر منتخب برحسب پیامد ۱۹ زوج شکست پایدار Jev، ۳ زوج بردمعکوس و ۲۱ زوج مختلط دارد: ۲۵۸ اجرا که ۲۵۱ اقدام قابل کدگذاری دارند. دوبرچسب‌گذار هفت‌رفتار هم‌پوشان وسوم داوری می‌کند. بازیابی، جست‌وجو، هدف/پیش‌شرط وپایان زودرس به مورد مشاهده وصل‌اند؛ فراوانی گروه منتخب نرخ شکست کل جمعیت نیست.",
+          "pages": [
+            7,
+            8,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated strengths, limitations & future work",
+        "fa": "قوت، محدودیت و آینده از دید نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The paper connects selection latency to auxiliary reasoning, environment interaction, failed recovery and verified completion. Reflexion-J initially succeeds383/402 times versus B376/402, but recovers only 11/19 initial failures versus 25/26. More reasoning can preserve a wrong premise; the authors recommend explicit progress, prerequisite and final-state checks rather than relying on reflection alone.",
+          "fa": "مقاله تأخیرانتخاب رابه استدلال کمکی، تعامل محیط، شکست بازیابی وپایان تأییدشده وصل می‌کند. Reflexion-J ابتدا ۳۸۳/۴۰۲ دربرابر B ۳۷۶/۴۰۲ موفق است ولی فقط ۱۱/۱۹ شکست اولیه رادر برابر ۲۵/۲۶ بازیابی می‌کند. استدلال بیشتر می‌تواند فرض غلط راحفظ کند؛ بررسی صریح پیشرفت، پیش‌شرط وحالت نهایی به جای اتکای تنها به بازاندیشی پیشنهاد می‌شود.",
+          "pages": [
+            7,
+            8,
+            16
+          ]
+        },
+        {
+          "en": "Limits: selected text-only workflows, only fixed task instances and three repeats, integration/interface confounds, unequal family budgets, hosted inference variation and some retry/imputed-usage accounting uncertainty. Transfer to visual agents, longer workflows and new tasks needs evaluation. The case appendix distinguishes evaluator acceptance from external geographic truth and final-response format from internal success flags.",
+          "fa": "محدودیت: گردش‌کارفقط‌متن منتخب، نمونه ثابت وسه‌تکرار، مخدوش‌سازی ادغام/قرارداد، بودجه نابرابر خانواده، تغییرپذیری سرویس وابهام حسابداری تلاش‌مجدد/مصرف تخمینی. انتقال به عامل بصری، گردش بلند ووظیفه تازه آزمون می‌خواهد. پیوست پذیرش ارزیاب راازحقیقت جغرافیایی و قالب پاسخ نهایی راازپرچم موفقیت داخلی جدا می‌کند.",
+          "pages": [
+            9,
+            14,
+            15,
+            16
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 5,
+      "caption": {
+        "en": "Figure 1: Success by benchmark and agent family (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 1: موفقیت به تفکیک معیار و خانواده (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Means±one sample SD cover three repeats. ALFWorld includes shared-interface C controls; AndroidWorld does not. Axis ranges differ between panels, so compare printed values rather than marker distance.",
+        "fa": "میانگین±یک انحراف معیار نمونه ازسه‌تکرار است. ALFWorld کنترل C قراردادمشترک دارد ولی AndroidWorld ندارد. دامنه محورپنل‌ها متفاوت است؛ مقدار چاپی را مقایسه کنید، نه فاصله نشانگر."
+      },
+      "data": {
+        "en": "ReAct B/J97.51/96.02%; Reflexion99.75/98.01%; T3A57.47/44.25%; AutoDroid18.68/16.38%; FastAgent50.00/31.90% (Table5).",
+        "fa": "B/J برای ReAct: ۹۷٫۵۱/۹۶٫۰۲٪؛ Reflexion: ۹۹٫۷۵/۹۸٫۰۱٪؛ T3A: ۵۷٫۴۷/۴۴٫۲۵٪؛ AutoDroid: ۱۸٫۶۸/۱۶٫۳۸٪؛ FastAgent: ۵۰/۳۱٫۹٪ (جدول ۵)."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Figure 2: Success difference by task type/budget (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 2: اختلاف موفقیت برحسب نوع/بودجه وظیفه (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "ALFWorld task categories and AndroidWorld budget strata are different stratifications. The same total success can hide failures on cleaning or short mobile tasks; sequence length alone does not explain difficulty.",
+        "fa": "نوع وظیفه ALFWorld وطبقه بودجه AndroidWorld تقسیم‌های متفاوت‌اند. موفقیت کل می‌تواند شکست تمیزکردن یاوظیفه کوتاه موبایل راپنهان کند؛ طول مسیر به‌تنهایی سختی راتوضیح نمی‌دهد."
+      },
+      "data": {
+        "en": "Narrative: ALFWorld cleaning deficits about8.6 and7.5 points; shortest mobile stratum T3A/FastAgent deficits12.5/15.3 points. Other cells remain in source.",
+        "fa": "متن: افت تمیزکردن ALFWorld حدود ۸٫۶ و ۷٫۵ واحد؛ کوتاه‌ترین طبقه موبایل افت T3A/FastAgent برابر ۱۲٫۵/۱۵٫۳ واحد. سایر سلول‌ها درمنبع‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 6,
+      "caption": {
+        "en": "Figure 3: Decision-level versus task-level resource changes (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 3: تغییر منبع سطح تصمیم دربرابر وظیفه (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Separate all attempts from each variant’s own successes. Columns compare tokens, cost andtime; opposite signs are possible because cheaper decisions can require more interactions or auxiliary work.",
+        "fa": "همه تلاش‌ها راازموفقیت خاص هرنسخه جدا کنید. ستون توکن، هزینه وزمان را می‌سنجد؛ علامت مخالف ممکن است چون تصمیم ارزان تعامل یاکارکمکی بیشتر بخواهد."
+      },
+      "data": {
+        "en": "All-task decision cost reductions66.1–78.4%; FastAgent tokens/task+202.3%, cost−43.0%, time+0.7%.",
+        "fa": "کاهش هزینه تصمیم همه‌وظیفه ۶۶٫۱–۷۸٫۴٪؛ FastAgent توکن/وظیفه ۲۰۲٫۳٪+، هزینه ۴۳٪−، زمان ۰٫۷٪+."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "caption": {
+        "en": "Figure 4: Time decomposition and overhead (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 4: تفکیک زمان و سربار (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Bars normalize to each family’s B total, not to one universal runtime. Decision, auxiliary andenvironment components explain why selection speed does not transfer one-for-one.",
+        "fa": "میله به کل B هرخانواده نرمال است، نه زمان مرجع همگانی. اجزای تصمیم، کمکی ومحیط علت عدم‌انتقال یک‌به‌یک سرعت انتخاب را نشان می‌دهند."
+      },
+      "data": {
+        "en": "ReAct selection68.31→17.25 s butadds17.23 s auxiliary; T3A auxiliary67.47→96.99 s; AutoDroid non-model164.43→213.37 s.",
+        "fa": "انتخاب ReAct از ۶۸٫۳۱ به ۱۷٫۲۵ ثانیه ولی ۱۷٫۲۳ ثانیه کمکی اضافه می‌شود؛ کمکی T3A از ۶۷٫۴۷ به ۹۶٫۹۹؛ غیرمدلی AutoDroid از ۱۶۴٫۴۳ به ۲۱۳٫۳۷."
+      }
+    },
+    {
+      "id": "5",
+      "page": 7,
+      "caption": {
+        "en": "Figure 5: Composition of outcome-selected trace groups (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 5: ترکیب گروه مسیر منتخب برحسب پیامد (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Segments count persistent losses, gains andmixed outcomes across families. These cases were selected because of outcomes; their behavior frequencies cannot be generalized to every execution.",
+        "fa": "بخش‌ها شکست پایدار، برد ومختلط را درخانواده‌ها می‌شمارند. انتخاب براساس پیامد است؛ فراوانی رفتار را نمی‌توان به همه اجراها تعمیم داد."
+      },
+      "data": {
+        "en": "19loss+3gain+21mixed=43family–task pairs;258 executions;251codable records after exclusions.",
+        "fa": "۱۹ شکست+۳ برد+۲۱ مختلط=۴۳ زوج خانواده–وظیفه؛ ۲۵۸ اجرا و ۲۵۱ رکورد کدپذیر پس ازحذف."
+      }
+    },
+    {
+      "id": "6",
+      "page": 8,
+      "caption": {
+        "en": "Figure 6: Repeated success-count joint distributions (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 6: توزیع مشترک شمار موفقیت تکراری (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Each cell counts tasks with 0–3 successes for B and J. Shared logarithmic color andmarked persistent-loss/gain cells expose instability hidden by average success.",
+        "fa": "هرسلول تعدادوظیفه با ۰ تا ۳ موفقیت برای B و J است. رنگ لگاریتمی مشترک وسلول شکست/بردپایدار ناپایداری پنهان میانگین را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Perfamily task denominators134 ALFWorld or116 AndroidWorld; do not sum grid counts as three independent task samples.",
+        "fa": "مخرج وظیفه هرخانواده ۱۳۴ در ALFWorld یا ۱۱۶ در AndroidWorld است؛ سلول‌ها را سه‌نمونه مستقل وظیفه جمع نکنید."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "B/J/C configurations and benchmarks",
+        "fa": "پیکربندی B/J/C ومعیارها"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "title": {
+        "en": "Matched successes, failure spending and delivered outcomes",
+        "fa": "موفقیت جفتی، هزینه شکست وتحویل"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "title": {
+        "en": "Overlapping behavior codes and agreement",
+        "fa": "کدرفتار هم‌پوشان وتوافق"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 8,
+      "title": {
+        "en": "Initial success, recovery and final success",
+        "fa": "موفقیت اولیه، بازیابی ونهایی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 12,
+      "title": {
+        "en": "Success, SD and all-three consistency",
+        "fa": "موفقیت، انحراف معیار وپایداری سه‌تکرار"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 12,
+      "title": {
+        "en": "Paired gains, losses and both-success",
+        "fa": "برد، باخت وموفقیت مشترک جفتی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 13,
+      "title": {
+        "en": "ALFWorld absolute resources",
+        "fa": "منابع مطلق ALFWorld"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 13,
+      "title": {
+        "en": "AndroidWorld absolute resources",
+        "fa": "منابع مطلق AndroidWorld"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "9",
+      "page": 13,
+      "title": {
+        "en": "Time and auxiliary-cost decomposition",
+        "fa": "تفکیک زمان وهزینه کمکی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 14,
+      "title": {
+        "en": "All paired effect estimates and intervals",
+        "fa": "تمام برآورد اثرجفتی وبازه‌ها"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 15,
+      "title": {
+        "en": "Adjudicated behavior by group/family",
+        "fa": "رفتار داوری‌شده گروه/خانواده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "12",
+      "page": 15,
+      "title": {
+        "en": "Recorded case task identifiers and runs",
+        "fa": "شناسه وظیفه وتکرار مورد ثبت‌شده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Highly relevant to the thesis promise of fast and reliable adaptation: it shows that cheap decisions can coexist with failed recovery or worse resources per successful outcome. It is methodological evidence, not an energy-control result.",
+      "fa": "برایوعده سازگاری سریع وقابل اعتماد بسیارمرتبط است: تصمیم ارزان می‌تواند با شکست بازیابی یامنبع بیشتر برای موفقیت همراه باشد. شاهد روش‌شناختی است، نه نتیجه کنترل انرژی.",
+      "pages": [
+        1,
+        6,
+        7,
+        8
+      ]
+    },
+    "contribution": {
+      "en": "Adds success-conditioned resource accounting, matched-interface controls, task-cluster repeated evaluation anda transparent recovery/completion taxonomy. These map directly to our P6 execution verification and P8 recovery metrics.",
+      "fa": "حسابداری منبع مشروط به موفقیت، کنترل قراردادمشترک، ارزیابی تکراری خوشه‌وظیفه ورده‌بندی شفاف بازیابی/پایان را می‌دهد؛ مستقیماً به تأییداجرای P6 ومعیاربازیابی P8 وصل می‌شود.",
+      "pages": [
+        3,
+        4,
+        7,
+        11,
+        12
+      ]
+    },
+    "employment": {
+      "en": "Proposed adaptation: log operation candidates, target identity, prerequisites, expected state changes, actual feedback and completion checks. Detect repeated lack of progress; report total intervention/Twin/LLM cost across failed andsuccessful recovery attempts andpaired outcomes across fixed fault scenarios.",
+      "fa": "اقتـباس پیشنهادی: ثبت گزینه عملیات، هویت هدف، پیش‌شرط، تغییر موردانتظار، بازخورد واقعی وبررسی پایان. نبود پیشرفت تکراری را تشخیص وکل هزینه مداخله/Twin/LLM درشکست وموفقیت بازیابی وپیامدجفتی سناریوی خطای ثابت راگزارش کنیم.",
+      "pages": [
+        8,
+        11,
+        12,
+        16
+      ]
+    },
+    "baseline": {
+      "en": "No need to implement AndroidWorld or all five agents as thesis baselines. If Jev enters P7, include matched LLM-Choice and Jev selectors plus our safety/recovery checks; an ablation without progress/completion verification can test that component only if it remains safely sandboxed.",
+      "fa": "پیاده‌سازی AndroidWorld یاپنج‌عامل به عنوان پایه پایان‌نامه لازم نیست. اگر Jev وارد P7 شد، انتخابگر LLM-Choice و Jev باقرارداد یکسان وبررسی ایمنی/بازیابی مقایسه شوند؛ حذف بررسی پیشرفت/پایان فقط درمحیط ایزوله ایمن می‌تواند اثرآن مؤلفه رابسنجد.",
+      "pages": [
+        3,
+        4,
+        8,
+        9
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Strength: the study retains failed-attempt cost anddistinguishes shared-interface controls. Limitation: outcome-selected trace frequencies are descriptive, not causal estimates of how often Jev causes a specific failure. Its model andexecution-granularity changes remain entangled in some families.",
+      "fa": "قوت: هزینه تلاش شکست‌خورده وکنترل قراردادمشترک حفظ می‌شود. محدودیت: فراوانی مسیرمنتخب برحسب پیامد توصیفی است، نه برآوردعلّی فراوانی خطای ناشی از Jev. تغییرمدل ودرشتی اجرای برخی خانواده‌ها درهم‌آمیخته‌اند.",
+      "pages": [
+        3,
+        4,
+        9,
+        12
+      ]
+    },
+    {
+      "en": "Do not equate task completion in a benchmark withphysical success in our simulator. A HEMS completion check must inspect actual delivered actions andsubsequent observable state, while retaining hidden ground truth only for independent evaluation.",
+      "fa": "پایان وظیفه معیار را باموفقیت فیزیکی شبیه‌ساز برابرنگیریم. بررسی پایان HEMS باید اقدام تحویل‌شده واقعی وحالت مشاهده‌پذیر بعدی را بسنجد وحقیقت پنهان فقط برای ارزیابی مستقل بماند.",
+      "pages": [
+        8,
+        15,
+        16
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "All five integrations reduce decision costs, but T3A/FastAgent lose13.22/18.10 success points. T3A’s cost per delivered success rises68.70→73.97 mUSD with an interval spanning zero; FastAgent time per success rises239.4→377.8 s with a positive paired-difference interval.",
+      "fa": "هرپنج‌ادغام هزینه تصمیم راکم می‌کنند ولی T3A/FastAgent افت ۱۳٫۲۲/۱۸٫۱۰ واحدموفقیت دارند. هزینه هرموفقیت T3A از ۶۸٫۷۰ به ۷۳٫۹۷ mUSD با بازه شامل صفر وزمان هرموفقیت FastAgent از ۲۳۹٫۴ به ۳۷۷٫۸ ثانیه با بازه اختلاف مثبت می‌رسد.",
+      "pages": [
+        6,
+        7,
+        14
+      ]
+    }
+  ],
+  "bibliography_end_marker": "^A Evaluation and Statistical Methods\\s*$"
+}

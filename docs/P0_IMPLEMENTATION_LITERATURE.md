@@ -1,6 +1,6 @@
 # P0 — Implementation literature map
 
-**Updated coverage:** the [interactive literature library](literature/index.html) now analyzes all 23 unique articles present in the local source folder. Use its [research-role map](literature/research-map.html) for current proposed uses and baseline recommendations. The inventory notes below describe the earlier triage snapshot; subsequent analyses supersede its file-availability notes.
+**Updated coverage (2026-11-15):** the [interactive literature library](literature/index.html) now analyzes all 29 unique articles present in the local source folder, including six Jev decision-model studies. Use its [research-role map](literature/research-map.html) for current proposed uses and baseline recommendations. The inventory notes below describe the earlier triage snapshot; subsequent analyses supersede its file-availability notes.
 
 Date: 2026-11-13. Current work: P0.1; P1.4 is deferred. No P0 task is complete yet.
 

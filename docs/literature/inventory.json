@@ -326,5 +326,89 @@
     "category": "Reviews & context",
     "id": "article-23",
     "status": "Report available"
+  },
+  {
+    "key": "jevversuslargelanguagemodels",
+    "title": "Jev versus Large Language Models for Energy-Audit Recommendations: Accuracy, Calibration, and Cost",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Jev versus Large Language Models.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Jev versus Large Language Models.pdf"
+    ],
+    "pages": 19,
+    "sha256": "7ec10ead025efebdf08204d8d56b545304ab608da3b86daa256614be174f1532",
+    "category": "Decision models & agent efficiency",
+    "id": "article-24",
+    "status": "Report available"
+  },
+  {
+    "key": "jevagentharnessbenchmarkingdeployingandtrainingdecisionmodelsthatsharecontrolwithllms",
+    "title": "JevAgentHarness: Benchmarking, Deploying and Training Decision Models That Share Control with LLMs",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\JevAgentHarness Benchmarking, Deploying and Training Decision Models That Share Control with LLMs.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\JevAgentHarness Benchmarking, Deploying and Training Decision Models That Share Control with LLMs.pdf"
+    ],
+    "pages": 44,
+    "sha256": "16af19adf3eed2a5fcce32cd4402cd71215f11f58d696d683809700d449feb06",
+    "category": "Decision models & agent efficiency",
+    "id": "article-25",
+    "status": "Report available"
+  },
+  {
+    "key": "reflexwithjevforefficientselectivecontrolinllmagents",
+    "title": "REFLEX with Jev for Efficient Selective Control in LLM Agents",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\REFLEX with Jev for Efficient Selective Control in LLM Agents.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\REFLEX with Jev for Efficient Selective Control in LLM Agents.pdf"
+    ],
+    "pages": 19,
+    "sha256": "7eaac75e8128eec7dbdb34f6865a9084a5b36b958a8864f4de8080a433d806bd",
+    "category": "Decision models & agent efficiency",
+    "id": "article-26",
+    "status": "Report available"
+  },
+  {
+    "key": "evaluatingandbenchmarkingthesystemonemodeljev",
+    "title": "Evaluating and Benchmarking the System One Model Jev",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Evaluating and Benchmarking The System One Model Jev.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Evaluating and Benchmarking The System One Model Jev.pdf"
+    ],
+    "pages": 25,
+    "sha256": "902f582dc3620c0c2d07473744bdb55eac317f9214aadb96d1357ec6b8ec4f17",
+    "category": "Decision models & agent efficiency",
+    "id": "article-27",
+    "status": "Report available"
+  },
+  {
+    "key": "fastmodelsslowevidenceapairedandselfauditedevaluationofsystem1decisionmodelsforllmagentharnesses",
+    "title": "Fast Models, Slow Evidence: A Paired and Self-Audited Evaluation of System-1 Decision Models for LLM Agent Harnesses",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Fast Models, Slow Evidence A Paired and Self-Audited Evaluation of System-1 Decision Models for LLM Agent Harnesses.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Fast Models, Slow Evidence A Paired and Self-Audited Evaluation of System-1 Decision Models for LLM Agent Harnesses.pdf"
+    ],
+    "pages": 11,
+    "sha256": "646d0add856d5793d2e24888e6a84333ffcefdde4bba5bc355b190661204178f",
+    "category": "Decision models & agent efficiency",
+    "id": "article-28",
+    "status": "Report available"
+  },
+  {
+    "key": "whenfasterdecisionsdonotmakebetteragentsanempericalstudyofjevinagentworkflows",
+    "title": "When Faster Decisions Do Not Make Better Agents: An Empirical Study of Jev in Agent Workflows",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\When Faster Decisions Do Not Make Better Agents An Emperical Study of Jev in Agent Workflows.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\When Faster Decisions Do Not Make Better Agents An Emperical Study of Jev in Agent Workflows.pdf"
+    ],
+    "pages": 16,
+    "sha256": "e7c457d9f51d4ecb2ae417f18fe65a00048c323b65a6635736f20340ced6d253",
+    "category": "Decision models & agent efficiency",
+    "id": "article-29",
+    "status": "Report available"
   }
 ]

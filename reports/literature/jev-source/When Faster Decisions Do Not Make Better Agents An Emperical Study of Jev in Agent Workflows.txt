@@ -1,0 +1,1615 @@
+
+=== PDF PAGE 1 ===
+When Faster Decisions Do Not Make Better Agents:
+An Empirical Study of Jev in Agent Workflows
+Yuchen Ling1, Shengcheng Yu2,†, Zhenyu Chen1, Chunrong Fang1,†
+1Nanjing University, 2Technical University of Munich
+1yuchenling@smail.nju.edu.cn, 2shengcheng.yu@tum.de,
+1{zychen, fangchunrong}@nju.edu.cn
+Abstract
+AI agents depend on repeated decisions to ac-
+complish tasks, with large language models
+(LLMs) commonly serving as their core de-
+cision makers. The recent emergence of Jev
+offers an opportunity to make these decisions
+faster and at lower cost. However, it remains
+unclear whether such local savings can be trans-
+lated into efficient and reliable task comple-
+tion. In this paper, we investigate this effi-
+ciency transfer across five agents in two repre-
+sentative application settings, embodied tasks
+in ALFWorld and mobile app use in Android-
+World. Across 4,500 task executions, we jointly
+evaluate task effectiveness, decision-level and
+task-level resource use, and execution behavior.
+Experimental results show that Jev integration
+substantially reduces decision cost and latency
+across all five agents, with task-level gains vary-
+ing by workflow. Task success remains close
+to baseline levels on ALFWorld and declines
+more substantially in two mobile agents. Aux-
+iliary reasoning and additional interactions ab-
+sorb decision savings, while failed recovery and
+premature completion limit successful delivery.
+Mean cost per successful outcome increases in
+one agent even as spending per attempt falls.
+These findings highlight the importance of pre-
+serving progress, supporting recovery, and ver-
+ifying completion when integrating efficient
+decision models into agent workflows. Their
+practical value should be assessed through suc-
+cessful task delivery, recovery behavior, and
+resources per delivered outcome.
+1 Introduction
+AI agents pursue goals through interaction with
+their environments, with LLMs supporting this
+process in different scenarios (Yang et al., 2024;
+Wen et al., 2024; Wang et al., 2024). Progress
+toward a goal depends on repeatedly interpreting
+observations and deciding what to do next (Yao
+et al., 2023). Some decisions require open-ended
+code or text generation, while others involve se-
+lecting among available tools, interface elements,
+or admissible commands (Wang et al., 2024; Wen
+et al., 2024; Shridhar et al., 2021; Yao et al., 2025).
+These bounded choices are repeated throughout a
+task, and make both action-selection quality and
+resource efficiency important to overall agent per-
+formance (Kapoor et al., 2025).
+The resources spent on these decisions should
+reflect their reasoning demands. On S1-Bench,
+Zhang et al. (2026b) find that large reasoning mod-
+els can overthink simple questions while still mak-
+ing errors, showing that extended reasoning does
+not consistently yield accurate, economical judg-
+ments. This finding motivates examining models
+designed for focused decisions. Jev, recently re-
+leased by TypeSafe AI as aSystem One Model,
+provides instruction-defined judgments through
+typed outputs, including probabilities over supplied
+choices (Almeida, 2026; TypeSafe AI, 2026b). The
+company positions it as a fast, inexpensive decision
+model (Almeida, 2026). Its choice interface offers
+an opportunity to reduce the cost and latency of re-
+peated action selection in AI agents. Whether these
+local savings translate into efficient and reliable
+task completion remains unclear.
+Answering this question requires following de-
+cisions through complete agent workflows. Ac-
+tions shape subsequent observations and choices,
+so each decision affects the conditions for the next
+(Ross et al., 2011). An executable action can
+move an agent away from its goal, requiring fur-
+ther reasoning or recovery whose cost may offset
+local savings. Reflection extends these dependen-
+cies across attempts (Shinn et al., 2023), and can-
+didate construction shapes the choices available
+to the decision model (Yang et al., 2024). Task
+efficiency therefore depends on auxiliary reason-
+ing, interaction overhead, and the sequence of ac-
+tions performed. Failed attempts also consume re-
+sources without delivering the requested outcome.
+arXiv:2610.13092v1  [cs.AI]  9 Oct 2026
+
+=== PDF PAGE 2 ===
+Evaluating agent performance requires connecting
+decision-level savings to task success, overall re-
+source use, and resources per successful outcome,
+supported by repeated evaluation and execution
+analysis (Kapoor et al., 2025; Yao et al., 2025).
+To provide this evidence, we conduct a compar-
+ative empirical study of AI agents with Jev-based
+action selection. The study covers five agent fami-
+lies in two representative application settings, em-
+bodied tasks in ALFWorld (Shridhar et al., 2021)
+and mobile app use in AndroidWorld (Rawles et al.,
+2025). Within each family, we compare the original
+configuration with a Jev-integrated variant, using
+text-only observations to match Jev’s supported
+inputs (TypeSafe AI, 2026a). Each configuration
+runs three times on the same tasks, yielding 4,500
+task executions. We jointly evaluate task effec-
+tiveness, decision-level and task-level resource use,
+and execution behavior. Paired task-level analyses
+estimate uncertainty in the observed differences,
+while systematic trace coding characterizes fail-
+ure and recovery patterns. Comparisons with the
+original configurations assess integration effects.
+Our results show that Jev substantially reduces
+decision cost and latency across all five agents,
+with task-level gains varying by workflow. Task
+success remains close to baseline levels on ALF-
+World and declines more substantially in two mo-
+bile agents. Mean task costs fall across all agents,
+while auxiliary reasoning and additional interac-
+tions limit overall speed gains. Failed recovery
+and premature completion further constrain suc-
+cessful delivery. Lower spending per attempt can
+therefore coexist with higher cost per successful
+outcome. These findings highlight the importance
+of preserving progress, supporting recovery, and
+verifying completion when integrating efficient de-
+cision models into agent workflows. Their practical
+value should be assessed through successful task
+delivery and the resources it requires. In summary,
+we make the following contributions:
+• We provide an empirical study of AI agents
+with Jev-based action selection across five
+agent families and two benchmarks, covering
+4,500 task executions.
+• We characterize how decision-level savings
+translate into task cost, latency, and resources
+per successful outcome across workflows.
+• We systematically annotate execution traces
+and analyze recovery outcomes to identify fail-
+ure and recovery patterns.
+The experimental code is available at https://
+anonymous.4open.science/r/jev-emp-5BF4/.
+2 Background
+Jev.TypeSafe AI introduced Jev in September
+2026 as aSystem One Modelfor fast, structured
+decisions in software automation (Almeida, 2026).
+Its API maps a shared state and instruction-defined
+questions to typed choices, scores, or binary prob-
+abilities. Questions are evaluated independently,
+and choice questions return probabilities over sup-
+plied candidates (TypeSafe AI, 2026b). Entailment-
+based classifiers and GLiClass support labels sup-
+plied at inference time (Yin et al., 2019; Stepanov
+et al., 2025). Jev’s choice interface accepts candi-
+date descriptions and instructions that define the
+decision to make. An agent can supply its goal,
+observations, and available actions as context for
+each selection. This connects the typed interface
+to repeated decisions within a workflow. Early Jev
+studies examine probabilistic coding of crash nar-
+ratives (Rafe and Das, 2026) and adoption across
+public software projects (Ling et al., 2026). We
+examine how its structured decisions interact with
+reasoning, environment feedback, and repeated ac-
+tion selection during task execution.
+3 Related Work
+Agent Action Selection.LLM agents repeatedly
+map goals, observations, and interaction history to
+actions through reasoning and environment inter-
+action (Yao et al., 2023). Their interfaces expose
+commands, UI operations, and tools across em-
+bodied, mobile, and software tasks (Wang et al.,
+2024; Wen et al., 2024; Yang et al., 2024). Tool use
+requires deciding which APIs to invoke, when to
+call them, and which arguments to supply (Schick
+et al., 2023). A finite set of action types can still re-
+quire open-ended arguments, so bounded selection
+and generation coexist within one agent. The sur-
+rounding workflow determines which candidates
+are available and how the selected action is exe-
+cuted. Feedback, reflection, and memory condition
+later decisions on earlier outcomes (Shinn et al.,
+2023; Wang et al., 2024; Yang et al., 2026). We
+focus on the bounded-selection component, exam-
+ining how a specialized decision model interacts
+with the workflow’s reasoning, environment inter-
+action, and recovery mechanisms.
+Efficient Decision Models and Routing.Rout-
+ing and cascades assign requests across models
+
+=== PDF PAGE 3 ===
+using difficulty, preferences, or confidence to bal-
+ance cost and response quality (Ding et al., 2024;
+Ong et al., 2025; Shen et al., 2025). Agent systems
+extend model allocation to collaboration modes
+and roles through MasRouter (Yue et al., 2025).
+EvoRoute uses experience and environment feed-
+back for step-level backbone selection, evaluat-
+ing performance, cost, and latency (Zhang et al.,
+2026a). These methods optimize which model a
+system invokes. We study specialized bounded
+action selection across five agent families, char-
+acterizing when decision-level savings transfer to
+task-level efficiency considering auxiliary reason-
+ing, interaction length, recovery, and completion.
+Agent Evaluation and Sequential Reliabil-
+ity.Benchmarks assess task outcomes across
+embodied, web, mobile, desktop, and software-
+engineering environments (Shridhar et al., 2021;
+Zhou et al., 2024b; Rawles et al., 2025; Xie et al.,
+2024; Jimenez et al., 2024). ALFWorld and An-
+droidWorld provide the outcomes for our house-
+hold and mobile evaluations. Resource-aware eval-
+uation considers accuracy and expenditure, while
+repeated trials assess consistency (Kapoor et al.,
+2025; Yao et al., 2025). Sequential errors can com-
+pound as earlier decisions alter the states encoun-
+tered later (Ross et al., 2011). Feedback, reflection,
+and tree search support correction across attempts
+or alternative action paths (Shinn et al., 2023; Zhou
+et al., 2024a). Failure analysis identifies difficul-
+ties in long-term reasoning, decision-making, and
+instruction following (Liu et al., 2024). Trajectory
+diagnosis evaluates backtracking, observation read-
+ing, and self-verification in web agents (Ou et al.,
+2025). We connect decision-level resources to total
+expenditure and resources per delivered success, in-
+cluding failed attempts, and characterize recovery
+and completion errors through trace coding.
+4 Empirical Study Design
+Selecting among finite candidates matches Jev’s
+stated focus on bounded judgments (TypeSafe AI,
+2026b). We therefore assess the benefits and limita-
+tions of Jev integration through task effectiveness,
+execution efficiency, inference cost, and consis-
+tency across runs, examining how decision-level
+savings translate into successful task delivery.
+4.1 Research Questions
+RQ1: Effectiveness.How does integrating Jev
+into LLM-based agents affect task success relative
+to their original configurations?
+RQ2: Efficiency Transfer.When do decision-
+level efficiency gains transfer to the overall task-
+level efficiency?
+RQ3: Failure and Recovery.What failure pat-
+terns and recovery behaviors characterize agents
+with Jev-based action selection?
+4.2 Experimental Setup
+Benchmarks.We study action selection in two
+complementary interaction environments. Android-
+World (Rawles et al., 2025) covers mobile appli-
+cation tasks, where agents act on changing UI el-
+ements and application states. We use text-based
+UI observations and one fixed parameter instance
+for each of its 116 task types. ALFWorld (Shridhar
+et al., 2021) covers household tasks through tex-
+tual observations and admissible commands. We
+use its text environment and all 134 tasks in the
+valid_unseen split. Together, these settings cover
+UI interaction and command-based control with
+language-based observations.
+Agent Configurations.Since Jev accepts only
+text input currently, we select text-only agent con-
+figurations to match input modalities across vari-
+ants. Table 1 lists six configurations per bench-
+mark, namedAgent-B,Agent-J, andAgent-Cfor
+Baseline, Jev, and LLM-Choice. AndroidWorld in-
+cludes T3A (Rawles et al., 2025), AutoDroid (Wen
+et al., 2024), and Droidrun’s FastAgent (Droidrun,
+2026), covering UI action generation, candidate-
+event selection, and tool invocation. Each hasBand
+Jvariants, with FastAgent in text-only Direct mode
+and AutoDroid’s app-specific memory disabled in
+both. ALFWorld includes ReAct (Yao et al., 2023)
+and Reflexion (Shinn et al., 2023), which support
+within-trial reasoning and cross-trial reflection, re-
+spectively. Each hasB,J, andCvariants. The
+Ccontrol is needed because Jev integration adds
+admissible-command access as well as changing
+the decision model. It uses an LLM with Jev’s
+candidate list and selection instructions.B–Ccom-
+parisons therefore assess the candidate-selection
+interface, whileC–Jcomparisons assess the deci-
+sion model under that interface.
+Jev Integration.We replace action selection
+with one logical Jev request per decision step, re-
+taining the surrounding observation, history, and ex-
+ecution mechanisms. In AndroidWorld, Jev selects
+UI actions and targets for T3A, candidate events
+for AutoDroid, and tools with associated arguments
+
+=== PDF PAGE 4 ===
+Benchmark Agent Variants
+AndroidWorld
+(Rawles et al., 2025)
+T3A(Rawles et al., 2025)B, J
+AutoDroid(Wen et al., 2024)B, J
+FastAgent(Droidrun, 2026)B, J
+ALFWorld
+(Shridhar et al., 2021)
+ReAct(Yao et al., 2023)B, J, C
+Reflexion(Shinn et al., 2023)B, J, C
+Table 1: Six configurations per benchmark. The suffix
+B denotes the baseline with its original LLM decision
+strategy. J uses Jev for action selection. C denotes LLM-
+Choice, which uses an LLM with the same candidates
+and selection instructions as Jev.
+for FastAgent. In ALFWorld, it selects an admissi-
+ble command or THINK, which invokes LLM rea-
+soning. Auxiliary LLMs supply open-ended text
+and summaries, including Reflexion’s reflections.
+The comparisons include two interface differences:
+ALFWorld baselines generate commands without
+candidate lists, andFastAgent-Jexecutes one tool
+per step whileFastAgent-Bcan emit multiple calls.
+Execution Protocol.We run each configu-
+ration three times on the same task suite with
+seed 0 to measure variability on fixed instances.
+All LLM decisions and auxiliary generation use
+gpt-5.6-luna, and Jev decisions usejev-1.13.0.
+Environment state and memory are reset between
+tasks and repetitions, with Reflexion memory re-
+tained only across trials of the same task. Budgets
+are matched within each agent family. Android-
+World allows 600 seconds of agent execution and
+⌈10c⌉ steps per task, where c is task complexity.
+ALFWorld allows ReAct 49 steps and 600 sec-
+onds per task. Reflexion allows up to ten trials
+of 49 steps within 6,000 seconds, stopping upon
+success. Cross-family comparisons thus reflect dif-
+ferent budgets as well as agent designs.
+4.3 Evaluation and Metrics
+Repeated Runs and Aggregation.To capture
+consistency and variability in agent execution, we
+evaluate each agent configuration three times on
+the same tasks, resetting environment state and
+agent memory between runs. We retain all task–
+run records and report the mean and sample stan-
+dard deviation of each metric across runs. Paired
+analyses preserve task correspondence. We report
+Jminus control differences with 95% task-cluster
+bootstrap intervals, resampling tasks and retaining
+their three runs together in 20,000 replicates. See
+Appendix A.2 for details.
+Effectiveness.Our primary metric is task suc-
+cess rate, the proportion of tasks completed success-
+fully according to the benchmark’s official evalua-
+tor. For AndroidWorld, we additionally report the
+official task score to capture partial completion.
+Efficiency and Cost.We measure token usage,
+inference cost, and elapsed time at both task and
+decision levels. Task-level token usage and cost
+include all model calls, including auxiliary gener-
+ation and reflection, while decision-level metrics
+cover only action-selection calls. Inference costs
+are calculated using fixed model-specific input and
+output token prices. We report each metric over
+all tasks and over successful tasks only, with the
+latter including only decisions from successful ex-
+ecutions. Task-level means divide the correspond-
+ing totals by the number of tasks, and decision-
+level means divide them by the number of action-
+selection calls within each scope. We also report
+cost and time per delivered success by dividing the
+corresponding totals across all attempts, including
+failures, by the number of successful executions.
+5 Results and Analysis
+5.1 RQ1: Effectiveness
+An uneven effectiveness gap.On ALFWorld,
+ReAct-JandReflexion-Jachieve 96.02% and
+98.01% success, trailing their original configura-
+tions by 1.49 and 1.74 percentage points (pp), re-
+spectively (Figure 1). With the shared candidate
+interface in C, these gaps narrow to 1.00 and 0.00
+pp. On AndroidWorld, Jev trails T3A, AutoDroid,
+and FastAgent by 13.22, 2.30, and 18.10 pp, respec-
+tively, with both AutoDroid variants below 20%
+success. Comparisons with original configurations
+capture system-level integration effects, including
+an interface change on ALFWorld. AndroidWorld
+agents already use predefined action lists. Jev thus
+retains nearly all success under ALFWorld’s shared
+interface but incurs larger losses in T3A and FastA-
+gent. The 95% task-cluster bootstrap intervals for
+J–B success differences are entirely negative for
+T3A and FastAgent and include zero for the other
+agents and both ALFWorld J–C comparisons (Ta-
+ble 10). Appendix B reports supplementary results.
+Task difficulty extends beyond sequence
+length.Within these workflows, success varies
+with task demands (Figure 2). Both Jev fami-
+lies reach 100% success on ALFWorld’s examine,
+place, and cool tasks, and Jev improves ReAct’s
+success on two-object tasks. Cleaning produces
+deficits of about 8.6 pp and 7.5 pp, with a similar
+
+=== PDF PAGE 5 ===
+95 96 97 98 99 100
+ReAct-B
+ReAct-J
+ReAct-C
+Reflexion-B
+Reflexion-J
+Reflexion-C
+97.5
+96.0
+97.0
+99.8
+98.0
+98.0
+a ALFWorld
+10 20 30 40 50 60
+T3A-B
+T3A-J
+AutoDroid-B
+AutoDroid-J
+FastAgent-B
+FastAgent-J
+57.5
+44.3
+18.7
+16.4
+50.0
+31.9
+b AndroidWorld
+Task success (%)
+B: Baseline J: Jev C: LLM-Choice
+Figure 1: Task success rates on ALFWorld (a) and An-
+droidWorld (b), shown as means ± one sample SD
+across three runs. Horizontal axis ranges differ.
+weakness in LLM-Choice. On AndroidWorld, T3A
+and FastAgent lose 12.5 and 15.3 pp even in the
+shortest-budget stratum, with larger deficits in the
+longest-budget stratum. Jev can sustain successful
+sequences with multiple subgoals, yet also lose ef-
+fectiveness on short tasks. The longer-task deficits
+indicate an additional challenge, while the short-
+task failures direct attention to the judgments re-
+quired within individual states. This pattern makes
+the content of a decision, including its target, pre-
+requisites, and completion conditions, central to
+explaining the observed differences.
+ReAct Reflexion
+Examine (18)
+Place (24)
+Clean (31)
+Cool (21)
+Heat (23)
+Two obj. (17)
+0.0 0.0
++1.4 0.0
+-8.6 -7.5
+0.0 +1.6
+-2.9 -1.4
++5.9 0.0
+a ALFWorld
+≤10
+(48)
+11–20
+(39)
+>20
+(29)
+Step budget
+T3A
+AutoDroid
+FastAgent
+-12.5 -11.1 -17.2
+-1.4 -4.3 -1.1
+-15.3 -17.1 -24.1
+b AndroidWorld
+−20 0 20
+Jev − baseline success rate (pp)
+Figure 2: Jev–baseline success-rate differences (pp) by
+ALFWorld task category (a) and AndroidWorld prede-
+fined step budget (b), pooled over three runs.
+Errors become failures through termination
+or failed recovery.Trajectories connect these task
+differences to goal interpretation and correction. In
+the Wi-Fi task, Jev selects an ambiguously labeled
+switch and declares completion with the goal un-
+met. This terminal judgment ends the opportunity
+for correction. In ALFWorld, selecting a hand-
+towel for a cloth leads the workflow to continue
+reasoning on the wrong object. The initial error is
+amplified as the agent repeatedly preserves the mis-
+taken premise. These cases show how a decisive
+stopping error can end a short task, while an earlier
+selection error can develop into sustained failure
+through unsuccessful correction. Reflexion demon-
+strates recovery’s contribution at the task level, as
+Jev’s first-trial success advantage becomes a final
+deficit after further trials (Table 4). Its selection
+and auxiliary LLM reflection jointly determine this
+outcome. Effective decision making consequently
+requires both selecting a goal-appropriate action
+and revising previous choices when feedback re-
+veals a mismatch.
+Jev suits clearly specified decision roles.Jev
+is most promising when the decision input makes
+the goal, current state, and action prerequisites ex-
+plicit, so selecting an action maps an understood
+state to a suitable next operation. Promising appli-
+cations include workflow routing, API or tool selec-
+tion, and routine software operations with identifi-
+able targets and observable completion conditions.
+Workflows involving ambiguous goals, incomplete
+observations, or repeated sub-goal revision place
+greater demands on interpretation and recovery,
+the capabilities implicated in the observed mobile
+deficits. The effectiveness trade-off is strong execu-
+tion within well-specified states versus adaptability
+when the agent must revise its understanding of the
+task. The strongest candidates for Jev have explicit
+conditions for choosing, checking, and completing
+an action.
+5.2 RQ2: Efficiency Transfer
+Faster and cheaper action selection.Across all
+five families, Jev reduces mean decision cost by
+66.1% – 78.4% and time by 73.9% – 81.5% (Fig-
+ure 3a). Decision times fall from 4.13 – 8.13 to 1.04
+– 1.75 seconds (Appendix B.2), with both advan-
+tages persisting among successful tasks (Figure 3b).
+Tokens per decision increase by 53.5% –134.9%,
+as selection consumes observations, choices, and
+history. Jev’s lower input price and zero output
+charge offset this increase.
+Cost savings transfer more consistently than
+speed.Task-level gains are smaller and vary across
+workflows (Figure 3a). On ALFWorld, ReAct and
+Reflexion reduce cost by 50.9% and 32.6%, and
+time by 47.6% and 37.8%, respectively. Against C,
+cost falls by 56.6% and 63.9%, with approximately
+56.6% shorter task times (Appendix B.2). On An-
+droidWorld, T3A, AutoDroid, and FastAgent re-
+duce cost by 17.1%, 68.8%, and 43.0%. Time falls
+by 10.6% and 5.7% for T3A and AutoDroid and
+
+=== PDF PAGE 6 ===
+Tokens Cost Time Tokens Cost Time
+ReAct
+Reflexion
+T3A
+AutoDroid
+FastAgent
++54.7 -74.0 -74.0 +72.7 -50.9 -47.6
++53.5 -74.2 -79.8 +99.1 -32.6 -37.8
++96.3 -66.1 -81.5 +53.6 -17.1 -10.6
++134.9 -78.4 -78.5 +171.3 -68.8 -5.7
++103.3 -68.6 -73.9 +202.3 -43.0 +0.7
+Per decision Per task
+a All tasks
+Tokens Cost Time Tokens Cost Time
+ReAct
+Reflexion
+T3A
+AutoDroid
+FastAgent
++53.7 -74.2 -74.3 +53.8 -64.3 -58.4
++50.1 -75.0 -79.8 +36.7 -66.8 -62.2
++92.7 -66.2 -77.7 +28.1 -31.2 -15.9
++122.3 -77.7 -80.2 +134.8 -73.6 -13.0
++64.8 -74.9 -70.4 +43.5 -64.9 -17.8
+Per decision Per task
+b Successful tasks
+−200 −100 0 100 200
+Change relative to baseline (%)
+Figure 3: Jev’s resource changes relative to B (%), from run-averaged means. Panels include all tasks (a) or
+each configuration’s successful tasks (b). Per-decision metrics cover action-selection calls. The first two rows are
+ALFWorld and the remaining rows AndroidWorld. Blue indicates decreases and gold increases.
+rises by 0.7% for FastAgent. All families use more
+tokens per task. Paired 95% task-cluster bootstrap
+intervals support lower costs in all J–B compar-
+isons except Reflexion, whose interval includes
+zero. Time intervals include zero for AutoDroid
+and FastAgent (Table 10). Cost savings thus trans-
+fer more consistently across workflows. These task-
+level comparisons capture the combined effects of
+action selection, auxiliary calls, and environment
+interaction under each integration.
+Work outside selection absorbs the savings.
+Transfer depends on the initial share of action selec-
+tion and additional workflow overhead (Figure 4).
+Baseline ReAct spends 68.31 of 71.17 seconds
+selecting actions. Jev reduces selection to 17.25
+seconds, retaining substantial savings after adding
+17.23 seconds of auxiliary reasoning. AutoDroid
+spends 164.43 of 261.20 seconds outside model
+calls. This component rises to 213.37 seconds with
+Jev, absorbing much of the selection saving. T3A’s
+auxiliary generation grows from 67.47 to 96.99 sec-
+onds and accounts for 81.9% of Jev’s inference ex-
+penditure, limiting cost savings. FastAgent makes
+44.1% more decisions and spends longer on aux-
+iliary calls and non-model execution. Its one-tool-
+per-step configuration combines cheaper decisions
+with longer interaction sequences. Task gains de-
+pend on both the share accelerated and the total
+work performed.
+Completion determines the value of savings.
+Every family is faster and cheaper on its own
+successful-task subset, which differs between con-
+figurations. On matched task–run pairs completed
+by both, ALFWorld retains 64.8–66.2% lower cost
+and 59.2–60.8% shorter execution (Table 2a). An-
+droidWorld retains cost savings, while FastAgent’s
+0 25 50 75 100
+Task time (% of baseline total)
+ReAct BJ −47.6%
+Reflexion BJ −37.8%
+T3A BJ −10.6%
+AutoDroid BJ −5.7%
+FastAgent BJ +0.7%
+Decision calls Auxiliary calls Environment interaction & other
+Figure 4: Mean task-time components over three runs,
+normalized to each family’s baseline (B = 100%). J
+labels show total-time changes. Gray denotes environ-
+ment interaction and other overhead. The divider sepa-
+rates ALFWorld (top) and AndroidWorld (bottom).
+time saving narrows to 5.5% and T3A becomes
+1.1% slower. Paired cost intervals are below zero
+for all families, while time intervals include zero
+for T3A and FastAgent (Table 10). Failures add to
+delivery costs. InReflexion-J, 2.0% of executions
+consume 53.3% of inference expenditure through
+unsuccessful recovery (Table 2b). Across all at-
+tempts, cost per delivered success falls in four fam-
+ilies and rises by 7.7% for T3A, from 68.70 to
+73.97 mUSD (Table 2c). This increase has a 95%
+interval spanning zero. At the observed means,
+lower completion offsets T3A’s 17.1% cost saving
+per attempt. FastAgent’s nearly unchanged task
+time and lower completion raise time per delivered
+success from 239.4 to 377.8 seconds. T3A also
+takes longer per success, with positive difference
+intervals for both agents. Completion and failed
+execution therefore shape the final resource benefit.
+Efficiency transfer depends on workflow over-
+head and completion.Decision savings transfer
+
+=== PDF PAGE 7 ===
+ReAct Reflexion T3A AutoDroid FastAgent
+(a) Matched successes
+Pairs 378 393 145 50 84
+Cost (%) -64.8 -66.2 -11.3 -75.3 -50.8
+Time (%) -59.2 -60.8 +1.1 -18.6 -5.5
+(b) Cost spent on failures (%)
+B 8.7 3.5 55.0 92.8 56.0
+J 34.6 53.3 71.2 94.7 82.7
+(c) Resources per delivered success
+Cost B 7.93 9.00 68.70 27.93 21.96
+Cost J 3.96 6.18 73.97 9.93 19.62
+Time B 73.0 99.8 370.6 1398.4 239.4
+Time J 38.9 63.2 430.2 1503.5 377.8
+Table 2: Efficiency of successful delivery. (a) Changes
+from B to J on matched successes. (b) Failure share
+of inference cost. (c) Cost (mUSD) and time (s) per
+success, including failed attempts. Paired 95% intervals
+appear in Table 10.
+most directly when selection dominates resource
+use, auxiliary reasoning and additional interactions
+remain limited, and task success is preserved. Re-
+Act meets these conditions and lowers both cost
+and time per delivered success. Auxiliary work,
+extra interactions, and lower completion weaken
+gains in T3A and FastAgent (Figure 4, Table 2).
+Tool routing and software-service orchestration
+with lightweight operations and little auxiliary gen-
+eration are promising settings. Slow external oper-
+ations limit time savings. Practical value depends
+on workflow resource use, task completion, and the
+cost of unsuccessful execution.
+5.3 RQ3: Failure and Recovery
+To connect task outcomes with agent behavior, we
+compare three groups over three runs on fixed tasks,
+persistent Jev failures with consistent baseline suc-
+cess, the reverse contrast, and mixed outcomes
+where each configuration succeeds once or twice.
+They contain nineteen, three, and 21 of the 616
+family–task pairs (Figure 5), totaling 43 pairs and
+258 executions. Figure 6 places them within the
+full outcome distribution.
+Systematic trace coding.Two authors indepen-
+dently applied seven binary behavior labels to each
+execution, with disagreements resolved by a third
+author against the records. Labels can co-occur and
+include transient errors in successful runs. Substan-
+tive action records support coding for 251 execu-
+tions, including three with partial coverage. Seven
+executions without action records contribute to out-
+come counts. Before adjudication, mean per-label
+0 25 50 75 100
+Share of selected pairs (%)
+ReAct
+Reflexion
+T3A
+AutoDroid
+FastAgent
+3
+1
+11
+5
+23
+n
+2
+1
+1
+1
+14 3
+1
+10
+4
+6
+J=0, B=3  (19) J=3, B=0  (3) Mixed  (21)
+Figure 5: Composition of selected outcome groups.
+Bar segments show within-family proportions and exact
+counts, with totals at right. J and B count successes
+over three runs. Mixed means both succeed once or
+twice. The dashed line separates the benchmarks.
+Cohen's κ was 0.867, binary agreement was 96.6%,
+and exact label-set agreement was 79.7%. Table 3
+reports category counts. Appendix C.1 defines the
+taxonomy and denominators.
+Behavior Executions (%)κ
+Target identification 42 (16.7) 0.794
+Prerequisite violation 27 (10.8) 0.781
+Failed recovery 73 (29.1) 0.882
+Premature completion 14 (5.6) 0.919
+Ineffective search 62 (24.7) 0.934
+Execution granularity 2 (0.8) 1.000
+Output or state mismatch 40 (15.9) 0.756
+Table 3: Behavior labels in 251 codable executions from
+the outcome-selected set. Counts follow adjudication.
+Agreement precedes adjudication. Categories overlap.
+Recovery and search distinguish persistent
+losses.Among 57 Jev executions in persistent-loss
+pairs, 40 contain failed recovery and 29 ineffective
+search, compared with 3 and 2 of 57 baseline ex-
+ecutions. FastAgent-J accounts for 39 of the 73
+recovery labels, and T3A-J for 11. In mixed pairs,
+prerequisite violations occur in 13/63 Jev and 6/58
+codable baseline executions. These patterns char-
+acterize the selected outcome groups and highlight
+correction, search, and prerequisite handling as re-
+curring difficulties (Appendix C.1).
+Initial success and recovery differ.Reflexion-J
+succeeds in 383/402 first trials (95.27%), exceed-
+ing B’s 376/402 (93.53%). It subsequently recovers
+11/19 initial failures, compared with 25/26 for B
+(Table 4). Final success is consequently lower for J.
+These recovery fractions condition on each config-
+uration’s own initial failures. The pattern connects
+final reliability to sequential correction within the
+joint selection-and-reflection workflow.
+Reliable selection requires correction and
+
+=== PDF PAGE 8 ===
+0 1 2 3
+0
+1
+2
+3Jev successes / 3
+0 0 1 2
+0 0 0 0
+1 1 0 5
+0 0 4 120
+a
+ReAct
+0 1 2 3
+0
+1
+2
+3
+0 0 0 1
+0 0 0 1
+0 0 0 3
+0 0 1 128
+b
+Reflexion
+0 1 2 3
+Baseline successes / 3
+0
+1
+2
+3
+38 4 6 1
+1 2 6 5
+0 1 1 17
+0 0 4 30
+c
+T3A
+0 1 2 3
+0
+1
+2
+3
+87 3 1 1
+1 3 0 1
+1 0 1 3
+0 1 0 13
+d
+AutoDroid
+0 1 2 3
+0
+1
+2
+3
+34 9 14 14
+3 4 0 2
+0 1 1 4
+3 2 7 18
+e
+FastAgent
+Figure 6: Task counts by Jev and baseline successes over three runs, on a shared logarithmic color scale. Purple
+outlines mark persistent Jev losses, teal persistent gains, and light blue mixed outcomes.
+Reflexion Initial success Recovery Final success
+B-version 376/402 25/26 401/402
+J-version 383/402 11/19 394/402
+C-version 371/402 23/31 394/402
+Table 4: First-trial success, recovery of initial failures,
+and final success across three runs.
+completion checks.The coded behaviors and Re-
+flexion outcomes connect reliability to how agents
+respond after an error. Recovery failures sustain un-
+successful execution, while premature completion
+ends opportunities for correction. These findings
+support feedback that revises mistaken choices,
+checks action prerequisites, and verifies the re-
+quested final state.
+6 Discussion
+Model development.Our findings point toward
+decision models trained for the consequences of
+sequential choices. Jev’s fast selection coexists
+with errors in target interpretation, correction, and
+termination, and these errors can consume its re-
+source savings through prolonged execution. For
+Jev and Jev-like models, a promising direction is
+to retain concise numerical outputs while strength-
+ening sensitivity to goals, action prerequisites, and
+contradictory feedback. Training on contrasting
+successful and failed trajectories could target deci-
+sions that restore progress or correctly end a task.
+Another useful objective is calibrated confidence
+in whether any available action advances the goal,
+giving the model a basis for requesting more in-
+formation or reconsidering its choices. Progress
+should be assessed through successful task delivery
+and the resources it requires, alongside decision
+accuracy and response time.
+Agentic system design.The engineering impli-
+cation is to treat decision making as an explicit
+system component with observable inputs, out-
+comes, and costs. Candidate interfaces should ex-
+pose target identity, prerequisites, and expected
+state changes, with feedback indicating whether
+the last action advanced the goal. Checks should
+focus on completion judgments and repeated lack
+of progress, the points where our traces show fail-
+ures becoming terminal or persistent. Additional
+observation or reasoning can then be directed to
+unresolved decisions. This allocation matters be-
+cause auxiliary calls and interaction overhead can
+absorb the savings from faster selection. Deploy-
+ment decisions should jointly consider the original
+runtime bottleneck, changes in interaction length,
+and expenditure per successful outcome. Jev and
+Jev-like models are consequently most promising
+in systems that make routine choices inexpensive
+while concentrating verification and recovery on
+decisions that threaten completion.
+7 Conclusion
+We evaluate AI agents with Jev-based action se-
+lection to examine whether faster, cheaper deci-
+sions translate into efficient and reliable task com-
+pletion. Across five agents over two scenarios,
+decision savings yield workflow-dependent task
+gains. Success remains close to baseline on ALF-
+World and falls more substantially in two mobile
+agents. Auxiliary reasoning and additional inter-
+actions absorb savings, while failed recovery and
+premature completion limit delivery. Mean cost per
+successful outcome rises in one agent despite lower
+spending per attempt. Agent workflows should pre-
+serve progress, support recovery, and verify com-
+pletion. Efficient decision models should be as-
+sessed through successful delivery, recovery behav-
+ior, and resources per delivered outcome.
+
+=== PDF PAGE 9 ===
+Limitations
+Evaluation scope.This study examines Jev in-
+tegration in selected agent families across mo-
+bile application and household-task environments.
+Both settings use language-based observations and
+bounded action interfaces. Transfer to visually
+grounded agents, open-ended tool creation, and
+longer workflows requires further evaluation. The
+three repetitions characterize execution variability
+on fixed task instances with a shared seed. They
+do not measure variation across newly sampled
+environments or task distributions.
+System-level comparisons.Jev operates within
+an agent workflow whose candidate construction,
+auxiliary generation, and feedback mechanisms
+jointly influence performance. Our comparisons
+therefore concern the evaluated integrations. The
+ALFWorld LLM-Choice control helps distinguish
+decision-model effects under a shared candidate
+interface, but this control does not cover every
+integration. Within-family budget matching sup-
+ports comparisons between variants. Comparisons
+across families also reflect differences in interac-
+tion budgets and workflow design. The findings
+should consequently be interpreted in the context
+of these configurations, without attributing every
+observed difference to Jev alone.
+Measurement conditions.Latency and cost
+depend on the evaluated model versions, service
+conditions, and experimental prices. Hosted infer-
+ence introduces variation beyond the agent’s con-
+trol, while future model updates or pricing changes
+may alter the observed trade-offs. Our account-
+ing includes auxiliary model use and failed tasks,
+but retry adjustments and imputed usage introduce
+measurement uncertainty where applicable. The
+reported costs represent estimates under the stated
+accounting rules, and timing comparisons retain
+the measurement boundaries of each benchmark.
+References
+Diogo Almeida. 2026. Introducing system one models
+& Jev. TypeSafe AI. Published September 15, 2026.
+Accessed September 28, 2026.
+Dujian Ding, Ankur Mallick, Chi Wang, Robert Sim,
+Subhabrata Mukherjee, Victor Rühle, Laks V . S. Lak-
+shmanan, and Ahmed Hassan Awadallah. 2024. Hy-
+brid LLM: Cost-efficient and quality-aware query
+routing. InInternational Conference on Learning
+Representations.
+Droidrun. 2026. Droidrun: An open-source framework
+for mobile automation with LLM agents. Software
+repository. Accessed September 28, 2026.
+Carlos E. Jimenez, John Yang, Alexander Wettig,
+Shunyu Yao, Kexin Pei, Ofir Press, and Karthik
+Narasimhan. 2024. SWE-bench: Can Language
+Models Resolve Real-World GitHub Issues? InInter-
+national Conference on Learning Representations.
+Sayash Kapoor, Benedikt Stroebl, Zachary S. Siegel,
+Nitya Nadgir, and Arvind Narayanan. 2025. AI
+Agents That Matter.Transactions on Machine Learn-
+ing Research.
+Guoming Ling, Muen Xue, and Zijian Ye. 2026.
+Jev in the wild: A data-driven analysis of the
+Jev model’s functionality, applications and ecosys-
+tem. arXiv preprint arXiv:2609.30216.Preprint,
+arXiv:2609.30216.
+Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu
+Lei, Hanyu Lai, Yu Gu, Hangliang Ding, Kaiwen
+Men, Kejuan Yang, Shudan Zhang, Xiang Deng, Ao-
+han Zeng, Zhengxiao Du, Chenhui Zhang, Sheng
+Shen, Tianjun Zhang, Yu Su, Huan Sun, and 3 others.
+2024. AgentBench: Evaluating LLMs as agents. In
+International Conference on Learning Representa-
+tions.
+Isaac Ong, Amjad Almahairi, Vincent Wu, Wei-Lin
+Chiang, Tianhao Wu, Joseph E. Gonzalez, M Waleed
+Kadous, and Ion Stoica. 2025. RouteLLM: Learning
+to route LLMs from preference data. InInternational
+Conference on Learning Representations.
+Tianyue Ou, Wanyao Guo, Apurva Gandhi, Graham
+Neubig, and Xiang Yue. 2025. AgentDiagnose: An
+open toolkit for diagnosing LLM agent trajectories.
+InProceedings of the 2025 Conference on Empiri-
+cal Methods in Natural Language Processing: Sys-
+tem Demonstrations, pages 207–215. Association for
+Computational Linguistics.
+Amir Rafe and Subasish Das. 2026. Calibrated deci-
+sions at scale: Converting police crash narratives into
+probabilistic crash variables with a system one model
+(Jev). arXiv preprint arXiv:2609.24052.Preprint,
+arXiv:2609.24052.
+Christopher Rawles, Sarah Clinckemaillie, Yifan Chang,
+Jonathan Waltz, Gabrielle Lau, Marybeth Fair, Alice
+Li, William E. Bishop, Wei Li, Folawiyo Campbell-
+Ajala, Daniel Kenji Toyama, Robert James Berry,
+Divya Tyamagundlu, Timothy P. Lillicrap, and Ori-
+ana Riva. 2025. AndroidWorld: A Dynamic Bench-
+marking Environment for Autonomous Agents. In
+International Conference on Learning Representa-
+tions.
+Stephane Ross, Geoffrey Gordon, and Drew Bagnell.
+2011. A reduction of imitation learning and struc-
+tured prediction to no-regret online learning. InPro-
+ceedings of the Fourteenth International Conference
+on Artificial Intelligence and Statistics, volume 15 of
+Proceedings of Machine Learning Research, pages
+627–635. PMLR.
+
+=== PDF PAGE 10 ===
+Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta
+Raileanu, Maria Lomeli, Eric Hambro, Luke Zettle-
+moyer, Nicola Cancedda, and Thomas Scialom. 2023.
+Toolformer: Language models can teach themselves
+to use tools. InAdvances in Neural Information Pro-
+cessing Systems, volume 36.
+Yuanzhe Shen, Yide Liu, Zisu Huang, Ruicheng Yin, Xi-
+aoqing Zheng, and Xuanjing Huang. 2025. SATER:
+A self-aware and token-efficient approach to routing
+and cascading. InProceedings of the 2025 Confer-
+ence on Empirical Methods in Natural Language Pro-
+cessing, pages 10515–10529. Association for Com-
+putational Linguistics.
+Noah Shinn, Federico Cassano, Ashwin Gopinath,
+Karthik Narasimhan, and Shunyu Yao. 2023. Reflex-
+ion: Language Agents with Verbal Reinforcement
+Learning. InAdvances in Neural Information Pro-
+cessing Systems.
+Mohit Shridhar, Xingdi Yuan, Marc-Alexandre Côté,
+Yonatan Bisk, Adam Trischler, and Matthew
+Hausknecht. 2021. ALFWorld: Aligning Text and
+Embodied Environments for Interactive Learning. In
+International Conference on Learning Representa-
+tions.
+Ihor Stepanov, Mykhailo Shtopko, Dmytro V odianyt-
+skyi, Oleksandr Lukashov, Alexander Yavorskyi,
+and Mykyta Yaroshenko. 2025. GLiClass: Gener-
+alist lightweight model for sequence classification
+tasks. arXiv preprint arXiv:2508.07662.Preprint,
+arXiv:2508.07662.
+TypeSafe AI. 2026a. Models: Jev 1.13. Official model
+documentation. Accessed September 29, 2026.
+TypeSafe AI. 2026b. Primitives (questions). API docu-
+mentation. Accessed September 28, 2026.
+Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Man-
+dlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, and
+Anima Anandkumar. 2024. V oyager: An Open-
+Ended Embodied Agent with Large Language Mod-
+els.Transactions on Machine Learning Research.
+Hao Wen, Yuanchun Li, Guohong Liu, Shanhui Zhao,
+Tao Yu, Toby Jia-Jun Li, Shiqi Jiang, Yunhao Liu,
+Yaqin Zhang, and Yunxin Liu. 2024. AutoDroid:
+LLM-powered Task Automation in Android. InPro-
+ceedings of the 30th Annual International Conference
+on Mobile Computing and Networking.
+Tianbao Xie, Danyang Zhang, Jixuan Chen, Xiaochuan
+Li, Siheng Zhao, Ruisheng Cao, Toh Jing Hua, Zhou-
+jun Cheng, Dongchan Shin, Fangyu Lei, Yitao Liu,
+Yiheng Xu, Shuyan Zhou, Silvio Savarese, Caiming
+Xiong, Victor Zhong, and Tao Yu. 2024. OSWorld:
+Benchmarking Multimodal Agents for Open-Ended
+Tasks in Real Computer Environments. InAdvances
+in Neural Information Processing Systems.
+Bowen Yang, Kaiming Jin, Zhenyu Wu, Zhaoyang Liu,
+Qiushi Sun, Zehao Li, JingJing Xie, Zhoumianze Liu,
+Fangzhi Xu, Kanzhi Cheng, Yian Wang, Qingyun
+Li, Yu Qiao, Zun Wang, and Zichen Ding. 2026.
+OS-Symphony: A holistic framework for robust and
+generalist computer-using agents. InProceedings
+of the 64th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers),
+pages 22300–22330. Association for Computational
+Linguistics.
+John Yang, Carlos E. Jimenez, Alexander Wettig, Kil-
+ian Lieret, Shunyu Yao, Karthik Narasimhan, and
+Ofir Press. 2024. SWE-agent: Agent-Computer In-
+terfaces Enable Automated Software Engineering. In
+Advances in Neural Information Processing Systems.
+Shunyu Yao, Noah Shinn, Pedram Razavi, and Karthik
+Narasimhan. 2025. τ-bench: A Benchmark for Tool-
+Agent-User Interaction in Real-World Domains. In
+International Conference on Learning Representa-
+tions.
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak
+Shafran, Karthik Narasimhan, and Yuan Cao. 2023.
+ReAct: Synergizing Reasoning and Acting in Lan-
+guage Models. InInternational Conference on Learn-
+ing Representations.
+Wenpeng Yin, Jamaal Hay, and Dan Roth. 2019. Bench-
+marking zero-shot text classification: Datasets, eval-
+uation and entailment approach. InProceedings of
+the 2019 Conference on Empirical Methods in Natu-
+ral Language Processing and the 9th International
+Joint Conference on Natural Language Processing
+(EMNLP-IJCNLP), pages 3914–3923, Hong Kong,
+China. Association for Computational Linguistics.
+Yanwei Yue, Guibin Zhang, Boyang Liu, Guancheng
+Wan, Kun Wang, Dawei Cheng, and Yiyan Qi. 2025.
+MasRouter: Learning to route LLMs for multi-agent
+systems. InProceedings of the 63rd Annual Meet-
+ing of the Association for Computational Linguistics
+(Volume 1: Long Papers), pages 15549–15572. Asso-
+ciation for Computational Linguistics.
+Guibin Zhang, Haiyang Yu, Kaiming Yang, Bingli
+Wu, Fei Huang, Yongbin Li, and Shuicheng Yan.
+2026a. EvoRoute: Experience-driven self-routing
+LLM agent systems. InProceedings of the 64th An-
+nual Meeting of the Association for Computational
+Linguistics (Volume 1: Long Papers), pages 38213–
+38225. Association for Computational Linguistics.
+Wenyuan Zhang, Shuaiyi Nie, Xinghua Zhang, Zefeng
+Zhang, and Tingwen Liu. 2026b. Exploring the sys-
+tem 1 thinking capability of large reasoning models.
+InProceedings of the Thirty-Fifth International Joint
+Conference on Artificial Intelligence, pages 6073–
+6081.
+Andy Zhou, Kai Yan, Michal Shlapentokh-Rothman,
+Haohan Wang, and Yu-Xiong Wang. 2024a. Lan-
+guage agent tree search unifies reasoning, acting, and
+planning in language models. InProceedings of the
+41st International Conference on Machine Learning,
+volume 235 ofProceedings of Machine Learning
+Research, pages 62138–62160. PMLR.
+
+=== PDF PAGE 11 ===
+Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou,
+Robert Lo, Abishek Sridhar, Xianyi Cheng, Tianyue
+Ou, Yonatan Bisk, Daniel Fried, Uri Alon, and Gra-
+ham Neubig. 2024b. WebArena: A Realistic Web
+Environment for Building Autonomous Agents. In
+International Conference on Learning Representa-
+tions.
+A Evaluation and Statistical Methods
+A.1 Aggregation and Resource Accounting
+For run r, let Ir contain either all task instances
+or those with official success, according to the re-
+ported scope. A task-level quantity xir and its
+action-selection counterparta ir give
+mtaskr =
+P
+i∈Ir xir
+|Ir| ,(1)
+mdecisionr =
+P
+i∈Ir airP
+i∈Ir dir
+,(2)
+where dir is the number of decision calls. Each
+decision has equal weight within a run. For ei-
+ther metric, the reported mean and sample standard
+deviation are
+¯m= 1R RXr=1 mr,(3)
+sm =
+s PR
+r=1(mr −¯m)2
+R−1 ,(4)
+with R= 3 . The full-task scope contains 134
+instances per ALFWorld run and 116 per Android-
+World run.
+Paired comparisons.A percentage resource
+change is 100( ¯mJ /¯mL −1) , where L denotes the
+specified LLM control. For matched successes,I r
+contains the intersection of instances completed
+by both configurations in run r. The task and run
+identifiers define each pair, and the same formulas
+apply to both configurations on that subset.
+Cost accounting.Prices per million tokens
+are $0.20 for LLM input, $1.20 for LLM out-
+put, $0.042 for Jev input, and zero for Jev output.
+Task expenditure includes all decision and auxiliary
+calls. Token counts follow each model’s tokenizer.
+Cost per delivered success divides expenditure over
+all task–run executions by their total number of suc-
+cesses. Failure expenditure is the fraction of this
+pooled cost spent on failed executions. Successful-
+task means instead average resource use only over
+each configuration’s own successful executions.
+A.2 Task-Cluster Bootstrap
+For each family and control, we resample n task
+identities with replacement from its n evaluated
+tasks, with n= 134 for ALFWorld and n= 116
+for AndroidWorld. Every sampled task contributes
+all three runs of both configurations. We compute
+J minus control differences in success rate, task
+cost, and task time for 20,000 replicates. The 2.5th
+and 97.5th percentiles form the 95% interval. Task
+resampling describes uncertainty across the evalu-
+ated task mix conditional on the fixed instances and
+run conditions. Computation uses NumPy 1.26.3
+with seed 20261006.
+For all-task metrics, the estimate is the mean
+paired difference over tasks and runs. For matched
+successes, each replicate retains the task–run pairs
+completed by both configurations and averages
+the three within-run mean differences. Thus, the
+matched subset can vary across runs and replicates.
+For resources per delivered success, each configura-
+tion’s total cost or time over all attempts is divided
+by its total successes within each replicate, and the
+two ratios are differenced. Table 10 includes every
+J–B and J–C comparison. Intervals are pointwise,
+with no multiplicity adjustment orpvalues.
+B Supplementary Experimental Results
+B.1 Task Effectiveness
+Success, scores, and consistency.Table 5 includes
+402 executions per ALFWorld configuration and
+348 per AndroidWorld configuration. Successes
+pool all three runs. Score is the AndroidWorld
+evaluator’s mean task score, expressed as a per-
+centage. All-three success counts distinct instances
+completed in every run. Its denominator is 134 or
+116 instances, respectively.
+Paired outcomes.Table 6 retains task–run cor-
+respondence. A gain is an execution completed
+by J but not by the specified control, and a loss
+is the reverse. Both-success counts determine the
+sample sizes used for matched resource compar-
+isons. Adding gains to both-success counts gives
+the number of Jev successes, while adding losses
+gives the control successes. Their difference is the
+net change in successful executions. For a given
+benchmark, dividing this difference by the total
+executions converts it to the success-rate differ-
+ence. These counts retain each run separately, so a
+task can contribute to different outcome categories
+across repetitions.
+
+=== PDF PAGE 12 ===
+Configuration Successes
+Success
+rate (%)
+Score
+(%)
+All-three
+success
+ALFWorld
+ReAct-B392/402 97.51±1.14 – 127/134
+ReAct-J386/402 96.02±0.86 – 124/134
+ReAct-C390/402 97.01±0.75 – 127/134
+Reflexion-B401/402 99.75±0.43 – 133/134
+Reflexion-J394/402 98.01±0.86 – 129/134
+Reflexion-C394/402 98.01±0.43 – 130/134
+AndroidWorld
+T3A-B200/348 57.47±4.75 57.47±4.75 53/116
+T3A-J154/348 44.25±6.05 44.83±6.08 34/116
+AutoDroid-B65/348 18.68±1.99 19.68±1.79 18/116
+AutoDroid-J57/348 16.38±1.49 17.39±1.74 14/116
+FastAgent-B174/348 50.00±3.76 50.14±4.00 38/116
+FastAgent-J111/348 31.90±2.59 33.05±2.60 30/116
+Table 5: Effectiveness across three runs. Success rates
+and AndroidWorld official scores are run means ± sam-
+ple SD. All-three success counts distinct tasks com-
+pleted in every run.
+Family Control Gains Losses Both
+ReActB8 14 378
+ReActC4 8 382
+ReflexionB1 8 393
+ReflexionC3 3 391
+T3AB9 55 145
+AutoDroidB7 15 50
+FastAgentB27 90 84
+Table 6: Paired execution outcomes for J versus B or C.
+Both denotes success by both configurations.
+B.2 Resource Use and Successful Delivery
+Task and decision resources.Tables 7 and 8 give
+absolute values for both task scopes. Tokens (k)
+are thousands of tokens, mUSD is 10−3 USD, and
+µUSD is 10−6 USD. The successful-task group
+uses each configuration’s own successful execu-
+tions.
+Time components.Table 9 provides compo-
+nent means in seconds per task, pooled over three
+equally sized runs. Decision and auxiliary columns
+sum their respective call durations. Environment
+interaction and other overhead is the residual after
+subtracting both call components from total task
+time. Auxiliary cost is its share of pooled inference
+expenditure.
+Successful delivery.Table 2 reports resource
+changes on common successful task–run pairs,
+alongside failure expenditure and cost per deliv-
+ered success. Failure expenditure is the fraction of
+total inference cost consumed by failed attempts.
+Cost per delivered success divides inference cost
+across all attempts by the number of successes.
+B.3 Paired Effect Estimates
+Table 10 reports J minus control differences for
+all executions, matched successes, and resources
+per delivered success. Intervals use 20,000 paired
+task-cluster bootstrap replicates, retaining all three
+runs of both configurations for each sampled task.
+Brackets show the 2.5th and 97.5th percentiles.
+C Trace Analysis and Case Evidence
+C.1 Coding Protocol and Behavioral Patterns
+The unit of annotation is one execution. The
+selected set contains all 43 family–task pairs in
+the persistent-loss, persistent-gain, and mixed-
+outcome groups defined in RQ3. Each contributes
+three baseline and three Jev runs, giving 258 execu-
+tions. Selection uses official outcomes, so category
+frequencies describe these groups. Two authors
+independently applied the same codebook to the
+goals, outcomes, and action records without ac-
+cess to each other’s annotations. A third author
+resolved disagreements using actions, observations,
+and final UI states. The annotators consulted the
+original records when the extracted records were
+insufficient. Agreement was calculated from the
+two independent annotations before adjudication.
+The independent annotations contained 51 label-set
+disagreements and one coverage disagreement.
+Behavior definitions.Target identification
+marks a wrong object, entity, or UI target. Pre-
+requisite violation marks an attempted action or
+search with an unmet state or inventory condition.
+Failed recovery marks repeated unsuccessful oper-
+ations or persistence in a contradicted premise after
+feedback. Premature completion marks an explicit
+completion claim while a goal condition remains
+unmet. Ineffective search marks repeated unpro-
+ductive search, navigation, or strategy changes. Ex-
+ecution granularity marks an observed error from
+batched operations or stale action references. Out-
+put or state mismatch marks an explicit discrep-
+ancy between the delivered answer or state and the
+requested result or evaluator criterion. A failed
+outcome alone provides no behavior label. An ex-
+ecution can receive several labels, and successful
+executions can contain corrected errors.
+Coverage and agreement.The behavioral de-
+nominator includes 248 complete and three partial
+records. The partial records contain T3A summary-
+call errors but retain substantive actions. Six FastA-
+gent baseline executions contain no action events,
+and one contains narrative responses without tool
+
+=== PDF PAGE 13 ===
+Configuration Per task Per decision
+Tokens (k) Cost (mUSD) Time (s) Tokens (k) Cost (µUSD) Time (s)
+All tasks
+ReAct-B33.73±1.15 7.74±0.30 71.17±7.50 2.04±0.07 468±15 4.13±0.49
+ReAct-J58.23±2.45 3.80±0.26 37.33±5.00 3.15±0.02 122±1 1.08±0.21
+ReAct-C37.63±2.53 8.75±0.66 86.02±23.49 2.51±0.04 582±15 5.68±1.46
+Reflexion-B38.86±3.25 8.98±0.67 99.55±20.22 2.08±0.06 479±9 5.14±0.81
+Reflexion-J77.36±13.83 6.05±1.70 61.90±8.66 3.19±0.07 124±3 1.04±0.05
+Reflexion-C68.35±0.89 16.75±0.15 143.03±18.64 2.71±0.01 670±1 5.84±0.71
+Successful tasks
+ReAct-B31.64±0.94 7.24±0.20 68.18±8.56 2.01±0.07 461±15 4.16±0.56
+ReAct-J48.64±1.82 2.59±0.09 28.36±4.35 3.10±0.01 119±1 1.07±0.21
+ReAct-C31.93±1.33 7.26±0.36 76.14±20.75 2.44±0.03 553±9 5.64±1.52
+Reflexion-B37.57±1.73 8.69±0.32 96.95±15.73 2.06±0.05 476±7 5.16±0.84
+Reflexion-J51.37±1.89 2.88±0.32 36.60±4.32 3.10±0.01 119±1 1.04±0.05
+Reflexion-C39.36±7.54 9.15±1.95 87.82±25.38 2.49±0.09 575±32 5.34±0.72
+Table 7: ALFWorld resource metrics. Each entry is a mean ± sample SD across three runs. The successful-task
+group includes only successful executions and their decisions. Decision averages divide action-selection totals by
+decision calls within each run. Cost units are10 −3 USD per task and10 −6 USD per decision.
+Configuration Per task Per decision
+Tokens (k) Cost (mUSD) Time (s) Tokens (k) Cost (µUSD) Time (s)
+All tasks
+T3A-B187.76±20.02 39.48±3.95 213.00±4.19 6.55±0.73 1413±147 7.24±0.35
+T3A-J288.44±58.30 32.73±6.81 190.36±27.06 12.86±1.54 480±58 1.34±0.41
+AutoDroid-B12.64±0.72 5.22±0.38 261.20±8.02 1.06±0.05 436±11 8.13±1.03
+AutoDroid-J34.30±0.28 1.63±0.04 246.27±10.82 2.48±0.02 94±1 1.75±0.47
+FastAgent-B47.68±8.80 10.98±1.96 119.68±16.38 4.78±0.02 1102±10 5.40±0.27
+FastAgent-J144.11±16.06 6.26±0.62 120.50±10.66 9.72±0.29 346±11 1.41±0.23
+Successful tasks
+T3A-B149.79±31.95 31.24±6.46 162.00±6.59 6.35±0.78 1346±155 6.12±0.57
+T3A-J191.85±25.14 21.50±2.95 136.20±14.46 12.23±1.23 455±46 1.37±0.49
+AutoDroid-B5.23±0.76 1.98±0.35 145.05±15.81 0.91±0.02 343±8 7.44±1.19
+AutoDroid-J12.27±1.07 0.52±0.07 126.24±13.06 2.02±0.06 76±2 1.47±0.90
+FastAgent-B42.32±2.92 9.65±0.60 104.89±6.42 4.61±0.09 1053±19 4.47±0.45
+FastAgent-J60.72±1.32 3.39±0.02 86.21±7.32 7.60±0.26 265±9 1.33±0.21
+Table 8: AndroidWorld resource metrics. Each entry is a mean ± sample SD across three runs. The successful-task
+group includes only successful executions and their decisions. Decision averages divide action-selection totals by
+decision calls within each run. Cost units are10 −3 USD per task and10 −6 USD per decision.
+Configuration
+Decision
+(s)
+Auxiliary
+(s)
+Env. &
+other (s)
+Aux. cost
+(%)
+ReAct-B68.31 0.00 2.86 0.0
+ReAct-J17.25 17.23 2.85 48.9
+ReAct-C79.18 3.95 2.89 7.7
+Reflexion-B95.76 0.89 2.90 1.0
+Reflexion-J20.16 38.57 3.17 60.3
+Reflexion-C119.76 20.17 3.10 18.0
+T3A-B88.52 67.47 57.01 56.3
+T3A-J16.14 96.99 77.24 81.9
+AutoDroid-B96.78 0.00 164.43 0.0
+AutoDroid-J23.34 9.56 213.37 22.9
+FastAgent-B52.99 2.27 64.42 1.0
+FastAgent-J20.03 14.76 85.71 21.1
+Table 9: Absolute task-time components and auxiliary
+inference expenditure over all executions.
+execution. These seven executions are excluded
+from behavior counts and agreement. For each la-
+bel, Cohen’s κ= (p o −p e)/(1−p e) compares the
+two original binary annotations, with pe computed
+from their marginal positive rates. The reported
+mean is the unweighted mean over seven labels.
+Binary agreement pools the 1,757 execution–label
+decisions, and exact-set agreement requires agree-
+ment on all seven labels for an execution. Table 3
+gives individual κ values. The granularity label has
+two positives for each annotator.
+Behavioral patterns.Table 11 reports adjudi-
+cated counts by agent and outcome group. Each
+denominator includes executions with substantive
+action records. Labels can overlap, and the counts
+
+=== PDF PAGE 14 ===
+Family Control∆Success (pp)∆Cost (mUSD)∆Time (s)
+All task executions
+ReAct B -1.49 [-4.48, +1.24] -3.94 [-4.88, -2.94] -33.84 [-42.51, -24.89]
+ReAct C -1.00 [-3.23, +0.75] -4.95 [-6.11, -3.84] -48.69 [-61.13, -37.16]
+Reflexion B -1.74 [-3.98, +0.00] -2.93 [-6.05, +0.90] -37.65 [-61.89, -9.55]
+Reflexion C +0.00 [-1.00, +1.00] -10.70 [-16.90, -5.93] -81.13 [-132.09, -42.03]
+T3A B -13.22 [-17.82, -8.62] -6.75 [-10.05, -3.44] -22.64 [-42.08, -3.72]
+AutoDroid B -2.30 [-5.46, +0.86] -3.59 [-4.08, -3.11] -14.94 [-32.63, +3.02]
+FastAgent B -18.10 [-26.44, -9.77] -4.72 [-6.36, -3.09] +0.82 [-9.63, +12.77]
+Matched successful executions
+ReAct B – -4.68 [-5.24, -4.15] -40.55 [-47.70, -33.90]
+ReAct C – -4.56 [-5.34, -3.86] -47.85 [-58.95, -37.98]
+Reflexion B – -5.61 [-6.98, -4.46] -56.38 [-70.44, -44.23]
+Reflexion C – -5.44 [-6.82, -4.32] -38.31 [-51.38, -26.92]
+T3A B – -2.64 [-4.71, -0.39] +1.49 [-12.98, +17.24]
+AutoDroid B – -1.48 [-2.06, -1.01] -26.88 [-42.70, -13.86]
+FastAgent B – -2.72 [-3.39, -2.14] -4.49 [-9.87, +1.32]
+Resources per delivered success
+ReAct B – -3.98 [-5.07, -2.81] -34.11 [-43.92, -23.82]
+ReAct C – -5.06 [-6.41, -3.81] -49.79 [-63.41, -37.03]
+Reflexion B – -2.83 [-6.06, +1.30] -36.64 [-61.92, -6.47]
+Reflexion C – -10.91 [-17.70, -5.93] -82.77 [-138.08, -42.02]
+T3A B – +5.27 [-3.83, +17.34] +59.55 [+7.44, +126.66]
+AutoDroid B – -18.00 [-29.85, -11.68] +105.07 [-206.65, +559.67]
+FastAgent B – -2.33 [-7.60, +4.38] +138.43 [+60.33, +257.46]
+Table 10: Paired differences for J minus the specified control with pointwise 95% task-cluster bootstrap intervals.
+All three runs of each sampled task remain together. Matched-success estimates average the three run-specific
+paired means. Delivered-success estimates divide total resources across all attempts by total successes.
+describe the selected outcome groups.
+C.2 Case Evidence and Execution Records
+Task identities and coverage.Table 12 identifies
+the illustrative tasks and preserves the order of their
+three run outcomes. ALFWorld identifiers refer
+to the valid_unseen split. AndroidWorld names
+identify task types, each evaluated on one fixed pa-
+rameter instance. The full case grouping comprises
+268 ALFWorld and 348 AndroidWorld family–task
+pairs. Each selected pair contributes six executions,
+three per configuration. A code of 111 records suc-
+cess in every run and 000 records failure in every
+run. Codes such as 010 and 101 retain the positions
+of variable outcomes. Thus, the two configura-
+tions in ALFWorld 133 succeed in complementary
+runs, whereas both configurations in the recipe-
+deletion example succeed in runs 1 and 3. The
+table records task completion, and the action de-
+scriptions in this appendix specify what happened
+within the corresponding executions.Record cov-
+erage.The recipe-creation field-shift account uses
+run 1, where the baseline batches operations against
+a changing form. Its other two failed runs con-
+tribute to the task’s outcome group. Behavioral
+descriptions use substantive action records, while
+all group counts use official task outcomes.
+Persistent Jev failures.
+Of the nineteen pairs, three occur in ALFWorld
+and sixteen in AndroidWorld, including fourteen
+for FastAgent. Household cases concern clean-
+ing or heating, while mobile cases span settings,
+records, calendars, and media. Representative fail-
+ures involve persisting with an incorrect target or
+accepting an unmet goal at termination.
+In cloth cleaning (ALFWorld 046),ReAct-Jse-
+lects a handtowel in all three runs and repeatedly in-
+vokes THINK when cleaning remains unavailable.
+The baseline makes the same initial error in run 2,
+but puts down the handtowel, retrieves a cloth, and
+completes the task. Correction distinguishes these
+outcomes. In Reflexion task 045, auxiliary LLM re-
+flections preserve the wrong-object premise across
+ten unsuccessful trials in run 1. Additional rea-
+soning reinforces the mistake. In the Wi-Fi task,
+FastAgent-Jopens quick settings, clicks a switch
+labeled “Off”, and declares success after three de-
+cisions in all three runs, while Wi-Fi remains off.
+The label provides no Wi-Fi identity. The object
+cases sustain an initial error through failed correc-
+tion, while the Wi-Fi case terminates before the
+required state is reached.
+
+=== PDF PAGE 15 ===
+Group VariantnTarget Prereq. Recovery Premature Search Granularity Output
+Family
+AutoDroid B 15 0 0 1 0 2 0 5
+AutoDroid J 15 0 0 6 0 3 0 4
+FastAgent B 62 5 4 1 1 4 2 3
+FastAgent J 69 10 7 39 5 32 0 9
+ReAct B 9 1 7 3 0 3 0 0
+ReAct J 9 6 0 0 3 0 0 3
+Reflexion B 3 1 1 1 0 1 0 0
+Reflexion J 3 3 0 3 0 0 0 0
+T3A B 33 9 2 8 2 6 0 7
+T3A J 33 7 6 11 3 11 0 9
+Outcome group
+Persistent Jev loss B 57 5 8 3 0 2 1 0
+Persistent Jev loss J 57 20 0 40 8 29 0 14
+Persistent Jev gain B 7 1 0 0 0 3 1 2
+Persistent Jev gain J 9 0 0 0 0 0 0 0
+Mixed outcomes B 58 10 6 11 3 11 0 13
+Mixed outcomes J 63 6 13 19 3 17 0 11
+Table 11: Adjudicated behavior counts by family and selected outcome group. n counts executions with substantive
+action records. All columns count executions bearing the label and can overlap.
+Family Task identifier B J
+ReAct 046 111 000
+ReAct 101 111 000
+Reflexion 045 111 000
+ReAct 133 010 101
+FastAgent SystemWifiTurnOn 111 000
+FastAgent RecipeAddMultiple
+Recipes
+000 111
+FastAgent SportsTrackerTotal
+DurationForCategory
+ThisWeek
+000 111
+FastAgent OsmAndFavorite 000 111
+FastAgent RecipeDeleteMultiple
+RecipesWithNoise
+101 101
+Table 12: Official outcomes in runs 1, 2, and 3. Each
+digit is success (1) or failure (0). The first four rows are
+ALFWorld and the others AndroidWorld.
+Persistent Jev gains.
+All three reverse pairs belong to FastAgent, in-
+volving recipe creation, activity-duration reporting,
+and adding a map favorite. They expose distinct
+contributions from interaction granularity, response
+format, and the evaluator’s acceptance criterion.
+This reverse contrast connects goal-appropriate
+choices with current-state execution and delivery
+in the requested response format.
+In recipe creation, the first baseline run batches
+field operations and reports that a value entered the
+wrong field after the form shifted. Jev completes
+the task through single-tool steps with updated ob-
+servations between operations, keeping choices
+grounded in the current layout. For the activity
+query, both workflows obtain 105 minutes in run 1.
+Jev returns the requested integer “105”, while the
+baseline returns a sentence containing that value
+and fails the evaluator. Correct calculation and
+compliant output are separate requirements. In the
+map task, the first baseline run expands its search
+and stops when it cannot verify the location. Jev
+creates the requested named favorite and passes the
+name-based evaluator. This contrast separates ge-
+ographic verification from benchmark acceptance.
+Successful delivery depends on execution, response
+format, and completion criteria.
+Mixed outcomes.
+The 21 mixed pairs comprise one ReAct, ten
+T3A, four AutoDroid, and six FastAgent tasks.
+Twenty occur in AndroidWorld. Fixed task in-
+stances make these contrasts informative about vari-
+ation within the same workflow. Representative
+runs differ in prerequisite management and search
+strategy, showing inconsistent application of effec-
+tive plans.
+In two-object placement (ALFWorld 133),
+ReAct-Jsucceeds twice andReAct-Bonce. The
+failed Jev run holds the first object while repeat-
+edly reasoning about collecting the second, whose
+inventory prerequisite is unmet. Successful runs
+deposit the first object before collecting the next.
+Progress requires making a needed action available
+as well as choosing among currently admissible
+actions. In recipe deletion among irrelevant entries,
+both FastAgent variants succeed twice. The failed
+Jev run deletes two targets and scrolls for the third
+until its budget expires. Successful Jev runs locate
+
+=== PDF PAGE 16 ===
+the targets through search, showing that strategy
+choice varies within the same configuration.
+Action positions.In ALFWorld 046,ReAct-
+Brun 2 takes the handtowel at step 3. Cleaning
+attempts at steps 5 and 12 return “Nothing hap-
+pens”. It deposits the handtowel at step 28, re-
+trieves cloth 2 at step 32, cleans it at step 34, and
+places it in the cabinet at step 36. In the addi-
+tional cup-heating example, ALFWorld 101,ReAct-
+Jrun 1 refers to mug 2 as the requested cup and
+continues making completion assertions through
+step 49. In recipe deletion with irrelevant entries,
+FastAgent-Jrun 2 performs 24 swipes after delet-
+ing two targets and ends with the third target still
+present.
+Completion fields and evaluator outcomes.
+For the activity-duration query in run 1, the Jev
+workflow’s completion call carries the message
+“105” with its internal success field set to false.
+The returned answer is “105” and receives official
+success. For the map-favorite instance, the eval-
+uator accepts the stored favorite by its requested
+name. The geographic verification attempted by the
+baseline is separate from this acceptance condition.
+Feedback and completion checks.Across
+these cases, reliability hinges on observations
+changing consequential choices. Object mis-
+matches require revised targets, changing forms
+require updated action references, and stalled
+progress calls for another strategy. Reflection that
+preserves a wrong premise adds little corrective
+value, while accepting an unverified goal ends exe-
+cution prematurely. Together with the distinction
+between real-world verification and benchmark ac-
+ceptance, these findings favor checks tied to target
+identity, prerequisites, and the requested final state.

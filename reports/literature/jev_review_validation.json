@@ -1,0 +1,13 @@
+{
+  "review_date": "2026-11-15",
+  "new_corpus": {
+    "articles": 6,
+    "figures": 49,
+    "tables": 106,
+    "pages": 134
+  },
+  "all_existing_ids_preserved": true,
+  "source_caption_page_errors": [],
+  "external_experiments_reproduced": false,
+  "status": "PASS"
+}

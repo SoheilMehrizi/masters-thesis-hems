@@ -1,0 +1,32 @@
+[
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Evaluating and Benchmarking The System One Model Jev.pdf",
+    "pages": 25,
+    "sha256": "902f582dc3620c0c2d07473744bdb55eac317f9214aadb96d1357ec6b8ec4f17"
+  },
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Fast Models, Slow Evidence A Paired and Self-Audited Evaluation of System-1 Decision Models for LLM Agent Harnesses.pdf",
+    "pages": 11,
+    "sha256": "646d0add856d5793d2e24888e6a84333ffcefdde4bba5bc355b190661204178f"
+  },
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Jev versus Large Language Models.pdf",
+    "pages": 19,
+    "sha256": "7ec10ead025efebdf08204d8d56b545304ab608da3b86daa256614be174f1532"
+  },
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\JevAgentHarness Benchmarking, Deploying and Training Decision Models That Share Control with LLMs.pdf",
+    "pages": 44,
+    "sha256": "16af19adf3eed2a5fcce32cd4402cd71215f11f58d696d683809700d449feb06"
+  },
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\REFLEX with Jev for Efficient Selective Control in LLM Agents.pdf",
+    "pages": 19,
+    "sha256": "7eaac75e8128eec7dbdb34f6865a9084a5b36b958a8864f4de8080a433d806bd"
+  },
+  {
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\When Faster Decisions Do Not Make Better Agents An Emperical Study of Jev in Agent Workflows.pdf",
+    "pages": 16,
+    "sha256": "e7c457d9f51d4ecb2ae417f18fe65a00048c323b65a6635736f20340ced6d253"
+  }
+]

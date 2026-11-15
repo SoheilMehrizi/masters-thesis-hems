@@ -12,7 +12,7 @@ P1.1–P1.3 are complete according to [saved setup validation](../reports/setup_
 
 **Current focus: P0 — research specification and implementation literature review.** The researcher requested specification review before P1.4 on 2026-11-13. Begin with P0.1; keep P0 tasks unchecked until their specifications are agreed.
 
-The [interactive literature library](literature/index.html) now contains analyses of all 23 unique local articles, including their [roles in our research and baseline recommendations](literature/research-map.html). This literature deliverable supports P0; it does not finalize specification choices or mark P0 tasks complete.
+The [interactive literature library](literature/index.html) now contains analyses of all 29 unique local articles, including six Jev decision-model studies and their [roles in our research and baseline recommendations](literature/research-map.html). This literature deliverable supports P0; it does not finalize specification choices or mark P0 tasks complete.
 
 **Next simulator task after P0 review: P1.4 — reproduce and verify fixed annual equipment sizing.**
 

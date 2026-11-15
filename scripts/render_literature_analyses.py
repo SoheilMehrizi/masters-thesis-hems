@@ -28,6 +28,9 @@ def bibliography(record,source_pages):
     text='\n'.join(source_pages[start-1:end])
     heading=re.search(r'(?im)^\s*(?:references|bibliography)\s*$',text)
     if heading:text=text[heading.end():]
+    if record.get('bibliography_end_marker'):
+        boundary=re.search(record['bibliography_end_marker'],text,re.M)
+        if boundary:text=text[:boundary.start()]
     # Preserve the complete transcript; do not silently infer missing entries.
     numbered=list(re.finditer(r'(?m)^\s*\[(\d+)\]\s+',text))
     if not numbered:numbered=list(re.finditer(r'(?m)^\s*(\d{1,3})\.\s+(?=[A-ZÀ-Ž])',text))

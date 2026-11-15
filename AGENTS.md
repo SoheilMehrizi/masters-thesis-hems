@@ -17,7 +17,7 @@ These are research questions, not demonstrated results.
 Current focus is **P0: research specification and implementation literature**.
 P1.1–P1.3 have saved validation evidence. P1.4 is deferred until the P0 review;
 it requires reproducing fixed annual equipment sizing, not just loading ratings.
-The literature library covers 23 unique local articles and 244 visual evidence
+The literature library covers 29 unique local articles and 293 visual evidence
 views. A literature report being available does not complete a P0 decision.
 
 Work task by task according to the researcher's instructions. Do not start later
@@ -115,8 +115,8 @@ missing-file notes are superseded by the current library inventory.
   context when a reliable crop cannot be established. Do not claim unavailable
   supplements or cited papers were independently reviewed.
 - Additional reports use canonical reviewed `article-*.json` files. The first
-  two use their builders and `existing-roles.json`. Historical `author_group_*`
-  and `author_twins_preferences_reports.py` scripts can overwrite manual review
+  two use their builders and `existing-roles.json`. Historical `author_group_*`,
+  `author_twins_preferences_reports.py`, and `author_jev_reports.py` scripts can overwrite manual review
   corrections: do not rerun them without comparing and preserving those fixes.
 - Rebuild generated reports through `scripts/build_literature_site.py`, rather
   than editing generated report HTML. Figure assets/manifest are prepared with

@@ -1,0 +1,491 @@
+{
+  "id": "article-27",
+  "short_title": "Jev · broad benchmark and sequential limits",
+  "title": {
+    "en": "Evaluating and Benchmarking the System One Model Jev",
+    "fa": "ارزیابی و معیارسنجی مدل System One به نام Jev"
+  },
+  "bibliography_start_page": 17,
+  "bibliography_end_page": 21,
+  "coverage_notes": {
+    "en": "Analysis of the supplied 25-page manuscript, including its methods, reported experiments, limitations, appendices, 6 numbered figure views and 14 table records. Captions below are bilingual summaries; original complete captions, tables, and pages remain available. Only explicitly printed values are transcribed. Publication status, external code, datasets and API claims have not been independently authenticated or executed. Prices, model names and versions are historical statements of this source, not current service guidance.",
+    "fa": "تحلیل نسخه 25 صفحه‌ای ارائه‌شده، شامل روش، آزمایش‌های گزارش‌شده، محدودیت‌ها، پیوست‌ها، 6 نمای شکل شماره‌دار و 14 رکورد جدول. عنوان‌ها خلاصه دوزبانه‌اند؛ عنوان کامل، جدول و صفحات اصلی در دسترس‌اند. فقط مقادیر چاپ‌شده نقل می‌شوند. وضعیت انتشار، کد بیرونی، داده و ادعای API مستقلاً تأیید یا اجرا نشده‌اند. قیمت، نام و نسخه مدل، گزارش تاریخی همین منبع است و راهنمای سرویس فعلی نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, objectives & hypothesis status",
+        "fa": "مشخصات، هدف و وضعیت فرضیه"
+      },
+      "paragraphs": [
+        {
+          "en": "Tobias Deußer, Rajkumar Ramamurthy, Lorenz Sparrenberg and Rafet Sifa are listed in the supplied PDF. It benchmarks pinned jev-1.13.0 over 37 public datasets in seven families and extends evaluation to five sequential environments. It is an empirical evaluation resource; no numbered preregistered H1/H2 list is stated. Expectations about calculation-heavy questions and explanations of sequential failure are discussed as hypotheses, not established mechanisms.",
+          "fa": "نسخه ارائه‌شده Tobias Deußer، Rajkumar Ramamurthy، Lorenz Sparrenberg و Rafet Sifa را نام می‌برد. نسخه jev-1.13.0 روی ۳۷ داده عمومی درهفت‌خانواده وپنج‌محیط ترتیبی سنجیده می‌شود. منبع ارزیابی تجربی است و فهرست فرضیه ثبت‌شده H1/H2 ندارد. انتظار درباره سؤال محاسباتی و توضیح شکست ترتیبی فرضیه‌اند، نه سازوکار اثبات‌شده.",
+          "pages": [
+            1,
+            2,
+            11,
+            16,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Typed interface, frozen requests & fair comparisons",
+        "fa": "قرارداد نوع‌دار، درخواست ثابت و مقایسه منصفانه"
+      },
+      "paragraphs": [
+        {
+          "en": "Choice returns an option distribution, Score a distribution over 2–10 rubric levels and a weighted score, and Noul a binary probability. One state is shared by independently evaluated questions. A template per dataset is piloted on 20 non-evaluation examples then frozen with no in-context examples. Dataset-specific metrics include accuracy, F1, AUPRC, balanced accuracy and Spearman correlation; these are not interchangeable percentages.",
+          "fa": "Choice توزیع گزینه، Score توزیع روی ۲–۱۰ سطح وامتیاز وزن‌دار و Noul احتمال دودویی می‌دهد. یک حالت بین پرسش‌های مستقل مشترک است. هر قالب روی ۲۰ مثال خارج ازارزیابی آزموده وسپس بدون مثال درون‌متنی ثابت می‌شود. معیار دقت، F1، AUPRC، دقت متوازن و Spearman بسته به داده است و درصد قابل جایگزینی نیست.",
+          "pages": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "en": "Qwen3.8-27B and Gemma-4-E4B see equivalent frozen states/questions. Each is scored from renormalized exact option-code logits in one forward pass, with thinking disabled and no text generation. Thus this is not a comparison against those LLMs with unrestricted reasoning. The harness caches content-addressed raw responses; original dataset splits and skipped/rejected cases are documented.",
+          "fa": "Qwen3.8-27B و Gemma-4-E4B حالت/پرسش ثابت معادل می‌بینند؛ امتیاز ازلوجیت دقیق کدگزینه نرمال‌شده دریک عبور، بااستدلال خاموش وبدون تولید متن است. پس مقایسه با استدلال آزاد این LLM ها نیست. خروجی خام با آدرس محتوایی ذخیره و تقسیم داده و موارد رد/حذف مستند می‌شود.",
+          "pages": [
+            3,
+            5,
+            6,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "calibration",
+      "title": {
+        "en": "Calibration, selective prediction & threshold experiments",
+        "fa": "کالیبراسیون، پیش‌بینی انتخابی و آزمایش آستانه"
+      },
+      "paragraphs": [
+        {
+          "en": "Reliability uses15 equal-width bins and Brier; selective prediction reports top80%/50% accuracy and AURC. Primary intervals use500 bootstrap resamples. Pooled Choice ECE is.028, but the unweighted dataset mean is.061 and low-accuracy datasets are overconfident. Multi-label Nouls averageP(yes)=.209 versus prevalence.041. A well-calibrated pooled Choice result does not imply calibrated binary or sequential decisions.",
+          "fa": "قابلیت اعتماد با ۱۵ سطل هم‌عرض و Brier، وپیش‌بینی انتخابی با دقت ۸۰٪/۵۰٪مطمئن و AURC سنجیده می‌شود. بازه اصلی ۵۰۰ بازنمونه دارد. ECE تجمیعی Choice برابر ۰٫۰۲۸ ولی میانگین بی‌وزن داده ۰٫۰۶۱ و داده کم‌دقت بیش‌اطمینان‌اند. میانگین Noul چندبرچسبی ۰٫۲۰۹ دربرابر فراوانی ۰٫۰۴۱ است. کالیبراسیون Choice تجمیعی، دودویی یا ترتیبی را تضمین نمی‌کند.",
+          "pages": [
+            5,
+            8,
+            9,
+            23
+          ]
+        },
+        {
+          "en": "Per-question cutoffs are tuned on 1,000 training/validation examples on a.01 grid and frozen for testing. UNFAIR-ToS micro-F1 rises.499→.748 and GoEmotions macro-F1.243→.353; AGB-DE stays.204. Low-resource languages and rubric judging remain weak; recalibrating a threshold does not create missing discrimination or task knowledge.",
+          "fa": "آستانه هرپرسش روی ۱۰۰۰ نمونه آموزش/اعتبارسنجی باگام ۰٫۰۱ تنظیم وبرای آزمون ثابت می‌شود. micro-F1 در UNFAIR-ToS از ۰٫۴۹۹ به ۰٫۷۴۸ و macro-F1 در GoEmotions از ۰٫۲۴۳ به ۰٫۳۵۳ می‌رسد؛ AGB-DE در ۰٫۲۰۴ می‌ماند. زبان کم‌منبع و داوری روبریک همچنان ضعیف‌اند؛ تنظیم آستانه دانش یا تفکیک ازدست‌رفته نمی‌سازد.",
+          "pages": [
+            6,
+            9,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sequential",
+      "title": {
+        "en": "Sequential experiments, reference policies & failure modes",
+        "fa": "آزمایش ترتیبی، سیاست مرجع و شکست"
+      },
+      "paragraphs": [
+        {
+          "en": "Every step presents current state/history and legal actions. ALFWorld has134 unseen games, TextWorld90 games, BabyAI-Text250 missions, Blackjack5,000 hands and FrozenLake500 episodes. Expert/solver or exact dynamic-programming references score encountered states, including after mistakes. Multiple acceptable actions can make single-reference agreement a lower bound. Step accuracy, probability calibration, task success and repeats are reported separately.",
+          "fa": "هرگام حالت/تاریخچه واقدام مجاز می‌گیرد. ALFWorld دارای ۱۳۴ بازی دیده‌نشده، TextWorld ۹۰، BabyAI-Text ۲۵۰ مأموریت، Blackjack ۵۰۰۰ دست و FrozenLake ۵۰۰ اپیزود است. خبره/حل‌گر یامرجه بهینه دقیق حالت طی‌شده حتی پس ازخطا را می‌سنجد. چنداقدام معتبر می‌تواند توافق باتک‌مرجع راکران پایین کند. دقت گام، کالیبراسیون، موفقیت و تکرار جداگزارش‌اند.",
+          "pages": [
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "en": "Jev completes35.1% ALFWorld,42.2% TextWorld and20.8% BabyAI-Text; Qwen completes54.5% and51.1% on the first two. Jev repeats44.7%,40.6% and74.0% of steps respectively. Blackjack optimal-action accuracy is90.0%, while FrozenLake success 13.4% trails the optimal74.8%. Adding explicit landing outcomes on 500 fixed FrozenLake states improves accuracy 32.0%→62.4%; this supplies part of the planning computation rather than proving autonomous inference of consequences.",
+          "fa": "Jev در ALFWorld موفقیت ۳۵٫۱٪، TextWorld ۴۲٫۲٪ و BabyAI-Text ۲۰٫۸٪ دارد؛ Qwen دردو اول ۵۴٫۵٪ و ۵۱٫۱٪. تکرار گام Jev به ترتیب ۴۴٫۷٪، ۴۰٫۶٪ و ۷۴٪ است. دقت اقدام بهینه Blackjack ۹۰٪ ولی موفقیت FrozenLake ۱۳٫۴٪ دربرابر بهینه ۷۴٫۸٪. افزودن پیامد مقصد روی ۵۰۰ حالت ثابت دقت را ۳۲٪→۶۲٫۴٪ می‌کند؛ بخشی ازمحاسبه برنامه‌ریزی را فراهم می‌کند، نه اثبات استنتاج مستقل پیامد.",
+          "pages": [
+            14,
+            15,
+            16,
+            24,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Memorization probes, strengths & author-stated gaps",
+        "fa": "آزمون حفظ‌کردن، قوت و شکاف ازدید نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Calculation-heavy MMLU accuracy 94.3% exceeds other subjects91.3%, unlike both open models and C-Eval. Rotating answers leaves94.3%; withholding questions drops to 31.5%. These probes rule out simple position/option-set artifacts but cannot distinguish genuine reasoning from memorized question–answer pairs. The authors leave changed-number question perturbations to future work.",
+          "fa": "دقت MMLU محاسباتی ۹۴٫۳٪ ازسایر ۹۱٫۳٪ بیشتر است؛ برخلاف هردومدل باز و C-Eval. چرخش پاسخ ۹۴٫۳٪ راحفظ وحذف سؤال به ۳۱٫۵٪ می‌رساند. این آزمون اثر ساده جایگاه/مجموعه گزینه را رد می‌کند ولی استدلال واقعی راازحفظ زوج سؤال–پاسخ جدا نمی‌کند. تغییر عدد سؤال برای آینده مانده است.",
+          "pages": [
+            11,
+            12
+          ]
+        },
+        {
+          "en": "Strengths include full-split coverage, explicit templates and raw-response release claims. Limits: one template and one request run, unknown training exposure, benchmark-label availability, network-inclusive latency and open baselines denied reasoning. Sequential prompt sensitivity is tested only on FrozenLake/BabyAI; cached repeated states reduce billed calls but not environment steps. API price and GPU hours are not directly comparable lifecycle costs.",
+          "fa": "قوت شامل پوشش تقسیم کامل، قالب صریح وادعای انتشار خروجی خام است. محدودیت: یک قالب ویک اجرای درخواست، مواجهه آموزشی نامعلوم، دسترسی برچسب، تأخیر شامل شبکه وپایه باز بدون استدلال. حساسیت پرامپت ترتیبی فقط در FrozenLake/BabyAI آزموده شده؛ ذخیره حالت تکراری فراخوانی صورتحساب راکم می‌کند، نه گام محیط. قیمت API وساعت GPU هزینه چرخه عمر قابل مقایسه مستقیم نیستند.",
+          "pages": [
+            5,
+            12,
+            16,
+            17,
+            24,
+            25
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 5,
+      "caption": {
+        "en": "Figure 1: One state with parallel binary and rubric questions (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 1: یک حالت باپرسش دودویی و روبریک موازی (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The request demonstrates separateNoul and Score heads over the same text. Shared input is not a joint probabilistic model of dependent labels.",
+        "fa": "درخواست سر Noul و Score جدا روی متن یکسان را نشان می‌دهد. ورودی مشترک مدل احتمالاتی مشترک برچسب وابسته نیست."
+      },
+      "data": {
+        "en": "One example, not a quantitative result; all question wording remains in the source.",
+        "fa": "یک مثال است، نه نتیجه کمی؛ متن کامل پرسش درمنبع موجود است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 8,
+      "caption": {
+        "en": "Figure 2: Pooled calibration by primitive (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 2: کالیبراسیون تجمیعی هرنوع پرسش (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Choice top-option probability, single binary yes-probability andmulti-label yes-probability use different calibration targets. Pooling can hide domain error; compare the per-dataset appendix.",
+        "fa": "احتمال گزینه برتر Choice، احتمال بله دودویی واحتمال چندبرچسبی هدف کالیبراسیون متفاوت دارند. تجمیع می‌تواند خطای دامنه راپنهان کند؛ پیوست هرداده راهم بخوانید."
+      },
+      "data": {
+        "en": "Choice ECE: Jev.028, Qwen.063, Gemma.208; multi-label Jev mean.209 versusyes-rate.041.",
+        "fa": "ECE مربوط به Choice: Jev ۰٫۰۲۸، Qwen ۰٫۰۶۳، Gemma ۰٫۲۰۸؛ چندبرچسبی Jev میانگین ۰٫۲۰۹ دربرابر نرخ‌بله ۰٫۰۴۱."
+      }
+    },
+    {
+      "id": "3",
+      "page": 9,
+      "caption": {
+        "en": "Figure 3: Jev accuracy versus retained coverage (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 3: دقت Jev نسبت به پوشش باقی‌مانده (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Moving left abstains on more low-confidence items. Improved accuracy applies to the retained subset and does not measure the success or cost of a downstream fallback.",
+        "fa": "حرکت به چپ موارد کم‌اطمینان بیشتری راکنار می‌گذارد. بهبود دقت متعلق به زیرمجموعه باقی‌مانده است ونه موفقیت/هزینه بازگشت بعدی."
+      },
+      "data": {
+        "en": "At50% coverage: Banking77 96.3%, ANLI86.9%, Emotion73.3% versusfull79.7%,73.9%,58.5%.",
+        "fa": "پوشش ۵۰٪: Banking77 برابر ۹۶٫۳٪، ANLI ۸۶٫۹٪، Emotion ۷۳٫۳٪ دربرابرکل ۷۹٫۷٪، ۷۳٫۹٪، ۵۸٫۵٪."
+      }
+    },
+    {
+      "id": "4",
+      "page": 10,
+      "caption": {
+        "en": "Figure 4: Selective prediction across models (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 4: پیش‌بینی انتخابی بین مدل‌ها (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "Each model ranks its own predictions by confidence; the retained examples can differ. Similar selective accuracy is not equivalent full workflow behavior.",
+        "fa": "هرمدل پیش‌بینی خودرابااطمینان رتبه‌بندی می‌کند؛ نمونه نگه‌داشته‌شده ممکن است متفاوت باشد. دقت انتخابی مشابه رفتار گردش‌کار برابر نیست."
+      },
+      "data": {
+        "en": "At50% Banking77: Jev 96.3%, Qwen94.5%; ANLI: Jev 86.9%, Qwen88.0%; remaining points not estimated.",
+        "fa": "در ۵۰٪Banking77: Jev ۹۶٫۳٪ و Qwen ۹۴٫۵٪؛ ANLI: Jev ۸۶٫۹٪ و Qwen ۸۸٪؛ سایرنقاط تخمین نشده‌اند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 11,
+      "caption": {
+        "en": "Figure 5: Language-level accuracy association (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 5: ارتباط دقت درسطح زبان (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The scatter pairs117 language varieties across twoFLORES-derived tasks. It shows correlation, not an experiment isolating language-resource causation or a Persian HEMS evaluation.",
+        "fa": "نمودار ۱۱۷ گونه زبانی رادر دووظیفه مشتق FLORES جفت می‌کند. همبستگی است، نه آزمایش جداسازی علت منابع زبان یاارزیابی HEMS فارسی."
+      },
+      "data": {
+        "en": "ReportedSpearmanρ=.69 across 117 varieties; no unlabeled point coordinates extracted.",
+        "fa": "Spearman گزارش‌شده ۰٫۶۹ برای ۱۱۷ گونه است؛ مختصات بدون برچسب استخراج نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 12,
+      "caption": {
+        "en": "Figure 6: Calculation-heavy and other exam subjects (caption summary; complete original caption in the linked source).",
+        "fa": "شکل 6: درس محاسباتی و سایردرس‌ها (خلاصه عنوان؛ عنوان کامل اصلی در منبع پیوندشده است)."
+      },
+      "explanation": {
+        "en": "The reversed MMLU pattern motivates contamination probes. The diagram alone does not prove memorization; the rotated andquestion-withheld controls are in Table5.",
+        "fa": "الگوی معکوس MMLU انگیزه آزمون آلودگی است. نموداربه‌تنهایی حفظ‌کردن رااثبات نمی‌کند؛ کنترل چرخش وحذف سؤال درجدول ۵ است."
+      },
+      "data": {
+        "en": "MMLUJev94.3% calculation versus 91.3% other; C-Eval81.4% versus 84.9%.",
+        "fa": "Jev در MMLU محاسباتی ۹۴٫۳٪ دربرابر ۹۱٫۳٪؛ در C-Eval برابر ۸۱٫۴٪ دربرابر ۸۴٫۹٪."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "37 datasets, split sizes and primitives",
+        "fa": "۳۷ داده، تقسیم ونوع‌پرسش"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "title": {
+        "en": "All three models’metrics and calibration",
+        "fa": "معیار وکالیبراسیون سه‌مدل"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 9,
+      "title": {
+        "en": "Fixed versus tuned thresholds",
+        "fa": "آستانه ثابت وتنظیم‌شده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 10,
+      "title": {
+        "en": "Rubric correlations and errors",
+        "fa": "همبستگی وخطای روبریک"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 12,
+      "title": {
+        "en": "MMLU/C-Eval memorization probes",
+        "fa": "آزمون حفظ‌کردن MMLU/C-Eval"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 13,
+      "title": {
+        "en": "Requests, tokens, cost and latency",
+        "fa": "درخواست، توکن، هزینه وتأخیر"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 13,
+      "title": {
+        "en": "Sequential suite and reference policies",
+        "fa": "مجموعه ترتیبی وسیاست مرجع"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 14,
+      "title": {
+        "en": "Sequential state and action contracts",
+        "fa": "قرارداد حالت واقدام ترتیبی"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "9",
+      "page": 15,
+      "title": {
+        "en": "Full sequential results and repeats",
+        "fa": "نتیجه ترتیبی کامل وتکرار"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 22,
+      "title": {
+        "en": "Dataset metrics with bootstrap intervals",
+        "fa": "معیار داده با بازه بازنمونه"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 23,
+      "title": {
+        "en": "Dataset-specific calibration and selective prediction",
+        "fa": "کالیبراسیون وانتخاب هر‌داده"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "12",
+      "page": 24,
+      "title": {
+        "en": "TextWorld/BabyAI difficulty breakdown",
+        "fa": "تفکیک سختی TextWorld/BabyAI"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "13",
+      "page": 24,
+      "title": {
+        "en": "BabyAI instruction sensitivity",
+        "fa": "حساسیت دستور BabyAI"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "14",
+      "page": 25,
+      "title": {
+        "en": "FrozenLake explicit-outcome sensitivity",
+        "fa": "حساسیت پیامدصریح FrozenLake"
+      },
+      "summary": {
+        "en": "Original table and all printed entries are retained in the source view. Read its caption, units, sample size and footnotes together; values are not estimated from plots.",
+        "fa": "جدول اصلی و تمام مقادیر چاپ‌شده در نمای منبع حفظ شده‌اند. عنوان، واحد، اندازه نمونه و پانوشت را با هم بخوانید؛ مقداری از نمودار تخمین زده نشده است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Useful broad evidence on where typed decisions, confidence and single-step success fail to transfer to sequential action. It directly informs our P5 uncertainty and P6 execution design but does not evaluate HEMS.",
+      "fa": "شاهد گسترده مفید درباره عدم‌انتقال تصمیم نوع‌دار، اطمینان وموفقیت تک‌گام به اقدام ترتیبی است. برایعدم‌قطعیت P5 واجرای P6 مرتبط است، ولی HEMS رانمی‌سنجد.",
+      "pages": [
+        8,
+        13,
+        16,
+        25
+      ]
+    },
+    "contribution": {
+      "en": "Contributes primitive-specific calibration, separate step/task metrics, encountered-state reference labels, repeat-loop measures and explicit-outcome probes. IndependentNoul outputs are not a substitute for our dependent-cause SCM beliefs.",
+      "fa": "کالیبراسیون اختصاصی نوع‌پرسش، معیار جداگام/وظیفه، برچسب حالت طی‌شده، سنجش حلقه تکرار وآزمون پیامدصریح رامی‌دهد. خروجی Noul مستقل جای باور علت‌های وابسته SCM نیست.",
+      "pages": [
+        3,
+        8,
+        14,
+        25
+      ]
+    },
+    "employment": {
+      "en": "Proposed use: construct typed state/action contracts with observable prerequisites and Twin-predicted consequences; maintain external progress/history checks; evaluate Persian and English separately; fit calibration on our own held-out scenarios. Test whether Twin consequence summaries help decisions rather than assuming the game result transfers.",
+      "fa": "کاربرد پیشنهادی: قرارداد حالت/اقدام نوع‌دار باپیش‌شرط مشاهده‌پذیر وپیامد پیش‌بینی‌شده Twin، بررسی بیرونی پیشرفت/تاریخچه، ارزیابی جدا فارسی/انگلیسی وکالیبراسیون روی سناریوی نگه‌داشته‌شده خودمان. اثرخلاصه پیامد Twin بایدآزموده شود، نه ازبازی تعمیم فرض شود.",
+      "pages": [
+        10,
+        14,
+        16,
+        25
+      ]
+    },
+    "baseline": {
+      "en": "No need to rerun37 NLP datasets for the main thesis. If Jev is adopted, a constrained Jev-only next-operation selector and anLLM-only selector on identical HEMS options can be adapted component baselines. Preserve independent validation andcompare sequential recovery as well as per-decision accuracy.",
+      "fa": "برایپایان‌نامه اصلی بازاجرای ۳۷ داده NLP لازم نیست. درصورت انتخاب Jev، انتخابگر محدود Jev تنها و LLM تنها رویگزینه یکسان HEMS پایه مؤلفه‌ای اقتباسی‌اند. اعتبارسنجی مستقل وحاصل بازیابی ترتیبی درکنار دقت تصمیم حفظ شود.",
+      "pages": [
+        13,
+        14,
+        16,
+        17
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Strength: a large reproducible request suite is paired with negative sequential results. Limitation: the cheaper one-pass comparison cannot establish superiority over reasoning-enabledLLMs or physical control; its pooled calibration would be unsafe to import as a universal safety threshold.",
+      "fa": "قوت: مجموعه درخواست بزرگ بازتولیدپذیر با نتیجه منفی ترتیبی همراه است. محدودیت: مقایسه یک‌عبوری برتری بر LLM استدلال‌دار یاکنترل فیزیکی رااثبات نمی‌کند؛ کالیبراسیون تجمیعی آستانه عمومی ایمنی نیست.",
+      "pages": [
+        5,
+        8,
+        16
+      ]
+    },
+    {
+      "en": "The paper reports up to 32k state-plus-question tokens, while the energy-audit manuscript describes64k per request. Keep these as source/version-specific claims; this report does not reconcile them or assert a current API limit.",
+      "fa": "این مقاله سقف ۳۲ هزار حالت‌به‌علاوه‌پرسش ومقاله ممیزی ۶۴ هزار دردرخواست توصیف می‌کند. این‌هاادعای منبع/نسخه‌اند؛ گزارش آن‌هارایکسان یاسقف API فعلی اعلام نمی‌کند.",
+      "pages": [
+        3
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "346,009 answered main requests consume 217.9M input tokens and cost $9.15 in the paper’s accounting. Strong single-step results coexist with ALFWorld 35.1% success and 44.7% repeated steps.",
+      "fa": "۳۴۶۰۰۹ درخواست پاسخ‌گرفته اصلی ۲۱۷٫۹ میلیون توکن و ۹٫۱۵ دلار در حسابداری مقاله مصرف می‌کنند. نتیجه تک‌گام قوی با ۳۵٫۱٪ موفقیت ALFWorld و ۴۴٫۷٪ گام تکراری همراه است.",
+      "pages": [
+        12,
+        13,
+        15
+      ]
+    }
+  ],
+  "bibliography_end_marker": "^A Results per dataset with confidence intervals\\s*$"
+}

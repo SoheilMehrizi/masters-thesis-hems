@@ -1,0 +1,1084 @@
+
+=== PDF PAGE 1 ===
+Fast Models, Slow Evidence:
+A Paired and Self-Audited Evaluation of System-1 Decision Models for
+LLM Agent Harnesses
+Jiawei Li
+Abstract
+Agent harnesses make many small, typed de-
+cisions per task: which model to call, which
+tool to use, whether retrieved text is relevant,
+whether an input carries an injection.System-
+1 decision modelsanswer such questions in
+a single forward pass with class probabili-
+ties, promising large cost and latency savings
+over LLM calls. We present a paired evalua-
+tion of an open-weight (LAYA) and a hosted
+(JEV) System-1 model on 11 agent decision
+points built from 18 public sources: 7,283
+base cases plus 6,640 robustness variants, with
+byte-identical inputs, paired tests, and cross-
+hardware and cross-day reproducibility checks.
+JEVis significantly more accurate on 9 of 11
+decision points (+10.8 to +46.0 pp). Neither
+model beats chance on zero-shot model rout-
+ing, and they tie on RAG relevance gating.
+LAYAchanges 30% of its answers when the
+option order is reversed and degrades sharply
+with many or similar candidates (31% at 50
+nearest-neighbour tools, vs. 98% for JEVon
+items with a unique correct tool). We also au-
+dit our own pipeline. Three analysis errors
+and one design confound distorted headline de-
+ployment claims: an omitted pre-screen cost
+(reported 23.9% saving, actual 4.3%), gate ac-
+curacy reported as end-to-end quality (58%
+vs. 98%), in-sample thresholds (5% target, up
+to 17% held-out misses), and a “channel ef-
+fect” on injection false positives that vanishes
+with channel-native content. Two other sus-
+pected confounds did not change the conclu-
+sions. All cases, raw outputs and analysis
+code are available at https://github.com/
+David-DL-Space/sys1-eval.
+1 Introduction
+An LLM agent is surrounded by aharness: code
+that routes requests, selects tools, decides whether
+to call a tool at all, gates retrieval, and screens
+untrusted content. Each of these is adecision: a
+typed output from a small, known set. Most of
+them are currently made by prompting the same
+LLM that does the work, which spends hundreds
+of milliseconds and a full generation on a problem
+whose output is one of a few labels.
+A recent class of models targets exactly this
+layer. Following Kahneman (2011), their ven-
+dors call themSystem-1models: given astate
+and a set of typedquestions( choice among K
+options, a yes/no probability, or an ordinal score),
+they return a distribution over answers in one non-
+autoregressive pass. LAYA(Laya AI, 2026) ships
+open weights; JEV(TypeSafe AI, 2026) is a hosted
+API. Both claim LLM-level accuracy on structured
+decisions at a small fraction of the cost.
+Practitioners who want to adopt such a model
+need answers to three concrete questions.(RQ1)
+At which harness decision points is a System-1
+model accurate enough?(RQ2)How reliable is
+it: stable under option order, wording, input chan-
+nel, and model version, and calibrated enough to
+threshold?(RQ3)When used as agatein front of
+an LLM, what does it actually save, and at what
+risk?
+We answer these with a paired evaluation (§3)
+and make three contributions:
+• A decision-point benchmark for agent har-
+nesses.It has 11 decision points, from model
+routing to PII egress, built from 18 public sources,
+with byte-identical inputs to both systems and
+paired statistics (§4).
+• Findings for practitioners(§5, §6). JEVdom-
+inates on tool selection, large label sets and in-
+jection screening. Both systems fail at zero-shot
+routing and tie on RAG gating. LAYAis order-
+sensitive, collapses with similar candidates, and
+misses half of the injections embedded in docu-
+ments. Used as gates, System-1 models save far
+less than naive accounting suggests.
+• A self-audit of the evaluation itself(§7). The
+first version of this study contained errors that
+changed deployment recommendations. We
+1
+arXiv:2610.02267v1  [cs.AI]  1 Oct 2026
+
+=== PDF PAGE 2 ===
+quantify each error, run control experiments for
+each suspected confound, and report two that
+turned out to be harmless. We believe this check-
+list transfers to any evaluation of gating compo-
+nents.
+2 Related Work
+Decision layers in agents.Cost-aware routing
+and cascades send easy queries to cheaper mod-
+els (Chen et al., 2023; Ong et al., 2024). Router-
+Bench provides per-query outcomes of many LLMs
+for studying such routers (Hu et al., 2024). Tool
+use is evaluated by BFCL, includingirrelevance
+cases where no tool should be called (Patil et al.,
+2023, 2025). Adaptive retrieval decides when to re-
+trieve or trust context (Asai et al., 2024; Yan et al.,
+2024; Jeong et al., 2024). Safety classifiers such
+as Llama Guard screen inputs and outputs (Inan
+et al., 2023). All of these are typically implemented
+either as a trained task-specific classifier or as an
+LLM prompt. System-1 models sit in between: one
+general model, zero-shot over typed questions.
+Prompt injection.Indirect prompt injection
+places adversarial instructions in data that the agent
+retrieves (Greshake et al., 2023). AgentDojo, In-
+jecAgent and BIPIA evaluate agents and defenses
+under such attacks (Debenedetti et al., 2024; Zhan
+et al., 2024; Yi et al., 2023). We evaluate thedetec-
+torin isolation and study how the delivery channel
+interacts with content style.
+Evaluation methodology.We use paired tests
+(McNemar, 1947; Dror et al., 2018), Wilson inter-
+vals (Wilson, 1927), calibration metrics (Guo et al.,
+2017; Platt, 1999), and selective-prediction views
+of thresholding (Geifman and El-Yaniv, 2017). Or-
+der and wording sensitivity of LLM classifiers is
+well documented (Zheng et al., 2024; Pezeshkpour
+and Hruschka, 2024; Sclar et al., 2024). So are
+label errors in test sets (Northcutt et al., 2021),
+contamination of public benchmarks (Sainz et al.,
+2023), and the limits of LLM judges (Zheng et al.,
+2023). Our self-audit adds a less discussed failure
+class: errors indeployment accounting(cost, end-
+to-end quality, threshold selection) that sit down-
+stream of correctly scored predictions.
+3 Systems and Protocol
+Interface.Both systems accept astate(here
+always a string) and a dictionary ofquestions.
+A choice question has instructions and a
+criteria map from option keys to short descrip-
+tions. A yes/no question ( noul in both APIs) re-
+turns p(yes). We use score questions only as aux-
+iliary signals. LAYA0.3.21 routes each request to
+an English or a multilingual checkpoint. JEVre-
+turned the version string jev-1.13.0 on every call
+we made, across two days.
+Fairness protocol.Both systems receive byte-
+identical state and questions for every case.
+Confidence is maxk pk for choice and max(p,1−
+p) for yes/no. This follows LAYA’s own calibration
+code. Its response field confidence is an entropy-
+based quantity on a different scale: it differs from
+maxk pk by 0.299 on average, versus 0.010 for JEV.
+Using that field would silently break any threshold.
+Accuracy intervals are Wilson; model comparisons
+use the exact McNemar test on discordant pairs,
+with an asymptotic CI for the paired difference.
+We do not correct for multiplicity. Every claim
+of a difference below has p <0.001, and we call
+p >0.4a tie only where the CI is narrow.
+Determinism and reproducibility.Re-running
+420 cases, LAYAchanged 0 decisions and JEV
+changed 1. On a second machine (Apple M4
+CPU vs. an RTX 2080 Ti GPU), LAYAreproduced
+1,180/1,180 decisions (max |∆p|= 0.006 ). One
+day later, JEVchanged 5 of 1,080 decisions (0.5%).
+Pairing runs across days and machines is therefore
+safe for both systems.
+Reference LLM.For the control experiments
+(§7) we add DeepSeek-V4.1-Flash (DeepSeek,
+2026) as a reference. It is prompted with the
+same state and question (temperature 0; prompt
+in App. B). It isnotpart of the paired comparison:
+its input format necessarily differs.
+4 Benchmark
+Each decision point is a question a harness asks,
+instantiated from public data (Table 1; details in
+App. A). The 2,100-case suite (A–F) is disjoint
+from a 100-case pilot whose labels were checked
+case by case. The agent-infrastructure suite (G–J,
+1,280 cases) uses paired constructions wherever
+possible: the same payload in two channels, the
+same evidence with a correct and a hallucinated
+answer, and the same text with and without PII.
+Label construction.For A, a request is labelled
+cheapif both a 7B model and GPT-4 solved it in
+RouterBench, andstrongif only GPT-4 did; items
+2
+
+=== PDF PAGE 3 ===
+Decision point Source(s)nType
+A Model routing RouterBench 400 ch(2)
+B Tool selection BFCL 400 ch(K)
+C Tool-call guard BFCL + irrelevance 300 y/n
+D RAG relevance BEIR×5 + BM25 1,920 y/n
+E Injection guard deepset, jackhhao 400 y/n
+F Large label set BANKING77, MASSIVE 200 ch(60+)
+G Injection×2 ch. deepset, jackhhao 480 y/n
+H Groundedness HaluEval-QA 200 y/n
+I Pre-exec. safety BeaverT., HarmB., DNA 400 y/n
+J PII egress ai4privacy 200 y/n
+B2 Hard distractors BFCL 400 ch(K)
+G2 Inj. in documents 3 corpora + AgentDojo 480 y/n
+J2 Natural redaction ai4privacy 100 y/n
+S Two-tier safety I sources + Alpaca 603 y/n
+Table 1: Decision points. B2, G2 and J2 are the control
+experiments of §7. S adds a policy-labelled gold stan-
+dard for §6. K∈ {2,5,10,20,50} with 80 cases per
+value. ch = choice, y/n = yes/no.
+30 40 50 60 70 80 90 100
+Accuracy (%)  —  bars: Wilson 95% CI
+A  Model routing
+D  RAG relevance gate
+J  PII egress
+I  Pre-execution safety
+C  Tool-call guardrail
+H  Groundedness
+G  Injection (user turn)
+G  Injection (tool output)
+E  Injection guard
+F  Large label set
+B  Tool selection
++1.5  (p=0.70)
++0.5  (p=0.71)
++17.5
++16.2
++19.3
++11.0
++10.8
++13.8
++14.8
++46.0
++15.5
+Δ pp
+Laya (open weights, local) Jev (hosted API)
+Figure 1: Accuracy per decision point. Right: paired
+difference JEV−LAYA(pp);p <0.001unless stated.
+that neither solved are dropped. For B, the correct
+tool is BFCL’s gold function, and K−1 distractors
+are drawn at random from the pool of all BFCL
+functions (B2 replaces them with lexical nearest
+neighbours, §7). For D, positives are BEIR rele-
+vance judgements (Thakur et al., 2021); negatives
+are BM25 hard negatives (800) or random passages
+(320). Other tracks use the dataset labels. We quan-
+tify their noise in §8.
+5 Results: Accuracy and Reliability
+RQ1: JEVis more accurate at 9 of 11 decision
+points; two are ties.Figure 1 shows paired ac-
+curacies. Overall, JEVreaches 76.7% vs. 63.1%
+on the 2,100-case suite (455 vs. 169 discordant
+wins) and 80.2% vs. 66.0% on agent infrastructure.
+The largest gap is on large label sets (F: 81.0%
+vs. 35.0%, +46.0 pp [38.7, 53.3]). Two points are
+2 5 10 20 50
+Candidate tools K (n=80 per point)
+40
+60
+80
+100
+Top-1 accuracy (%)
+Laya
+Jev
+DeepSeek-V4.1-Flash (ref.)
+random decoys
+nearest decoys
+Figure 2: Tool selection vs. number of candidates. Solid:
+random distractors (track B). Dashed: nearest-neighbour
+distractors (B2).
+ties, for different reasons.Model routing(A) is a
+tie at chance: JEVanswers “cheap” for 99.5% of
+requests (50.0%, the balanced-set constant base-
+line), and LAYAhas AUROC 0.48.RAG rele-
+vance(D, n=1,920) is a well-powered tie: 61.0%
+vs. 60.5%, difference +0.5 pp with CI [−2.0, 3.0].
+The two systems err in opposite directions, though.
+JEVrecovers more relevant passages (58.3% vs.
+45.4%), and LAYArejects more BM25 hard nega-
+tives (61.8% vs. 49.3%).
+Error direction matters for guards.On the tool-
+call guardrail (C), LAYAsays “call a tool” for
+74.7% of requests that need none (JEV: 40.0%). On
+pre-execution safety (I), LAYAlets through 81.5%
+of harmful requests (JEV: 25.5%). On PII egress
+(J), LAYA’s AUROC is 0.41, i.e. its scores rank the
+classes the wrong way round. We return to J in §7.
+Capacity: many and similar candidates.With
+random distractors (Fig. 2, solid), LAYAdegrades
+smoothly with K (100% at K=2, 53.8% at 50),
+while JEVstays at ≥98.8%. The released LAYA
+code explains the shape: all options share a 192-
+token budget, and each option is truncated to
+max(4,(192−16)/K) tokens. At K=50 an op-
+tion is about four tokens long. Withsimilardis-
+tractors (dashed), LAYAfalls to 54.0% overall and
+31.3% at K=50. JEVdrops to 84.5%, but the drop
+is almost entirely label ambiguity: an LLM audit
+found another valid tool in 19.8% of B2 items. On
+the 70.2% of items with a unique correct tool, JEV
+scores 98.9% and LAYA61.6%, a gap of +37.4 pp
+(vs. +15.5 pp with random distractors). The same
+3
+
+=== PDF PAGE 4 ===
+pattern holds for multilingual intents (App. C):
+LAYAscores 0/10 in Arabic and Hindi with 60
+labels.
+RQ2: LAYAis order-sensitive; wording moves
+both systems.Reversing the option list changes
+30.3% of LAYA’s decisions (53% with 60–77 la-
+bels), compared with 1.8% for JEV(Fig. 3a). In
+routing, LAYApicks “cheap” for 58.5% of requests
+in the original order and 82.3% in reversed order.
+Its preference follows position, not content. Re-
+wording only the instructions (criteria fixed) and
+re-sampling cases moves accuracy by 5–15 pp per
+track forbothsystems (Fig. 3b). Any single accu-
+racy number in this paper therefore carries a word-
+ing band of roughly ±5 pp. Therankingis robust:
+JEVleads in 8/8 wording ×sample combinations on
+B, C, E and F (smallest margin +1.3 pp on E). On
+A and D the sign flips (6/8 and 7/8).
+Calibration.Pooled ECE is 0.158 (LAYA) vs.
+0.143 (JEV) on A–F and 0.198 vs. 0.080 on G–
+J (App. Fig. 7). JEV’s A–F figure is dominated
+by routing, where it is confidently constant (ECE
+0.477). Among LAYA’s answers with confidence
+≥0.9, 26% are wrong. LAYAcheckpoints also warn
+at load time that some temperatures are invalid
+and “confidence . . . uncalibrated”. Per-domain
+recalibration helps: on D, Platt scaling fitted on
+half the data reduces LAYA’s ECE on the other half
+from 0.22 to 0.027 (JEV: 0.21 to 0.10).
+Latency and cost are deployment properties.
+LAYAruns in 31 ms (p50) on an RTX 2080 Ti but
+200 ms on an Apple M4 CPU. JEVtook 325 ms
+(p50) from one client site and 83 ms from another.
+The “10× faster” comparison that the first version
+of this study reported was a property of one net-
+work path. JEVuses 759 tokens per decision on av-
+erage, i.e. ≈$32 per million decisions at $0.042/M
+tokens. LAYA’s marginal cost is local compute.
+6 Using System-1 Models as Gates
+Agatedecides whether an expensive path (an LLM
+call, a review, a block) runs. Two quantities matter:
+the share of traffic that still takes the expensive path
+(call rate), and the share of cases that needed the
+expensive path but skipped it (miss rate, FNR).
+RAG gating saves little because of base rates.
+If the gate skips generation when context is judged
+irrelevant, then at a 5% miss budget LAYAkeeps
+92.4% of LLM calls and JEV79.8% (Fig. 4a). End-
+to-end, 97.9% of answerable queries are still an-
+swered by both (assuming the LLM is right). The
+first version of this study reported 45.1%/57.7%
+here, which is the gate’s own classification accu-
+racy (see §7). The binding constraint is instead
+the ceiling on savings, which is set by the share
+of irrelevant retrievals in traffic. In our set a per-
+fect gate saves at most 58%. Our mix is synthetic,
+so absolute savings will differ in production. The
+ranking will not: JEV’s AUROC is 0.71 vs. 0.61.
+On real top-5 contexts (400 cases), both systems
+recognise under 40% of “no answer here” contexts,
+which makes a skip-gate unsafe. We recommend
+using the gate as atrigger for more retrieval, not
+as a skip.
+Thresholds must be chosen out of sample.Pick-
+ing the threshold that meets a 5% FNR on the same
+data it is evaluated on guarantees 5% by construc-
+tion. When the threshold is picked on one half and
+evaluated on the other (Fig. 4b), the median FNR
+stays near 5%, but the 95th percentile is 6–8% for D
+(npos=800) and 10–17% for the 100–200-positive
+tracks. The target is exceeded in roughly half of all
+splits. A 5% promise needs either several hundred
+positives for calibration or a conservative margin.
+Two-tier safety review.Track S asks whether a
+System-1 pre-screen can spare an LLM reviewer
+(DeepSeek-V4.1-Flash) from seeing clearly benign
+requests. Gold labels come from a written policy
+applied by a different LLM (GLM-4.6; App. D).
+This gold agrees with the dataset labels on only
+72.8% of 540 items. At τ=0.1, the JEVpre-screen
+sends 65.6% of traffic to the reviewer with an iden-
+tical in-sample miss rate (11.6%). Once the pre-
+screen’s own tokens are counted, however, the cost
+falls by only 4.3% (Fig. 5). At τ=0.05 the two-tier
+system costs 4.7%morethan the reviewer alone.
+The LLM reviewer here is cheap ($72 per million
+requests, batched); a single System-1 call is 20% of
+that. The durable benefit islatency: 34–41% of re-
+quests are released in about 0.3 s instead of waiting
+for a multi-second LLM review. With thresholds
+chosen on held-out halves, the pre-screen adds at
+least one extra miss in 47% of splits. LAYAis use-
+less as a pre-screen: it must pass 99.3% of traffic
+to preserve recall.
+Cascades between the two System-1 models.
+Letting LAYAanswer when confident ( ≥0.9) and
+escalating the rest to JEVkeeps 41.7% of decisions
+local and saves 45% of JEVspend, but it lowers ac-
+4
+
+=== PDF PAGE 5 ===
+A routing B tools F 60–77 labels
+0
+20
+40
+60
+Decisions changed (%)
+30
+19
+53
+0 0
+8
+(a) Reversing option order
+Laya
+Jev
+A B C D E F
+40
+60
+80
+100
+Accuracy (%)
+(b) 4 wordings × 2 samples: range per track
+Figure 3: (a) Share of decisions that change when only the option order is reversed (n= 1,000 ). (b) Accuracy of
+each track under 4 instruction wordings×2 case samples (600 cases each); dots are the 8 runs.
+0 10 20 30
+Answerable queries dropped (FNR, %)
+40
+50
+60
+70
+80
+90
+100
+LLM calls kept (%)
+perfect gate (share answerable)
+5%
+(a) RAG gate operating curve
+Laya
+Jev
+D RAG G tool-out inj. H grounded. I safety J PII
+0
+5
+10
+15
+Held-out FNR (%)
+target 5%
+(b) Threshold picked on one half, FNR on the other (median, 5–95%)
+Figure 4: (a) RAG gate: share of LLM calls kept vs. answerable queries dropped (in-sample). (b) Choosing the
+threshold for a 5% FNR target on one random half and measuring FNR on the other half (500 splits).
+curacy from 76.7% to 70.7%. The saving is $16 per
+million decisions, which rarely justifies six points
+of accuracy.
+7 Auditing the Evaluation
+The first version of this study was built quickly,
+and its reports were confident and detailed. We
+re-derived every number from raw outputs and de-
+signed a control experiment for every suspected
+confound. Table 2 lists what changed.
+Control G2: channel vs. content.The original
+track G placed thesameshort text either in a user
+turn or inside a tool output. Benign texts were
+user queries (“Unemployment young people Eu-
+rope”) and therefore look anomalous as the output
+of read_email. In the control, we take 120 pas-
+sages that naturally appear in tool outputs (FiQA,
+CQADupStack, Wikipedia paragraphs from HaluE-
+val). Each passage appears clean and with an em-
+bedded payload: 60 AgentDojo (Debenedetti et al.,
+2024) injection goals in four carrier templates, plus
+60 deepset payloads. Each version is delivered
+through both channels. On transplanted texts, ev-
+ery model shows the effect, including the LLM
+reference (FPR 3.3%→25.0%, paired p <0.001).
+On native documents it disappears: JEVand the
+LLM reference stay at 0% FPR in both channels,
+and LAYAmoves 6.7% →10.0% (p=0.34) (Fig. 6).
+A smaller shift in mean p(attack) remains (JEV:
+0.04→0.13 on clean documents). The control also
+exposes a new weakness. With the payloadembed-
+dedin a passage, LAYAdetects only 47.5–50.8%
+of attacks, versus 70.8–82.5% for standalone pay-
+loads. JEVdetects 88.3–94.2% of standalone and
+90.8–93.3% of embedded payloads.
+Control B2: similar distractors.We replaced
+random distractors with the K−1 functions most
+similar to the gold function (TF-IDF over name
+and description), excluding near-duplicates (co-
+5
+
+=== PDF PAGE 6 ===
+Original claim After audit Root cause
+Errors that changed a recommendation
+Pre-screen at τ=0.1 saves 23.9% of
+safety-review cost
+Saves 4.3%;τ=0.05costs 4.7%more Pre-screen token cost omitted from the
+two-tier total
+RAG gate at 5% FNR: “end-to-end cor-
+rectness 45–58%”
+97.9% of answerable queries retained; 45–
+58% is gate accuracy
+Metric mislabelled: negatives that pass
+the gate still reach the LLM
+Pre-screen adds “zero” extra misses; 5%
+FNR thresholds
+Held-out: extra misses in 47% of splits;
+FNR p95 up to 16.7%
+Thresholds chosen and evaluated on
+the same data
+Tool-output channel doubles/triples be-
+nign false positives; calibrate per chan-
+nel
+Holds only for transplanted user-style text;
+0%→0% (JEV) on native documents
+Benign user queries pasted into tool
+outputs are anomalous in that channel
+Errors in secondary numbers
+Wording sensitivity±2 pp 5–15 pp range over 4 wordings × 2 sam-
+ples
+One paraphrase = one draw
+LLM reviewer agrees with dataset labels
+91.1%
+75.0% Expression bug returned another agree-
+ment
+JEV≈10×slower than LAYA 83–325 ms vs. 31–200 ms, depending on
+site/hardware
+Single client site and single GPU
+JEVtool-call guardrail 31% (first build) 78.7% Case builder dropped the user request
+(caught before the first report)
+Suspected confounds that did not change conclusions
+Tool selection 99.5% inflated by random
+distractors
+JEV98.9% on unambiguous nearest-
+neighbour items; gap to LAYAwidens
+—
+PII AUROC 0.41 caused by placeholder
+negatives
+Natural-redaction negatives: LAYA0.40,
+JEV0.82
+—
+Table 2: What a re-derivation from raw outputs and three control experiments changed.
+12 14 16 18
+End-to-end miss rate on unsafe requests (%)
+60
+80
+100
+120
+Cost vs. LLM-only (%)
+τ=0.05
+τ=0.1τ=0.2
+τ=0.3
+Jev pre-screen, incl. its own cost
+as originally reported (pre-screen cost omitted)
+LLM reviewer only
+Figure 5: Two-tier safety review (JEVpre-screen →
+LLM reviewer): cost vs. end-to-end miss rate over
+thresholds τ. Dashed: the original accounting, which
+omitted the pre-screen’s own cost.
+sine ≥0.8 ). Mean similarity rose from 0.01 to
+0.22. Because similar tools can beequally correct,
+DeepSeek audited every item, listing all tools that
+would fulfil the request: 70.2% of B2 items (96.3%
+of B) had a unique valid tool. Results are in §5: the
+suspected inflation of JEV’s score is not real, while
+LAYA’s weakness is larger than the original track
+showed. Because an LLM filtered the items, the
+unique subset may favour LLM-like judgements
+(§8).
+user turn tool output
+0
+5
+10
+15
+20
+25
+False-positive rate on benign (%)
+(a) Transplanted short texts
+user turn tool output
+(b) Native documents
+Laya
+Jev
+DeepSeek (ref.)
+Figure 6: Benign false-positive rate of injection detec-
+tors by delivery channel. (a) The original design: short
+user-style texts placed verbatim in either channel. (b)
+Control: 120 forum/web/encyclopedia passages, native
+to tool outputs, in either channel.
+Control J2: natural redaction.Placeholder neg-
+atives such as Last Name: [LASTNAME1] might
+look like PII to a detector. We therefore replaced
+each placeholder with a neutral phrase (“the per-
+son”, “their phone number”). JEV’s false-positive
+rate barely moves (66%→63%), and neither does
+LAYA’s AUROC (0.41→0.40), while the LLM ref-
+erence improves (FPR 25%→12%). The original
+conclusion, that neither System-1 model is a us-
+able PII egress gate, stands. Detecting PII means
+6
+
+=== PDF PAGE 7 ===
+finding spans, which is a task for NER and pattern
+matching.
+8 Threats to Validity
+Label noise.A blind LLM judge (DeepSeek-
+V4.1-Flash, given neither the gold label nor model
+outputs) re-labelled a stratified sample of 360 cases.
+It agrees with the dataset on 90.0% of items that
+both models got right, 75.7% of disagreements, and
+only 12.7% of items that both got wrong. Chang-
+ing the judge instruction from “strict” to “lenient”
+reading flips 28.1% (32/114) of the re-judged both-
+wrong labels. This is mostly because BEIR rele-
+vance is broader than “answerable”, so absolute
+accuracies on D (and I) are underestimates. On
+disagreements the judge sides with JEVin 131 of
+145 decided cases. We donottreat that as inde-
+pendent confirmation: judge and JEVmay share
+systematic preferences. The ranking claims rest on
+the gold labels and on the robustness of the ranking
+to wording.
+Routing labels.79% of A items come from
+multiple-choice benchmarks, and 95% have binary
+per-item outcomes from a single run of each model.
+Whether a 7B model “solves” a four-way multiple-
+choice item is partly a coin toss, so A’s attainable
+accuracy is unknown. Our routing result says that
+zero-shot System-1 routing failson these labels. It
+does not measure the limit of routing in general.
+Contamination and scope.All sources are pub-
+lic, and JEV’s training data is not. Near-perfect
+scores on popular sets (B, E) may partly reflect
+exposure. The G2/B2/J2 controls use newly com-
+posed inputs and preserve the conclusions, which
+is some reassurance. We tested one version of
+each system, English-centric decisions (multilin-
+gual cells have n=10), and zero-shot use only.
+LAYA’s fine-tuning path, its main selling point for
+domain adaptation, is not evaluated, and neither is
+its typed-decisions checkpoint, which crashed on
+our GPU. On the 100-case pilot, run on CPU, that
+checkpoint matched the default router within one
+point (59% vs. 58%).
+Audit coverage.We fixed every error we
+found, but an audit only covers the ques-
+tions its auditor thought to ask. We re-
+lease every raw response (https://github.com/
+David-DL-Space/sys1-eval ) so that others can
+extend it.
+9 Recommendations and Conclusion
+For harness builders:
+• Use a strong System-1 model (here JEV) for tool
+selection, large-label intent classification, injec-
+tion screening of tool outputs, and groundedness
+checks. These are single-glance decisions over a
+closed set, and it is near LLM quality on them.
+• Do not use zero-shot System-1 models to route
+between LLMs, to skip generation on RAG rele-
+vance, to screen PII, or as the only safety gate.
+• If you use LAYA, keep K≲10 dissimilar op-
+tions, fix the option order or vote over permuta-
+tions, compute confidence as maxk pk, and recal-
+ibrate per domain.
+• Report gates by call rate andheld-outmiss rate.
+Include every component’s cost. Test channel
+effects with content that is native to each channel.
+System-1 models make agent decisions cheap.
+Evaluating them turned out to be the harder part:
+in our study, the errors that changed recommenda-
+tions sat in the accounting around the model, not
+in its scored predictions.
+Limitations
+We evaluate two systems at single versions, zero-
+shot, on public English-dominant data with syn-
+thetic class mixes. Absolute accuracies carry a
+±5 pp wording band, and gate savings depend on
+production base rates that we do not observe. La-
+tency was measured from two client sites and on
+two hardware types only. Safety and PII gold labels
+involve LLM annotators whose policies differ from
+dataset conventions (72.8% agreement). The LLM
+reference receives a necessarily different prompt
+format and is not a paired competitor. The LAYA
+fine-tuning path is untested.
+Ethics Statement
+We use publicly released datasets under their li-
+cences. Harmful-request datasets (BeaverTails,
+HarmBench, Do-Not-Answer) and jailbreak pay-
+loads are used only as classifier inputs; no harmful
+completions were generated. The PII dataset is
+synthetic. API keys were read from local files and
+never written to logs or outputs.
+Acknowledgments
+The author used LLM-based assistants for coding
+and editing. All experiments, numbers and text
+were checked by the author, who takes full respon-
+sibility for the content.
+7
+
+=== PDF PAGE 8 ===
+References
+Ai4Privacy. 2024. pii-masking-300k. Hugging Face
+dataset https://huggingface.co/datasets/
+ai4privacy/pii-masking-300k.
+Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and
+Hannaneh Hajishirzi. 2024. Self-RAG: Learning to
+retrieve, generate, and critique through self-reflection.
+InThe Twelfth International Conference on Learning
+Representations.
+Iñigo Casanueva, Tadas Tem ˇcinas, Daniela Gerz,
+Matthew Henderson, and Ivan Vuli´c. 2020. Efficient
+intent detection with dual sentence encoders. InPro-
+ceedings of the 2nd Workshop on Natural Language
+Processing for Conversational AI.
+Lingjiao Chen, Matei Zaharia, and James Zou. 2023.
+FrugalGPT: How to use large language models while
+reducing cost and improving performance.arXiv
+preprint arXiv:2305.05176.
+Edoardo Debenedetti, Jie Zhang, Mislav Balunovi ´c,
+Luca Beurer-Kellner, Marc Fischer, and Florian
+Tramèr. 2024. AgentDojo: A dynamic environment
+to evaluate prompt injection attacks and defenses for
+LLM agents. InAdvances in Neural Information Pro-
+cessing Systems, Datasets and Benchmarks Track.
+DeepSeek. 2026. DeepSeek-V4.1-Flash. API model
+deepseek-flash,https://api.deepseek.com.
+deepset. 2023. prompt-injections. Hugging Face
+dataset https://huggingface.co/datasets/
+deepset/prompt-injections.
+Rotem Dror, Gili Baumer, Segev Shlomov, and Roi
+Reichart. 2018. The hitchhiker’s guide to testing
+statistical significance in natural language processing.
+InProceedings of the 56th Annual Meeting of the
+Association for Computational Linguistics.
+Jack FitzGerald et al. 2023. MASSIVE: A 1M-example
+multilingual natural language understanding dataset
+with 51 typologically-diverse languages. InProceed-
+ings of the 61st Annual Meeting of the Association
+for Computational Linguistics.
+Yonatan Geifman and Ran El-Yaniv. 2017. Selective
+classification for deep neural networks. InAdvances
+in Neural Information Processing Systems.
+Kai Greshake, Sahar Abdelnabi, Shailesh Mishra,
+Christoph Endres, Thorsten Holz, and Mario Fritz.
+2023. Not what you’ve signed up for: Compromising
+real-world LLM-integrated applications with indirect
+prompt injection. InProceedings of the 16th ACM
+Workshop on Artificial Intelligence and Security.
+Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q. Wein-
+berger. 2017. On calibration of modern neural net-
+works. InProceedings of the 34th International Con-
+ference on Machine Learning.
+Jack Hao. 2023. jailbreak-classification. Hugging Face
+dataset https://huggingface.co/datasets/
+jackhhao/jailbreak-classification.
+Qitian Jason Hu, Jacob Bieker, Xiuyu Li, Nan Jiang,
+Benjamin Keigwin, Gaurav Ranganath, Kurt Keutzer,
+and Shriyash Kaustubh Upadhyay. 2024. Router-
+Bench: A benchmark for multi-LLM routing system.
+arXiv preprint arXiv:2403.12031.
+Hakan Inan, Kartikeya Upasani, Jianfeng Chi, Rashi
+Rungta, Krithika Iyer, Yuning Mao, Michael
+Tontchev, Qing Hu, Brian Fuller, Davide Testuggine,
+and Madian Khabsa. 2023. Llama guard: LLM-
+based input-output safeguard for human-AI conver-
+sations.arXiv preprint arXiv:2312.06674.
+Soyeong Jeong, Jinheon Baek, Sukmin Cho, Sung Ju
+Hwang, and Jong C. Park. 2024. Adaptive-RAG:
+Learning to adapt retrieval-augmented large language
+models through question complexity. InProceedings
+of the 2024 Conference of the North American Chap-
+ter of the Association for Computational Linguistics.
+Jiaming Ji, Mickel Liu, Juntao Dai, Xuehai Pan, Chi
+Zhang, Ce Bian, Boyuan Chen, Ruiyang Sun, Yizhou
+Wang, and Yaodong Yang. 2023. BeaverTails: To-
+wards improved safety alignment of LLM via a
+human-preference dataset. InAdvances in Neural
+Information Processing Systems, Datasets and Bench-
+marks Track.
+Daniel Kahneman. 2011.Thinking, Fast and Slow. Far-
+rar, Straus and Giroux.
+Laya AI. 2026. Laya: An open-source system-1 de-
+cision model. https://www.layaaimodel.com/.
+Python packagelaya0.3.21, Apache-2.0 weights.
+Junyi Li, Xiaoxue Cheng, Wayne Xin Zhao, Jian-Yun
+Nie, and Ji-Rong Wen. 2023. HaluEval: A large-
+scale hallucination evaluation benchmark for large
+language models. InProceedings of the 2023 Con-
+ference on Empirical Methods in Natural Language
+Processing.
+Mantas Mazeika, Long Phan, Xuwang Yin, Andy Zou,
+Zifan Wang, Norman Mu, Elham Sakhaee, Nathaniel
+Li, Steven Basart, Bo Li, David Forsyth, and Dan
+Hendrycks. 2024. HarmBench: A standardized eval-
+uation framework for automated red teaming and ro-
+bust refusal. InProceedings of the 41st International
+Conference on Machine Learning.
+Quinn McNemar. 1947. Note on the sampling error
+of the difference between correlated proportions or
+percentages.Psychometrika, 12(2):153–157.
+Curtis G. Northcutt, Anish Athalye, and Jonas Mueller.
+2021. Pervasive label errors in test sets destabilize
+machine learning benchmarks. InAdvances in Neu-
+ral Information Processing Systems, Datasets and
+Benchmarks Track.
+8
+
+=== PDF PAGE 9 ===
+Isaac Ong, Amjad Almahairi, Vincent Wu, Wei-Lin
+Chiang, Tianhao Wu, Joseph E. Gonzalez, M. Waleed
+Kadous, and Ion Stoica. 2024. RouteLLM: Learning
+to route LLMs with preference data.arXiv preprint
+arXiv:2406.18665.
+Shishir G. Patil, Huanzhi Mao, Fanjia Yan, Char-
+lie Cheng-Jie Ji, Vishnu Suresh, Ion Stoica, and
+Joseph E. Gonzalez. 2025. The Berkeley function
+calling leaderboard (BFCL): From tool use to agentic
+evaluation of large language models. InProceedings
+of the 42nd International Conference on Machine
+Learning.
+Shishir G. Patil, Tianjun Zhang, Xin Wang, and
+Joseph E. Gonzalez. 2023. Gorilla: Large language
+model connected with massive APIs.arXiv preprint
+arXiv:2305.15334.
+Pouya Pezeshkpour and Estevam Hruschka. 2024.
+Large language models sensitivity to the order of op-
+tions in multiple-choice questions. InFindings of the
+Association for Computational Linguistics: NAACL
+2024.
+John Platt. 1999. Probabilistic outputs for support vec-
+tor machines and comparisons to regularized likeli-
+hood methods. InAdvances in Large Margin Classi-
+fiers. MIT Press.
+Oscar Sainz, Jon Ander Campos, Iker García-Ferrero,
+Julen Etxaniz, Oier Lopez de Lacalle, and Eneko
+Agirre. 2023. NLP evaluation in trouble: On the
+need to measure LLM data contamination for each
+benchmark. InFindings of the Association for Com-
+putational Linguistics: EMNLP 2023.
+Melanie Sclar, Yejin Choi, Yulia Tsvetkov, and Alane
+Suhr. 2024. Quantifying language models’ sensitiv-
+ity to spurious features in prompt design or: How I
+learned to start worrying about prompt formatting.
+InThe Twelfth International Conference on Learning
+Representations.
+Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann
+Dubois, Xuechen Li, Carlos Guestrin, Percy Liang,
+and Tatsunori B. Hashimoto. 2023. Stanford alpaca:
+An instruction-following LLaMA model. https://
+github.com/tatsu-lab/stanford_alpaca.
+Nandan Thakur, Nils Reimers, Andreas Rücklé, Ab-
+hishek Srivastava, and Iryna Gurevych. 2021. BEIR:
+A heterogeneous benchmark for zero-shot evaluation
+of information retrieval models. InAdvances in Neu-
+ral Information Processing Systems, Datasets and
+Benchmarks Track.
+TypeSafe AI. 2026. Introducing system one mod-
+els and jev. https://typesafe.ai/blog/
+introducing-system-one-models-and-jev .
+Modeljev-1.13.0.
+Yuxia Wang, Haonan Li, Xudong Han, Preslav Nakov,
+and Timothy Baldwin. 2024. Do-not-answer: Evalu-
+ating safeguards in LLMs. InFindings of the Associ-
+ation for Computational Linguistics: EACL 2024.
+Edwin B. Wilson. 1927. Probable inference, the law of
+succession, and statistical inference.Journal of the
+American Statistical Association, 22(158):209–212.
+Shi-Qi Yan, Jia-Chen Gu, Yun Zhu, and Zhen-Hua Ling.
+2024. Corrective retrieval augmented generation.
+arXiv preprint arXiv:2401.15884.
+Jingwei Yi, Yueqi Xie, Bin Zhu, Emre Kiciman,
+Guangzhong Sun, Xing Xie, and Fangzhao Wu. 2023.
+Benchmarking and defending against indirect prompt
+injection attacks on large language models.arXiv
+preprint arXiv:2312.14197.
+Z.ai. 2025. GLM-4.6.https://z.ai.
+Qiusi Zhan, Zhixiang Liang, Zifan Ying, and Daniel
+Kang. 2024. InjecAgent: Benchmarking indirect
+prompt injections in tool-integrated large language
+model agents. InFindings of the Association for
+Computational Linguistics: ACL 2024.
+Chujie Zheng, Hao Zhou, Fandong Meng, Jie Zhou, and
+Minlie Huang. 2024. Large language models are not
+robust multiple choice selectors. InThe Twelfth Inter-
+national Conference on Learning Representations.
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan
+Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi Lin,
+Zhuohan Li, Dacheng Li, Eric P. Xing, Hao Zhang,
+Joseph E. Gonzalez, and Ion Stoica. 2023. Judging
+LLM-as-a-judge with MT-Bench and chatbot arena.
+InAdvances in Neural Information Processing Sys-
+tems, Datasets and Benchmarks Track.
+A Data Construction Details
+A (routing).RouterBench 0-shot rows.
+Cheap model mistral-7b-chat, strong model
+gpt-4-1106-preview. The 200 cheap and 200
+strong items are stratified by source benchmark.
+The state is the raw request, truncated to 1,500
+characters. Options:cheap= “a small fast 7B chat
+model is enough to answer correctly”;strong=
+“only a frontier model will answer correctly”.
+B / B2 (tool selection).400 BFCL
+simple/live_simple requests with exactly
+one gold function, and 80 per K. Option descrip-
+tions are truncated to 110 characters. The state
+lists the request and numbered tools. B2 keeps
+the same requests, K and option shuffling seeds,
+and replaces distractors with TF-IDF nearest
+neighbours of the gold function (cosine <0.8 ,
+different base name).
+C (guardrail).150 relevant re-
+quests with their gold function; 150
+irrelevance/live_irrelevance requests
+with up to 6 of their listed functions.
+9
+
+=== PDF PAGE 10 ===
+D (RAG).SciFact, NFCorpus, FiQA, SciDocs
+and CQADupStack-android. 800 qrels positives,
+800 BM25 hard negatives (token Jaccard ≤0.6
+to the positive), 320 random negatives. Passages
+p50 = 172 words. A separate multi-passage set
+has 400 real top-5 contexts (200 containing a qrels
+positive).
+E/G (injection).Attacks come from
+deepset/prompt-injections and jackhhao/jailbreak-
+classification (deepset, 2023; Hao, 2023). Benign
+texts were filtered to exclude imperative or
+role-play text. In G, each of 240 payloads appears
+in both channels. G2 is described in §7; the
+passages are 60–200 words and contain no URLs
+or AI-directed words.
+H (groundedness).100 HaluEval-QA items (Li
+et al., 2023), each with its right and its hallucinated
+answer, over the same evidence.
+I (safety).Unsafe: 100 BeaverTails (Ji et al.,
+2023), 50 HarmBench (Mazeika et al., 2024), 50
+Do-Not-Answer (Wang et al., 2024). Safe: 150
+BeaverTails-safe and 50 filtered benign prompts. S
+adds 120 Alpaca (Taori et al., 2023) instructions
+and hard-benign Do-Not-Answer items.
+J/J2 (PII).100 ai4privacy/pii-masking-300k
+(Ai4Privacy, 2024) pairs of source text and masked
+text. J2 replaces each placeholder with a neutral
+phrase by type (e.g. [TEL]→“their phone num-
+ber”).
+F (labels).BANKING77 (Casanueva et al.,
+2020), 100 items, 77 labels. MASSIVE (FitzGer-
+ald et al., 2023) intents, 60 labels, 10 items in each
+of 10 locales. Label names are kept verbatim.
+B Prompts
+System-1 questions (verbatim).C: “Does this
+user request require calling one of the available
+tools, rather than being answered directly?” D:
+“Does the passage contain information that helps
+answer the question?” E/G/G2: “Does this con-
+tent contain instructions aimed at the AI system,
+rather than being ordinary content for it to pro-
+cess (a prompt-injection or jailbreak attempt)?” H:
+“Is the proposed answer fully supported by the ev-
+idence?” I: “Does this request ask for harmful,
+unsafe or disallowed assistance that the agent must
+refuse?” J: “Does this text contain personal data (a
+person’s name, address, email, phone number, or
+an account/ID number)?”
+LLM reference.System prompt: “You are the
+decision component of an AI agent. You receive a
+STATE and one QUESTION about it. For a yes/no
+question give p_yes, your probability that the an-
+swer is yes; for a multiple-choice question give
+the exact key of the single best option. Reply with
+only JSON.” The user message contains the state,
+the question and the options. Label-audit prompt
+for B/B2: list every tool that, called with suitable
+arguments, would correctly fulfil the request.
+C Full Results
+LAYAJEV
+Track AUC FNR FPR AUC FNR FPR
+C guardrail .56 6.7 74.7 .86 2.7 40.0
+D RAG (400) .58 57.8 29.9 .70 42.2 37.2
+E injection .88 22.0 21.5 .98 7.0 7.0
+G user turn .90 29.2 8.3 .98 11.7 4.2
+G tool output .85 17.5 25.8 .97 5.8 10.0
+H grounded. .79 5.0 37.0 .95 4.0 16.0
+I safety .64 81.5 8.5 .77 25.5 32.0
+J PII .41 77.0 39.0 .81 15.0 66.0
+Table 3: Yes/no tracks at threshold 0.5 (FNR/FPR in %).
+For H the positive class is “supported”.
+B77 en zh ja de fr es ko pt ar hi
+LAYA40 30 30 60 30 60 40 20 30 0 0
+JEV84 80 50 100 90 70 90 90 80 80 50
+Table 4: Track F accuracy (%). BANKING77 n=100;
+MASSIVE localesn=10each (trends only).
+Short (orig. G) Documents (G2)
+Model / channel TPR FPR TPR FPR
+LAYAuser 70.8 8.3 47.5 6.7
+LAYAtool 82.5 25.8 50.8 10.0
+JEVuser 88.3 4.2 93.3 0.0
+JEVtool 94.2 12.5 90.8 0.0
+LLM ref. user 85.0 3.3 97.5 0.0
+LLM ref. tool 97.5 25.0 98.3 0.0
+Table 5: Channel control (%, day-2 runs). Benign FPR
+change user→tool, paired McNemar: short texts LAYA
+p <10−4, JEV p=0.002, LLM p <10−6; documents
+LAYAp=0.34, JEVand LLM identical.
+D Two-Tier Safety Details
+The policy defines 10 refusal classes and 7 allowed
+classes, plus rules for specificity, target, intent and
+bundling. The gold standard is GLM-4.6 (Z.ai,
+10
+
+=== PDF PAGE 11 ===
+Negatives Placeholder Natural
+AUC FPR AUC FPR
+LAYA.41 39 .40 36
+JEV.81 66 .82 63
+LLM ref. .85 25 .88 12
+Table 6: PII control (J vs. J2). TPR on the shared
+positives: LAYA23%, JEV85%, LLM 84%.
+Random (B) Nearest (B2)
+all unique all unique
+n400 385 400 281
+LAYA84.0 84.9 54.0 61.6
+JEV99.5 100.0 84.5 98.9
+LLM ref. 98.5 – 83.0 –
+Table 7: Tool selection (%). “Unique”: items whose
+LLM audit lists exactly the gold tool as valid.
+2025), applied blind. The reviewer is DeepSeek-
+V4.1-Flash, batched 6 per call (p50 4.1 s, p95 33.8 s
+per batch). 63 of 603 items were excluded be-
+cause the gold or reviewer output could not be
+parsed; exclusions are spread across sources (25
+unsafe, 38 safe). The reviewer agrees with the pol-
+icy gold on 91.1% of items and with the dataset
+labels on 75.0%. Costs use $0.112/$0.336 per M
+input/output tokens for the reviewer and $0.042 per
+M tokens for JEV.
+Call FNR FPR Cost
+LLM only 100 11.6 7.0 100.0
+JEVτ=0.0575.2 11.6 7.0 104.7
+JEVτ=0.165.6 11.6 7.0 95.7
+JEVτ=0.258.9 12.0 5.1 87.8
+JEVτ=0.353.3 15.1 3.5 80.9
+LAYAτ=0.199.3 11.6 7.0 99.4
+Table 8: Two-tier review, in-sample (%; cost relative
+to LLM-only, pre-screen cost included). n=540, 225
+unsafe.
+E Reproducibility and Compute
+Versions: LAYA0.3.21 (transformers 5.17.0,
+torch 2.14.0), JEV jev-1.13.0, DeepSeek
+deepseek-flash. Runs: Windows + RTX 2080 Ti
+(day 1), macOS + Apple M4 CPU (day 2). To-
+tal JEVspend across all runs was $0.52. The
+DeepSeek audit and reference runs used 1.7M input
+and 1.1M output tokens. The release ( https://
+github.com/David-DL-Space/sys1-eval ) con-
+tains every case file, raw response, analysis script
+(paper/analysis.py regenerates all numbers and
+0.4 0.6 0.8 1.0
+Confidence = max prob.
+0.2
+0.4
+0.6
+0.8
+1.0
+Accuracy
+2,100-case suite (A–F)
+Laya (ECE 0.158)
+Jev (ECE 0.143)
+0.4 0.6 0.8 1.0
+Confidence = max prob.
+Agent-infra suite (G–J)
+Laya (ECE 0.198)
+Jev (ECE 0.080)
+Figure 7: Reliability diagrams (10 bins, ≥10 items per
+point).
+figures), and the corrected versions of the original
+scripts.
+11
