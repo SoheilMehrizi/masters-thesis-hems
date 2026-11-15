@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-OUT=Path(__file__).resolve().parents[1]/'reports/literature/analyses'
+OUT=Path(__file__).resolve().parents[2]/'reports/literature/analyses'
 OUT.mkdir(parents=True,exist_ok=True)
 def p(en,fa,*pages):return dict(en=en,fa=fa,pages=list(pages))
 def sec(id,en,fa,*pars):return dict(id=id,title=dict(en=en,fa=fa),paragraphs=list(pars))

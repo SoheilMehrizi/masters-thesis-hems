@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 from pypdf import PdfReader
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/literature'
 inventory=json.loads((OUT/'inventory.json').read_text(encoding='utf-8'))
 (ROOT/'reports/literature/analyses').mkdir(exist_ok=True)

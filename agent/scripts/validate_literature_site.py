@@ -5,7 +5,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/literature'
 class Document(HTMLParser):
     def __init__(self):super().__init__();self.ids=[];self.links=[];self.images=[];self.classes=Counter()

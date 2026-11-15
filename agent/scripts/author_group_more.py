@@ -1,7 +1,7 @@
 """Additional local source analyses; outputs JSON only."""
 import json,re
 from pathlib import Path
-R=Path(__file__).resolve().parents[1];O=R/'reports/literature/analyses';O.mkdir(exist_ok=True)
+R=Path(__file__).resolve().parents[2];O=R/'reports/literature/analyses';O.mkdir(exist_ok=True)
 I=json.loads((R/'docs/literature/inventory.json').read_text(encoding='utf-8'))
 def P(en,fa,*pages):return dict(en=en,fa=fa,pages=list(pages))
 def S(id,en,fa,*ps):return dict(id=id,title=dict(en=en,fa=fa),paragraphs=list(ps))

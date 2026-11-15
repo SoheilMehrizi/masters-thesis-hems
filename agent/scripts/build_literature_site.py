@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 from pypdf import PdfReader
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 SOURCE = Path(r'A:\University\Master\3rd Semester\LLM Course\Working\Literature review')
 OUT = ROOT/'docs/literature'
 OUT.mkdir(exist_ok=True)
@@ -134,6 +134,6 @@ body='<div class="hero"><span class="eyebrow">01 / PREFERENCE ADAPTATION / SOURC
 (OUT/'la-upahem.html').write_text(shell('LA-UPAHEM',body),encoding='utf-8')
 print(f'Built {len(inventory)} article records; LA-UPAHEM report; {len(figs)} figures; {len(tables)} table views; {len(matches)} references')
 
-exec(compile((ROOT/'scripts/build_huang_report.py').read_text(encoding='utf-8'), 'build_huang_report.py', 'exec'), globals())
+exec(compile((ROOT/'agent/scripts/build_huang_report.py').read_text(encoding='utf-8'), 'build_huang_report.py', 'exec'), globals())
 
-exec(compile((ROOT/'scripts/render_literature_analyses.py').read_text(encoding='utf-8'), 'render_literature_analyses.py', 'exec'), globals())
+exec(compile((ROOT/'agent/scripts/render_literature_analyses.py').read_text(encoding='utf-8'), 'render_literature_analyses.py', 'exec'), globals())

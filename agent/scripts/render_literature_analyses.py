@@ -112,7 +112,7 @@ content=index_path.read_text(encoding='utf-8')
 content=content.replace('<div class="toolbar">','<p><a class="btn" href="research-map.html">'+pair('Explore the research-role & baseline map →','مشاهده نقش منابع و نقشه خط‌مبناها ←')+'</a></p><div class="toolbar">',1)
 index_path.write_text(content,encoding='utf-8')
 
-exec(compile((ROOT/'scripts/enhance_figure_presentation.py').read_text(encoding='utf-8'), 'enhance_figure_presentation.py', 'exec'), globals())
+exec(compile((ROOT/'agent/scripts/enhance_figure_presentation.py').read_text(encoding='utf-8'), 'enhance_figure_presentation.py', 'exec'), globals())
 
 # Reserve original image proportions before lazy loading so anchor targets stay put.
 image_sizes={}

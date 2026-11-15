@@ -18,7 +18,7 @@ Static checks verified local links, assets, anchors, figure/reference counts, an
 
 ## Rebuilding
 
-`scripts/build_literature_site.py` builds HTML, inventory, and shared CSS/JS using bundled Python and pypdf. It requires the existing LA-UPAHEM rendered pages and figure crops in `assets/la-upahem/` and the extracted text in `reports/literature/la-upahem-full.txt`. Those source-derived assets are retained in this delivery.
+`agent/scripts/build_literature_site.py` builds HTML, inventory, and shared CSS/JS using bundled Python and pypdf. It requires the existing LA-UPAHEM rendered pages and figure crops in `assets/la-upahem/` and the extracted text in `reports/literature/la-upahem-full.txt`. Those source-derived assets are retained in this delivery.
 
 ## Second delivery — 2026-11-13
 
@@ -36,7 +36,7 @@ All 23 unique articles found in the supplied folder now have bilingual analysis 
 
 The library retains 542 original PDF page images. Visual indexes include numbered figures, appendix figures, graphical abstracts, and continued figure views; these are evidence-view counts, not counts of independent experiments. Uncertain figure boundaries use explicitly labeled complete source-page images. Original table rows remain available through their source views; unlabeled curves are not numerically estimated. External supplements absent from the supplied PDFs are not claimed reviewed.
 
-The canonical reviewed data for additional reports are `reports/literature/analyses/article-*.json`; the original two reports use their existing builders plus `existing-roles.json`. The JSON records include manual source-page, caption, and prose corrections. Authoring scripts are historical helpers and must not overwrite those corrections without review. Rebuild using `scripts/build_literature_site.py`, then run `scripts/validate_literature_site.py`. Source renders can be prepared with `scripts/prepare_literature_assets.py`.
+The canonical reviewed data for additional reports are `reports/literature/analyses/article-*.json`; the original two reports use their existing builders plus `existing-roles.json`. The JSON records include manual source-page, caption, and prose corrections. Authoring scripts are historical helpers and must not overwrite those corrections without review. Rebuild using `agent/scripts/build_literature_site.py`, then run `agent/scripts/validate_literature_site.py`. Source renders can be prepared with `agent/scripts/prepare_literature_assets.py`.
 
 Numbered bibliographies are linked when a sequential reference list can be identified. Author-year bibliographies are preserved as full transcripts with original reference-page links. Neither format implies that every paper cited by an analyzed article was independently reviewed.
 
@@ -58,4 +58,4 @@ Reported non-inferiority failures, retired hypotheses/claims, calibration failur
 
 The inventory builder now preserves report IDs when sources are added. `prepare_figure_views.py article-24 article-25 ...` can prepare selected articles while retaining the existing manifest. Reviewed records are canonical; `author_jev_reports.py` is an intentional regeneration helper and must not overwrite later manual corrections without review. Browser checks cover all six report routes, figure navigation, Persian rendering and image enlargement; static checks cover all 29 reports and source links.
 
-`scripts/prepare_figure_views.py` prepares the source crops, card previews, and `figure-views.json` manifest from existing page renders. Run it when source assets change; normal rebuilds reuse the manifest. `scripts/build_literature_site.py` applies the presentation through `scripts/enhance_figure_presentation.py`. Validation now checks every card image and every figure presentation, including a regression check against reference markup entering image alt text. Browser checks verified card search, report navigation, figure selection, enlargement, zoom, next/previous navigation, and images-only mode.
+`agent/scripts/prepare_figure_views.py` prepares the source crops, card previews, and `figure-views.json` manifest from existing page renders. Run it when source assets change; normal rebuilds reuse the manifest. `agent/scripts/build_literature_site.py` applies the presentation through `agent/scripts/enhance_figure_presentation.py`. Validation now checks every card image and every figure presentation, including a regression check against reference markup entering image alt text. Browser checks verified card search, report navigation, figure selection, enlargement, zoom, next/previous navigation, and images-only mode.

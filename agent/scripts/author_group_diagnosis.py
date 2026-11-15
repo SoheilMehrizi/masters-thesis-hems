@@ -1,7 +1,7 @@
 """Source-grounded bilingual analyses for articles 03–09; no site rendering."""
 import json,re
 from pathlib import Path
-R=Path(__file__).resolve().parents[1]
+R=Path(__file__).resolve().parents[2]
 O=R/'reports/literature/analyses';O.mkdir(exist_ok=True)
 inventory=json.loads((R/'docs/literature/inventory.json').read_text(encoding='utf-8'))
 def P(en,fa,*pages):return dict(en=en,fa=fa,pages=list(pages))

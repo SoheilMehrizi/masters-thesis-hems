@@ -1,0 +1,4 @@
+# Research document tooling; separate from the pinned simulator dependencies.
+pypdf
+pdfplumber
+Pillow

@@ -1,8 +1,8 @@
 """Article-specific synthesis of the four local review PDFs; no new experiment claims."""
 import json,runpy
 from pathlib import Path
-R=Path(__file__).resolve().parents[1]
-x=runpy.run_path(str(R/'scripts/author_group_more.py'))
+R=Path(__file__).resolve().parents[2]
+x=runpy.run_path(str(R/'agent/scripts/author_group_more.py'))
 P,S,B=x['P'],x['S'],x['B'];D={}
 D[19]=B(19,'Transformers, LLMs and agentic Twins','مرور ترنسفورمر، مدل زبانی وTwinعامل‌محور',19,[
  S('questions','Stated review objectives','اهداف صریح مرور',P('Antonesi et al., Applied Energy 401 (2025), 126670. The objectives are to identify Transformer-based energy-efficiency use cases, analyze large-scale AI in energy management and optimization, and identify challenges and research directions. Agentic Digital Twins are a proposed direction; the paper does not test a newly implemented agentic controller.','Antonesi و همکاران،۲۰۲۵. هدف‌ها شناسایی کاربرد ترنسفورمر در بهره‌وری انرژی، تحلیل مدل بزرگ در مدیریت و بهینه‌سازی و تعیین چالش و مسیر آینده است. Twinعامل‌محور پیشنهاد مفهومی است؛ کنترل‌گر جدیدی آزموده نشده.',1,4)),

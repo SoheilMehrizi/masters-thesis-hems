@@ -4,7 +4,7 @@ from pathlib import Path
 import pdfplumber
 from PIL import Image,ImageDraw,ImageOps
 
-ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'docs/literature'
+ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'docs/literature'
 inventory=json.loads((OUT/'inventory.json').read_text(encoding='utf-8'))
 selected=set(sys.argv[1:])
 manifest=json.loads((OUT/'figure-views.json').read_text(encoding='utf-8')) if selected else {}

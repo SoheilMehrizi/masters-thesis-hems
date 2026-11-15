@@ -3,7 +3,7 @@ import json
 import re
 from pathlib import Path
 
-root = Path(__file__).resolve().parents[1]
+root = Path(__file__).resolve().parents[2]
 source = (root / 'docs/PROJECT_BACKLOG.md').read_text(encoding='utf-8')
 phases = []
 for line in source.splitlines():

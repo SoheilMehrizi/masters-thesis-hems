@@ -1,7 +1,7 @@
 """Source-grounded authored analyses for literature records 10–15 and 17."""
 import json,re
 from pathlib import Path
-OUT=Path('reports/literature/analyses');OUT.mkdir(exist_ok=True)
+OUT=Path(__file__).resolve().parents[2]/'reports/literature/analyses';OUT.mkdir(exist_ok=True)
 def bi(en,fa): return {'en':en,'fa':fa}
 def p(en,fa,pages): return dict(en=en,fa=fa,pages=pages)
 def sec(id,en,fa,*paras):return dict(id=id,title=bi(en,fa),paragraphs=list(paras))

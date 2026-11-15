@@ -1,5 +1,5 @@
 param([int]$Port = 8768)
-$projectDirectory = Split-Path -Parent $PSScriptRoot
+$projectDirectory = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $pythonExecutable = Join-Path $projectDirectory '.venv\Scripts\python.exe'
 $docsDirectory = Join-Path $projectDirectory 'docs'
 Write-Host "Landing: http://127.0.0.1:$Port/literature/index.html"

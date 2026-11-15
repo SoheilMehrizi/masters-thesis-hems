@@ -1,0 +1,66 @@
+# Agent workspace
+
+Shared instructions and repository-local research tooling for collaborators and
+coding agents. Start with [agent.md](agent.md). The root `AGENTS.md` points here
+so future agents can discover the instructions.
+
+## Layout
+
+| Location | Purpose |
+| --- | --- |
+| `agent.md` | Research context, specifications, status, evidence rules and handoff |
+| `scripts/build_literature_site.py` | Main library builder; invokes its renderer helpers |
+| `scripts/build_huang_report.py` | First-pair report helper, invoked by the main builder |
+| `scripts/render_literature_analyses.py` | Reviewed JSON reports, bibliography and research-role map |
+| `scripts/enhance_figure_presentation.py` | Card previews and structured figure presentation |
+| `scripts/prepare_literature_assets.py` | Extract supplied PDF text and render original source pages |
+| `scripts/prepare_figure_views.py` | Checked figure crops, previews and evidence manifest |
+| `scripts/validate_literature_site.py` | Local source links, anchors, citations and coverage checks |
+| `scripts/build_backlog_page.py` | Generate the interactive backlog from its Markdown source |
+| `scripts/serve_literature.ps1` | Loopback-only documentation preview server |
+| `scripts/author_*.py`, `scripts/review_group_data.py` | Authored record-generation helpers; intentional regeneration only |
+| `requirements.txt` | Python dependencies for the document-analysis/build tools |
+
+The authoring helpers can overwrite manual source corrections. Treat reviewed
+`reports/literature/analyses/*.json` as canonical. Do not execute all scripts in
+this folder as a batch. Renderer helpers are executed by the main builder and
+are not standalone entry points.
+
+## Commands
+
+Run from the repository root with a Python environment containing the packages
+in `agent/requirements.txt`. The simulator `.venv` has its own pinned runtime;
+check dependencies before using it for document work.
+
+```powershell
+python agent/scripts/build_literature_site.py
+python agent/scripts/validate_literature_site.py
+python agent/scripts/build_backlog_page.py
+
+# Re-render source assets only when needed (requires pdftoppm on PATH)
+python agent/scripts/prepare_literature_assets.py
+
+# Rebuild selected figure views, keeping other manifest records
+python agent/scripts/prepare_figure_views.py article-24 article-25
+
+# Serve docs at http://127.0.0.1:8768/
+powershell -ExecutionPolicy Bypass -File agent/scripts/serve_literature.ps1
+```
+
+The source literature path is configured in `build_literature_site.py` and
+recorded in `docs/literature/inventory.json`. The preview launcher uses the
+project's `.venv/Scripts/python.exe`. Poppler's `pdftoppm` is required for new
+source-page rendering; Node.js is useful for JavaScript syntax checks.
+
+## Data and outputs
+
+- `docs/` retains the user-facing proposal, library, source-page assets and tracker.
+- `reports/literature/analyses/` retains reviewed article data and project roles.
+- `reports/literature/` retains source extracts and validation evidence.
+- `scripts/` retains simulator setup, recovery, smoke/validation and dashboard commands.
+- `src/`, `configs/` and `tests/` retain the simulation application and its checks.
+
+These project deliverables remain in their established locations so their links
+and provenance stay intact. Installed Codex skills and runtime libraries are
+managed outside the repository; this folder contains the project-specific
+instructions and helpers used with them, not copies of those installations.

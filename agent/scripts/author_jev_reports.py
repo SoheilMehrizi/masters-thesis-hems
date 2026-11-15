@@ -6,7 +6,7 @@ refer to the supplied PDFs, not an independently verified publisher edition.
 import json,re
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 DEST=ROOT/'reports/literature/analyses'
 def bi(en,fa):
     # Normalize prose spacing without rewriting identifiers such as Qwen3.8/4B.

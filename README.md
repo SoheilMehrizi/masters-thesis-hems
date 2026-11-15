@@ -3,8 +3,10 @@
 Project navigation: [research proposal](docs/HEMS_Research_Landing_Final_Title_Updated.html),
 [literature library](docs/literature/index.html), and
 [interactive backlog](docs/PROJECT_BACKLOG.html).
-Read [AGENTS.md](AGENTS.md) for shared research context, implementation status,
-scientific boundaries, contributor rules, and handoff instructions.
+Read [agent/agent.md](agent/agent.md) for shared research context, implementation
+status, scientific boundaries, contributor rules, and handoff instructions.
+[Agent tooling](agent/README.md) contains the library/backlog workflow and scripts;
+the root [AGENTS.md](AGENTS.md) provides the discovery entry point.
 
 This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 `fd86484b8b438f03eb40c3ec06dc90caa349842d`, recovery of the supplied Custom
