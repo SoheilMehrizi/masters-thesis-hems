@@ -1,0 +1,5 @@
+-c requirements.lock
+streamlit==1.67.0
+plotly==7.1.0
+# PyArrow 26 requires NumPy 2 at runtime; preserve simulator NumPy 1.26.
+pyarrow==19.0.1

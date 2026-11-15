@@ -1,0 +1,1533 @@
+
+=== PDF PAGE 1 ===
+  Downloaded from https://iranpaper.ir
+
+
+
+
+
+
+                                     Contents lists available at ScienceDirect
+
+                                       Energy & Buildings
+
+
+                                 journal homepage: www.elsevier.com/locate/enb
+
+
+An entropy-based causality framework for cross-level faults diagnosis and
+isolation in building HVAC systems
+Jiajing Huanga,b, Naghmeh Ghalamsiah c, Abhidnya Patharkara,b, Ojas Pradhanc,
+Mengyuan Chud, Teresa Wu  a,b,*, Jin Wenc, Zheng O’Neilld, Kasim Selcuk Candana,e
+
+
+
+aSchool of Computing and Augmented Intelligence, Arizona State University, Tempe, AZ, USA
+bASU-Mayo Center for Innovative Imaging, Arizona State University, Tempe, AZ, USA
+
+cDepartment of Civil, Architectural and Environmental Engineering, Drexel University, Philadelphia, PA, USA
+dJ. Mike Walker’66 Department of Mechanical Engineering, Texas A&M University, College Station, TX, USA
+
+eCenter for Assured and Scalable Data Engineering, Arizona State University, Tempe AZ, USA
+
+
+
+
+ARTICLE INFO                    ABSTRACT
+
+Keywords:                       Faults, such as malfunctioning sensors, equipment, and control systems, significantly affect a building’s per-
+Causal learning                 formance. Automatic fault detection and diagnosis (AFDD) tools have shown great potential in improving
+Information entropy             building performances, including both energy efficiency and indoor environment quality. Since modern buildings
+Bayesian network                have integrated systems where multiple subsystems and equipment are coupled, many faults in a building are
+Cross-level fault               cross-level faults, i.e., faults occurring in one component that trigger operational abnormalities in other sub-
+Root cause fault diagnosis      systems. Compared with non-cross-level faults, it is more challenging to isolate the root cause of a cross-level
+Building HVAC system
+                                faults due to the system coupling effects. Bayesian networks (BNs) have been studied for the root cause isola-
+                                tion for building faults. While promising, existing BN-based diagnosis methods highly rely on expert domain
+                                knowledge, which is time-consuming and labor expensive, especially for cross-level faults. To address this
+                                challenge, we propose an entropy-based causality learning framework, termed Eigen-Entropy Causal Learning
+                                (EECL), to learn BN structures. The proposed method is data-driven without the use of expert domain knowledge;
+                                it utilizes causal inference to determine the causal mechanisms between faults status and symptoms to construct
+                                the BN model. To demonstrate the effectiveness of the proposed framework, three fault test cases are used for
+                                evaluation in this study. Experimental results show that the BN constructed by the proposed framework is able to
+                                conduct building cross-level faults diagnosis with a comparable isolation accuracy to those by domain knowledge
+                                while maintaining less complexed BN structure.
+
+
+                                                     achieve up to 20 % building energy savings [6,7] but also improve
+1.Introduction                                       equipment lifecycles and indoor comforts [8–10].
+                                                       Modern building HVAC systems typically include a set of multiple,
+                                                     highly coupled subsystems such as cooling/heating plant, primary air
+  Building Heating, Ventilation and Air conditioning (HVAC) systems distribution, and terminal air distribution subsystems. Due to the
+are complex with a variety of sensors, subsystems and automatically coupling effect among building components, a fault occurring in one
+controlled components. According to the United Nations Environment equipment or subsystem may propagate and influence other equipment
+Programme, approximately 135 EJ operational energy demand and 10 or subsystems [11,12]. Hence, component-level AFDD methods may not
+Gt energy-related carbon dioxide emission were attributed to the be efficient and suitable solutions to the root cause analysis for cross-
+building systems in 2021 [1]. It is also reported that 30 % of this energy level faults, i.e., faults causing adverse effects across multiple compo-
+usage [2] was wasted due to malfunctioning sensors and components in nents and subsystems [13]. Chen et al. [13] has provided an example of
+the HVAC systems [3,4]. Automatic fault detection and diagnosis a chiller supply water temperature sensor bias fault (e.g., sensor reading
+(AFDD) technologies thus are vital to ensure satisfactory building per-higher than actual temperature) in the chiller plant which would cause
+formances, especially from the aspect of energy efficiency [5]. Field the cooling valve open position in a downstream air handling unit
+studies and practices indicate that AFDD technologies cannot only
+
+
+*Corresponding author at: School of Computing and Augmented Intelligence, Arizona State University, Tempe, AZ, USA.
+  E-mail address: teresa.wu@asu.edu (T. Wu).
+
+https://doi.org/10.1016/j.enbuild.2024.114378
+Received 22 February 2024; Received in revised form 17 May 2024; Accepted 2 June 2024
+
+=== PDF PAGE 2 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+                                                                                                 temporal dependencies of fault nodes between time steps using temporal
+   Nomenclature                                                                                  conditional probabilities to improve accuracy for a whole building level
+                                                                                                 fault diagnosis.
+   AFDD      Automatic fault detection and diagnosis                                                 The  aforementioned  BN-based  diagnosis  methods  highly  rely  on
+   AHU        Air handling unit                                                                  heuristics processes to learn causal relationships among fault status and
+   AIA          Average isolation accuracy                                                       symptoms, and their causal mechanism is primarily determined by the
+   BAS         Building automation system                                                        expert knowledge. While promising, heuristics processes by the domain
+   BN           Bayesian network                                                                 knowledge may not be adequate and effective for the fault diagnosis in
+   CL           Causal learning                                                                  more complex buildings, especially those with multiple coupled sub-
+   EE           Eigen-Entropy                                                                    systems. Other than being labor intensive, these approaches may not
+   EECL       Eigen-Entropy-based causality learning                                             discover  underlying  coupling  effects  among  the  subsystems  compre-
+   HVAC      Heating, ventilation and air conditioning                                           hensively. This motivates us to take a data-driven approach to interro-
+   IA            Isolation accuracy                                                              gate  the  fault-symptom  causalities  to  construct  the  BN  structure.  A
+   PN           Probability of necessity                                                         notable emerging field is causal learning (CL) which uses the observa-
+   SIA          Sufficient isolation accuracy                                                    tional data to learn causality and we believe CL presents new opportu-
+   VAV         Variable air volume                                                               nities to address domain specific challenges [25].       In general, CL research
+                                                                                                 focuses on two categories [26]:        (1) causal effects estimation; and (2)
+                                                                                                 causal structure learning. Causal effects estimation is to investigate how
+                                                                                                 much  changing  one  variable  will  influence  another  given  a  causal
+(AHU) to be lower than normal. In this case, a component-level AFDD                              structure assumption between these two variables. This can be done by
+tool that only monitors the AHU might result in false alarms such as a                           the  counterfactual  inference  [27,28]  which  assesses  the  strength  of
+cooling coil valve fault or a supply air temperature sensor fault. Hence, a                      causality between two events by inferring the likelihood of one event not
+root cause analysis is necessary to ensure the correct diagnosis of cross-                       occurring  when  another  is  absent.  Causal  structure  learning,  on  the
+level faults.                                                                                    other hand, is to induce the structure describing the causal relationships
+    Compared with fault detection studies, much fewer fault diagnosis/                           from variables to others, and BN is one of the prevailing causal structure
+root cause analysis studies exist [14].       A root cause analysis has shown its                learning tools as it has shown the ability to represent the probabilisti-
+importance to improve quality assurance, reliability and performance in                          cally conditional independence in a graph model, providing an efficient
+many fields, such as power systems [15],        manufacturing [16],        just to               and  expressive way  for knowledge  representations  and acquirements
+name a few. Bayesian networks (BNs) have been extensively studied as a                           [29,30].
+root cause analysis technique. For example, Wang et al. [15] conducted                               Despite the extensive research conducted on BN, there have been
+an analysis on root causes of occurring alarms in thermal power plants                           limited investigations into the causal structure construction from the
+based on posterior probability from BN. In their research, the BN was                            causal effect estimation perspective using observation data, especially
+constructed by one child node and multiple parent nodes that describe                            the BN construction for building fault diagnosis. As reviewed earlier,
+the  relationship  between  an  alarm  variable  and  root-cause  variables                      most building research using BN has heavily relied on the domain ex-
+using the process knowledge. Lokrantz et al. [16] proposed a BN-based                            perts’         knowledge. Additionally, the existing research on BN-based fault
+graphic probabilistic models using the expert knowledge to identify the                          diagnosis primarily relied on the assumption of the symptom indepen-
+causality of failure and quality deviation among multiple manufacturing                          dence [13,31,32],                 which may not always be valid. In this research, we
+stages, where network parameters were trained by historical data, and                            hypothesize that the building is an interconnected system comprising
+root cause was inferred according to defect types and measurements. Liu                          multiple subsystems, and when a fault occurs, co-evolving of multiple
+et al. [17] developed a strong relevant mechanism BN combining pro-                              symptoms may present some unique patterns. Motivated by this idea, we
+cess mechanism analysis with historical data mining for unmonitored                              introduce  a  new  concept  termed  “synchronicity”                        to  describe  the  co-
+root cause variables in chemical plants fault diagnosis, which showed                            evolving  patterns,  and  propose  a  CL-based  framework  to  induce  the
+great practicability and satisfactory performances in fault propagation                          BN structures. Specifically, Eigen-Entropy (EE) [33],        a metric derived
+recognitions. Amin et al. [18] presented a hybrid data-driven method                             from  multi-variate  time  series  is  employed  to  characterize  the  “syn              -
+integrating principal component analysis with the Bayesian networks for                          chronicity”.                  Next, causal inference is used for causation measurements
+fault detection and diagnosis in process plants, which demonstrated a                            between the fault status and symptoms to decide what symptoms should
+strong efficacy of diagnosis performance while maintaining lesser false                          be included in the BN structure model. Finally, the performance of our
+diagnosis.  In  [19],        the  same  authors  developed  a  dynamic  Bayesian                 proposed framework is validated by three fault test cases.
+network-based fault detection and root cause diagnosis, which had an                                 The paper is organized as follows. Background and methodology are
+ability to convert the continuous process data into meaningful evidence                          detailed in sections 2 and 3.   Experiments are summarized in section 4,
+instead  of  a  probabilistic  domain.  There  are  also  some  BN  studies                      followed by discussion in section 5.   Finally, conclusion and future work
+emphasizing  cross-level  fault  diagnosis  in  an  HVAC  system  from  the                      is drawn in section 6.
+data-driven  perspective. For example, Wang  et al. [20] introduced a
+practical,  efficient  discretized  BN-based  diagnosis  method  for  chiller                    2.  Background
+faults;  Chen  et  al.  [21]  proposed  a  whole  building  fault  diagnosis
+method based on Discrete BN to isolate faults causing significant ab-                                In this section, we review BN model for building fault diagnosis, and
+normalities in multiple subsystems/equipment during system operation,                            introduce the Pearl Causality, a commonly used causal effect estimation
+and further designed a weather and schedule-based pattern matching                               approach that can support the BN structure construction.
+Discrete BN to diagnose cross-level faults in building HVAC systems for
+real-time fault diagnosis and isolations [13].        Wang et al. [22] combined                  2.1.  BN model for building system fault diagnosis
+a reference model-based approach using normal data with a BN-based
+approach using faulty data to improve the effectiveness of fault diag-                               Bayesian  Network  (BN)  is  a  probabilistic  graphical  model  repre-
+nosis. Taal and Itard [23] proposed an automated fault identification                            senting  a  set  of  variables  and  their  conditional  dependencies  via  a
+(AFI)  process  for  HVAC  systems  using  a  diagnostic  BN,  successfully                      directed acyclic graph, which can be used to reveal causal relationships
+isolating control faults in a thermal energy plant. Pradhan et al. [24]                          between faults and symptoms. Fig. 1.   below illustrates an example of a
+developed   a   dynamic   BN-based   approach   that   incorporated   the                        BN model for fault diagnosis in the building systems.
+
+=== PDF PAGE 3 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        Fig. 1.  A BN model for fault diagnosis.
+
+    In  this  BN  model,  F1  and  F2  are  fault  nodes  that  represent  two                     erties related to multiple symptoms, referred to as synchronicity, and
+distinct  faults,  while  E1,  E2  and  E3  are  evidence  nodes  that  are  in-                   Y= 0  is  referred  to  as  the  complement  to  synchronicity  (asyn-
+dicatives (symptoms) of the presence of a fault. Arcs from the fault nodes                         chronicity).
+to the evidence nodes demonstrate the direct causation that a fault has                                To illustrate this idea, we consider AHU Cooling Coil Valve Stuck
+on the occurrence of the evidence. By Bayes theorem [34], posterior                                Fully Open (CoolCoiValStuck_0) as the example fault with two evidence
+probabilities of faults (F1 and F2) given these evidence nodes (E1, E2,                            nodes, AHU Cooling Coil Discharge Air Temperature (CC-DA-TEMP) and
+and E3) can be calculated to infer which fault is more likely to affect the                        AHU Cooling Coil Valve Control Signal (CC-VLV). Therefore, X= 1 in-
+system. For instance, if the posterior probability of F1 is greater than                           dicates  the  occurrence  of  CoolCoiValStuck_0,  X= 0  indicates  the
+that of F2, the fault is said to be F1.                                                            nonoccurrence  of  CoolCoiValStuck_0  (fault-free  condition);  Y= 1  in-
+    Clearly, the link between faults and evidence nodes plays a crucial                            dicates the synchronicity exist between CC-DA-TEMP and CC-VLV, and
+role in facilitating fault diagnosis in building systems based on BN. Pearl                        Y= 0 is asynchronicity. Supposen11               = 16 (the frequency of synchro-
+Causality, a method for estimating causal effects in fault-symptom re-                             nicity under this fault) andn01          = 14 (the frequency of asynchronicity
+lationships, is often employed to support the inference of BN structure.                           under this fault); n10 = 484 (the frequency of synchronicity under fault-
+We provide a review of Pearl Causality basic in the next section.                                  free condition) and n00        = 986 (the frequency of asynchronicity under
+                                                                                                   fault-free condition). Given these values, we obtain PN = 0.54 by Eq (2),
+                                                                                                   which is greater than 0.5. We conclude that the synchronicity between
+2.2.  Pearl causality                                                                              CC-DA-TEMP and CC-VLV is attributed to CoolCoiValStuck_0.
+                                                                                                       Consequently,  in  the  methodology  section,  we  will  provide  a
+    Pearl  Causality  [27],  also  known  as  counterfactual  inference,  as-                      comprehensive explanation of this term and elucidate how we employ
+sesses the likelihood that one event is the cause of another, which is                             Pearl Causality to ascertain the BN structure. This BN structure will then
+usually  evaluated  by  the  probability  of  necessity.  Given  two  binary-                      be utilized to facilitate fault diagnosis in the building systems.
+valued events, X and Y, let x and y stand for the propositions X= 1
+and Y= 1, respectively, xʹ and yʹ stand for their complements (X= 0 and                            3.  Methodology
+Y= 0). The probability of necessity (PN) is then defined as:
+PN= P(Y          = 0|X= 1, Y= 1)= P yʹ           ⃒⃒x, y)                                     (1)      To  begin  with,  we  introduce  a  new  concept,  “synchronicity”,  to
+            X=0                                 xʹ
+                                                                                                   describe interactions among multiple time series in general. Next, we
+Consequently, PN stands for the probability that event y would not have                            introduce  details  about  our  proposed  entropy-based  causal  learning
+occurred in the absence of event x (yʹxʹ), given that x and y did actually                         framework, termed Eigen-Entropy-based Causality Learning (EECL), for
+occur.                                                                                             the BN construction to support fault diagnosis in building systems.
+    Supposing the frequencies of X and Y are as shown in Table 1, the PN
+can be calculated as [35]:                                                                         3.1.  Information entropy and time series synchronicity
+                        P(y)   P(y|xʹ)      n11+n01     n01
+PN= P yʹʹ|x, y)=                               n      n01+n00                          (2)
+            x               P(x, y)  =               n11                                               Information entropy [37] is to quantify the averaged information
+                                                      n                                            inherent to a random variable. Given a single variate with N possible
+
+where n= n11       + n10    + n01   + n00. When PN≥ 0.5, the causal relation-                      values, its information entropy (H) is defined as
+ship from x to y is confirmed [36].                                                                           N
+    In this study, event X serves as an indication of the fault status in the                      H= ∑pilogpi                                                                            (3)
+building systems. Specifically, when X= 1, it signifies the occurrence of                                    i=1
+a fault, indicating fault conditions. On the other hand, when X=  0, it                            where p     is the probability of this single variate taking the value i, and
+represents  normal  operations,  indicating  fault-free  conditions.  Addi-                        ∑         i
+                                                                                                      N  pi  = 1.
+tionally, event Y= 1 is another indicator that describes specific prop-                               i=1
+                                                                                                       Eigen-Entropy (EE) is an entropy for multivariate data derived on
+   Table 1                                                                                         eigenvalues  extracted  from  the  correlation  magnitude  matrix  [33].
+   Frequency data of events X and Y.                                                               Given a dataset X with n samples and m features, EE is defined as
+
+                                           X= 1                                              X= 0              m  λi      λi
+                                                                                                   EE= ∑m log           m                                                                          (4)
+     Y=                                    n11                                  n01                           i=1
+       1
+     Y=                                    n10                                  n00                where λi is the eigenvalue corresponding to the correlation magnitude
+       0                                                                                           matrix on the feature space.
+
+=== PDF PAGE 4 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+    The EE method has been used to quantify the homogeneity (or het-                                                               √̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅
+erogeneity) of a tabular dataset [33] to support sampling decisions. One                                                              ∑t  x   x
+                                                                                                                                            1i 2i
+use case of EE is to construct baseline for AFDD as demonstrated in                                     cos< X      , X   >=    √    ̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅i=1√                                                              (5)
+[38,39]. The interest of this research is on multiple time-series, and here                                       1t    2t         ∑t        ∑t
+we introduce “synchronicity” to describe the multi-time series dataset                                                                 x2        x2
+                                                                                                                                   i=1  1i   i=1   2i
+property which can be measured by EE.
+    Definition 1. Multiple time series collected from the system may                                    The corresponding cosine similarity magnitude matrix on X                           and X      is
+present some co-evolving patterns. If the trend of movements aligns over                                                                                                                 1t         2t
+time (that is, the time series may increase, decrease or remain constant                                       (  1     ct   )
+                                                                                                        C*  =             12                                                                         (6)
+together with respect to time), we define this pattern as synchronicity.                                  t       ct      1
+    Without loss of generality, let us consider two time series, X1 and X2,                                        21
+where X1     =[x11,x12,⋯,x1n], X2          =[x21,x22,⋯,x2n], and xij refers the time                    where ct       is the magnitude of cosine similarity between X1t                      and X2t,
+point j of time series i. At time t, cosine similarity between X                   and X     , is                  12
+                                                                                1t         2t           (ct   =|cos< X1t, X2t        >|) and ct       = ct   . We derive eigenvalues λt          and λt
+defined as:                                                                                               12                                      21      12                                   1        2
+                                                                                                        from C*     to obtain EE (see Eq (4)). Please note for multiple time-series,
+                                                                                                                 t
+                                                                                                        the  dimension  of  the  cosine  similarity  magnitude  matrix  increases
+                                                                                                        accordingly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 2.  Trend of movement, cosine similarity and EE between two time series X1 and X2                           over time when (A) X1         and X2   both increase; (B) X1 decreases and X2
+increases; (C) X1 remains constant and X2 increases. As shown in (A1), two time-series show the exactly same trend of movements (perfectly aligned movement), the
+corresponding magnitude of cosine similarity increases (A2) and EE decreases over the time (A3); As shown in (B1), two time-series show the different trend of
+movements, the corresponding magnitude of cosine similarity becomes decreasing (B2) and EE becomes increasing over the time (B3); As shown in (C1), two time-
+series show the exactly opposite trend of movements, the corresponding magnitude of cosine similarity becomes decreasing significantly (C2) and EE becomes
+increasing drastically over the time (C3). This indicates that EE can measure the degree of aligned movements between two time-series over the time.
+
+=== PDF PAGE 5 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+    Given the magnitude of cosine similarity between X1t and X2t, we can                           fault.
+further obtain corresponding Eigen-Entropy by Eq (4). Let EEt1 be the                                  Given k fault nodes (a.k.a., fault test cases), each fault node including
+Eigen-Entropy calculated for X1 and X2 at time point t1                  (X1t1  and X2t1)          one fault dataset (i.e., data from the system that contain fault(s)) and
+and EEt2 is the Eigen-Entropy calculated for X1 and X2                  at time point t2           corresponding baseline dataset, each dataset consisting of d days’ data,
+(X1t2 and X2t2), where t1      < t2. If EEt2 < EEt1, we assume that the trends of                  each day’s data with t time points (t samples), and m evidence nodes (m
+the time series have become more synchronous or aligning between time                              symptoms), Algorithm 1 presents the EECL method to determine the
+points t1 and t2, and vice versa.                                                                  evidence nodes for each fault node so as to construct a BN for fault
+    Therefore, the value of EE indicates the degree of alignment between                           diagnosis.  These  include  two  parts:  initialization  and  evidence  node
+the movements of these time-series, or their synchronicity. If the time-                           selection stages.
+series movements are well aligned or highly positively correlated, the                                 At the initialization stage, we need to identify a set of critical evi-
+value of EE would be zero or close to zero. As the movements become                                dence nodes for each fault node as candidates to support the BN con-
+less aligned, the value of EE increases, reaching its maximum when the                             struction. This involves four main steps.
+movements are completely misaligned or highly negatively correlated.
+    To illustrate this concept, we present a simple example in Fig. 2,                              •  We  obtain  feature  importance  score  of  each  evidence  node  by
+which  shows  the  relationships  among  the  movement  trends,  cosine                                training a machine learning model (e.g., random forest classifier)
+similarities, and EEs for these two time-series under different scenarios:                             using all k fault datasets, and then select those evidence nodes whose
+(1) both X1 and X2 increase over time; (2) X1 remains constant while X2                                importance scores are greater than a set value through sensitivity
+increases over time; and (3) X1          decreases while X2 increases over time.                       analysis (e.g., in this study, 0.05). This forms a set of critical evidence
+In Fig. 2 (A), where X1 and X2 exhibit perfectly aligned movements over                                nodes that can differentiate all k fault datasets, say Eall              (line 1).
+time (scenario (1)), indicating a strong positive correlation, the cosine                           •  We follow a similar procedure to obtain multiple sets of evidence
+similarity between X1        and X2 increases, and the corresponding EE de-                            nodes, Ei,j’s (i∕= j), each set containing critical evidence nodes that
+creases. In Fig. 2 (B), as X1 and X2 show divergent movements (scenario                                can distinguish its fault dataset from any other fault datasets for any
+(2)), the cosine similarity between X1            and X2 decreases, and the corre-                     individual test case i (e.g., Fi vs. Fj) (lines 2–3). We need to identify a
+sponding EE increases. In Fig. 2 (C), X1 and X2                 exhibit movements in                   set of critical evidence nodes that can differentiate between its fault
+completely opposite directions (scenario (3)), depicting a strong nega-                                dataset  and  baseline,  saying  Ei        (line  4).  Hence,  we  form  a  set  of
+tive correlation, the cosine similarity decreases significantly, and the EE                            critical evidence nodes for the test case by taking the union of Eall,
+increases markedly over time.                                                                          multiple  Ei,j’s  and  Ei,  saying  Eʹi,  which  contains  critical  evidence
+    Note that the patterns for cases where both X1                and X2    decrease, X1               nodes from previous steps.
+increases  while  X2      decreases,  and  X1      remains  constant  while  X2         de-         •  Next is to assign a score to each evidence node in Eʹ                  by taking the
+                                                                                                                                                                            i
+creases, are similar to Fig. 2 (A), (B), and (C) respectively. Therefore, we                           maximum value of its importance among Eall, Ei,j’s and Ei (lines 5–6).
+conclude that EE can be used as a metric to measure the synchronicity,                              •  Finally, we rank all evidence nodes in Eʹ              in a descending order by
+describing the phenomenon of multiple time series showing trends of                                                                                          i
+aligned movements over time.                                                                           their importance score to obtain a set of ranked, critical evidence
+                                                                                                       nodes, ̂Ei   (line 7).
+
+3.2.  Eigen-Entropy-based causality learning (EECL) for HVAC AFDD                                      Fig. 3 illustrate an example given the scenario of three fault node, F1,
+                                                                                                   F2 and F3, one baseline node, B, and four evidence nodes, E1, E2, E3, and
+    In this research, we focus on the building HVAC fault diagnosis/root                           E4. Using a machine learning model (e.g., random forest), the important
+cause  isolation.  This  involves  the  use  of  evidence  nodes,  which  are                      scores  for  E1, E2, E3,  and  E4       that  can  distinguish  three  fault  nodes
+comprised of sensor readings obtained from the building system over a                              (F1vs.F2vs. F3) are all 0.2; Next let us focus on the F1, and assess these
+specific time frame. These evidence nodes can be regarded as multiple                              evidence nodes by distinguishing pairwise fault nodes (F1vs.F2; F1vs.F3):
+time series. Upon analyzing the data, we have observed that when a                                 the scores for E1, E2, E3, and E4 are 0.15, 0.25, 0.20, and 0.05 for F1vs.F2,
+system contains fault(s), the evidence nodes exhibit synchronicity. This                           and 0.23, 0.24, 0.36, 0.17 for F1vs.F3 respectively; we obtain the scores
+has led to our assumption that the synchronicity among evidence nodes                              for F1vs.B are 0.05, 0.62, 0.00 and 0.33. Therefore, from these scoring
+is attributed to the system fault(s). As a result, we have employed this                           results,  we  rank  evidence  nodes  according  to  their  max  score  in  a
+causal assumption to identify evidence nodes for constructing BNs. That
+is, we need to decide which evidence nodes are associated with which
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 3.  An illustrative example of procedures of obtaining the set of ranked critical evidence nodes for one fault node. (1) 3 fault nodes and one baseline with 4
+evidence nodes; (2) For one fault node, F1, obtain (importance) scores for each evidence node under different comparison scenarios: (3) Rank evidence nodes by max
+score for F1.
+
+=== PDF PAGE 6 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+descending order (scores: E2             > E3> E4      > E1).                                                 •  For each day in a fault node, we first normalize each evidence node in
+  Algorithm 1: BN construction by EECL for fault diagnosis                                                        ̂
+                                                                                                                  Ei  of the fault data with respect to its corresponding baseline (line
+  Input: k fault nodes, each fault node with one fault and one baseline datasets, each                            10). Then for both fault data and baseline, we calculate EE on ̂Ei for
+    dataset consisting of d days’ data, each data with m evidence nodes and t time points                         each time point q and obtain corresponding normalized EE, NEEq. We
+  Output: Bayesian networks for fault diagnosis,BN                                                                assign 1 if NEE        is smaller than a certain threshold (ε), indicating the
+  Initialization:                                                                                                                     q
+  1:        Obtain a set of critical evidence nodes that can differentiate all k fault datasets,                  existence  of  synchronicity among  evidence  nodes at  time  point  q
+          Eall, according feature importance scores from the machine learning model                               (that is, evidence nodes exhibit the trend of aligned movements over
+  2:        For fault node i, i= 1, ⋯,k                                                                           time q); 0 otherwise (lines 11–14).
+  3:        Repeat Step 1 to obtain multiple sets, each set containing critical evidence                      •  After going through all d days’ data, we obtain a frequency table for
+          nodes that can differentiate its fault dataset from another fault dataset of fault                      this  fault  node,  where  X= 1  indicating  fault  conditions,  X= 0
+          node j, Ei,j,j= 1, ⋯,k,i∕= j
+  4:        Repeat Step 1 to obtain a set of critical evidence nodes that can differentiate its                   indicating  fault-free  conditions,  Y= 1  indicating  synchronicity,
+          fault dataset baseline,Ei                                                                               otherwise, Y= 0. The frequency information is used for probability
+  5:        Obtain a set of critical evidence nodes by taking the union of Eʹ     all, Ei,j’s and Ei,             of necessity (PN) calculations to assess the causal relationship from
+          Ei                                                                                                      fault status to synchronicity among ̂E                 (line 15).
+  6:        Assign importance score to each evidence node in Eʹi by taking its maximum                                                                                 i
+          value of importance scores among Eall, Ei,j’s and Ei                                                •  If the PN< 0.5, it indicates the causal relationship does not hold
+  7:        Rank each evidence node in Eʹi by its importance score in a descending order to                       between that fault condition and the synchronicity of the evidence
+
+          obtain a ranked evidence node set,̂Ei       ={e(1),e(2), ⋯}                                             nodes; thus, we remove the last ranked evidence node from ̂Ei (note
+  Evidence nodes selection:                                                                                       that in this approach we do not have any evidence node added) and
+  8:        For fault node i, i= 1, ⋯,k                                                                           continue the process; otherwise stop and output the final evidence
+  9:        For day p, p= 1, ⋯,d                                                                                  nodes for this fault node (lines 16–17).
+  10:      Normalize each evidence node from ̂Ei of fault data with respect to its baseline
+          data in day p                                                                                       •  We  go  through  the  procedures  for  all  fault  nodes,  and  finally
+  11:      Calculate Eigen-Entropy (EE) by Eq (4) on ̂Ei for each q time point on fault data                      construct BN by linking all fault nodes to corresponding evidence
+          in day p using the first qth samples,EEq,q= 2, ⋯,t                                                      nodes selected (line 18).
+  12:      Derive normalized EE for each q time point, NEEq, where NEEq             = EEq/q
+  13:      Assign 1 for each q time point if NEEq      < ε; 0 otherwise                                      4.  Experiments on simulation datasets
+  14:      Repeat Steps 11–13 for baseline data in day p
+  15:      Obtain frequency table given results from Steps 11–14, and calculate PN by the
+          Eq (2)                                                                                             4.1.  Experimental datasets from simulation
+  16:      If PN< 0.5, update ̂Ei by removing the last ranked evidence node, and repeat
+          Steps 11–14                                                                                             A virtual HVAC system testbed developed using Modelica in Dymola
+  17:      Otherwise, stop and output ̂Ei                                                                    environment [40] is used to generate experimental data in the experi-
+  18:      Return BN by linking k fault nodes with {̂E1, ⋯,̂Ek}                                              ment, and Fig. 4 shows the schematics of the HVAC system. The devel-
+                                                                                                             oped HVAC system model is for a one-floor, five-zone medium-sized
+                                                                                                             office building, which has one Air Handler Unit (AHU) connected with
+Next, we start selecting evidence nodes for each fault node. The evidence                                    five Variable Air Volume (VAV) terminal boxes serving five zones (four
+node selection stage also involves four main steps.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   Fig. 4.  Schematic diagram of the simulated HVAC system.
+
+=== PDF PAGE 7 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                              Fig. 5.  Modelica implementation of the studied HVAC system for a commercial building.
+
+
+Table 2                                                                                                    between these two models. The system model consists of three compo-
+Comparison between the EnergyPlus prototype with the Modelica model.                                       nents, namely an HVAC system, a building envelope model, and a model
+                                                                                                           for air flow through building leakage and through open doors based on
+  Item                                                       EnergyPlus Midfloor_Plenum         Modelica   wind  pressure  and  flow  imbalance  of  the  HVAC  system.  The  HVAC
+  Area [m2]                                               1660.7                                          1662.7 system  is  sized  for  Chicago,  IL,  USA  in  climate  zone  5A.  The  HVAC
+  AHU Fan Design Flow Rate [m3/s]          4.2                                               4.8           system control complies with  American Society of Heating, Refriger-
+  AHU Fan Head [Pa]                                1389                                            1381    ating and Air-Conditioning Engineers (ASHRAE) standards and guide-
+  Overall Efficiency                                   0.6                                               0.49 lines or literature-reported practices. For example, the air-side control
+  AHU Fan Rated Electric Power [W]         9685                                            13,530
+  Cooling Coil Capacity [W]                      95,438                                          100,711   sequences follow ASHRAE Guideline 36 [44] and the water-side control
+  Heating Coil Capacity [W]                      34,995                                          40,526    sequences follow ASHRAE project RP-1711 [45]. More details of this
+  Chilled Water Pump Head [W]               Not applicable                              255,000            HVAC system model can be found in [46–49].
+  Chilled Water Pump Flow [m3/s]                                                                0.004
+  Cooling Water Pump Head [W]                                                                   215,700         In this study, three fault datasets and one fault-free dataset collected
+  Cooling Water Pump Flow [m3/s]                                                               0.0043      from this virtual testbed are used. Specifically, these three fault datasets
+  Hot Water Pump Head [W]                                                                         157,000  are those collected when the virtual testbed is operated under one of the
+  Hot Water Pump Flow [m3/s]                                                                     0.00132   three different commonly-occurring physical fault conditions, namely,
+  Cooling Tower Fan Power [W]                                                                    4300      AHU  Cooling  Coil  Valve  Stuck Fully  Open  (CooCoiValStuck_0),  AHU
+                                                                                                           Outdoor Air Damper Stuck Fully Closed (OADamStuck_100) and Supply
+exterior zones, and one interior zone, respectively). Heating and cooling                                  Duct Leakage at a degradation rate of 20 % (SupDucLea_20), respec-
+are delivered by a single-duct VAV system and the reheat in the VAV                                        tively (see Table 3), while the fault-free dataset is collected when the
+terminals is supplied by electric resistance coils. The chilled water is                                   virtual testbed is operated under normal conditions. Specifically, the
+supplied by a central chiller plant which consists of a chiller, a waterside                               fault-free dataset serves as the baseline for each fault node; in other
+economizer,  a  cooling  tower,  and  one  chilled  water  pump  and  one                                  words, the three fault nodes share the same baseline dataset. Since the
+condenser water pump. A boiler, fed by natural gas, supplies the hot                                       HVAC system is sized for Chicago, IL, USA in climate zone 5A and the
+water to the AHU heating coil.                                                                             fault injection period starts at the beginning of the day on July 9 and
+    Fig. 5 presents the Modelica model for the studied HVAC system,                                        continues for four weeks until August 5, the ranges of temperature and
+which was developed based on the open-source Modelica Buildings Li-                                        relative humidity are 24–29 ◦C and 50 % to 70 %. Each dataset (both
+brary (MBL) [41] and verified against a medium-sized office DOE pro-                                       fault and fault-free) consists of 28-days’ data, each day’s data containing
+totype model [42] developed by Pacific Northwest National Laboratory                                       120 time points (samples) for the entire occupied hours (unoccupied
+in EnergyPlus [43]. Table 2 shows a peak load and sizing comparison                                        hours excluded); consequently, there are 3,360 samples in total for each
+between  the  EnergyPlus  prototype  medium  office  model  with  the                                      fault node. In our experiment, 15 days’ data (1,800 samples) from each
+Modelica model. The peak cooling load (cooling coil capacity) is similar                                   fault  node  are used  as the  training  dataset  while  5  days’  data  (6,00
+                                                                                                           samples) are used as the test datasets for validation, and the remaining 8
+                                                                                                           days are excluded because these days correspond to the periods when
+Table 3                                                                                                    the building was unoccupied. Detailed information about the training
+Description of three fault nodes.                                                                          and testing days can be found in Appendix A.
+
+  Fault No.      Fault Node Name        Fault Node Description                                                  It is worth noticing that both fault and fault-free datasets have 132
+  1                  CoolCoiValStuck_0      AHU Cooling Coil Valve Stuck Fully Open                        evidence nodes. Out of these 132 evidence nodes, 50 are related to the
+  2                  OADamStuck_100       AHU Outdoor Air Damper Stuck Fully Closed                        AHU or chiller. Since building faults usually occur in AHUs or chillers,
+  3                  SupDucLea_20             Supply Duct Leakage at a degradation rate of 20              these evidence nodes are important and thus considered as the candi-
+                                          %                                                                dates for the BN construction. The descriptions of these evidence nodes
+
+=== PDF PAGE 8 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+Table 4                                                                                                             can be found in Table 4; besides, all these 50 evidence nodes are ranked
+AHU/Chiller-related evidence nodes.                                                                                 according to its importance scores for each fault node, and the details
+  Evidence           Evidence Node            Evidence Node Description                                             about the ranking method can be found in Appendix B of this paper.
+  No.                Name
+
+  E1                    SA-TEMP                AHU Supply Air Temperature                                           4.2.  Evaluation metrics
+  E2                    SA-TEMP-STP         AHU Supply Air Temperature Set Point
+  E3                    OA-DB-TEMP          AHU Outdoor Air Dry Bulb Temperature                                          In the BN model, we assess every fault sample for each fault node by
+  E4                    OA-WB-TEMP         AHU Outdoor Air Wet Bulb Temperature
+  E5                    MA-TEMP               AHU Mixed Air Temperature                                             utilizing  posterior  probabilities  derived  from  prior  and  conditional
+  E6                    RA-TEMP                AHU Return Air Temperature                                           probabilities. Let us define sij               as the ith     fault sample from fault node j
+  E7                    CC-DA-TEMP          AHU Cooling Coil Discharge Air Temperature                                                                    ). Using BN, we can obtain k posterior proba
+  E8                    SF-SPD                    AHU Supply Air Fan Speed                                          whose true label is Y s s) , P s), …,Pij  s  ), indicating likelihoods of s                             -
+  E9                    OA-DMPR               AHU Outdoor Air Damper Control Signal                                 bilities, P1       ij      2   ij          k   ij                                           ij belonging ), will be
+  E10                  RA-DMPR               AHU Return Air Damper Control Signal                                   to fault nodes 1, 2, …,k. Thus, the predicted label for sij, ̂Y sij
+  E11                  EA-DMPR               AHU Exhaust Air Damper Control Signal                                                                                                                                          )=
+  E12                  SA-CFM                  AHU Supply Air Mass Flow Rate                                        based on the maximum of these posterior probabilities, saying ̂{P s)}, where r∈{1,⋯,k}. Therefore, for any sY sij
+  E13                  OA-CFM                 AHU Outdoor Air Mass Flow Rate                                        argmaxr          r   ij                                                                  ij, we have an
+  E14                  RA-CFM                  AHU Return Air Mass Flow Rate                                                              ), such that:
+  E15                  EA-CFM                  AHU Exhaust Air Mass Flow Rate                                       indicator, I sij
+  E16                  CC-VLV                   AHU Cooling Coil Valve Control Signal                                     )=    { 1,̂         )= Y s     )
+  E17                  HC-VLV                  AHU Heating Coil Valve Control Signal                                I sij             Y sij            ij
+  E18                  SAD-FLOW             AHU Supply Air Duct Static Pressure                                                        0, otherwise                                                                    (7)
+  E19                  SAD-FLOW-STP       AHU Supply Air Duct Static Pressure Set Point                                              )= 1 indicating that the i
+  E20                  CC-HTR                  AHU Cooling Coil Heat Transfer Rate                                  where, I sij                                            th fault sample from fault node j is
+  E21                  HC-HTR                  AHU Heating Coil Heat Transfer Rate                                  correctly  identified  by  the  BN;  I s                  )= 0  indicating  this  sample  is
+  E22                  SF-PWR-CONS        AHU Supply Air Fan Power Consumption                                                                                               ij
+  E23                  CHWS-TEMP           Chilled Water Loop: Chilled Water Supply                                 incorrectly identified. If there are n fault samples in fault node j, we
+                                              Temperature                                                           define that isolation accuracy (IA) for fault node j as:
+  E24                  CHWR-TEMP          Chilled Water Loop: Chilled Water Return                                           ∑            )
+                                              Temperature                                                                        n   I sij
+  E25                  CWS-TEMP             Condenser Water Loop: Cooling Water Supply                              IAj   =      i=1
+                                              Temperature                                                                           n                                                                                      (8)
+  E26                  CWR-TEMP             Condenser Water Loop: Cooling Water Return                              Once we have the IA for each fault node, we further define the average
+                                              Temperature
+  E27                  HWS-TEMP             Hot Water Loop: Hot Water Supply Temperature                            isolation accuracy (AIA) over all (say k) fault nodes, as:
+  E28                  HWR-TEMP            Hot Water Loop: Hot Water Return Temperature                                        ∑k
+  E29                  CHWS-TEMP-             Chilled Water Loop: Supply Chilled Water                                            j=1IAj
+                     STP                      Temperature Set Point                                                 AIA=            k                                                                                      (9)
+  E30                  CHW-DIFF-              Chilled Water Loop: Measured Differential
+                     FLOW                     Pressure                                                              If there are m evidence nodes in the BN, we define the sufficient isolation
+  E31                  CHW-FLOW-              Chilled Water Loop: Differential Pressure Setpoint                    accuracy (SIA) for the BN as:
+                     STP
+  E32                  HWS-TEMP-              Hot Water Loop: Supply Hot Water Temperature                                    AIA
+                     STP                      Set Point                                                             SIA=        m                                                                                       (10)
+  E33                  HW-DIFF-               Hot Water Loop: Measured Differential Pressure
+                     FLOW                                                                                           We expect to construct a robust BN containing as fewer evidence nodes
+  E34                  HW-FLOW-STP       Hot Water Loop: Differential Pressure Setpoint
+  E35                  CHW-FLOW-CC       Chilled Water Loop: Chilled Water Flow Rate into                           as possible while maintaining satisfactory isolation accuracy, which can
+                                              the Cooling Coil                                                      be measured by SIA. In other words, a robust BN has a higher SIA.
+  E36                  CHL-CHW-               Chiller: Chilled Water Flow Rate of the Chiller
+                     FLOW
+  E37                  WSE-CHW-               WSE: Chilled Water Flow Rate of the WSE                               4.3.  Experimental results
+                     FLOW
+  E38                  CW-FLOW               Condenser Water Loop: Cooling Water Flow Rate                          4.3.1.  Sensitivity test on EECL
+  E39                  CHL-CW-FLOW       Chiller: Cooling Water Flow Rate of the Chiller                                  As is shown in Algorithm 1, a threshold ε                        is needed to determine if
+  E40                  WSE-CW-FLOW       Cooling Water Flow Rate of the Water Side
+                                              Economizer (WSE)                                                      there is synchronicity among evidence nodes. As there is no set rule to
+  E41                  HW-FLOW-HC        Hot Water Loop: Hot Water Loop Flow Rate into                              determine ε          to identify  significant  synchronicity,  we  conduct  experi-
+                                              the Heating Coil                                                      ments by varying ε from 0.001 to 0.005 with increments of 0.001. This is
+  E42                  BLR-HW-FLOW       Boiler: Boiler Hot Water Flow Rate                                         because when ε is greater than 0.006, the PN is less than 0.5 indicating
+  E43                  HW-FLOW-               Hot Water Loop: Bypass Hot Water Flow Rate
+                     BYPS                                                                                           that there is no causal relationship according to [36]. Through obser-
+  E44                  CHL-PWR               Chiller Power consumption                                              vations, it is found that ε = 0.005 yields satisfactory results, as the SIA of
+  E45                  DIFF-SAT-STP         AHU Supply Air Temperature and Supply Air                               the constructed BN under this threshold is 11.38 %, surpassing the re-
+                                              Temperature Setpoint Difference                                       sults obtained from other values (refer to Table 5). Moreover, observing
+  E46                  DIFF-OAT-MAT       Difference between AHU Outdoor Air                                        from Fig. 6, normalized EE values based on selected evidence nodes
+                                              Temperature and Mixed Air Temperature
+  E47                  CHW-COOLING       Chilled Water Cooling Capacity                                             under  fault  conditions  are  below                    ε   =  0.005,  which  agrees  to  our
+  E48                  VAV-FLOW-              Summation of VAV Flowrate
+                     SUM                                                                                            Table 5
+  E49                  MA-TEMP-1            AHU Mixed Air Temperature Curve Fit; MAT = f                            Results under different ε’s (ε = 0.005 highlighted in grey).
+                                              (OAT, RAT, SAflow, RAflow)
+                                                                                                                       ε                        # of evidence nodes in BN                   AIA                     SIA
+  E50                  MA-TEMP-2            AHU Mixed Air Temperature Curve Fit; MAT = f                                  0.001                   19                                                       78 %                   4.11 %
+                                              (OAT, RAT, SAflow, OAdmpr)                                                  0.002                   19                                                       78 %                   4.11 %
+
+                                                                                                                          0.003                   19                                                       78 %                   4.11 %
+                                                                                                                          0.004                   19                                                       78 %                   4.11 %
+                                                                                                                          0.005                   8                                                         91%                    11.38%
+
+=== PDF PAGE 9 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 6.  Normalized EEs on selected evidence nodes over time for (A) AHU Cooling Coil Valve Stuck Fully Open; (B) AHU Outdoor Air Damper Stuck Fully Closed; and
+(C) Supply Duct Leakage at a degradation rate of 20 %. Each case shows normalized EEs under fault condition below the threshold (ε = 0.005), which agrees to our
+assumptions that fault conditions will lead to evidence synchronicity.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        Fig. 7.  BN constructed by EECL under ε = 0.005.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     Fig. 8.  Effects of the fault Cooling Coil Valve Stuck Fully Open on two evidence nodes: (A) DIFF-SAT-STP and (B) MA-TEMP-1.
+
+assumption that fault conditions will lead to the synchronicity among                                       4.3.2.  BN derived from expert knowledge
+evidence nodes. Therefore, we report the results with ε = 0.005 and the                                         The  structure  of  BN  developed  based  on  expert  knowledge  and
+corresponding BN is shown in Fig. 7.                                                                        physical analysis is shown as below. The values of an evidence node
+                                                                                                            from a fault dataset are compared with those from a baseline dataset to
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        Fig. 9.  BN constructed by expert knowledge [13].
+
+=== PDF PAGE 10 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+observe if this evidence node demonstrates abnormality under a fault                            isolation accuracy by EECL is 90 %, lower than that by MIKK2 (100 %)
+condition. Fig. 8 illustrates an example showing the effects of the fault:                      and that by expert knowledge (100 %). Observing from Fig. 12 (A) and
+Cooling Coil Valve Stuck Fully Open on two evidence nodes, DIFF-SAT-                            (B), BN constructed by EE is with 8 evidence nodes and can achieve AIA
+STP (i.e., AHU Supply Air Temperature and Supply Air Temperature                                of 91 %, which includes fewer evidence nodes and maintain higher AIA
+Setpoint  Difference)  and  MA-TEMP-1  (i.e.,  Mixed  Air  Temperature).                        than that by MIKK2 (19 evidence nodes and AIA of 78 %); Although BN
+There are larger differences between the values of DIFF-SAT-STP under                           by expert knowledge can reach AIA of 100 %, it includes 50 % more
+the fault scenario (see Fig. 8 (A) in purple) and those under baseline (see                     evidence nodes than that by EECL. Moreover, as is observed from Fig. 12
+Fig. 8 (B) in green), while there are many overlaps between the values of                       (C), BN constructed by EECL reaches SIA of 11.38 %, higher than those
+MA-TEMP-1. Consequently, DIFF-SAT-STP rather than MA-TEMP-1 will                                by Expert (8.33 %) and by MIKK2 (4.11 %) respectively. This indicates
+be selected for the BN since this evidence node has shown significant                           the efficiency of EECL for BN construction, as EECL requires 33.3 %
+abnormality under the fault condition according to the criteria described                       fewer evidence nodes and yields a 36.6 % higher SIA compared to expert
+in  [46].  Following  the  same  procedures,  nine  evidence  nodes  are                        knowledge,  and  57.9  %  fewer  and  1.77  times  higher  compared  to
+selected  for the fault ‘CooCoiValStuck_0′, nine for the fault ‘OADam-                          MIKK2, respectively.
+Stuck_100, and eight for the fault ‘SupDucLea_20′. The final BN structure                           As shown in Fig. 13, our constructed BN using EECL includes eight
+by expert knowledge is shown in Fig. 9, which includes twelve evidence                          evidence nodes for CooCoiValStuck_0, three for OADamStuck_100, and
+nodes. The values of each evidence node under each fault node can be                            four  for  SupDucLea_20;  the  numbers  of  evidence  nodes  by  expert
+found in Appendix C.                                                                            knowledge are nine, nine and eight, and those by MIKK2 are eleven,
+                                                                                                fifteen and seventeen, respectively; moreover, three evidence nodes are
+4.3.3.  BN derived from MIKK2 algorithm                                                         shared for CooCoiValStuck_0, one for OADamStuck_100, and two for
+    The  structure  of  BN  developed  based  on  Mutual  Information-                          SupDucLea_20  among  three  BNs,  respectively.  Therefore,  our  EECL
+Krruskal-K2 (MIKK2) algorithm [50] is included as a benchmark. This                             method for BN construction is able to reach a satisfactory isolation ac-
+algorithm initiates by computing the mutual information (MI) between                            curacy for the cross-level fault diagnosis in the building systems for this
+variables, followed by utilizing the Kruskal algorithm from graph theory                        given case study.
+to  develop  the  maximum  spanning  tree,  thereby  determining  the
+maximum node in-degree. Subsequently, the maximum spanning tree                                 5.  Discussions
+undergoes a Depth First Search to establish the node order. Ultimately,
+the K2 algorithm utilizes both the node in-degree and the node order to                             In this research, the BN structure is constructed using a data-driven
+learn and derive the optimal Bayesian Network structure. The final BN                           causal learning approach. To facilitate causal learning, the concept of
+structure by MIKK2 is shown in Fig. 10, which includes nineteen evi-                            “synchronicity”  is introduced to describe the interactions among evi-
+dence nodes.                                                                                    dence  nodes.  The  direction  of  causality  from  the  fault  status  to  the
+                                                                                                synchronicity  is  characterized  by  Pearl  Causality.  This  process  ulti-
+4.3.4.  Comparisons among three BN construction approaches                                      mately results in the construction of the BN structure that can be used to
+    In this section, posterior probabilities for each fault node obtained                       diagnose cross-level faults in a building HVAC system. As discussed in
+using BNs by EECL, MIKK2 and expert knowledge are compared in the                               [13], automatic process of the BN structure construction is demanding
+analysis. Two important parameters, prior and conditional probabilities                         due to the time-consuming and labor-intensive natures of determining
+predefined as in [51] are used for both faults and evidence nodes for                           BN structures by expert knowledge, and the developed EECL method has
+posterior probability calculations. The corresponding comparison plots                          the  potential  for  overcoming  this  deficiency  since  it  is  purely  data-
+of posterior probabilities are shown in Fig. 11. The isolation accuracies                       driven, and does not require any prior knowledge. Additionally, while
+for each individual fault using different BNs are as follows. For Coo-                          expert knowledge method can determine the presence of the causal re-
+CoiValStuck_0,  the  isolation  accuracy  using  BN  by  EECL  is  98  %,                       lationships between faults and evidence nodes, it does not provide any
+significantly higher than that by MIKK2 (52 %), but slightly lower than                         measures on the strength of these causations. In contrast, the proposed
+that by expert knowledge (100 %); for OADamStuck_100, the isolation                             EECL method is able to quantify the causal relationships in terms of an
+accuracy by EECL is 84 %, slightly higher than that by MIKK2 (81 %) but                         evaluation  metric  (i.e.,  PN),  which  helps  to  reduce  uncertainties  of
+lower than that by expert knowledge (100 %); for SupDucLea_20, the                              causality determined explicitly by expert knowledge.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                               Fig. 10.  BN constructed by MIKK2 algorithm [50].
+
+=== PDF PAGE 11 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 11.  Posterior probability results for test datasets from three fault nodes: (A) AHU Cooling Coil Valve Stuck Fully Open; (B) AHU Outdoor Air Damper Stuck Fully
+Closed; (C) Supply Duct Leakage at a rate of 20%. The left-hand sided plots are isolations from BN by expert knowledge, the middle sided plots are by MIKK2, and the
+right-hand sided plots are by EECL. All the posterior probabilities are generated by BayesFusion software [52,53].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               Fig. 12.  Comparisons of BNs among three methods (Expert, MIKK2, EECL) in terms of (A) number of evidence nodes; (B) AIA and (C) SIA.
+
+=== PDF PAGE 12 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+                                                                                                 0.5, the causal assumption holds true between the two variables. Since
+                                                                                                 the objective of the study is to learn causal structure by determining
+                                                                                                 which  evidence  nodes  should  be  connected  to  the  fault  node,  Pearl
+                                                                                                 causality is adopted in this study.
+                                                                                                     While promising, it is worth noticing that the proposed EECL method
+                                                                                                 like most data-driven approach is still influenced by several factors such
+                                                                                                 as data volume, data quality, and data information. Despite the rapid
+                                                                                                 development  of  data  science  and  sensor  technology,  collections  of  a
+                                                                                                 large amount of high-quality, information-rich data are still challenging
+                                                                                                 with the current BAS. For example, the proposed EECL may discard a
+                                                                                                 certain evidence node containing many missing values even though it is
+                                                                                                 important  and  interpretable  from  a  physical  knowledge  perspective.
+                                                                                                 Another  is  that  the  BN  by  EECL  still  relies  heavily  on  the  expert
+                                                                                                 knowledge  to  diagnose  cross-level  faults  due  to  the  same  parameter
+                                                                                                 model. There is a need for data-driven parameterizations (i.e., deter-
+                                                                                                 mination on prior and conditional probabilities) to support the diag-
+                                                                                                 nosability of BN by EECL. Moreover, Pearl causality in EECL acquires PN
+                                                                                                 by using frequency information from binary outcomes (e.g., the outcome
+                                                                                                 should  be  synchronicity/asynchronicity),  which  may  not  apply  to  a
+                                                                                                 more  complex  scenario  when  outcomes  are  multi-class  (e.g.,  weak,
+                                                                                                 medium or strong synchronicity).
+
+                                                                                                 6.  Conclusions and future work
+
+                                                                                                     This  research  develops  an  entropy-based  causal  learning  method,
+                                                                                                 termed eigen entropy-based causality learning (EECL), to support BN
+                                                                                                 structure construction for fault diagnosis/isolation from the data-driven
+                                                                                                 perspective.  The  proposed  method  includes  two  phases.  In  the  first
+                                                                                                 phase,  Eigen-entropy  is  used  for  characterizing  synchronicity,  which
+                                                                                                 describes the trends of movements among the evidence nodes over the
+                                                                                                 time. In the second phase, counterfactual inference is applied to deter-
+                                                                                                 mine what and how evidence nodes should be connected to each fault
+                                                                                                 node so as to build up the BNs to support fault diagnosis, including cross-
+                                                                                                 level faults, in the building system. Compared to the traditional expert
+                                                                                                 knowledge-based approach, the proposed method shares the following
+                                                                                                 contributions: (1) it is a complete data-driven approach without the use
+                                                                                                 of  expert  domain  knowledge;  (2)  a  term  synchronicity  is  defined  to
+                                                                                                 capture the interactions, i.e., the trends of aligned movements over time,
+                                                                                                 among multiple symptoms under fault status; (3) it utilizes cause effect
+                                                                                                 estimations (counterfactual inferences) to induce the causal structure
+                                                                                                 between faults and synchronicity among symptoms. The BN constructed
+Fig. 13.  Comparisons of BN evidence nodes by EECL, by MIKK2, and by expert                      by  the  developed  EECL  method  is  evaluated  against  that  by  expert
+knowledge for three fault nodes (common evidence nodes between three BNs                         knowledge based method using three cross-level fault test cases simu-
+are in the overlap of three circles).                                                            lated using a virtual testbed. Experimental results show that the EECL
+                                                                                                 based BN can achieve satisfactory isolation accuracy with fewer evi-
+    In  addition  to  causation  characterizations,  the  proposed  EECL                         dence nodes (average isolation accuracy of 91 % with 8 evidence nodes),
+method takes full considerations on interactions among the evidence                              indicating the efficacy of EECL approach for fault diagnosis.
+nodes,  which  is  measured  by  EE,  an  information  entropy  used  for                            Our current research focuses on a smaller set of fault test cases, each
+multivariate time-series. These interactions may reveal important and                            from one fault category. In the future, we are interested in investigating
+interesting patterns specific to a fault, but they may be overlooked by                          the capability of the proposed method for the fault diagnosis on multiple
+expert knowledge because experts often treat evidence nodes individu-                            fault test cases, as well as the test cases from the same fault categories (i.
+ally; This deficiency also applies in BN constructed by MIKK2 algorithm                          e., various intensities under the same fault). Another interesting topic is
+since evidence nodes are also treated as independent. The BN structure                           to explore data-driven parameterizations for a robust diagnosability of
+by EECL utilizes the parameter model that includes prior and conditional                         BN by EECL. Finally, we use EE in conjunction with Pearl causality to
+probabilities  for  the  fault  and  evidence  nodes  determined  by  expert                     construct BN, and there is a need to extend this EE causality framework
+knowledge and is able to achieve satisfactory fault diagnosis/isolation                          to other types of causal structure learning methods such as functional
+accuracy (see Experiments).                                                                      causal models, score-based methods [25].
+
+    As a matter of fact, several mainstream methods, such as randomized                          CRediT authorship contribution statement
+controlled trials, regression analysis, propensity score matching, have
+been widely used for causal effect estimations. These methods are to                                 Jiajing Huang: Writing – original draft, Methodology, Data cura-
+estimate the strength of the causal effect from one variable to another                          tion,  Conceptualization. Naghmeh  Ghalamsiah:  Writing  –  review  &
+with a causal assumption given as a prior. In contrast, Pearl causality                          editing, Methodology, Data curation. Abhidnya Patharkar: Writing –
+utilizes probability of necessity (PN) to assess whether the causal rela-                        review & editing, Conceptualization. Ojas Pradhan: Writing – review &
+tionship  is  valid  using  frequency  information.  Specifically,  decision                     editing, Methodology, Data curation. Mengyuan Chu: Data curation.
+criterion on causality (PN ≥ 0.5) is uniform; if PN is greater or equal to                       Teresa Wu: Writing – review & editing, Supervision, Conceptualization.
+
+=== PDF PAGE 13 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+Jin Wen: Writing – review & editing. Zheng O’Neill: Writing – review                                                    Data availability
+& editing. Kasim Selcuk Candan: Methodology.
+                                                                                                                              Data will be made available on request.
+Declaration of competing interest
+                                                                                                                        Acknowledgments
+     The authors declare that they have no known competing financial
+interests or personal relationships that could have appeared to influence                                                     This  research  is  supported  by  funds  from  the  National  Science
+the work reported in this paper.                                                                                        Foundation  award  under  the  grant  number  2309030  entitled  “PIRE:
+                                                                                                                        Building   Decarbonization   via   AI-empowered   District   Heat   Pump
+                                                                                                                        Systems”.
+
+
+
+Appendix A:.  Training and testing sets for the developed model
+
+     The HVAC system is sized for Chicago, IL, USA in climate zone 5A and the fault injection period starts at the beginning of the day on July 9 and
+continues for four weeks until August 5, the ranges of temperature and relative humidity are 24–29 ◦C and 50 % to 70 %.The data is collected at the
+sampling rate of 5 min, so 1,800 samples are used as the training set (representing 15 days with 10 h of operation each day). Also, 5 days are used for
+testing the developed BN network which has 6,00 samples (representing 5 days with 10 h of operation in each day). Table A-1 represents the same
+information (the excluded days in the table are unoccupied days that are removed from the dataset).
+
+
+                                                                  Table A1
+                                                                  Days considered for BN-based model training and validation.
+
+                                                                    Datasets                               Occupied time
+
+                                                                    Training                              Days 1–3; Days 6–10; Days 13–17; Days 20–21
+                                                                    Test                                     Days 22–24; Day 27–28
+
+
+
+Appendix B:.  Evidence node ranking method
+
+     In this study, we use the random forest classifier to characterize the importance score for each evidence node. Given three fault cases, CooCoi-
+ValStuck_0 (C), OADamStuck_100 (O), and SupDucLea_20 (S) and one baseline (B), we first identify critical evidence nodes that can differentiate all
+three fault cases (C vs. O vs. S). Next identify critical evidence nodes that can differentiate each pair of fault cases (C vs. O; C vs. S; O vs. S). Finally
+identify critical evidence nodes that can differentiate each fault case and baseline (C vs. B; S vs. B; O vs. B). The evidence nodes and corresponding
+importance scores can be referred to Table B-1.
+
+
+        Table B1
+        Critical evidence nodes and corresponding importance score information. Evidence nodes whose score > 0.05 are considered critical.
+
+           C vs. O vs. S                                              C vs. O                                                        C vs. S                                                            O vs. S
+
+           Evidence                        Score                   Evidence                          Score                   Evidence                             Score                   Evidence                         Score
+           CC-DA-TEMP                  0.1024                CC-DA-TEMP                    0.1741                CC-DA-TEMP                       0.1773                RA-CFM                          0.1889
+           RA-CFM                         0.0912                DIFF-SAT-STP                   0.1448                DIFF-SAT-STP                      0.1492                EA-CFM                          0.1754
+           EA-CFM                         0.0880                SA-TEMP                          0.1007                CWR-TEMP                         0.0998                OA-CFM                          0.1182
+           DIFF-SAT-STP                0.0826                CC-VLV                            0.0786                SA-TEMP                             0.0858                OA-DMPR                       0.1100
+           SA-TEMP                        0.0662                RA-TEMP                         0.0766                CHWS-TEMP-STP                0.0758                SA-CFM                          0.0635
+           OA-CFM                         0.0546                CWR-TEMP                      0.0739                CHW-FLOW-CC                   0.0601                SF-PWR-CONS                0.0594
+           CWR-TEMP                    0.0510                CHW-FLOW-CC                0.0512                RA-TEMP                            0.0509
+           C vs. B                                                                                    O vs. B                                                                                S vs. B
+
+           Evidence                                       Score                                 Evidence                                    Score                                 Evidence                                         Score
+
+           CC-DA-TEMP                                0.1719                               OA-DMPR                                  0.1628                               EA-CFM                                           0.1416
+           DIFF-SAT-STP                               0.1423                               EA-CFM                                     0.1202                               CHW-COOLING                               0.1281
+           CC-VLV                                         0.1418                               RA-CFM                                     0.1055                               RA-CFM                                          0.0768
+           SA-TEMP                                      0.1024                               OA-CFM                                     0.1041                               CC-HTR                                           0.0759
+           RA-TEMP                                      0.0812                               MA-TEMP-2                               0.0992                               CHL-PWR                                        0.0664
+           CWR-TEMP                                   0.0520                               MA-TEMP                                  0.0971                               SA-CFM                                           0.0644
+                                                                                                                                                                      MA-TEMP-2                                     0.0568
+
+
+     Given critical evidence nodes identified and corresponding importance score under different criteria, we rank these evidence nodes for each test
+case according to the max importance score. Take the test case CooCoiValStuck_0 as an example (see Table B-2). Since the max value of importance
+score for CC-DA-TEMP is 0.1773 while that of DIFF-SAT-STP is 0.1492, then CC-DA-TEMP ranks before DIFF-SAT-STP. Similarly, we have the evidence
+nodes importance information for other two cases (see Tables B-3 & B-4). Finally, ranking information about the evidence nodes for each test cases are
+summarized in Table B-5.
+
+=== PDF PAGE 14 ===
+        Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+           Table B2
+           Critical evidence nodes and corresponding importance scores for CooCoiValStuck_0.
+               Evidence                                            C vs. O vs. S                               C vs. O                               C vs. S                                C vs. B                                Max Value
+
+               CC-DA-TEMP                                      0.1024                                        0.1741                                0.1773                               0.1719                               0.1773
+               CC-VLV                                              0                                                0.0786                                0                                        0.1418                               0.1418
+               DIFF-SAT-STP                                     0.0826                                        0.1448                                0.1492                               0.1423                               0.1492
+               CWR-TEMP                                        0.0510                                        0.0739                                0.0998                               0.0520                               0.0998
+               RA-CFM                                              0.0912                                        0                                        0                                        0                                        0.0912
+               CHW-FLOW-CC                                  0                                                0.0512                                0.0601                               0                                        0.0601
+               SA-TEMP                                            0.0662                                        0.1007                                0.0858                               0.1024                               0.1024
+               OA-CFM                                             0.0546                                        0                                        0                                        0                                        0.0546
+               EA-CFM                                              0.0880                                        0                                        0                                        0                                        0.0880
+               RA-TEMP                                           0                                                0.0766                                0.0509                               0.0812                               0.0812
+               CHWS-TEMP-STP                               0                                                0.0374                                0.0758                               0                                        0.0758
+
+
+
+
+           Table B3
+           Critical evidence nodes and corresponding importance scores for OADamStuck_100.
+
+               Evidence                                          C vs. O vs. S                                C vs. O                                O vs. S                                O vs. B                                Max Value
+
+               OA-DMPR                                        0.0428                                        0                                         0.1100                                0.1628                                0.1628
+               SA-TEMP                                         0.0662                                        0.1007                                0                                         0                                         0.1007
+               RA-TEMP                                         0                                                 0.0766                                0                                         0                                         0.0766
+               EA-CFM                                           0.0880                                        0                                         0.1754                                0.1202                                0.1754
+               CHW-FLOW-CC                                0                                                 0.0512                                0                                         0                                         0.0512
+               MA-TEMP                                        0                                                 0                                         0                                         0.0971                                0.0971
+               RA-CFM                                           0.0912                                        0                                         0.1889                                0.1055                                0.1889
+               CWR-TEMP                                      0.0510                                        0.0739                                0                                         0                                         0.0739
+               DIFF-SAT-STP                                  0.0826                                        0.1448                                0                                         0                                         0.1448
+               MA-TEMP-2                                     0                                                 0                                         0                                         0.0992                                0.0992
+               OA-CFM                                           0.0546                                        0                                         0.1182                                0.1041                                0.1182
+               SA-CFM                                            0.042                                          0                                         0.0635                                0                                         0.0635
+               SF-PWR-CONS                                  0                                                 0                                         0.0594                                0                                         0.0594
+               CC-DA-TEMP                                    0.1024                                        0.1741                                0                                         0                                         0.1741
+               CC-VLV                                            0                                                 0.0786                                0                                         0                                         0.0786
+
+
+
+
+           Table B4
+           Critical evidence nodes and corresponding importance scores for SupDucLea_20.
+
+               Evidence                                            C vs. O vs. S                                C vs. S                                O vs. S                                S vs. B                                Max Value
+
+               CHL-PWR                                           0                                                0.0456                                0                                        0.0664                                0.0664
+               OA-DMPR                                           0.0428                                        0                                        0.1100                               0                                        0.1100
+               RA-CFM                                              0.0912                                        0                                        0.1889                               0.0768                                0.1889
+               DIFF-SAT-STP                                     0.0826                                        0.1492                                0                                        0                                        0.1492
+               CHW-COOLING                                  0                                                0                                        0                                        0.1281                                0.1281
+               OA-CFM                                             0.0546                                        0                                        0.1182                               0                                        0.1182
+               CC-HTR                                              0                                                0                                        0                                        0.0759                                0.0759
+               EA-CFM                                              0.0880                                        0                                        0.1754                               0.1416                                0.1754
+               MA-TEMP-2                                        0                                                0                                        0                                        0.0568                                0.0568
+               CC-DA-TEMP                                      0.1024                                        0.1773                                0                                        0                                        0.1773
+               SA-CFM                                              0.0424                                        0                                        0.0635                               0.0644                                0.0644
+               CWR-TEMP                                        0.0510                                        0.0998                                0                                        0                                        0.0998
+               RA-TEMP                                            0                                                0.0509                                0                                        0                                        0.0509
+               CHWS-TEMP-STP                               0                                                0.0758                                0                                        0                                        0.0758
+               SA-TEMP                                            0.0662                                        0.0858                                0                                        0                                        0.0858
+               CHW-FLOW-CC                                  0                                                0.0601                                0                                        0                                        0.0601
+               SF-PWR-CONS                                    0                                                0                                        0.0594                               0                                        0.0594
+
+
+
+
+Table B5
+Ranking of critical evidence nodes for three test cases.
+   Rank                       CooCoiValStuck_0                                                              OADamStuck_100                                                           SupDucLea_20
+
+                                     Evidence                                    Max Value                       Evidence                                 Max Value                       Evidence                                    Max Value
+
+   1                             CC-DA-TEMP                              0.1773                             RA-CFM                                  0.1889                             RA-CFM                                     0.1889
+   2                             DIFF-SAT-STP                            0.1492                             EA-CFM                                  0.1754                             CC-DA-TEMP                              0.1773
+   3                             CC-VLV                                      0.1418                             CC-DA-TEMP                           0.1741                             EA-CFM                                     0.1754
+   4                             SA-TEMP                                    0.1024                             OA-DMPR                               0.1628                             DIFF-SAT-STP                            0.1492
+   5                             CWR-TEMP                                0.0998                             DIFF-SAT-STP                         0.1448                             CHW-COOLING                          0.1281
+   6                             RA-CFM                                     0.0912                             OA-CFM                                  0.1182                             OA-CFM                                     0.1182
+                                                                                                                                                                                                                                                                       (continued  on next page)
+
+=== PDF PAGE 15 ===
+       Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+Table B5 (continued)
+
+   Rank                       CooCoiValStuck_0                                                              OADamStuck_100                                                           SupDucLea_20
+
+                                  Evidence                                    Max Value                       Evidence                                 Max Value                       Evidence                                    Max Value
+   7                             EA-CFM                                     0.0880                             SA-TEMP                                 0.1007                             OA-DMPR                                  0.1100
+   8                             RA-TEMP                                   0.0812                             MA-TEMP-2                            0.0992                             CWR-TEMP                                0.0998
+   9                             CHWS-TEMP-STP                       0.0758                             MA-TEMP                               0.0971                             SA-TEMP                                    0.0858
+   10                           CHW-FLOW-CC                          0.0601                             CC-VLV                                   0.0786                             CC-HTR                                      0.0759
+   11                           OA-CFM                                     0.0546                             RA-TEMP                                0.0766                             CHWS-TEMP-STP                       0.0758
+   12                                                                                                                    CWR-TEMP                             0.0739                             CHL-PWR                                   0.0664
+   13                                                                                                                    SA-CFM                                   0.0635                             SA-CFM                                      0.0644
+   14                                                                                                                    SF-PWR-CONS                         0.0594                             CHW-FLOW-CC                          0.0601
+   15                                                                                                                    CHW-FLOW-CC                       0.0512                             SF-PWR-CONS                            0.0594
+   16                                                                                                                                                                                                          MA-TEMP-2                               0.0568
+   17                                                                                                                                                                                                          RA-TEMP                                   0.0509
+
+
+
+Appendix C:.  Defining fault-evidence connections by expert knowledge
+
+      The following figures show the standardized value of evidence nodes in the BN constructed by expert knowledge for three fault nodes, ‘Cool-
+CoiValStuck_0′, ‘OADamStuck_100′ fault and ‘SupDucLea_20′ fault respectively. Evidence nodes with ‘**’ are those associated with the specific fault.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                    Fig. C14.
+
+=== PDF PAGE 16 ===
+        Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                             Fig. C15.
+
+=== PDF PAGE 17 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                           Fig. C16.
+
+
+
+
+References                                                                                                            [10]  S. Ginestet, D. Marchio, O. Morisot, Evaluation of faults impacts on energy
+                                                                                                                             consumption and indoor air quality on an air handling unit, Energy Build 40
+ [1]  United Nations Environment Programme. 2022 global status report for buildings                                          (2008) 51–57.
+       and construction: towards a zero‑emission, efficient and resilient buildings and                               [11]  Y. Yan, P.B. Luh, K.R. Pattipati, Fault diagnosis of HVAC air-handling systems
+       construction sector. 2022.                                                                                            considering fault propagation impacts among components, IEEE Trans Autom Sci
+ [2]  L. P´erez-Lombard, J. Ortiz, C. Pout, A review on buildings energy consumption                                         Eng 14 (2017) 705–717.
+       information, Energy Build 40 (3) (2008) 394–1338.                                                              [12]  N. Cauchi, K.A. Hoque, M. Stoelinga, A. Abate, Maintenance of smart buildings
+ [3]  IEA - Annex 25 - Real Time Simulation for Building Optimization, Fault Detection                                       using fault trees, ACM Trans Sen Netw 14 (2018) 1–25.
+       and Diagnosis: https://www.iea-ebc.org/Data/publications/EBC_Annex_25_source_                                  [13]  Y. Chen, J. Wen, O. Pradhan, L.J. Lo, T. Wu, Using discrete Bayesian networks for
+       book.pdf.                                                                                                             diagnosing and isolating cross-level faults in HVAC systems, Appl Energy 327
+ [4]  M.R. Brambley, S. Katipamula, Commercial building retuning: a low-cost approach                                        (2022) 120050.
+       to improved performance and energy efficiency, ASHRAE J 51 (10) (2009) 12–23.                                  [14]  Z. Chen, Z. O’Neill, J. Wen, O. Pradhan, T. Yang, X. Lu, et al., A review of data-
+ [5]  K.W. Roth, D. Westphalen, P. Llana, M. Feng, The energy impact of faults in us                                         driven fault detection and diagnostics for building HVAC systems, Appl Energy 339
+       commercial buildings, in: Proceedings of the 2004 International Refrigeration and                                     (2023) 121030.
+       Air Conditioning Conference, 2004, p. 665.                                                                     [15]  J. Wang, Z. Yang, J. Su, Y. Zhao, S. Gao, X. Pang, D. Zhou, Root-cause analysis of
+ [6]  M.A. Piette, S.K. Kinney, P. Haves, Analysis of an information monitoring and                                          occurring alarms in thermal power plants based on Bayesian networks, Int J Electr
+       diagnostic system to improve building operations, Energy Build 33 (8) (2001)                                          Power Energy Syst 103 (2018) 67–74.
+       783–791.                                                                                                       [16]  A. Lokrantz, E. Gustavsson, M. Jirstrand, Root cause analysis of failures and quality
+ [7]  J. Granderson, G. Lin, A. Harding, P. Im, Y. Chen, Building fault detection data to                                    deviations in manufacturing using machine learning, Procedia CIRP 72 (2018)
+       aid diagnostic algorithm creation and performance testing, Sci Data 7 (2020) 65.                                      1057–1062.
+ [8]  B.L. Capehart, M.R. Brambley, Automated diagnostics and analytics for buildings,                                [17]  N. Liu, M. Hu, J. Wang, Y. Ren, W. Tian, Fault detection and diagnosis using
+       first ed., River Publishers, New York, 2014.                                                                          Bayesian network model combining mechanism correlation analysis and process
+ [9]  CIBSE Guide H: Building Control Systems, Routledge, Oxford, British, 2007.                                             data: Application to unmonitored root cause variables type of faults, Process Saf
+                                                                                                                             Environ Prot 164 (2022) 15–29.
+                                                                                                                      [18]  M.T. Amin, F. Khan, S. Ahmed, S. Imtiaz, A data-driven Bayesian network learning
+                                                                                                                             method for process fault diagnosis, Process Saf Environ Prot 150 (2021) 110–122.
+
+=== PDF PAGE 18 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+J. Huang et al.
+
+[19]  M.T. Amin, F. Khan, S. Imtiaz, Fault detection and pathway analysis using a                                    [37]  C.E. Shannon, A mathematical theory of communication, Bell Syst. Technol 27
+       dynamic Bayesian network, Chem Eng Sci 195 (2019) 777–790.                                                           (1948) 379–423.
+[20]  Y. Wang, Z. Wang, S. He, Z. Wang, A practical chiller fault diagnosis method based                             [38]  J. Huang, H. Yoon, O. Pradhan, T. Wu, J. Wen, Z. O’Neill, K.S. Candan, A cosine-
+       on discrete Bayesian network, Int J Refrig 102 (2019) 159–167.                                                       based correlation information entropy approach for building automatic fault
+[21]  Y. Chen, J. Wen, T. Chen, O. Pradhan, Bayesian Networks for whole building level                                      detection baseline construction, Sci Technol Built Environ 28 (9) (2022)
+       fault diagnosis and isolation, in: Proceedings of the 2018 International High                                        1138–1149.
+       Performance Buildings Conference, 2018, p. 266.                                                               [39]  J. Huang, T. Wu, H. Yoon, O. Pradhan, J. Wen, Z., O’Neill, Automatic fault
+[22]  Z. Wang, L. Wang, Y. Tan, J. Yuan, X. Li, Fault diagnosis using fused reference                                       detection baseline construction for building HVAC systems using joint entropy and
+       model and Bayesian network for building energy systems, J Build Eng 34 (2021)                                        enthalpy, in: Proceedings of 2021 Institute of Industrial and Systems Engineers,
+       101957.                                                                                                              2021, pp. 536–541.
+[23]  A. Taal, L. Itard, P&ID-based automated fault identification for energy performance                            [40]  P. Fritzson, Principles of object oriented modeling and simulation with Modelica
+       diagnosis in HVAC systems: 4S3F method, development of DBN models and                                                3.3: a cyber-physical approach, 2nd ed.,, Wiley-IEEE Press, Piscataway, 2014.
+       application to an ATES system, Energy Build. 224 (2020) 110289.                                               [41]  M. Wetter, W. Zuo, T.S. Nouidui, X. Pang, Modelica buildings library, J Build
+[24]  Pradhan O, Wen J, Chen Y, Lu X, Chu M, Fu Y, et al. Dynamic bayesian network-                                         Perform Simul 7 (4) (2014) 253–270.
+       based fault diagnosis for ASHRAE guideline 36: high performance sequence of                                   [42]  S. Goel, R.A. Athalye, W. Wang, Enhancements to ASHRAE standard 90.1
+       operation for HVAC systems. In: Proceedings of the 8th ACM International                                             prototype building model, Richland, WA (United States): Pacific Northwest
+       Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation.                                    National Lab, (PNNL) (2014).
+       2021, p. 365-68.                                                                                              [43]  D.B. Crawley, L.K. Lawrie, F.C. Winkelmann, W.F. Buhl, Y.J. Huang, C.O. Pedersen,
+[25]  L. Cheng, R. Guo, R. Moraffah, P. Sheth, K.S. Candan, H. Liu, Evaluation methods                                      et al., EnergyPlus: creating a new-generation building energy simulation program,
+       and measures for causal learning algorithms, IEEE Trans Artif Intell 3 (2022)                                        Energy Build 33 (4) (2001) 319–331.
+       924–943.                                                                                                      [44]  ASHRAE, ASHRAE Guideline 36-2018, High-Performance Sequences of Operation
+[26]  B. Sch¨olkopf, Causality for machine learning, in: H. Geffner, R. Dechter, J.                                         for HVAC Systems. Tullie Cir NE, Atlanta, GA; 2018.
+       Y. Halpern (Eds.), Probabilistic and Causal Inference: the Works of Judea Pearl,                              [45]  Taylor Engineering LLP, S.T. Taylor, B. Gill, R. Kiriu, Advanced sequences of
+       first ed., Association for Computing Machinery, New York, 2022, pp. 765–804.                                         operation for HVAC systems – Phase II Central plants and hydronic systems.
+[27]  J. Pearl, Causality: models, reasoning and inference, second ed., Cambridge                                           Technical report research project 1711. Task 5: Reporting of findings, Atlanta, GA:
+       University Press, New York, 2009.                                                                                    ASHRAE; 2019.
+[28]  J. Pearl, Probabilistic reasoning in intelligent systems: networks of plausible                                [46]  Y. Fu, Z. O’Neill, Z. Yang, V. Adetola, J. Wen, L. Ren, et al., Modeling and
+       inference, first ed., Morgan Kaufmann Publishers Inc, San Francisco, 1988.                                           evaluation of cyber-attacks on grid-interactive efficient buildings, Appl Energy 303
+[29]  L. Jiang, L. Zhang, C. Li, J. Wu, A correlation-based feature weighting filter for                                    (2021) 117639.
+       naïve Bayes, IEEE Trans Knowl Data Eng 31 (2) (2019) 201–213.                                                 [47]  Y. Fu, Z. O’Neill, V. Adetola, A flexible and generic functional mock-up unit based
+[30]  L. Jiang, L. Zhang, L. Yu, D. Wang, Class-specific attribute weighted naïve Bayes,                                    threat injection framework for grid-interactive efficient buildings: A case study in
+       Pattern Recognit 88 (2019) 321–330.                                                                                  Modelica, Energy Build 250 (2021) 111263.
+[31]  Y. Chen, J. Wen, L.J. Lo, Using weather and schedule based pattern catching and                                [48]  X. Lu, Y. Fu, Z. O’Neill, J. Wen, A holistic fault impact analysis of the high-
+       feature based PCA for whole building fault detection — part I development of the                                     performance sequences of operation for HVAC systems: Modelica-based case study
+       method, ASME J Eng Sustain Build Cities 3 (1) (2022) 011001.                                                         in a medium-office building, Energy Build 252 (2021) 111448.
+[32]  Y. Chen, J. Wen, L.J. Lo, Using weather and schedule based pattern catching and                                [49]  G. Li, Z. Yang, Y. Fu, Z. O’Neill, L. Ren, O. Pradhan, J. Wen, A hardware-in-the-loop
+       feature based PCA for whole building fault detection — part II field evaluation,                                     (HIL) testbed for cyber-physical energy systems in smart commercial buildings, Sci
+       ASME J Eng Sustain Build Cities 3 (1) (2022) 011002.                                                                 Technol Built Environ (2024) 1–18.
+[33]  J. Huang, H. Yoon, T. Wu, K.S. Candan, O. Pradhan, J. Wen, Z. O’Neill, Eigen-                                  [50]  X. Li, H. Yu, Bayesian Network Structure Learning Algorithm Based on Node Order
+       Entropy: a metric for multivariate sampling decisions, Inf Sci 619 (2023) 84–97.                                     Constraint, In: 2022 3rd International Conference on Electronic Communication
+[34]  D. Barber, Bayesian reasoning and machine learning, first ed., Cambridge                                              and Artificial Intelligence (IWECAI). 2022, p. 214-217.
+       University Press, Cambridge, 2012.                                                                            [51]  O. Pradhan, A,, dynamic Bayesian network framework for data-driven fault
+[35]  J. Pearl, Probabilities of causation: three counterfactual interpretations and their                                  diagnosis and prognosis of smart building systems. Doctoral dissertation, Drexel
+       identification, Synthese 121 (1999) 93–149.                                                                          University, 2023.
+[36]  J. Tian, J. Pearl, Probabilities of causation: bounds and identification, Annals of                            [52]  BayesFusion. SMILE Wrappers Programmer’s Manual. 2021.
+       Mathematics and Articial Intelligence 28 (2000) 287–313.                                                      [53]  BayesFusion. GeNIe Modeler User Manual Version 2.2.4. 2018.

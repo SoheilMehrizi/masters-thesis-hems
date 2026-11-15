@@ -1,0 +1,1552 @@
+
+=== PDF PAGE 1 ===
+Technical Paper
+Agentic digital twin-embedded maintenance methodology for energy 
+equipment: A self-evolving operational paradigm
+Wang Cong , Wu Tao , Bao Jinsong *
+College of Mechanical Engineering, Donghua University, Shanghai 201620, China
+ARTICLE INFO
+Keywords:
+Multi-agent
+Digital twin
+Automated maintenance
+Large language models
+ABSTRACT
+Intelligent operation and maintenance of energy equipment represents a critical component in ensuring the 
+stable performance of new-generation power systems. Faced with complex operational conditions and nonlinear 
+fault characteristics, conventional manual maintenance suffers from delayed perception and ambiguous cau-
+sality. However, while digital twin technology can establish a virtual-real interaction space, its static modeling 
+approach exhibits prediction failure in dynamic scenarios. To address these challenges, this study proposes an 
+intelligent maintenance methodology based on cognitive agents and virtual-real co-evolution: constructing a 
+dynamic environment representation model to achieve spatiotemporal feature correlation of equipment states 
+and operational condition migration; designing a memory-planning-decision architecture to enhance causal 
+reasoning capabilities for equipment faults and integrating with digital twin models for virtual-real interaction. 
+The methodology is validated through an 18-month case study of a gas-steam boiler in a combined heat and 
+power plant, utilizing 5.2 million historical operational records. Experimental results demonstrate that this 
+approach achieves a 97.3 % accuracy rate in diagnosing non-stationary faults for gas-steam boiler equipment, 
+realizes a 20-fold improvement in knowledge update time (from 48 to 2.3 h), and attains significant performance 
+enhancements including 31.2 % cost efficiency improvement, 3-fold early warning lead time extension (from 24 
+to 72 h), and 16.2 % overall collaborative performance improvement (from 82.2 % to 95.5 %). The research 
+validates the engineering value of dynamic cognitive paradigms in intelligent maintenance of power equipment, 
+providing a feasible solution for autonomous decision-making in high-real-time scenarios.
+1. Introduction
+Energy equipment constitutes the backbone of modern energy sys-
+tems, with operational reliability directly impacting system stability and 
+overall societal productivity [1]. As the integration of combined heat 
+and power systems intensifies, the complexity and dynamism of power 
+grids have escalated, presenting unprecedented challenges for the 
+maintenance of critical assets such as gas-steam boilers, steam turbines, 
+and heat recovery steam generators [2]. These high-value components 
+routinely endure severe thermomechanical stresses, making equipment 
+degradation and nonlinear fault evolution increasingly unavoidable. As 
+failures occur, they not only disrupt energy supply—causing cascading 
+effects on industrial production—but also pose significant risks to sys-
+tem security through potential domino effects in interconnected in-
+frastructures [3].
+However, traditional maintenance strategies remain predominantly 
+reliant on periodic inspections and reactive repairs. For instance, in gas- 
+steam combined heat and power plants, maintenance still hinges on 
+manual checks at fixed intervals, with technicians recording thermal- 
+hydraulic parameters using paper logs or basic spreadsheets. This 
+experience-driven approach faces critical limitations: 1) lack of sys-
+tematic temporal correlation modeling in data analysis; 2) inflexible 
+maintenance rules unable to adapt to equipment aging and variable load 
+cycles; 3) fragmented human expertise, which cannot be formalized for 
+broader knowledge transfer [4]. The consequences are severe: delayed 
+fault detection, unplanned shutdowns for diagnosis, and increased 
+operational costs, all of which threaten the reliability and safety of en-
+ergy systems.
+Amid these challenges, the modernization of maintenance method-
+ologies has become an urgent priority. The widespread adoption of 
+sensing technologies and industrial Internet platforms has enabled the 
+real-time collection of vast volumes of multi-modal operational data. 
+Yet, transforming this heterogeneous, high-velocity data into actionable 
+knowledge for improving equipment reliability and lifecycle 
+* Correspondence to: Donghua University, 2999 Renmin North Road, Songjiang District, Shanghai, China.
+E-mail address: bao@dhu.edu.cn (B. Jinsong). 
+Contents lists available at ScienceDirect
+Journal of Manufacturing Systems
+journal homepage: www.elsevier.com/locate/jmansys
+https://doi.org/10.1016/j.jmsy.2025.11.020
+Received 16 June 2025; Received in revised form 24 November 2025; Accepted 25 November 2025  
+Journal of Manufacturing Systems 84 (2026) 100–116 
+Available online 9 December 2025 
+0278-6125/© 2025 The Society of Manufacturing Engineers. Published by Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, 
+and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 2 ===
+performance remains a bottleneck. Existing predictive maintenance 
+strategies—ranging from machine learning-based diagnostics to rule- 
+based expert systems—have demonstrated effectiveness in specific sce-
+narios but generally suffer from poor generalizability, limited inter-
+pretability, and inadequate adaptability to the non-stationary, complex 
+environments typical of real-world energy systems. However, the 
+emergence of digital twin (DT) technology has introduced a paradigm 
+shift. DT enables not only real-time, virtual-real fusion of physical assets 
+and their digital counterparts but also facilitate comprehensive lifecycle 
+management through advanced simulation, prediction, and optimiza-
+tion capabilities. Nevertheless, most current DT implementations are 
+constrained by static or semi-static modeling paradigms, which fail to 
+capture evolving spatiotemporal correlations and causal mechanisms 
+underlying equipment degradation and fault propagation [5]. Further-
+more, while the integration of multi-agent systems (MAS) with digital 
+twins is an active area of research for enhancing distributed task 
+execution [6], the infusion of genuine cognitive capabilities into these 
+frameworks remains a significant challenge. Key aspects such as 
+LLM-driven autonomous reasoning, deep adaptive learning, and 
+self-evolving collaboration are still in their nascent stages within 
+DT-driven maintenance, marking a critical and underexplored frontier 
+[7].
+To address these limitations, a new generation of intelligent main-
+tenance methodologies is required—ones that can dynamically perceive, 
+reason, and respond to intricate equipment behaviors under uncertainty. 
+Such approaches must bridge the gap between symbolic knowledge 
+representation (e.g., expert rules, ontologies) and sub-symbolic data- 
+driven inference (e.g., deep learning, reinforcement learning), thereby 
+enabling the construction of self-evolving operational paradigms. The 
+convergence of large language models (LLMs), cognitive agents, and DT- 
+based platforms now provides a fertile ground for such advancements, 
+holding the potential to revolutionize maintenance strategies for high- 
+value, safety-critical energy infrastructures.
+Fig. 1 illustrates the transition from a traditional human-centric 
+maintenance model to an agentic digital twin framework. Unlike static 
+DTs that rely entirely on manual interpretation (Fig. 1a), our system 
+integrates a Cognitive Core to autonomously reason, plan, and optimize 
+maintenance strategies (Fig. 1b). To ensure operational safety and 
+accountability, this autonomous reasoning operates within a human-in- 
+the-loop (HITL) structure, where critical agent-generated recommen-
+dations undergo operator verification before execution. This design 
+effectively transforms the digital twin from a passive visualization tool 
+into a proactive intelligent orchestrator.
+In brief, this study pioneers an agentic digital twin-embedded 
+maintenance methodology that leverages cognitive co-evolution and 
+virtual-real interaction to address the core challenges of intelligent 
+maintenance in energy equipment. The term agentic is used to empha-
+size a higher level of cognitive autonomy and goal-oriented reasoning, 
+distinguishing it from conventional multi-agent systems where indi-
+vidual agents often operate based on predefined rules. Our agentic 
+paradigm centralizes intelligence within the DT, enabling it to dynam-
+ically plan, delegate, and coordinate tasks in a holistic manner. Specif-
+ically, the proposed methodology overcomes the static modeling 
+limitations of conventional digital twins by enabling dynamic state- 
+space construction through cognitive agents and establishes a formal-
+ized knowledge acquisition bridge between symbolic expert reasoning 
+and sub-symbolic sensor data. Moreover, it is designed to meet the ur-
+gent industrial need for self-evolving, real-time maintenance architec-
+tures, aiming to resolve a significant majority of faults within boiler on- 
+load maintenance windows, and is broadly applicable to key thermal 
+power infrastructures such as heat exchangers and steam distribution 
+systems [8]. This paradigm shift towards autonomous digital twin 
+technology represents a significant advancement in thermal power 
+system automation, aligning with the broader trends of Industry 4.0 and 
+the Internet of Things (IoT) in combined heat and power applications. As 
+illustrated in the proposed framework (Fig. 1b), the tool use capability 
+acts as a key input to the agent’s Cognitive Core, demonstrating the 
+system’s ability to dynamically leverage a diverse set of algorithms for 
+informed, data-driven reasoning and decision-making. The intelligent 
+approach not only reduces operational costs by minimizing manual 
+labor but also improves the timeliness and accuracy of maintenance 
+actions, potentially leading to better asset performance and longer 
+lifespans. Furthermore, intelligent systems can enhance their 
+decision-making capabilities through continuous learning and adapta-
+tion to data, providing dynamic and evolving maintenance strategies 
+that traditional systems find hard to match. While the system is designed 
+for a high degree of autonomy in diagnostics and planning, it operates 
+within a HITL framework. Critical maintenance decisions and actions 
+proposed by the agentic DT are presented to human operators for final 
+verification and approval, ensuring ultimate safety, accountability, and 
+control.
+The main contributions of this paper are as follows: 
+1) Proposes a novel agentic digital twin maintenance paradigm that 
+integrates LLM-driven cognition with DT-based virtual-real interac-
+tion for continuous self-evolution. To mitigate the common chal-
+lenge of data scarcity in industrial settings, our approach does not 
+rely solely on large datasets for LLM training; instead, it leverages a 
+Fig. 1. Traditional digital twin maintenance system vs the proposed agentic digital twin-embedded cognitive maintenance system.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+101 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 3 ===
+hybrid model that integrates symbolic domain knowledge with data- 
+driven learning, ensuring robust performance even with limited data 
+[9]. It implements a data-stream orchestrated cognition-execution 
+pipeline to establish a bidirectional knowledge flow between 
+LLM-based strategic reasoning agents and DT-powered physical 
+enactment modules, enabling closed-loop perception, reasoning, and 
+action.
+2) Develops an ontology-enhanced hybrid symbolic-neural modeling 
+approach for interpretable and adaptive fault diagnosis in a dynamic 
+operational environment, which enables LLMs to construct causal 
+knowledge graphs via hybrid symbolic-neural modeling of equip-
+ment thermodynamics, facilitating interpretable and adaptive 
+maintenance decision-making.
+3) Designs a self-evolving optimizing multi-agent coordination scheme 
+that utilizes Q-learning-enhanced resource allocation to dynamically 
+balance exploration and exploitation in maintenance workflows, 
+thereby improving diagnostic accuracy and operational efficiency. 
+Here, the overarching agentic DT acts as a central orchestrator that 
+manages and guides a multi-agent system of specialized agents 
+responsible for executing specific sub-tasks, clarifying the hierar-
+chical relationship between these concepts.
+The remainder of the paper is organized as follows: Section 2 reviews 
+related work on digital twins in equipment maintenance and state-of- 
+the-art intelligent maintenance, identifying current research gaps. Sec-
+tion 3 describes the framework of agentic maintenance. Section 4 details 
+the methodology, including models and algorithms. Section 5 presents 
+and analyzes an actual case study to validate the proposed approach.
+2. Related work
+2.1. Digital twin and intelligent equipment maintenance
+Recent years have witnessed a paradigm shift toward data-driven 
+predictive maintenance, driven by advancements in the Artificial In-
+telligence of Things (AIoT), big data analytics, and the Industrial 
+Internet of Things (IIoT). Cutting-edge solutions now integrate multi- 
+source sensor fusion, deep learning, and edge-cloud collaborative 
+computing to enable comprehensive health monitoring and predictive 
+maintenance in complex industrial environments. For instance, deep 
+learning frameworks and ensemble learning algorithms for equipment 
+health monitoring now enable early abnormality detection via hierar-
+chical feature engineering and have demonstrated impressive capabil-
+ities in remaining useful life estimation and adaptive maintenance 
+scheduling across diverse sectors [10]. Concurrently, advanced state 
+observers using extended Kalman networks demonstrate improved 
+tracking accuracy under nonlinear system dynamics [11], while multi-
+modal knowledge graphs consolidate structured troubleshooting pro-
+tocols with unstructured maintenance logs for enhanced diagnostics 
+[12].
+The integration of emerging LLMs and autonomous intelligent agents 
+further expands the potential of maintenance systems by enabling nat-
+ural language understanding, intelligent reasoning, and knowledge- 
+driven decision-making. The LLM-enabled system synthesis (LESS) 
+framework demonstrates intelligent production planning through 
+formalized procedure encoding [13]. Revolutionary RCAgent architec-
+tures integrate LLMs with RESTful API agents, achieving 35 % faster 
+root cause localization in cloud systems [14]. Notably, temporal 
+semanticization algorithms combined with multi-agent reinforcement 
+learning(MARL) show 40 % performance gains in industrial anomaly 
+prediction through natural language-based collaboration protocols [7]. 
+Recent studies have also explored LLMs for automated fault report 
+generation and context-aware root cause analysis, significantly 
+enhancing transparency and interpretability. Furthermore, MAS coor-
+dinated by Reinforcement Learning(RL) or federated learning ap-
+proaches have shown promise in distributed equipment monitoring and 
+collaborative diagnosis, especially in scenarios requiring real-time 
+adaptation and decentralized autonomy.
+In this context, DT technologies have revolutionized equipment 
+monitoring through high-fidelity virtual modeling. Yu et al. proposed a 
+digital twin framework for tunnel operation and maintenance (O&M), 
+using Semantic Web tech for multi-level data fusion and a rule-based 
+engine for reasoning [15]. Li’s multidimensional DT architecture for 
+hydraulic infrastructure enables closed-loop health management 
+through sensor-cloud integration [16]. However, despite these ad-
+vancements in creating high-fidelity models, key challenges persist in 
+real-time heterogeneous data fusion and expert knowledge embedding 
+within decision engines. Moreover, static DT implementations reveal 
+fundamental limitations in nonlinear fault propagation scenarios due to 
+three major constraints: 1) Parametric drift across equipment aging 
+phases, 2) Epistemic uncertainty in multivariable state estimation, and 
+3) Temporal misalignment between virtual representation and physical 
+dynamics [5]. The relevant works have been illustrated in Table 1.
+Table 1 presents a classification of recent studies, highlighting the 
+diversity in data types, research fields, and tasks. These works demon-
+strate significant progress in leveraging multimodal data—spanning 
+text, time series, images, and code—to enhance specific maintenance- 
+related functions. For instance, in robotics and human-robot 
+Table 1 
+Classification of the relevant and recent studies in digital twin in equipment 
+maintenance.
+Reference Data Type Research Field Task
+[7] Time Series 
+Data & Text 
+Data & 
+Setpoint Data
+Global temporal 
+feature learning
+Temporal Feature Learning 
+in Digital Twins
+[17] Text Data Robotic control Developing LLM for 
+dynamic robot control 
+adaptation
+[18] Text Data & 
+Point Cloud 
+Data
+Human-robot 
+collaboration
+Developing a visual 
+language model for robot 
+navigation
+[19] Text Data & 
+Real-time Data 
+from Digital 
+Twins
+Human-robot 
+collaboration
+Generating robot behavior 
+sequence
+[20] Text Data Aerospace product 
+manufacturing
+Cause analysis of quality 
+problems
+[21] Machine 
+Process and 
+Product 
+Quality Data
+Quality control Enhancing the 
+interoperability of data 
+integration in the quality 
+control process
+[22] Text and 
+Speech Data
+Assembly 
+manufacturing
+Acting as a Digital 
+Intelligent Assistant
+[23] Time series 
+Data
+Fault diagnosis Fine-tuning a fault 
+diagnosis classifier based 
+on LLM
+[24] Time series 
+data
+Fault diagnosis Improving task-driven 
+automation and 
+interpretability
+[25] Text Data Predictive 
+maintenance
+Generating ontology and 
+training data for knowledge 
+extraction
+[26] Code Data Product design Generating Computer- 
+Aided Design codes for 3D 
+models
+[27] Time Series 
+Data & Text 
+Data & 
+Setpoint Data
+Cognitive digital 
+twins
+Enhancing interaction with 
+cognitive Digital Twins
+[28] Time Series 
+Data & Text 
+Data & 
+Setpoint Data
+Multi-agent systems 
+in digital twins
+Automating simulation 
+parameterization
+[29] Text Data & 
+Image Data
+Collaborative 
+design
+Generating precise visual 
+schemes
+[30] Text Data Disassembly in 
+remanufacturing
+Generating disassembling 
+sequence
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+102 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 4 ===
+collaboration, LLMs excel at translating natural language instructions 
+into executable behaviors and code [17  19]. In quality control and 
+manufacturing, they act as intelligent assistants or improve data inter-
+operability [20  22]. Similarly, in predictive maintenance, fusing time 
+series and text data has improved fault diagnosis and knowledge 
+extraction [23,25].
+However, a critical analysis of these studies reveals that they often 
+address isolated aspects of the maintenance lifecycle. While they 
+showcase the power of LLMs and DTs for specific tasks like code gen-
+eration [26], sequence planning [18] or classifier fine-tuning [23], they 
+generally lack an overarching framework that integrates these capabil-
+ities into a cohesive, continuously learning system. For example, the 
+cognitive interaction in DTs [27] or automated parameterization [28]
+are steps toward more intelligent systems, but they do not constitute a 
+fully autonomous, self-evolving paradigm that can adapt its internal 
+models and decision-making logic in response to real-time operational 
+feedback. The primary gap, therefore, is the absence of a holistic 
+methodology that unifies perception, reasoning, decision-making, and 
+execution into a closed-loop, self-improving maintenance architecture.
+Despite the advances highlighted, several critical challenges remain. 
+Heterogeneous data fusion, semantic interoperability, causal reasoning 
+in complex degradation processes, and the ability to continuously self- 
+improve under non-stationary industrial conditions are still unresolved 
+bottlenecks. The transition from descriptive and predictive analytics to a 
+fully autonomous and adaptive maintenance strategy represents a key 
+frontier for both academic research and industrial deployment. This is 
+precisely the gap this paper aims to address.
+2.2. Research gap and motivation
+Based on the above literature review, it is evident that while signif-
+icant progress has been made in intelligent equipment maintenance, 
+several research gaps persist: 
+1) Lack of a Continuously Self-Evolving Maintenance Paradigm. Exist-
+ing digital twin maintenance frameworks predominantly rely on 
+static or semi-static models, which are insufficient for capturing the 
+dynamic, nonlinear, and evolving nature of equipment degradation 
+and fault propagation in real-world environments [31]. These 
+models also typically lack the capability for closed-loop cognitive 
+adaptation that leverages both symbolic and sub-symbolic reasoning 
+to continuously refine their understanding and strategies [32].
+2) Insufficient Interpretability and Adaptability in Fault Diagnosis. 
+Most current predictive maintenance and diagnostics approaches are 
+limited by the semantic gap between symbolic knowledge (e.g., 
+expert rules, ontologies) and sub-symbolic models (e.g., deep 
+learning) [9]. This restricts their ability to provide interpretable, 
+transparent, and adaptive fault diagnosis, especially under 
+non-stationary and variable operational conditions. Moreover, there 
+is a lack of robust causal reasoning frameworks that can bridge this 
+gap and enable explainable root-cause analysis [33].
+3) Limited Autonomy and Optimization in Multi-Agent Coordination. 
+The real-world deployment of intelligent maintenance systems often 
+involves large-scale, distributed assets requiring collaborative diag-
+nosis, resource allocation, and adaptive scheduling. However, 
+traditional MAS often lack self-evolving optimizing coordination 
+mechanisms, especially under the uncertainty, heterogeneity, and 
+real-time constraints typical of energy infrastructure operations 
+[34].
+To solve the above research gaps, this work provides a universal, 
+intelligent maintenance framework that advances the state-of-the-art in 
+industrial asset management, offering new directions for the develop-
+ment of autonomous, real-time operational paradigms in the era of In-
+dustry 4.0 and IIoT.
+3. Framework for agentic maintenance
+3.1. Overall framework of the agentic maintenance
+The proposed framework for agentic maintenance is built upon the 
+foundational principles of a digital twin, establishing a dynamic and 
+symbiotic relationship between physical and virtual systems. This 
+duality is central to enhancing the operation and maintenance of energy 
+equipment, such as gas-steam boilers and heat recovery systems. Our 
+approach aligns with the conceptual architecture of digital twins as 
+outlined in standards like ISO 23247, which emphasizes the integration 
+of physical assets with their virtual counterparts through data exchange 
+[35]. By combining real-time monitoring, predictive analytics, and 
+autonomous decision-making, the framework ensures stable perfor-
+mance in next-generation power systems. The overall architecture is 
+illustrated in Fig. 2, which highlights the bidirectional data flow be-
+tween the Physical System and Virtual System, emphasizing their dy-
+namic and collaborative interaction.
+The Virtual System’s components interact synergistically, with 
+bidirectional data flows between the Environment Perception/Cognition 
+Model and the Condition-Based Decision (CBD)/Predictive Model (rep-
+resented as the Maintenance Algorithm/Policy in Fig. 2). This holistic 
+integration addresses the limitations of static modeling approaches, such 
+as prediction failures in dynamic scenarios, by enabling adaptive system 
+analysis and real-time decision-making.
+3.1.1. Physical system
+The Physical System forms the foundation of the framework and 
+comprises the following key elements:
+1) Energy Assets. These are the core physical entities, such as gas-steam 
+boilers, heat recovery steam generators, or other thermal power 
+equipment, whose operational states are continuously monitored 
+and maintained. They represent the primary focus of the framework, 
+ensuring reliable performance and operational stability under com-
+plex and dynamic conditions.
+2) Sensors. Sensors are mounted on the Energy Assets to collect real- 
+time data originating from them, capturing their current state, 
+denoted as S(t). This data is then transmitted to the Virtual System 
+for analysis. The bidirectional interaction with Energy Assets, 
+depicted in Fig. 2, represents a continuous flow of information, 
+enabling real-time insights into equipment’s performance and 
+condition.
+3) Actuators. Actuators are physical devices (e.g., valves, motors, ro-
+botic systems) that execute commands received from the Virtual 
+System, denoted as M(t), enabling physical adjustments or mainte-
+nance actions on Energy Assets. The framework is designed to sup-
+port varying levels of autonomy. For routine adjustments or well- 
+defined corrective tasks, actions can be applied autonomously 
+without direct human intervention. For more complex or critical 
+maintenance activities, the system can operate in a HITL mode, 
+where it provides recommendations for a human technician to vali-
+date and execute. The bidirectional connection with Energy Assets 
+establishes a feedback mechanism, where operational adjustments 
+influence the system’s state, completing the control loop. This 
+configuration ensures that the Physical System provides a robust 
+foundation for data collection and action execution, addressing the 
+challenges posed by nonlinear fault characteristics and complex 
+operational conditions.
+3.1.2. Virtual system
+The Virtual System serves as the intelligent core of the framework 
+and comprises several interconnected components designed to process 
+data, predict outcomes, and make informed decisions: 
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+103 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 5 ===
+1) Environmental Perception/Cognition Model. 
+This component receives incoming state data S(t) from the Phys-
+ical System and interprets it to discern patterns, anomalies, and 
+environmental conditions. Cognitive computing techniques, such as 
+pattern recognition and anomaly detection, are employed to enhance 
+understanding of the system’s operational context. As noted in Fig. 2, 
+this is also referred to as the Environment Perception/Cognition 
+Model. Fig. 2 positions this model as a central node in the Virtual 
+System, underscoring its role in bridging physical data with cognitive 
+analysis.
+2) Condition-Based Decision (CBD)/Predictive Model. 
+Utilizing insights from the Environment Perception/Cognition 
+Model, this model, referred to as the Maintenance Algorithm/Policy 
+in Fig. 2, performs condition-based decision-making (CBD) and 
+predictive analytics. External tools and methodologies, as indicated 
+by the tools use in Fig. 2, are integrated to forecast potential failures 
+or performance degradations, enabling proactive maintenance stra-
+tegies. The bidirectional connection with the Environment Percep-
+tion/Cognition Model reflects their collaborative relationship, 
+ensuring refined and accurate predictions.
+3) Cognitive Maintenance Agent.
+The Cognitive Maintenance Agent orchestrates higher-level decision- 
+making and action execution within the Virtual System. Its advanced 
+reasoning and planning capabilities can be implemented using LLMs, 
+which allow the agent to interpret complex instructions, reason about 
+unseen situations, and generate coherent maintenance plans [36]. It 
+comprises three interconnected modules: 
+1) Memory. A repository of historical data and learned experiences, 
+providing context for current and future decisions. Fig. 2 depicts 
+Memory feeding into the Planning module via work memory 
+extraction, emphasizing its role in leveraging past data for informed 
+decision-making.
+2) Planning. A module that formulates maintenance strategies based on 
+Memory and predictive inputs from the CBD/Predictive Model. 
+Iterative feedback loops, depicted in Fig. 2 as circular arrows with 
+colored dots (orange, purple, and gray), refine plans dynamically. 
+This adaptability ensures optimization of maintenance strategies 
+under changing operational conditions.
+3) Action. The execution component translates planned strategies into 
+actionable commands M(t), which are sent back to the Physical 
+System’s Actuators. The unidirectional arrow from Planning to Act in 
+Fig. 2 indicates a direct flow of decisions to actions, ensuring efficient 
+implementation.
+The framework leverages cognitive agents and virtual-real co-evo-
+lution to extend beyond static modeling approaches. By dynamically 
+correlating spatiotemporal features of equipment states with operational 
+condition migration, the framework addresses challenges such as 
+nonlinear fault characteristics and enhances causal reasoning capabil-
+ities. The bidirectional interaction between the Physical System and 
+Virtual System exemplifies the engineering value of dynamic cognitive 
+paradigms in intelligent maintenance. This provides a scalable and 
+adaptive solution for next-generation power systems.
+3.2. Interaction and dynamic feedback loop of virtual-physical systems
+The Cognitive Maintenance Framework operates based on a closed- 
+loop principle, ensuring seamless interaction between the Physical and 
+Virtual Systems. This bidirectional feedback mechanism is designed to 
+address complex operational conditions, such as nonlinear fault evolu-
+tion and dynamic environmental changes, while enabling real-time 
+responsiveness and autonomous decision-making. The interaction be-
+tween the Physical System and Virtual System is characterized by the 
+following steps:
+Step 1: The Physical System continuously transmits its current state 
+S(t) to the Virtual System via sensors. This establishes a data flow from 
+the physical domain to the virtual domain, providing real-time insights 
+into equipment performance and operational conditions. The state data 
+includes multi-modal information such as temperature, pressure, vi-
+bration, and flow rates, ensuring comprehensive monitoring.
+Step 2: The Virtual System processes the received state data S(t) 
+through predictive models, memory-driven analysis, and cognitive 
+agents. It generates decision commands M(t) based on the equipment’s 
+current state and anticipated operational changes. These commands 
+reflect actions such as equipment adjustments, fault mitigation 
+Fig. 2. The overall architecture of the agentic digital twin framework.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+104 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 6 ===
+strategies, or preventative maintenance tasks.
+Step 3: The decision commands M(t) are executed by actuators 
+within the Physical System, dynamically altering its state S(t+ 1). This 
+interaction completes the feedback loop, enabling continuous adapta-
+tion and optimization.
+The practical challenges of implementing a fully autonomous closed- 
+loop system are significant, particularly regarding human oversight re-
+quirements and the difficulty of capturing tacit expert knowledge. To 
+address these issues, the framework includes flexible operational modes. 
+The system can operate in a HITL configuration where critical decisions 
+are presented to human operators for validation before execution. This 
+approach ensures safety while leveraging human expertise. To handle 
+undocumented knowledge, the agent’s memory module can be 
+enhanced through knowledge engineering approaches, including the 
+ingestion of maintenance manuals and learning from human technician 
+actions and feedback over time. This enables progressive codification of 
+intrinsic expertise [37].
+The closed-loop mechanism integrates advanced sensing, reasoning, 
+and execution capabilities, offering several key features: 
+1) Real-Time Responsiveness. Sensors and actuators ensure uninter-
+rupted data collection and immediate action execution, critical for 
+high-real-time scenarios. This capability minimizes delays in fault 
+detection and response, addressing challenges such as ambiguous 
+causality in conventional maintenance methods.
+2) Predictive Maintenance. By leveraging predictive models and his-
+torical data stored in the Memory module, the framework anticipates 
+potential issues before they escalate. The efficacy of this predictive 
+approach has been validated in case studies, showing the potential 
+for significant error reduction in predictive maintenance tasks for 
+energy equipment [8].
+3) Adaptive Decision-Making. The Cognitive Maintenance Agent en-
+hances the system’s ability to learn from past experiences and 
+dynamically adapt to changing operational conditions. Iterative 
+feedback loops in the Planning module refine maintenance strategies 
+over time, contributing to high accuracy rates in diagnosing non- 
+stationary faults [38], as will be demonstrated in the experimental 
+section of this paper.
+4) Integration of External Tools. The CBD/Predictive Model integrates 
+external tools for advanced analytics, enhancing forecasting capa-
+bilities and operational efficiency. This feature ensures that the 
+framework remains versatile and scalable for diverse industrial 
+applications.
+In brief, this closed-loop interaction mechanism embodies the engi-
+neering value of dynamic cognitive paradigms in intelligent mainte-
+nance. By continuously correlating spatiotemporal features of 
+equipment states and operational condition migration, the framework 
+provides a feasible solution for autonomous decision-making in high- 
+real-time scenarios. As will be highlighted in experimental results, the 
+framework can achieve significant improvements in maintenance 
+response efficiency, reducing downtime and operational costs while 
+enhancing system reliability.
+3.3. Definitions for core processes
+The framework’s dynamics are formalized using a state-space rep-
+resentation. This approach is conceptually analogous to established 
+frameworks for modeling sequential decision-making under uncer-
+tainty, such as Markov Decision Processes (MDPs) and RL, which pro-
+vide a robust mathematical foundation for the interaction between an 
+agent and its environment [39]. This Section details the core processes 
+of our proposed system by expanding on the construction of its dynamic 
+models. 
+1) Dynamics of the Physical System 
+The physical system’s state evolves based on its current state S(t) 
+and the decision command M(t) imposed by the virtual system. This 
+evolution is governed by the state transition function f: 
+S(t+ 1)= f(S(t), M(t)) (1) 
+Where S(t) represents the state vector of the system at time t (e.g., 
+temperature, pressure), M(t) is the command executed at time t (e.g., 
+adjust valve position), and f is the state transition function. The 
+construction of f can follow two primary approaches. It can be a 
+physics-based model, derived from first-principles equations such as 
+thermodynamic and fluid dynamic laws governing energy equip-
+ment. Alternatively, it can be a data-driven model, such as a 
+Recurrent Neural Network (RNN) or a Long Short-Term Memory 
+(LSTM) network, trained on historical operational data to learn the 
+complex, nonlinear dynamics of the equipment. For instance, in a 
+gas-steam boiler, f would model how steam pressure Sp(t+ 1) changes 
+based on the current pressure Sp(t), feed water temperature ST(t), and 
+a fuel intake adjustment Mfuel(t).
+2) Dynamics of the Virtual System 
+The virtual system processes the observed state S(t) to update its 
+internal state V(t) and generate a decision command M(t). 
+The internal state update is formalized as: 
+V(t+ 1)= h(V(t), S(t)) (2) 
+Here, h represents the evolution function of the virtual system’s 
+internal state. This function models the cognitive process of memory 
+update. For example, the new state S(t) is stored in Short-Term 
+Memory (STM), and h governs how this new information is used to 
+retrieve relevant historical data from Long-Term Memory (LTM) and 
+assemble the current Working Memory (WM), which forms part of V 
+(t+ 1). 
+The decision command generation is formalized as: 
+M(t)= g(S(t), V(t)) (3) 
+The function g is the core decision-making policy implemented by 
+the cognitive maintenance agent. It takes the current physical state S 
+(t) and the agent’s internal cognitive state V(t) (containing context 
+from memory) as input to produce a maintenance action M(t). This 
+function can be realized as a sophisticated planning algorithm, a 
+rule-based inference engine, or a learned policy from a reinforcement 
+learning model, as detailed in Section 3.5.2. It essentially translates 
+cognitive understanding into actionable commands.
+3) Dynamics of the Closed-Loop System 
+The interaction between the physical and virtual systems forms a 
+closed-loop system, ensuring continuous feedback and adaptation. 
+The overall dynamics are thus described by coupling the above 
+equations: 
+S(t+ 1)= f(S(t), g(S(t), V(t))) (4) 
+V(t+ 1)= h(V(t), S(t)) (5) 
+This set of equations captures the essence of the feedback loop. Eq. 
+(4) shows that the physical system’s next state S(t+ 1) is determined 
+by its current state S(t) and the action g(S(t), V(t)) generated by the 
+virtual system. Eq. (5) shows that the virtual system updates its own 
+internal state V(t+ 1) based on its previous state V(t) and the new 
+observation S(t) from the physical world, thus informing the next 
+cycle of decision-making.
+4) Extension for Predictive Maintenance
+The virtual system’s predictive capability is modeled by the function, 
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+105 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 7 ===
+as follows: 
+̂S(t+ τ)= p(S(t), V(t), τ) (6) 
+Where ˆS(t+ τ) is the predicted state at a future time, τ represents the 
+prediction horizon, and p is the prediction model. This model is typically 
+a time-series forecasting algorithm, such as an AutoRegressive Inte-
+grated Moving Average model for simpler linear trends or a more 
+complex Transformer-based network for capturing long-range de-
+pendencies in the equipment’s operational data. The output of this 
+model informs the decision function g, which is extended to incorporate 
+these predictive insights: 
+M(t)= g(S(t), V(t),̂S(t+ τ)) (7) 
+This allows the agent to take proactive maintenance actions if a 
+predicted state ˆS(t+ τ) is forecasted to exceed a predefined operational 
+threshold (e.g., ˆS(t+ τ) > Smax). For clarity, the variables used in the 
+formalization are summarized in Table 2.
+3.4. Data flow
+The Cognitive Maintenance Framework is driven by a continuous, 
+multi-modal stream of data originating from the physical system. The 
+state data S(t) is not a monolithic entity but a vector comprising various 
+sensor readings, each serving a distinct function within the digital twin 
+system. For the gas-steam boiler case study detailed later, this data in-
+cludes: 1) Temperature Data: Readings such as flue gas temperature, 
+feed water temperature, and steam temperature are crucial. They 
+function as primary indicators for monitoring the boiler’s thermal effi-
+ciency, ensuring complete combustion, and detecting overheating risks 
+that could lead to material fatigue or failure. 2) Pressure Data: Mea-
+surements like steam pressure and control target pressure are essential 
+for both safety and performance. They are used to maintain operational 
+stability within safe limits, prevent over-pressurization events, and 
+ensure the steam produced meets the requirements of the downstream 
+turbine. 3) Flow Data: Data on cumulative and instantaneous inlet water 
+flow and outlet steam flow are vital for assessing the boiler’s real-time 
+output and efficiency. Discrepancies between inlet and outlet flows 
+can indicate potential leaks or blockages, triggering diagnostic routines 
+within the virtual system. 4) Operational Parameters: Other data points 
+like unit load, thermal efficiency calculations, and conductivity provide 
+higher-level context about the equipment’s operational mode and 
+health, enabling the cognitive agent to make more informed, context- 
+aware decisions.
+This rich set of sensor data provides the foundation for the 
+framework’s data flow, which is structured to ensure seamless interac-
+tion and decision-making between its components. The framework 
+correlates spatiotemporal features from these data streams with opera-
+tional condition migration, addressing challenges such as nonlinear fault 
+characteristics and enhancing causal reasoning capabilities. Table 3
+summarizes the flow of information and actions within the framework.
+Table 3 encapsulates the flow of information and commands, illus-
+trating the framework’s operational dynamics. Structured data flow 
+ensures that each component seamlessly interacts with others, facili-
+tating real-time responsiveness, adaptive decision-making, and predic-
+tive maintenance. This structure comprises key features of data flow 
+integration, including real-time state monitoring, interpretive analysis, 
+prediction, memory and planning integration, and execution within a 
+feedback loop. Specifically, sensors capture real-time state data S(t) 
+from energy assets. The Environment Perception/Cognition Model 
+processes this raw data to discern patterns and anomalies, sharing 
+interpretive insights with the CBD/Predictive Model, which forecasts 
+potential failures. The framework leverages Memory for contextual data 
+retrieval, enabling the Planning module to devise maintenance strate-
+gies that are both anticipatory and adaptive. Decision commands M(t) 
+generated by the Cognitive Maintenance Agent are executed by actua-
+tors within the Physical System. These actions dynamically influence the 
+system’s state to S(t+ 1), completing the feedback loop and allowing 
+the framework to continuously refine its strategies.
+In brief, the Cognitive Maintenance Framework represents a state-of- 
+the-art approach to energy asset management. By enabling autonomous, 
+predictive, and adaptive maintenance, this framework addresses the 
+challenges of complex operational conditions and nonlinear fault char-
+acteristics, offering a robust solution for ensuring the stable performance 
+of next-generation power systems.
+3.5. Methodology
+3.5.1. Components of agentic framework
+The agentic digital twin-embedded maintenance system is under-
+pinned by a modular cognitive architecture, which integrates advanced 
+memory organization, adaptive planning, and intelligent action mod-
+ules. This architecture establishes the foundation for self-evolving, 
+closed-loop operation and decision-making, directly corresponding to 
+the paper’s core innovations of LLM-driven cognition, symbolic-neural 
+hybrid modeling, and self-optimizing multi-agent collaboration. 
+1) Memory
+Table 2 
+Summary of variables in the system formalization.
+Variable Definition
+t Current time step.
+S(t) State of the Physical System at time t.
+M(t) Maintenance/decision command generated by the Virtual System at time 
+t.
+V(t) Internal state of the Virtual System (e.g., memory, plans) at time t.
+f State transition function of the Physical System.
+h Internal state update function of the Virtual System.
+g Decision function of the Cognitive Maintenance Agent.
+p Predictive model functions for forecasting future states.
+ˆS(t+ τ) Predicted state of the Physical System at future time t+ τ.
+τ Future time horizon for prediction.
+Smax Predefined maintenance threshold for a system state.
+d Advance preparation time for scheduled maintenance.
+Table 3 
+Partial source and types of data flow.
+Source Component Target Component Data/Action Type
+Energy Asset Sensor Provide state data S(t)
+Sensor Environmental 
+Perception 
+/Cognition Model
+Transmit state data S 
+(t)
+Environmental Perception/ 
+Cognition Model
+CBD/Prediction Model Share interpretive 
+data
+CBD/Prediction Model Cognitive Maintenance 
+Agent
+Provide predictive 
+insights
+Memory Planning Working memory 
+retrieval
+Planning Action Plan maintenance 
+actions
+Cognitive Maintenance Agent Actuator Send decision 
+command M(t)
+Actuator Energy Asset Execute maintenance 
+actions
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+106 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 8 ===
+The memory system is central to the cognitive maintenance frame-
+work, supporting the entire perception–reasoning–action cycle by 
+organizing and managing equipment operation and maintenance data. 
+As shown in Fig. 3, the memory is structured into three distinct 
+typesM∈{MLTM, MSTM, MWM}, including Long-term memory (LTM), 
+Short-term memory (STM), and Working memory (WM).
+Fig. 3 describes the current types of memory and sources. Specif-
+ically, MLTM={r1, …, rn} stores historical equipment data, including 
+time-series sensor logs, maintenance records, and fault reports. LTM 
+utilizes relational databases (e.g., PostgreSQL) and time-series databases 
+(e.g., InfluxDB) to provide a rich context for knowledge-driven 
+reasoning and predictive analytics. MSTM={s1, …, sm} temporarily 
+holds recent sensor readings and maintenance actions in high-speed 
+caches (e.g., Redis) for real-time access and rapid response to opera-
+tional changes. MWM={w1, …, wk} integrates relevant information from 
+LTM and STM for the current maintenance task, facilitating context- 
+sensitive reasoning. Typically, WM is implemented in a structured 
+format (e.g., JSON), supporting flexible, task-oriented data extraction. 
+The interaction mechanism between the three types of memory is shown 
+in Fig. 4, and the memory-driven maintenance planning as illustrated in 
+Algorithm 1.
+In summary, this layered memory design provides a synergistic, non- 
+redundant foundation for advanced cognitive functions. Each memory 
+type serves a distinct purpose: LTM provides the deep historical context 
+necessary for long-term learning and strategic adaptation, STM offers 
+the immediate data required for real-time responsiveness, and WM acts 
+as a dynamic cognitive workspace for synthesizing information from 
+both LTM and STM to perform causal reasoning for the task at hand. This 
+division of labor prevents resource duplication by ensuring that data is 
+processed at the appropriate temporal scale and level of abstraction, 
+Fig. 3. The memory system of the cognitive maintenance framework.
+Fig. 4. The interaction mechanism between the three types of memory.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+107 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 9 ===
+thereby enabling efficient learning, adaptation, and causal analysis to 
+address the challenge of ambiguous causality in complex operational 
+environments [40]. 
+Algorithm 1. Memory - Driven Maintenance Planning   
+2) Planning
+The planning module translates memory and real-time status data 
+into actionable maintenance strategies. The design of the cognitive 
+agent planning logic incorporates) A hierarchical memory access 
+mechanism, enabling the agent to retrieve and fuse multi-source infor-
+mation (historical, real-time, contextual). 2) Decision-making criteria 
+based on equipment status, operational goals, and predictive insights. 3) 
+Learning mechanisms that allow the agent to adapt its planning logic in 
+response to new fault patterns, changing operational conditions, and 
+feedback from executed actions. The interaction mechanism between 
+the three types of memory is shown in Fig. 5, and task planning in 
+cognitive maintenance framework is illustrated in Algorithm 2.
+This design ensures the planning module supports continuous self- 
+evolution and robust performance in dynamic and uncertain 
+environments. 
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+108 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 10 ===
+Algorithm 2. Task Planning in Cognitive Maintenance Framework   
+3) Action
+The Action module serves as the executive component of the cogni-
+tive maintenance framework, responsible for translating maintenance 
+plans into concrete operational commands and ensuring their effective 
+implementation within the physical system. This module embodies the 
+framework’s commitment to closed-loop cognitive maintenance by 
+establishing the critical bridge between virtual decision-making pro-
+cesses and physical execution capabilities.
+The Action module operates through a sophisticated command 
+translation and execution mechanism that receives high-level mainte-
+nance plans MP(t) from the Planning module and converts them into 
+specific, executable instructions for actuators and maintenance systems. 
+This translation process incorporates semantic parsing of abstract 
+maintenance strategies, resource validation to ensure availability of 
+required tools and personnel, and safety assessment to maintain 
+compliance with operational protocols. The module employs a hierar-
+chical decomposition approach where complex maintenance tasks are 
+systematically broken down into atomic operations that can be directly 
+executed by the physical system’s actuators.
+The execution coordination process leverages the multi-agent ar-
+chitecture inherent in the proposed methodology, distributing mainte-
+nance tasks among available execution agents based on capability 
+matching and dynamic workload optimization. Real-time progress 
+tracking enables continuous monitoring of execution status, while 
+adaptive resource allocation mechanisms respond to changing condi-
+tions or unexpected challenges during maintenance operations. The 
+Action module integrates quality assurance protocols to ensure that 
+executed actions meet predefined standards and contribute effectively to 
+equipment reliability enhancement.
+A key innovation of the Action module lies in its adaptive response 
+mechanism, which handles uncertainties and dynamic conditions during 
+maintenance execution. When execution outcomes deviate from ex-
+pected results, the module triggers intelligent adaptation processes that 
+analyze current system states, planned actions, and actual outcomes to 
+generate corrective responses. This capability enables the system to 
+respond effectively to unexpected equipment behavior, adjust execution 
+strategies based on real-time feedback, and continuously learn from 
+execution experiences to improve future performance.
+The Action module maintains seamless integration with the digital 
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+109 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 11 ===
+twin environment through virtual execution simulation and real-time 
+synchronization mechanisms. Before implementing maintenance com-
+mands on physical equipment, the module conducts predictive simula-
+tions within the digital twin to optimize action sequences, identify 
+potential risks, and validate resource requirements. During physical 
+execution, continuous synchronization between the digital twin and 
+physical system ensures dynamic adjustment of virtual parameters 
+based on execution progress and real-time validation of outcomes 
+against virtual predictions.
+Feedback integration represents another critical aspect of the Action 
+module’s functionality, continuously collecting execution data and 
+performance metrics that feed back into the Memory and Planning 
+modules for system-wide learning and optimization. The module records 
+execution performance metrics including success rates, completion 
+times, and resource utilization, while conducting quality assessment of 
+maintenance effectiveness and equipment response. This feedback 
+mechanism enables the extraction of successful execution patterns and 
+identification of failure modes, contributing to the self-evolving nature 
+of the cognitive maintenance framework.
+The Action module’s integration with the broader cognitive main-
+tenance framework occurs through well-defined interfaces that enable 
+retrieval of historical execution data from the Memory module, receipt 
+of maintenance directives from the Planning module, and direct control 
+of physical system actuators. This integration ensures that the Action 
+module operates as an integral component of the closed-loop cognitive 
+maintenance system, contributing to the framework’s ability to achieve 
+autonomous, efficient, and continuously improving maintenance oper-
+ations that adapt to changing equipment conditions and operational 
+requirements.
+3.5.2. Self-evolving operational maintenance
+The agentic digital twin-embedded maintenance system implements 
+a sophisticated operational maintenance architecture designed for 
+autonomous, adaptive, and predictive maintenance. This architecture is 
+built upon the real-time virtual model of the physical system (the digital 
+twin) and is operationalized by a team of specialized agents. Their 
+collaboration, governed by principles of closed-loop cognition and 
+optimization, directly addresses the core challenges of dynamic 
+operational environments and nonlinear fault characteristics.
+The architecture revolves around the digital twin, which continu-
+ously updates with sensor data to reflect the equipment’s current state. 
+The specialized agents are assigned distinct roles to create a seamless 
+workflow for anomaly detection, strategy optimization, task execution, 
+and process refinement. The key agent roles within this architecture 
+include: 
+1) Monitoring Agents: Detect anomalies using real-time sensor data and 
+environmental conditions.
+2) Planning Agents: Devise optimal maintenance strategies through 
+simulations, leveraging historical and predictive insights.
+3) Execution Agents: Implement planned maintenance actions on the 
+physical system.
+4) Feedback Agents: Analyze outcomes to refine strategies and update 
+the memory system.
+5) Maintenance Task Agents: Coordinate tasks, assign sub-tasks to 
+execution agents, and ensure system-wide synchronization.
+This role-based agent collaboration enables a self-improving, closed- 
+loop operation, where real-time data, simulations, and feedback 
+collectively drive efficient and continuously optimized maintenance. 
+Fig. 6 illustrates the mechanism of this self-evolving operational 
+maintenance.
+To orchestrate the collaboration among these agents and continu-
+ously enhance their collective decision-making, the framework in-
+tegrates a MARL algorithm. The MARL model is embedded primarily 
+within the Planning and Feedback loops of the architecture. Specifically, 
+Planning Agents use the MARL policy to determine the optimal joint 
+maintenance strategy, considering inputs from Monitoring Agents and 
+the Memory system. After Execution Agents perform the tasks, Feedback 
+Agents collect the results and calculate a global reward. This reward is 
+then used to update the MARL policy, allowing the agent team to learn 
+from experience and adapt its collaborative strategies over time. This 
+integration ensures that the maintenance decision-making process is not 
+only reactive but also self-optimizing. The pseudo-code of the Q- 
+learning-based MARL approach is described in Algorithm 3 [41]. 
+Fig. 5. The interaction mechanism of task planning in the cognitive maintenance.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+110 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 12 ===
+Algorithm 3. Q-learning-Based MARL Approach  
+4. Case study
+This research selects a gas-steam boiler from a combined heat and 
+power plant as the experimental validation object. This equipment 
+possesses typical characteristics of large-scale, high-value energy assets, 
+having operated continuously for five years and representing a common 
+critical equipment type in industrial power systems. The experimental 
+dataset encompasses over 5.2 million historical operational records, 
+with monitoring parameters including temperature monitoring cate-
+gories (flue gas temperature, feed water temperature, flue gas protection 
+temperature), pressure monitoring categories (steam pressure, steam 
+protection pressure, control target pressure), flow monitoring categories 
+(cumulative inlet flow, instantaneous inlet flow, cumulative outlet 
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+111 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 13 ===
+steam flow, instantaneous outlet steam flow), and operational param-
+eter categories (unit load, thermal efficiency, conductivity, combustion 
+time, operation time), totaling more than 40 key indicators. Addition-
+ally, the experiment integrates 31 related technical documents, 
+including maintenance records, inspection standards, and fault investi-
+gation forms, providing both structured sensor data and unstructured 
+high-value semantic information for comprehensive analysis.
+For this study, a specialized agentic digital twin platform was 
+developed based on the proposed theoretical framework, with a focus on 
+achieving high fidelity between the virtual and physical systems. The 3D 
+visual models were constructed based on the boiler’s original Computer- 
+Aided Design (CAD) drawings and rendered in the GLB (glTF Binary) 
+format, ensuring geometric fidelity. The operational models were a 
+hybrid of physics-based principles and data-driven models trained on 
+historical data to ensure functional fidelity.
+The platform’s technical stack was designed for robust, real-time 
+virtual-real interaction. The MAS was implemented using Python, 
+leveraging the LangChain framework for agent creation, communication 
+protocol management, and orchestrating complex workflows. The dig-
+ital twin’s visual interface was developed as a web-based application 
+using React and Three.js. The critical linkage between the physical asset 
+and this virtual platform was established as follows: 
+1) Physical-to-Virtual Data Mapping: Real-time sensor data from the 
+physical boiler was streamed from the plant’s Supervisory Control 
+and Data Acquisition (SCADA) system to a Message Queuing 
+Telemetry Transport (MQTT) message broker. The platform’s real- 
+time data monitoring module, acting as the input layer for the vir-
+tual system, subscribed to these data streams, ensuring a mapping 
+latency of under one second for the state data S(t).
+2) Virtual-to-Physical Command Execution: Decision commands M(t) 
+generated by the agent were formatted into standardized instructions 
+compliant with the Open Platform Communications Unified Archi-
+tecture (OPC UA) protocol. For automated actions, these instructions 
+were sent to a control gateway interfacing with the plant’s Pro-
+grammable Logic Controllers (PLCs). For actions requiring human 
+oversight, the command was routed as a detailed work order to the 
+human-machine interface (HMI) for operator validation.
+This custom-built platform architecture comprises four core func-
+tional modules: the equipment long-term memory module, the real-time 
+data monitoring module, the intelligent decision-making and planning 
+module, and the execution feedback module. The platform’s interface 
+presents the 3D digital twin scene alongside a visualization of the multi- 
+agent collaborative process, providing an effective validation 
+environment for the proposed methodology.
+Fig. 7 offers a comprehensive overview of the developed agentic 
+digital twin platform. The top-left panel presents the digital twin’s vir-
+tual scene of the power generation system, constructed with high fidelity 
+to the physical plant. The asset targeted for maintenance in this case 
+study, the No. 2 gas-steam boiler, is highlighted with a red box. The 
+bottom-left panel illustrates the multi-agent system’s collaborative 
+workflow, showing how different agents (e.g., Monitoring, Diagnostic, 
+Planning Agents) interact to perform a maintenance task. The panels on 
+the right demonstrate the core cognitive process in action: (1) retrieving 
+relevant knowledge from the Long-Term Memory (LTM), (2) accessing 
+real-time device status from the Short-Term Memory (STM), (3) forming 
+a contextual Working Memory (WM), (4) generating a maintenance plan 
+through Planning & Decision, and (5) managing the Execution & 
+Feedback loop.
+Data collection adheres to strict time-series recording protocols, with 
+sensor sampling frequency set at one sample per minute to ensure cap-
+ture of dynamic characteristics in equipment operational state changes. 
+To guarantee experimental reproducibility, all data undergo standard-
+ized preprocessing, including outlier detection, missing value imputa-
+tion, and noise filtering. The experimental period spans 18 months of 
+continuous monitoring, covering different operational conditions and 
+seasonal variations of the equipment, providing sufficient data founda-
+tion for validating the adaptability of the proposed method under dy-
+namic operational environments. Data splitting employs time-series 
+cross-validation methodology, with the first 12 months of data used for 
+model training and system optimization, and the subsequent 6 months 
+for independent validation and performance evaluation.
+To provide direct, visual evidence of this framework’s foundational 
+capability—virtual-physical synchronization and proactive monitor-
+ing—Fig. 8 presents a time-series comparison between real-world sensor 
+data and the virtual system’s simulation data. This simulation is per-
+formed by a predictive model, which was trained on the first 12 months 
+of historical data as described below. Within our architecture, this model 
+is encapsulated as a specialized temperature_prediction_tool available to 
+the Monitoring Agent.
+4.1. Cognitive agent architecture effectiveness validation
+The core innovation of the cognitive agent architecture lies in 
+combining memory-planning-decision mechanisms with self- 
+evolutionary optimization to achieve continuous accumulation of 
+maintenance knowledge and dynamic enhancement of intelligent 
+decision-making capabilities. Experimental results demonstrate that the 
+proposed cognitive architecture exhibits significant performance 
+Fig. 6. Self-Evolving Operational Maintenance Mechanism of Agentic Digital Twin.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+112 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 14 ===
+advantages when handling complex maintenance tasks. In terms of 
+knowledge representation and reasoning capabilities, the hybrid 
+symbolic-neural modeling method successfully integrates symbolic 
+knowledge from expert experience with data-driven sub-symbolic 
+learning, enabling the system to perform reasoning at different 
+abstraction levels. Specifically, when processing complex fault patterns 
+such as temperature anomalies, pressure fluctuations, and flow de-
+viations, this architecture achieves a fault identification accuracy of 
+97.3 %, representing a 14.7 % improvement over traditional rule-based 
+expert systems and a 13.7 % improvement over pure machine learning 
+methods. Comparison analysis of different maintenance approaches is 
+described in detail in Table 4.
+The hierarchical design of the memory system plays a crucial role in 
+maintenance knowledge management. Through constructing a three- 
+layer architecture of short-term working memory, long-term proce-
+dural memory, and historical case memory, the system effectively in-
+tegrates immediate perceptual information, standardized maintenance 
+procedures, and historical fault experiences. Experimental data show 
+that when processing novel fault patterns, the system can complete 
+knowledge updates and strategy adjustments within an average of 2.3 h, 
+achieving a 20-fold improvement compared to the 48-hour response 
+time of traditional systems. Particularly when facing gradual faults 
+Fig. 7. Multi-agent and digital twin operation and maintenance system.
+Fig. 8. Comparative analysis of physical sensor data and virtual simulation data.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+113 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 15 ===
+caused by equipment aging, the long-term memory mechanism enables 
+the system to identify subtle degradation patterns and provide early 
+warnings 72 h in advance of potential failures, securing sufficient time 
+windows for preventive maintenance. Statistical analysis indicates that 
+the memory system contributes 32 % to overall diagnostic performance, 
+with its contribution reaching as high as 45 % in complex fault pattern 
+recognition.
+The planning and decision-making mechanism achieves intelligent 
+decomposition and optimized scheduling of maintenance tasks through 
+integrating goal-oriented reasoning and constraint satisfaction solving. 
+In resource-constrained maintenance environments, the system can 
+dynamically balance maintenance costs, time constraints, and safety 
+requirements to generate optimal maintenance plans. Experimental re-
+sults show that compared to traditional priority-driven scheduling 
+methods, maintenance plans generated by cognitive agents achieve 
+28 % improvement in cost efficiency and 35 % improvement in time 
+utilization. Analysis of 1000 maintenance tasks reveals that the system 
+demonstrates excellent adaptability when handling conflicting sched-
+uling between emergency faults and preventive maintenance, with a 
+conflict resolution success rate of 94.6 % and an average resolution time 
+of only 8.5 min.
+4.2. Multi-agent collaboration mechanism performance evaluation
+The design of the multi-agent collaboration mechanism aims to 
+achieve efficient task division and resource optimization allocation 
+through distributed agent collaborative work. The experiment validates 
+the collaborative effectiveness of four types of specialized agents: 
+monitoring agents, diagnostic agents, decision-making agents, and 
+execution agents. Monitoring agents are responsible for real-time data 
+collection and anomaly detection, achieving comprehensive equipment 
+state perception through distributed sensor networks deployed at key 
+monitoring points. Experimental data indicate that multi-point collab-
+orative monitoring achieves a 43 % improvement in anomaly detection 
+sensitivity and a 67 % reduction in false alarm rates compared to single- 
+point monitoring. Particularly when handling multi-parameter coupled 
+anomalies, the collaborative monitoring mechanism can identify 
+correlated fault symptoms that single agents cannot detect, improving 
+detection accuracy from 78.4 % to 94.7 %.
+Knowledge sharing and reasoning collaboration among diagnostic 
+agents significantly enhances the accuracy and efficiency of fault diag-
+nosis. Through establishing distributed knowledge bases and collabo-
+rative reasoning mechanisms, different diagnostic agents can share 
+domain-specific knowledge and diagnostic experience, forming collec-
+tive intelligence for fault analysis capabilities. When handling com-
+pound faults and rare fault patterns, collaborative diagnosis achieves an 
+accuracy of 96.8 %, representing an 18.3 % improvement over single- 
+agent diagnosis. The collaborative mechanism also significantly re-
+duces diagnostic time, with average diagnostic duration decreasing from 
+26 min in traditional methods to 7 min, with particularly notable 
+response speed improvements in emergency fault scenarios. Communi-
+cation overhead analysis indicates that information exchange between 
+agents occupies an average bandwidth of 2.3 MB/hour, representing a 
+40 % reduction in communication load compared to centralized sys-
+tems, demonstrating the advantages of a distributed architecture. Multi- 
+agent collaboration performance evaluation results are shown in Table 5
+below.
+4.3. Self-evolutionary optimization mechanism validation analysis
+The core of the self-evolutionary optimization mechanism lies in 
+achieving autonomous optimization of maintenance strategies and 
+iterative updates of knowledge systems through continuous learning and 
+dynamic adaptation. The experiment designs an 18-month longitudinal 
+tracking study, focusing on evaluating the system’s adaptive capabilities 
+when facing environmental changes, equipment aging, and new fault 
+patterns. Results demonstrate that the self-evolutionary mechanism 
+significantly enhances the system’s long-term performance stability and 
+adaptability. In the initial experimental period, the system’s fault pre-
+diction accuracy was 89.2 %, improving to 94.7 % after 6 months of self- 
+learning and strategy optimization, and further advancing to 97.3 % at 
+the experiment’s conclusion. This continuous improvement trend fully 
+validates the effectiveness of the self-evolutionary mechanism, demon-
+strating that the system can continuously enhance its intelligence level 
+through experience accumulation.
+Coordination optimization of decision-making agents achieves dy-
+namic optimization allocation of maintenance resources through Q- 
+learning enhanced resource allocation strategies. When facing multi- 
+task concurrency and resource conflict scenarios, the collaborative 
+decision-making mechanism can generate Pareto-optimal resource 
+allocation schemes through game theory models and multi-objective 
+optimization algorithms. Experimental results show that in terms of 
+resource utilization, multi-agent collaboration achieves a 31 % 
+improvement over traditional centralized scheduling, and a 24 % 
+improvement in task completion timeliness. Particularly during high- 
+load operation periods, when multiple maintenance requirements 
+occur simultaneously, the collaborative mechanism can complete 
+rescheduling within an average of 4.2 min, ensuring priority execution 
+of critical tasks. Closed-loop control of execution feedback further en-
+sures maintenance quality by real-time monitoring of execution pro-
+cesses and result feedback, enabling the system to promptly detect and 
+correct execution deviations, achieving a maintenance task success rate 
+of 98.7 %. Long-term performance evolution of self-evolutionary opti-
+mization is shown in Table 6.
+Reinforcement learning-driven strategy optimization plays an 
+important role in improving maintenance decision quality. As intro-
+duced in Section 3.5.2, this study applied the Q-learning-based MARL 
+approach (Algorithm 3) to train the decision-making agents. For the 
+specific application on the boiler maintenance task, the MARL frame-
+work was configured as follows:
+State Space (S): The state was defined by a vector of discretized 
+sensor readings, including key indicators for flue gas temperature, steam 
+pressure, and water flow rate, representing the boiler’s operational 
+condition.
+Action Space (A): The agents’ collective action space consisted of a 
+set of predefined maintenance commands, such as ’No Action’, ’Adjust 
+Fuel-Air Ratio’, ’Schedule Soot Blowing’, and ’Initiate Emergency 
+Shutdown Procedure’.
+Reward Function (R): A composite reward function was engineered 
+to guide the learning process. It provided positive rewards for main-
+taining operation within optimal efficiency ranges and negative rewards 
+(penalties) for actions leading to safety threshold breaches, unplanned 
+downtime, or high operational costs.
+Through constructing the maintenance environment model based on 
+this Markov Decision Process framework, the system gradually opti-
+mized its maintenance strategies by balancing exploration and 
+Table 4 
+Performance comparison analysis of different maintenance approaches.
+Method 
+Type
+Fault 
+Identification 
+Accuracy (%)
+Knowledge 
+Update Time 
+(hours)
+Early 
+Warning 
+Lead Time 
+(hours)
+Cost Efficiency 
+Improvement 
+(%)
+Traditional 
+Expert 
+System
+82.6 48.0 24 -
+Machine 
+Learning 
+Method
+83.6 36.0 36 12.4
+Single-Agent 
+System
+91.2 12.0 48 18.7
+Proposed 
+Method
+97.3 2.3 72 31.2
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+114 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 16 ===
+exploitation. The experiment tracks the system’s learning process over 
+1000 maintenance cycles, discovering that strategy convergence speed 
+significantly accelerates with experience accumulation. In the first 100 
+cycles, the average strategy improvement magnitude per cycle was 
+2.3 %, while in the final 100 cycles, the improvement magnitude sta-
+bilized around 0.8 %, indicating that the system reached a relatively 
+mature strategy state. The reward function design comprehensively 
+considers maintenance costs, equipment availability, and safety risks, 
+enabling the system to find optimal solutions under multi-objective 
+constraints. Statistical analysis shows that optimized maintenance 
+strategies achieve a 22 % improvement in cost savings and a 15 % 
+improvement in equipment availability compared to initial strategies.
+The dynamic update mechanism of knowledge graphs provides 
+continuous knowledge accumulation and reasoning capability 
+enhancement for the system. Through automatically extracting new 
+knowledge generated during maintenance processes, including fault 
+patterns, maintenance experiences, and equipment characteristic 
+changes, the system can continuously enrich and improve its knowledge 
+system. During the experimental period, the knowledge graph’s entity 
+counts increased from an initial 8427–15,863, relationship count 
+increased from 12,546 to 28,991, representing a 138 % improvement in 
+knowledge density. New knowledge integration through semantic con-
+sistency verification and conflict resolution mechanisms ensures 
+knowledge base quality and consistency. When handling concept drift 
+problems, the dynamic update mechanism demonstrates excellent 
+adaptive capabilities. When equipment operational parameters undergo 
+systematic changes, the system can complete knowledge model recali-
+bration within an average of 5.8 days, achieving significant improve-
+ment compared to the 30-day adjustment cycle of static systems. Long- 
+term performance monitoring indicates that the self-evolutionary opti-
+mization mechanism enables the system to maintain stable performance 
+improvement trends during 18 months of operation, avoiding common 
+performance degradation problems in traditional systems, fully vali-
+dating the sustainability and practical value of the proposed method in 
+actual engineering applications.
+5. Conclusions
+This paper addresses the urgent need for intelligent, adaptive, and 
+self-evolving maintenance strategies for energy equipment operating 
+under complex and dynamic conditions. To tackle the limitations of 
+conventional digital twin-based maintenance (particularly their static 
+modeling and lack of cognitive autonomy), this paper proposes an 
+agentic digital twin-embedded maintenance methodology. This meth-
+odology is characterized by the integration of cognitive agents and DT- 
+based virtual-real co-evolution, enabling dynamic state-space modeling, 
+closed-loop reasoning, and adaptive decision-making. Experimental 
+validation on gas-steam boiler equipment demonstrates the effective-
+ness of the proposed methodology: achieving a 97.3 % accuracy rate in 
+diagnosing non-stationary faults, 20-fold improvement in knowledge 
+update responsiveness, 31.2 % enhancement in cost efficiency, and 
+comprehensive performance improvements, including 16.2 % increase 
+in overall collaborative effectiveness and 98.7 % maintenance task 
+success rate. The system demonstrates remarkable adaptability with 
+9.1 % continuous improvement in fault prediction accuracy over 18 
+months (from 89.2 % to 97.3 %) and an 80.7 % reduction in system 
+calibration time. These results substantiate the engineering value and 
+practical applicability of dynamic cognitive paradigms for intelligent 
+maintenance in energy systems.
+The broader significance of this research lies in its potential to 
+advance the field of industrial asset management by enabling autono-
+mous, interpretable, and real-time maintenance operations. The meth-
+odology supports enhanced system reliability, reduced operational 
+costs, and extended asset lifespans—outcomes that are critically 
+important for the sustainable development of next-generation power 
+systems in the context of Industry 4.0 and the Industrial Internet of 
+Things.
+Despite its demonstrated success, the methodology has certain lim-
+itations. First, the approach’s performance may be affected by the 
+availability and quality of multi-modal data streams, as well as by the 
+accuracy of the underlying digital twin models. Second, while the 
+agentic coordination mechanism has shown robustness in tested sce-
+narios, its scalability and generalization to highly heterogeneous or 
+cross-domain equipment fleets require further investigation. Finally, the 
+interpretability of hybrid symbolic-neural models, though improved, 
+still presents challenges in highly complex or ambiguous fault cases.
+Future research will focus on expanding the universality and scal-
+ability of the agentic digital twin paradigm, including: 1) Developing 
+more advanced data fusion and transfer learning techniques to handle 
+sparse or imbalanced datasets; 2) Enhancing the explainability of causal 
+reasoning models; 3) Integrating cross-domain knowledge for multi-type 
+equipment ecosystems; These efforts aim to further strengthen the au-
+tonomy, adaptability, and resilience of intelligent maintenance systems 
+for energy and other high-value industrial assets.
+CRediT authorship contribution statement
+Bao Jinsong: Writing – review & editing, Writing – original draft, 
+Methodology, Conceptualization. Wu Tao: Writing – review & editing, 
+Validation, Supervision, Resources, Methodology, Investigation, 
+Table 5 
+Multi-agent collaboration performance evaluation results.
+Agent 
+Type
+Single Agent Performance Collaborative Performance Improvement Magnitude Communication Overhead (MB/h) Response Time (min)
+Monitoring Agent 78.4 % 94.7 % + 20.8 % 1.2 1.5
+Diagnostic Agent 78.5 % 96.8 % + 23.3 % 2.8 7.0
+Decision-making Agent 82.3 % 91.7 % + 11.4 % 1.8 4.2
+Execution Agent 89.4 % 98.7 % + 10.4 % 0.5 2.3
+Overall Performance 82.2 % 95.5 % + 16.2 % 2.3 3.8
+Table 6 
+Long-term performance evolution of self-evolutionary optimization.
+Time 
+Point
+Fault Prediction Accuracy (%) Knowledge Entity Count Knowledge Relationship Count System Calibration Time (days) Overall Performance Index
+Initial State 89.2 8427 12,546 30.0 0.74
+6 months 94.7 12,654 21,332 12.3 0.86
+12 months 96.4 14,128 25,678 8.7 0.92
+18 months 97.3 15,863 28,991 5.8 0.97
+Improvement + 9.1 % + 88.2 % + 131 % -80.7 % + 31.1 %
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+115 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 17 ===
+Conceptualization. Wang Cong: Writing – review & editing, Writing – 
+original draft, Visualization, Validation, Software, Methodology, 
+Investigation.
+Declaration of Competing Interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgement
+This work was supported by the National Natural Science Foundation 
+of China [Grant No. 52475513], and the Municipal Natural Science 
+Foundation of Shanghai, China [Grant No. 21ZR1400800].
+References
+[1] An X, Si G, Xia T, Liu Q, Li Y, Miao R. Operation and maintenance optimization for 
+manufacturing systems with energy management. Energies 2022;15(19):7338. 
+https://doi.org/10.3390/en15197338.
+[2] Xia J, Zou G. Operation and maintenance optimization of offshore wind farms 
+based on digital twin: a review. Ocean Eng 2023;268:113322. https://doi.org/ 
+10.1016/j.oceaneng.2022.113322.
+[3] Zhang X, Zhang M, Hu Q. Research on the application of artificial intelligence in 
+operation and maintenance for power equipment. IOP Conference Series: Earth and 
+Environmental Science, 617. IOP Publishing; 2020, 012001. https://doi.org/ 
+10.1088/1755-1315/617/1/012001.
+[4] Li B, Deng Y, Li Z, Xu J, Wang H. Thermal-economy optimization for single/dual/ 
+triple-pressure HRSG of gas-steam combined cycle by multi-objective genetic 
+algorithm. Energy Convers Manag 2022;258:115471. https://doi.org/10.1016/j. 
+enconman.2022.115471.
+[5] Xiao B, Zhong J, Bao X, Ma R, Zhang J, Zhang Y. Digital twin-driven prognostics 
+and health management for industrial assets. Sci Rep 2024;14:13443. https://doi. 
+org/10.1038/s41598-024-63990-0.
+[6] Kalyani Y, Collier R. The role of multi-agents in digital twin implementation: short 
+survey. Article 72 ACM Comput Surv 2024;57(3). https://doi.org/10.1145/ 
+3697350.
+[7] Sun Y, Zhang Q, Bao J, Lu Y, Liu S. Empowering digital twins with large language 
+models for global temporal feature learning. J Manuf Syst 2024;74:83–99. https:// 
+doi.org/10.1016/j.jmsy.2024.02.015.
+[8] Molęda M, Małysiak-Mrozek B, Ding W, Sunderam V, Mrozek D. From corrective to 
+predictive maintenance—A review of maintenance approaches for the power 
+industry. Sensors 2023;23(13):5970. https://doi.org/10.3390/s23135970.
+[9] Li Q, Liu Y, Sun S, Qin Z, Chu F. Deep expert network: a unified method toward 
+knowledge-informed fault diagnosis via fully interpretable neuro-symbolic AI. 
+J Manuf Syst 2024;77:652–61. https://doi.org/10.1016/j.jmsy.2024.10.007.
+[10] Du J, Zhang C, Li S, Zhang L, Zhang W. Aging abnormality detection of lithium-ion 
+batteries combining feature engineering and deep learning. Energy 2024;297: 
+131276. https://doi.org/10.1016/j.energy.2024.131276.
+[11] Zhu Y, Dong Z, Cheng Z, Huang X, Dong Y, Zhang Z. Neural network extended 
+state-observer for energy system monitoring. Energy 2023;263(Part A):125736. 
+https://doi.org/10.1016/j.energy.2022.125736.
+[12] Wu Y, Liu F, Wan L, Wang Z. Intelligent fault diagnostic model for industrial 
+equipment based on multimodal knowledge graph. IEEE Sens J 2023;23(21): 
+26269–78. https://doi.org/10.1109/JSEN.2023.3316473.
+[13] Xia Y, Shenoy M, Jazdi N, Weyrich M. Towards autonomous system: flexible 
+modular production system enhanced with large language model agents. 
+Proceedings of the IEEE 28th International Conference on Emerging Technologies 
+and Factory Automation (ETFA). IEEE; 2023. p. 1–8. https://doi.org/10.1109/ 
+ETFA54631.2023.10275362.
+[14] Wang Z, Liu Z, Zhang Y, Chen Z, Zhang J, Wu L, et al. Rcagent: cloud root cause 
+analysis by autonomous agents with tool-augmented large language models. 2024. 
+p. 4966–74. https://doi.org/10.48550/arXiv.2310.16340. Proceedings of the 33rd 
+ACM International Conference on Information and Knowledge Management.
+[15] Yu G, Wang Y, Mao Z, Hu M, Sugumaran V, Wang YK. A digital twin-based decision 
+analysis framework for operation and maintenance of tunnels. Tunn Undergr Space 
+Technol 2021;116:104125. https://doi.org/10.1016/j.tust.2021.104125.
+[16] Li H, Zhang R, Zheng S, Li Y, Zhong D. Digital twin-driven intelligent operation and 
+maintenance platform for large-scale hydro-steel structures. Adv Eng Inform 2024; 
+62:102661. https://doi.org/10.1016/j.aei.2024.102661.
+[17] Wang X, Dong L, Rangasrinivasan S, Singh H, Chernova S. AutoMisty: a multi-agent 
+LLM framework for automated code generation in the Misty social robot. arXiv 
+2025. https://doi.org/10.48550/arXiv.2503.06791.
+[18] Shah D, Osi´nski B, Levine S, Ichter B. LM-Nav: robotic navigation with large pre- 
+trained models of language, vision, and action. arXiv preprint arXiv 2022:492–504. 
+https://doi.org/10.48550/arXiv.2207.04429.
+[19] Cao Y, Lee CS. Robot behavior-tree-based task generation with large language 
+models. arXiv 2023. https://doi.org/10.48550/arXiv.2302.12927.
+[20] Zhou B, Li X, Liu T, Xu K, Liu W, Bao J. CausalKGPT: industrial structure causal 
+knowledge-enhanced large language model for cause analysis of quality problems 
+in aerospace product manufacturing. Adv Eng Inform 2024;59:102333. https:// 
+doi.org/10.1016/j.aei.2023.102333.
+[21] Shi D, Liedl P, Bauernhansl T. Interoperable information modelling leveraging 
+asset administration shell and large language model for quality control toward zero 
+defect manufacturing. J Manuf Syst 2024;77:678–96. https://doi.org/10.1016/j. 
+jmsy.2024.10.011.
+[22] Colabianchi S, Costantino F, Sabetta N. Assessment of a large language model 
+based digital intelligent assistant in assembly manufacturing. Comput Ind 2024; 
+162:104129. https://doi.org/10.1016/j.compind.2024.104129.
+[23] Lin L, Zhang S, Fu S, Liu Y. FD-LLM: large language model for fault diagnosis of 
+complex equipment. Adv Eng Inform 2025;65(Part A):103208. https://doi.org/ 
+10.1016/j.aei.2025.103208.
+[24] Huang Y, Zhang J, Liu R, Zhao S. Improving accuracy and interpretability of CNN- 
+based fault diagnosis through an attention mechanism. Processes 2023;11(11): 
+3233. https://doi.org/10.3390/pr11113233.
+[25] Wen S, Li F, Zhuang W, Pan X, Yu W, Bao J, et al. Leveraging large language models 
+for Human-Machine collaborative troubleshooting of complex industrial 
+equipment faults. Adv Eng Inform 2025;65(Part B):103235. https://doi.org/ 
+10.1016/j.aei.2025.103235.
+[26] Li J, Ma W, Li X, Liu Y, Wu P, Sun Y, et al. CAD-Llama: leveraging large language 
+models for computer-aided design parametric 3D model generation. 2025. 
+p. 18563–73. https://doi.org/10.48550/arXiv.2505.04481. Proceedings of the 
+Computer Vision and Pattern Recognition Conference.
+[27] Xu W, Yang H, Ji Z, Ba M. Cognitive digital twin-enabled multi-robot collaborative 
+manufacturing: framework and approaches. Comput Ind Eng 2024;194:110418. 
+https://doi.org/10.1016/j.cie.2024.110418.
+[28] Xia Y, Dittler D, Jazdi N, Weyrich M. LLM experiments with simulation: large 
+language model multi-agent system for simulation model parametrization in digital 
+twins. Proceedings of the IEEE 29th International Conference on Emerging 
+Technologies and Factory Automation (ETFA). IEEE; 2024. p. 1–4. https://doi.org/ 
+10.48550/arXiv.2405.18092.
+[29] Xu S, Wei Y, Zheng P, Zhang J, Yu C. LLM enabled generative collaborative design 
+in a mixed reality environment. J Manuf Syst 2024;74:703–15. https://doi.org/ 
+10.1016/j.jmsy.2024.04.030.
+[30] Yu W, Lv J, Zhuang W, Pan X, Wen S, Bao J, et al. Rescheduling human-robot 
+collaboration tasks under dynamic disassembly scenarios: an MLLM-KG 
+collaboratively enabled approach. J Manuf Syst 2025;80:20–37. https://doi.org/ 
+10.1016/j.jmsy.2025.02.015.
+[31] Zhang B, Ding G, Zheng Q, Zhang K, Qin S. Iterative updating of digital twin for 
+equipment: progress, challenges, and trends. Adv Eng Inform 2024;62(Part B): 
+102773. https://doi.org/10.1016/j.aei.2024.102773.
+[32] Aivaliotis P, Arkouli Z, Georgoulias K, Makris S. Methodology for enabling 
+dynamic digital twins and virtual model evolution in industrial robotics - a 
+predictive maintenance application. Int J Comput Integr Manuf 2023;36(7): 
+947–65. https://doi.org/10.1080/0951192X.2022.2162591.
+[33] Nadim K, Ragab A, Ouali MS. Data-driven dynamic causality analysis of industrial 
+systems using interpretable machine learning and process mining. J Intell Manuf 
+2023;34:57–83. https://doi.org/10.1007/s10845-021-01903-y.
+[34] Salvador Palau A, Dhada MH, Parlikad AK. Multi-agent system architectures for 
+collaborative prognostics. J Intell Manuf 2019;30:2999–3013. https://doi.org/ 
+10.1007/s10845-019-01478-9.
+[35] Shao G., Frechette S., Srinivasan V. An analysis of the new ISO 23247 series of 
+standards on digital twin framework for manufacturing. Proceedings of the ASME 
+2023 18th International Manufacturing Science and Engineering Conference. 2023. 
+doi:10.1115/MSEC2023-101127.
+[36] Zhai W, Liao J, Chen Z, Su B, Zhao X. A survey of task planning with large language 
+models. Intell Comput 2025;4:0124. https://doi.org/10.34133/icomputing.0124.
+[37] Mosqueira-Rey E, Hern´andez-Pereira E, Alonso-Ríos D, Bobadilla J. Human-in-the- 
+loop machine learning: A state of the art. Artif Intell Rev 2023;56:3005–54. 
+https://doi.org/10.1007/s10462-022-10246-w.
+[38] Li J, Huang Z, Jiang L, Li C, Wang W. An intelligent fault diagnosis model for 
+bearings with adaptive hyperparameter tuning in multi-condition and limited 
+sample scenarios. Sci Rep 2025;15:10095. https://doi.org/10.1038/s41598-025- 
+92838-4.
+[39] Arulkumaran K, Deisenroth MP, Brundage M, Bharath AA. Deep reinforcement 
+learning: a brief survey. IEEE Signal Process Mag 2017;34(6):26–38. https://doi. 
+org/10.1109/MSP.2017.2743240.
+[40] Zhang Z, Dai Q, Bo X, Pan R, Chen L, Liu Z. A survey on the memory mechanism of 
+large language model based agents. ACM Trans Inf Syst 2025. https://doi.org/ 
+10.1145/3748302.
+[41] Hu K, Li M, Song Z, Xu K, Xia Q, Sun N, et al. A review of research on reinforcement 
+learning algorithms for multi-agents. Neurocomputing 2024;599:128068. https:// 
+doi.org/10.1016/j.neucom.2024.128068.
+W. Cong et al.                                                                                                                                                                                                                                   Journal of Manufacturing Systems 84 (2026) 100–116 
+116 
+Downloaded from https://iranpaper.ir

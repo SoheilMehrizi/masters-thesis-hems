@@ -1,0 +1,563 @@
+{
+  "id": "article-12",
+  "title": {
+    "en": "DT-BEMS: Digital twin-enabled building energy management system for information fusion and energy efficiency",
+    "fa": "DT-BEMS: مدیریت انرژی ساختمان با دوقلوی دیجیتال برای همجوشی اطلاعات و بهره‌وری"
+  },
+  "short_title": "Hwang / DT-BEMS",
+  "sections": [
+    {
+      "id": "questions",
+      "title": {
+        "en": "Problem, objective and hypotheses",
+        "fa": "مسئله، هدف و فرضیه"
+      },
+      "paragraphs": [
+        {
+          "en": "Hwang, Kim and Yoon integrate BEMS informatics, virtual behavioral models and Holistic Operational Signatures (HOS) to generate real-time energy-efficiency information. The objective is to infer operational states under limited heterogeneous data, not to validate an end-to-end corrective controller. No numbered hypothesis list is explicit.",
+          "fa": "هوانگ و همکاران اطلاعات BEMS، مدل رفتاری مجازی و امضای عملکرد HOS را برای اطلاعات بهره‌وری بلادرنگ ادغام می‌کنند. هدف استنتاج وضعیت عملکرد از داده ناهمگون محدود است و کنترل اصلاحی سرتاسری ارزیابی نمی‌شود. فرضیه شماره‌دار صریح نیست.",
+          "pages": [
+            1,
+            3,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Method and implementation",
+        "fa": "روش و پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "Brick/RDF ontology maps spaces, equipment and control points and is converted to TTL. Three virtual models are used: MLP missing-energy imputation, schedule+CO2 occupancy estimation, and Bayesian-MCMC gray-box PMV correction. The imputation MLP has64–64 hidden units, ReLU, batch32,200epochs,MSE/Adam and80/20train-validation ratio.",
+          "fa": "هستی‌شناسی Brick/RDF فضا، تجهیز و نقطه کنترل را به TTL نگاشت می‌کند. سه مدل مجازی شامل MLP جایگذاری انرژی، حضور مبتنی بر برنامه+CO2 و اصلاح PMV جعبه‌خاکستری با MCMC است. MLP دو لایه۶۴، ReLU، دسته۳۲،۲۰۰دوره، MSE/Adam و نسبت۸۰/۲۰ دارد.",
+          "pages": [
+            6,
+            7
+          ]
+        },
+        {
+          "en": "PMV binning uses absolute−.5/.5 comfort boundaries; GMM separates idle/operation and K-means subdivides operating energy/PV into low/middle/high. A rule-based HOS classifier combines occupancy, energy/PV and comfort into eight signatures. Imputation, occupancy averages and relative binning update every3days; PMV correction and classifier rules remain fixed. Dynamo integrates the workflow.",
+          "fa": "PMV با مرز مطلق−۰٫۵ و۰٫۵؛ GMM برای سکون/کار و K-means برای کم/میانه/زیاد انرژی/خورشید به کار می‌رود. قواعد HOS حضور، انرژی و آسایش را به هشت امضا تبدیل می‌کنند. جایگذاری، میانگین حضور و مرز نسبی هر۳روز اصلاح و PMV و قواعد ثابت می‌مانند. Dynamo گردش کار را ادغام می‌کند.",
+          "pages": [
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Data, experiments and comparisons",
+        "fa": "داده، آزمایش و مقایسه"
+      },
+      "paragraphs": [
+        {
+          "en": "The target is a second-floor office in a South Korean public-service building with two EHP units, ventilation and PV. One January month of BEMS data and three days of intrusive comfort measurements are used. Growing3-day datasets classify the full month and are compared with the full-month model; virtual-model ablations compare no correction, PMV correction, and occupancy correction. This is not an independent ground-truth fault diagnosis benchmark.",
+          "fa": "هدف دفتر طبقه دوم ساختمان خدمات عمومی کره با دو EHP، تهویه و خورشید است. یک ماه ژانویه و سه روز اندازه‌گیری مستقیم آسایش استفاده می‌شود. داده تجمعی۳روزه ماه کامل را طبقه‌بندی و با مدل ماه کامل مقایسه می‌کند؛ اصلاح PMV و حضور نیز حذف/افزوده می‌شوند. این معیار مستقل تشخیص خطا با حقیقت زمین نیست.",
+          "pages": [
+            5,
+            10,
+            13,
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Results and comparison interpretation",
+        "fa": "نتایج و تفسیر مقایسه"
+      },
+      "paragraphs": [
+        {
+          "en": "After12days, HOS classifications agree97.9% with the full-month classifications. The paper reports23.5% inappropriate operation and19.9% energy waste, mainly unoccupied heating. PMV correction changes values by maximum.348/mean.129;28.09%of initially comfortable data move outside comfort and11.21%of initially outside data move inside. Quadratic correction achieves MAE.0384 versus.0446constant,.0410linear,.0666cubic.",
+          "fa": "پس از۱۲روز، توافق طبقه‌بندی HOS با ماه کامل۹۷٫۹٪ است. عملکرد نامناسب۲۳٫۵٪ و اتلاف عمدتاً گرمایش بدون حضور۱۹٫۹٪ گزارش می‌شود. اصلاح PMV حداکثر۰٫۳۴۸ و میانگین۰٫۱۲۹ است؛۲۸٫۰۹٪از آسایش خارج و۱۱٫۲۱٪وارد آن می‌شوند. MAE اصلاح درجه۲ برابر۰٫۰۳۸۴ دربرابر ثابت۰٫۰۴۴۶، خطی۰٫۰۴۱۰ و مکعبی۰٫۰۶۶۶ است.",
+          "pages": [
+            7,
+            12,
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated requirements and limitations",
+        "fa": "نیازها و محدودیت نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Required inputs include at least12days of24-hour energy/generation and indoor temperature/humidity at finer-than-hourly resolution, CO2 and intrusive PMV measurements. Limitations: schedule/CO2 occupancy needs ground truth refinement; classifier is EHP-specific; only one winter month; no quantitative actual energy/cost savings assessment. Future integration with PIR/cameras, control/AI agents and MPC is proposed. Authors cannot share the data.",
+          "fa": "نیازها حداقل۱۲روز داده۲۴ساعته انرژی/تولید و دما/رطوبت با تفکیک ریزتر از ساعت، CO2 و سنجش مستقیم PMV است. محدودیت‌ها: نبود حقیقت حضور، قواعد ویژه EHP، یک ماه زمستان و نبود سنجش کمی صرفه‌جویی واقعی. PIR/دوربین، عامل کنترل و MPC پیشنهاد می‌شوند. داده قابل اشتراک نیست.",
+          "pages": [
+            16
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "Digital Twin-enabled BEMS concept",
+        "fa": "مفهوم BEMS با دوقلو"
+      },
+      "explanation": {
+        "en": "Connects BEMS informatics, virtual physical behavior models and efficiency information.",
+        "fa": "اطلاعات BEMS، مدل مجازی رفتار فیزیکی و اطلاعات بهره‌وری را متصل می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "HOS application process",
+        "fa": "فرایند کاربرد HOS"
+      },
+      "explanation": {
+        "en": "Virtual models precede data binning and the rule-based HOS classifier.",
+        "fa": "مدل مجازی پیش از دسته‌بندی داده و قواعد HOS قرار می‌گیرد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "caption": {
+        "en": "Target office and intrusive measurements",
+        "fa": "دفتر هدف و سنجش مستقیم"
+      },
+      "explanation": {
+        "en": "Shows actual measurement locations/equipment needed for virtual PMV correction.",
+        "fa": "مکان و تجهیزات اندازه‌گیری واقعی موردنیاز اصلاح PMV را نشان می‌دهد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "caption": {
+        "en": "BEMS ontology",
+        "fa": "هستی‌شناسی BEMS"
+      },
+      "explanation": {
+        "en": "Brick/RDF relates rooms, sensors, HVAC equipment and measured points.",
+        "fa": "Brick/RDF اتاق، حسگر، HVAC و نقطه اندازه‌گیری را مرتبط می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 7,
+      "caption": {
+        "en": "Occupancy model",
+        "fa": "مدل حضور"
+      },
+      "explanation": {
+        "en": "Schedule initializes occupancy; CO2 magnitude/trend revises it.",
+        "fa": "برنامه حضور اولیه را می‌سازد؛ اندازه و روند CO2 آن را اصلاح می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 8,
+      "caption": {
+        "en": "PMV correction functions",
+        "fa": "توابع اصلاح PMV"
+      },
+      "explanation": {
+        "en": "Compares constant, linear, quadratic and cubic calibration against intrusive PMV. Table4 gives MAEs .0446/.0410/.0384/.0666.",
+        "fa": "اصلاح ثابت، خطی، درجه۲ و۳ را با PMV مستقیم مقایسه می‌کند. MAEها۰٫۰۴۴۶/۰٫۰۴۱۰/۰٫۰۳۸۴/۰٫۰۶۶۶ هستند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "7",
+      "page": 8,
+      "caption": {
+        "en": "Clustering-based boundaries",
+        "fa": "مرزهای مبتنی بر خوشه‌بندی"
+      },
+      "explanation": {
+        "en": "GMM separates idle and operation; K-means divides operation into low/middle/high.",
+        "fa": "GMM سکون/کار و K-means کم/میانه/زیاد را جدا می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "8",
+      "page": 9,
+      "caption": {
+        "en": "HOS classifier",
+        "fa": "طبقه‌بند HOS"
+      },
+      "explanation": {
+        "en": "Decision flow combines operation, occupancy, generation and comfort into8signatures.",
+        "fa": "گردش تصمیم کارکرد، حضور، تولید و آسایش را به۸امضا تبدیل می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 10,
+      "caption": {
+        "en": "Growing datasets",
+        "fa": "داده تجمعی"
+      },
+      "explanation": {
+        "en": "Three-day accumulation schedules model/bin-boundary refresh; the classifier itself remains fixed.",
+        "fa": "تجمع۳روزه تازه‌سازی مدل و مرز را زمان‌بندی می‌کند؛ خود طبقه‌بند ثابت است."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "10",
+      "page": 10,
+      "caption": {
+        "en": "Dynamo implementation",
+        "fa": "پیاده‌سازی Dynamo"
+      },
+      "explanation": {
+        "en": "Shows the real-time data-to-signature workflow and daily visualizations.",
+        "fa": "گردش داده بلادرنگ به امضا و نمایش روزانه را نشان می‌دهد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "11",
+      "page": 11,
+      "caption": {
+        "en": "Energy imputation accuracy",
+        "fa": "دقت جایگذاری انرژی"
+      },
+      "explanation": {
+        "en": "R² improves with accumulation: unit1 .792→.885; unit2 reaches.973. Curves are test-set prediction results.",
+        "fa": "R²با تجمع افزایش می‌یابد: واحد۱از۰٫۷۹۲به۰٫۸۸۵ و واحد۲به۰٫۹۷۳می‌رسد. منحنی‌ها نتیجه پیش‌بینی آزمون‌اند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "12",
+      "page": 11,
+      "caption": {
+        "en": "CO2 and occupancy results",
+        "fa": "نتایج CO2 و حضور"
+      },
+      "explanation": {
+        "en": "Tracks changing CO2 means and occupancy relabeling; text reports occupied→unoccupied reaching31.6%.",
+        "fa": "تغییر میانگین CO2 و برچسب حضور را نشان می‌دهد؛ تبدیل حضور به عدم حضور۳۱٫۶٪گزارش شده است."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "13",
+      "page": 12,
+      "caption": {
+        "en": "PMV before/after correction",
+        "fa": "PMV پیش/پس اصلاح"
+      },
+      "explanation": {
+        "en": "Maximum correction.348, mean.129;28.09%move outside and11.21%inside comfort. These are model-driven relabelings.",
+        "fa": "اصلاح حداکثر۰٫۳۴۸، میانگین۰٫۱۲۹؛۲۸٫۰۹٪از آسایش خارج و۱۱٫۲۱٪وارد می‌شوند؛ این تغییر برچسب مدل است."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "14",
+      "page": 12,
+      "caption": {
+        "en": "Relative energy/PV binning",
+        "fa": "دسته‌بندی نسبی انرژی/خورشید"
+      },
+      "explanation": {
+        "en": "Heatmaps compare boundaries fitted to3days,15days and full month; the same measured month is categorized differently.",
+        "fa": "نقشه‌ها مرزهای۳روز،۱۵روز و ماه کامل را مقایسه می‌کنند؛ همان ماه برچسب متفاوت می‌گیرد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "15",
+      "page": 13,
+      "caption": {
+        "en": "Absolute PMV binning",
+        "fa": "دسته‌بندی مطلق PMV"
+      },
+      "explanation": {
+        "en": "Comfort±.5 defines cold/comfortable/hot bins; these boundaries do not drift with sample size.",
+        "fa": "آسایش±۰٫۵ دسته سرد/آسوده/گرم را می‌سازد و مرز با اندازه نمونه تغییر نمی‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "16",
+      "page": 13,
+      "caption": {
+        "en": "Agreement with full-month classification",
+        "fa": "توافق با طبقه‌بندی ماه کامل"
+      },
+      "explanation": {
+        "en": "12days gives97.9%agreement with the full-month reference; this is not independent ground-truth accuracy.",
+        "fa": "۱۲روز توافق۹۷٫۹٪با مرجع ماه کامل می‌دهد؛ دقت مستقل با حقیقت زمین نیست."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "17",
+      "page": 14,
+      "caption": {
+        "en": "Signature distributions over accumulating data",
+        "fa": "توزیع امضا با تجمع داده"
+      },
+      "explanation": {
+        "en": "Shows proportions changing with successive3-day models; final inappropriate operation23.5%,energy waste19.9%.",
+        "fa": "سهم امضا با مدل‌های۳روزه تغییر می‌کند؛ نهایی۲۳٫۵٪نامناسب و۱۹٫۹٪اتلاف است."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "18",
+      "page": 14,
+      "caption": {
+        "en": "Operational signature heatmaps",
+        "fa": "نقشه حرارتی امضای عملکرد"
+      },
+      "explanation": {
+        "en": "Locates energy waste at unoccupied periods, including heating on January10–12 in the paper’s discussion.",
+        "fa": "اتلاف بدون حضور، ازجمله گرمایش۱۰تا۱۲ژانویه را مطابق بحث مقاله مکانیابی می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "19",
+      "page": 15,
+      "caption": {
+        "en": "Virtual-model ablation",
+        "fa": "حذف مدل مجازی"
+      },
+      "explanation": {
+        "en": "Compares uncorrected signatures, PMV correction and occupancy update; occupancy raises detected energy waste by4.5percentage points.",
+        "fa": "امضای اصلاح‌نشده، اصلاح PMV و حضور را مقایسه می‌کند؛ مدل حضور اتلاف تشخیص‌داده‌شده را۴٫۵واحددرصد افزایش می‌دهد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 5,
+      "title": {
+        "en": "Target building",
+        "fa": "ساختمان هدف"
+      },
+      "summary": {
+        "en": "Office on2F,Gyeongbuk;2packaged EHPs,ventilation,PV.",
+        "fa": "دفتر طبقه۲در Gyeongbuk؛دو EHP،تهویه و خورشید."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "title": {
+        "en": "MLP imputation settings",
+        "fa": "تنظیم MLP"
+      },
+      "summary": {
+        "en": "64–64ReLU,batch32,200epochs,Adam/MSE,80/20split.",
+        "fa": "۶۴–۶۴ReLU،دسته۳۲،۲۰۰دوره،Adam/MSE و۸۰/۲۰."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "title": {
+        "en": "PMV assumptions",
+        "fa": "فرض‌های PMV"
+      },
+      "summary": {
+        "en": "MET1,Clo1,MRT=air temperature,velocity.1m/s.",
+        "fa": "MET۱،Clo۱،MRTبرابر دمای هوا و سرعت۰٫۱متر/ثانیه."
+      }
+    },
+    {
+      "id": "4",
+      "page": 7,
+      "title": {
+        "en": "Correction MAE",
+        "fa": "MAEاصلاح"
+      },
+      "summary": {
+        "en": "Quadratic.0384best among four tested forms.",
+        "fa": "درجه۲با۰٫۰۳۸۴بهترین ازچهارفرم آزموده."
+      }
+    },
+    {
+      "id": "5",
+      "page": 8,
+      "title": {
+        "en": "Correction parameters",
+        "fa": "پارامترهای اصلاح"
+      },
+      "summary": {
+        "en": "Median c=.1383,b=.1054,a=.0406 used in quadratic correction.",
+        "fa": "میانه c=۰٫۱۳۸۳،b=۰٫۱۰۵۴،a=۰٫۰۴۰۶در اصلاح درجه۲استفاده شده."
+      }
+    },
+    {
+      "id": "6",
+      "page": 9,
+      "title": {
+        "en": "Eight HOS signatures",
+        "fa": "هشت امضای HOS"
+      },
+      "summary": {
+        "en": "Idle,surplus,waste,uncomfortable,increase,proper,reduce,inefficient.",
+        "fa": "سکون،مازاد،اتلاف،ناراحتی،افزایش،مناسب،کاهش،ناکارا."
+      }
+    },
+    {
+      "id": "7",
+      "page": 10,
+      "title": {
+        "en": "Update policy",
+        "fa": "سیاست به‌روزرسانی"
+      },
+      "summary": {
+        "en": "Imputation/occupancy/binning update;PMV/classifier remain fixed.",
+        "fa": "جایگذاری/حضور/دسته‌بندی اصلاح می‌شوند؛PMV/طبقه‌بند ثابت‌اند."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Directly supports evidence services, missing data, occupancy ambiguity and model synchronization in our dual-Twin design.",
+      "fa": "مستقیماً لایه شاهد، داده گمشده، ابهام حضور و همگام‌سازی دو دوقلو را پشتیبانی می‌کند.",
+      "pages": [
+        6,
+        10
+      ]
+    },
+    "contribution": {
+      "en": "Offers ontology-based data mapping, virtual-sensor correction and interpretable operational signatures; it also documents limits of classification without closed-loop savings validation.",
+      "fa": "نگاشت هستی‌شناسی، اصلاح حسگر مجازی و امضای قابل‌تفسیر می‌دهد و محدودیت طبقه‌بندی بدون اعتبارسنجی صرفه‌جویی را نشان می‌دهد.",
+      "pages": [
+        6,
+        16
+      ]
+    },
+    "employment": {
+      "en": "Use data provenance/ontology ideas and compare rule-based signature diagnosis with causal diagnosis where telemetry permits. Avoid assuming CO2/intrusive PMV channels exist in Alameda.",
+      "fa": "منشأ/هستی‌شناسی و امضای قاعده‌محور در صورت وجود تله‌متری با تشخیص علّی مقایسه شوند؛ CO2 و PMV مستقیم در Alameda مفروض نشوند.",
+      "pages": [
+        6,
+        7,
+        16
+      ]
+    },
+    "baseline": {
+      "en": "Conditional inspired rule-based diagnostic comparator, not a full mandatory reproduction. Its HOS labels and finer-than-hourly sensing differ from our five cause families and hourly benchmark.",
+      "fa": "مقایسه تشخیص قاعده‌محور الهام‌گرفته و مشروط است؛ بازتولید کامل الزامی نیست. برچسب HOS و حسگری ریزتر از ساعت با پنج علت و معیار ساعتی ما فرق دارند.",
+      "pages": [
+        9,
+        16
+      ]
+    }
+  },
+  "bibliography_start_page": 16,
+  "critical": [
+    {
+      "en": "Reviewer observation:97.9%is self-consistency against a full-month identification, not independently labeled diagnostic accuracy. Recommended shutdowns or future MPC are not measured interventions demonstrating recovery.",
+      "fa": "ملاحظه مرورگر:۹۷٫۹٪سازگاری با طبقه‌بندی ماه کامل است، نه دقت برچسب‌گذاری مستقل. توصیه خاموشی یا MPC آینده مداخله اندازه‌گیری‌شده بازیابی نیست.",
+      "pages": [
+        13,
+        16
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "12days yield97.9%agreement;23.5%inappropriate states;19.9%unoccupied energy waste.",
+      "fa": "۱۲روز با توافق۹۷٫۹٪؛۲۳٫۵٪وضعیت نامناسب؛۱۹٫۹٪اتلاف بدون حضور.",
+      "pages": [
+        13,
+        14,
+        16
+      ]
+    }
+  ],
+  "coverage_notes": {
+    "en": "Main article and its embedded figures/tables reviewed. Original pages retain full equations and tables. Bibliography is source transcription; cited works were not independently reviewed.",
+    "fa": "متن اصلی و شکل‌ها و جدول‌های درون آن بررسی شده‌اند. معادلات و جدول‌های کامل در صفحات اصلی حفظ شده‌اند. کتاب‌نامه استخراج منبع است و آثار ارجاع‌شده مستقلاً مرور نشده‌اند."
+  }
+}

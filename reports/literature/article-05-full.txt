@@ -1,0 +1,1053 @@
+=== PDF PAGE 1 ===
+Agentic fault detection and diagnosis for building HVAC systems using AI 
+agent, ontology, and diagnosis rules
+Jiteng Li a
+ , Jabeom Koo b, Jeyoon Lee b, Peng Wang c, Tianyi Zhao c, Sungmin Yoon b,d,*
+a College of Engineering for Built Environment Research Center, Sungkyunkwan University, Suwon 16419, South Korea
+b BIST Lab, Department of Global Smart City, Sungkyunkwan University, Suwon, 16419, South Korea
+c School of Civil Engineering, Dalian University of Technology, Dalian, China
+d School of Civil Architectural Engineering and Landscape Architecture, Sungkyunkwan University, Suwon, 16419, South Korea
+ARTICLE INFO
+Keywords:
+Agentic fault detection and diagnosis
+Building energy system
+Ontology
+Generalized diagnosis rules
+AI agent
+ABSTRACTS
+Intelligent detection and diagnosis methods have shown great potential in identifying faults of building energy 
+systems. However, practical applications remain limited due to its reliance on prompt engineering, the developed 
+models, and a lack of interpretability. To address these challenges, this study develops an agentic fault detection 
+and diagnosis (AFDD) framework that integrates the AI agent, ontology, and generalized diagnosis rules. The 
+ontology can describe the knowledge of buildings and control logic. The generalized diagnosis rules can diagnose 
+the fault of the actuator, sensor, load, plant in other control loops, and setpoint. And the AI agent combined with 
+ontology and diagnosis rules generates interpretable diagnosis reports and suggestions. The AFDD framework is 
+validated on a real-world heating, ventilation, and air conditioning (HVAC) system. The result shows that the 
+framework achieves information extraction for building energy system and supply air temperature control loop 
+and realizes ontology extension for the supply chilled water temperature. All faults for the supply air sensor, 
+temperature control valve, cooling capacity, supply chilled water temperature and unreasonable setpoint can be 
+automatically diagnosed without misjudgment using data form one hour, one day, to one week. The diagnosis 
+report including the fault number, breakdown, and detailed analysis and operation and maintenance suggestions 
+are generated. In summary, the AFDD framework enhances automation, interpretability, and decision-making for 
+building energy systems. It provides a new perspective for the next-generation intelligent diagnosis method.
+1. Introduction
+As one of the most resource-intensive sectors, the building industry is 
+responsible for approximately 40 % of global primary energy con-
+sumption and over 30 % of total carbon emissions. This offers consid-
+erable potential for energy conservation and carbon reduction [1,2]. 
+Building energy systems are an essential part of large public buildings, 
+which consume significant energy [3,4]. In recent years, the rapid 
+advancement of sensor, communication, computing, and control tech-
+nologies has positioned automatic control as one of the effective stra-
+tegies for optimizing energy efficiency [5]. Through the real-time 
+monitoring and intelligent adjustment of operational parameters, 
+automatic control systems can decrease energy consumption while 
+increasing indoor environmental comfort [6]. At present, widely 
+implemented automatic control strategies encompass open-loop control 
+[7], closed-loop control [8], proportional–integral–derivative (PID) 
+control [9], and model predictive control [10,11]. Automatic control 
+enhances system stability and responsiveness compared to traditional 
+manual operation or simple time-based scheduling. It facilitates dy-
+namic optimization in response to fluctuating loads, changing climatic 
+conditions, and varying user demands, further advancing overall energy 
+performance.
+However, the practical implementation of automatic control strate-
+gies continues to face several challenges, including sensor failures, 
+actuator stuck, higher load, unreasonable setpoint, and negative influ-
+ence from other control loops [12–14]. For instance, Li et al. [15] 
+discovered that adjusting the temperature control valve resulted in the 
+control fault when the error of the supply air temperature was +2 ◦C, at 
+which the control loop of the PID reached a stable time lag exceeding 
+20.6 % . Similarly, Verhelst et al. [16] reported that faults in tempera-
+ture sensors may induce economic losses in control performance ranging 
+from 7 % to 1000 %. Consequently, fault detection and diagnosis (FDD) 
+for control loops has become increasingly important in building energy 
+* Corresponding author.
+E-mail address: S.Yoon@skku.edu (S. Yoon). 
+Contents lists available at ScienceDirect
+Building and Environment
+journal homepage: www.elsevier.com/locate/buildenv
+https://doi.org/10.1016/j.buildenv.2025.114104
+Received 5 October 2025; Received in revised form 12 November 2025; Accepted 2 December 2025  
+Building and Environment 289 (2026) 114104 
+Available online 3 December 2025 
+0360-1323/© 2025 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 2 ===
+systems [17–19]. By monitoring and analyzing operational conditions, 
+FDD facilitates the timely identification and localization of potential 
+faults. This prevents abnormal increases in energy consumption and 
+enhances system stability.
+Many researchers have proposed different FDD approaches for 
+building energy systems and control loops to facilitate automatic fault 
+identification, isolation, and maintenance. The FDD approaches can be 
+classified into three categories: model-based approaches [20,21], 
+data-driven approaches [22,23], and knowledge-based approaches [24,
+25]. Model-driven approaches are used to develop mathematical models 
+that characterize the system’s behavior. Based on these models, residual 
+sequences are generated and analyzed against predetermined thresholds 
+to identify fault conditions. The effectiveness of this approach is closely 
+tied to the accuracy of the system model, necessitating a certain level of 
+domain expertise for practical implementation. With the development of 
+the big data technology, data-driven approaches have attracted more 
+and more attention. Data-driven approaches rely on many operational 
+data and employ data mining techniques to analyze system performance 
+for fault diagnosis, including principal component analysis, support 
+vector machines, neural networks, and deep learning. While data-driven 
+approaches provide significant advantages in terms of detection and 
+ease of implementation, their performance is largely dependent on the 
+accuracy and quality of data collected from system sensors and equip-
+ment. Moreover, knowledge-driven approaches leverage causal models, 
+detailed system descriptions, or expert knowledge to construct diagnosis 
+rules for fault detection. These approaches do not depend on the quality 
+of measurement and can be highly effective; however, they often require 
+a substantial accumulation of expert knowledge, which can be both 
+time-consuming and labor-intensive.
+Recently, with the ongoing refinement of intelligent building oper-
+ation and maintenance standards by international organizations such as 
+ASHRAE, alongside the adoption of cutting-edge technologies, an arti-
+ficial intelligence (AI) agent driven FDD approach has provided new 
+ways for intelligent diagnostics and adaptive operation of various sys-
+tems [26–28]. The AI agent is powered by large language models (LLMs) 
+such as Generative Pre-trained Transformer (GPT) by OpenAI and 
+Gemini by Google [29]. It has demonstrated the ability to comprehend 
+complex concepts, engage in sophisticated reasoning, and integrate in-
+formation across multiple domains [30–32]. LLMs in the fault diagnosis 
+industry possess domain knowledge like domain experts, enabling them 
+to diagnose faults and anomalies based on users’ prompts and analyze 
+data like domain experts [33]. For example, Lannger et al. [34] utilized 
+the sequential processing capabilities of LLMs to handle time-series data 
+from HVAC systems. And the models were further fine-tuned using many 
+labeled input data to achieve binary or multiclass fault classification. 
+Zhang et al. [35] applied GPT to diagnose common faults in AHUs, 
+chillers, and variable refrigerant flow air conditioners. They could 
+provide interpretable texts explaining the reason behind their diagnosis 
+results. To further enhance diagnosis accuracy, Zhang et al. [36] 
+designed a self-correction strategy for LLMs that automatically generates 
+an optimized training dataset based on labeled data to improve the 
+LLM’s performance. Additionally, a data augmentation method was 
+proposed to adapt and optimize the training dataset, enabling iterative 
+development of high-performance LLMs. Moreover, Li et al. [28] diag-
+nosed the fault of the virtual model of return temperature of chilled 
+water in building digital twins based on 10 consecutive residuals greater 
+than the threshold.
+These approaches have propelled the progress and advancement of 
+FDD. However, when applied to real-world building energy systems, 
+several limitations need to be considered: 
+(1) Existing FDD approaches relied on user prompt to provide 
+building information and control logic, which increased the time 
+and cost required for system deployment and development.
+(2) System-specific knowledge or black-box models were employed 
+to achieve FDD for the sensor or equipment. However, the control 
+loop including the sensor, actuator, load, setpoint, and plant was 
+neglected, which reduces the performance of operation and 
+maintenance.
+(3) Previous FDD methods focused on diagnosis effect using various 
+evaluation indexes, decision-making processes behind responses 
+were not interpretable.
+Hence, this study develops an agentic fault detection and diagnosis 
+(AFDD) framework that combines the ontology, generalized FDD rules, 
+and the AI agent, achieving advancements in automated cross-scenario 
+generalizability, result interpretability, and practical decision support 
+capability. This work presents a novel solution for efficiently operating 
+and maintaining building energy systems and promoting energy con-
+servation and carbon reduction. Moreover, the effectiveness of the AFDD 
+framework in the real building energy system has been further validated 
+through the discussion of the running time and field experiments.
+The main contributions of this study are as follows: 
+(1) Ontology is developed by leveraging the Brick schema and its 
+extensions for control logic to describe the knowledge of building 
+energy systems and control loops to reduce the required time and 
+cost for providing this information.
+(2) Generalized FDD rules are proposed based on by incorporating 
+operational and maintenance experience, design instructions, 
+expert knowledge, and historical data to diagnose the sensor, 
+actuator, load, setpoint, and plant in real building energy systems 
+with high accuracy and applicability, which achieves manage-
+ment of key equipment and points.
+Nomenclature
+Symbols
+DP differential pressure (kPa or Pa)
+M flow rate (m3/h)
+RD return air
+RH relative humidity ( %)
+SD supply air
+T temperature ( ◦C)
+W cooling capacity (kW)
+Y variable
+Subscripts
+CO2 carbon dioxide (ppm)
+mea measurement
+set setpoint
+thr threshold
+vir virtual model
+Abbreviations
+AFDD agentic fault detection and diagnosis
+AHU air handling unit
+AI artificial intelligence
+FDD fault detection and diagnosis
+GPT generative pre-trained transformers
+HVAC heating, ventilation, and air conditioning
+LLMs large language models
+MLP multilayer perceptron
+PID proportional–integral–derivative
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+2 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 3 ===
+(3) AI agent is used to automatically generate the interpretable 
+diagnosis report from fault detection to diagnosis finally to 
+decision-making, which reduces the requirement for specialized 
+domain knowledge among operation and maintenance personnel.
+The rest of the paper is organized as follows. Section 2 presents the 
+methodology and framework of the AFDD. Section 3 provides a detailed 
+description of its application to the target building energy systems and 
+control loops. Section 4 presents the results and discussion for the AFDD.
+2. Agentic fault detection and diagnosis
+2.1. Framework and composition
+The agentic fault detection and diagnosis (AFDD) framework is 
+developed by integrating the ontology, generalized diagnostic rules, and 
+an AI agent to enable interpretable and automated diagnosis for building 
+energy systems. As illustrated in Fig. 1, the AFDD framework adopts a 
+multi-component collaborative architecture, comprising six key com-
+ponents: expert, user, AI agent, ontology, database, and FDD tool.
+Expert: Experts contribute domain knowledge and engineering 
+experience to the AI agent through knowledge engineering to avoid 
+hallucinations. Knowledge engineering is defined as the process of 
+providing information and domain knowledge to support understanding 
+of the context in which fault detection and diagnosis are performed and 
+analyzed, ultimately optimizing prompt engineering for more accurate 
+and intelligent system reasoning. The knowledge engineering includes 
+the expert instructions and tool explanations [37]. The expert in-
+structions can enrich the AI agent with system knowledge beyond its 
+pre-trained data, such as role descriptions, result analysis, and virtual-
+ization. It can be input to the AI agent using textual form. The tool ex-
+planations are the description of the FDD tool, encompassing the 
+purposes, rules, performance evaluation, etc. It is expressed through 
+Python scripts and texts, which effectively help prevent AI agents from 
+generating erroneous outputs.
+User: Users initiate queries and requests based on operational needs 
+and receive diagnosis results and services. They can also provide feed-
+back, which is relayed to experts for further system refinement. This 
+mechanism helps to reduce operational errors and supports more precise 
+detection and diagnosis.
+Ontology: The ontology provides a unified, structured, and semantic 
+representation of building system metadata and control logic. It supplies 
+system information to support the AI agent and FDD tool, enabling 
+automated and interpretable diagnosis.
+Database: The database contains data of building energy system, 
+including historical data and real-time data. Historical data can realize 
+the development of virtual model and lay the foundation for the reali-
+zation of the FDD tool. During implementation, real-time data can be 
+Fig. 1. Framework and composition of the AFDD.
+Fig. 2. Ontology for building energy systems and control logic.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+3 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 4 ===
+imported into AI agent to realize fault diagnosis.
+FDD tool: The FDD tool applies codes, data, information, and rule- 
+based reasoning to automate fault detection and diagnosis of sensors, 
+actuators, loads, plants, and setpoints. It is formulated using both expert 
+input and ontology-driven knowledge.
+AI agent: The AI agent serves as the core of the system, orchestrating 
+the execution of the FDD tool and interfacing with the ontology. It ex-
+tracts and extends ontology information, executes the FDD tool, and 
+delivers interpretable results to users.
+Well-defined information flows between these components ensure 
+the integration of data, domain knowledge, diagnosis rules, and opera-
+tional feedback, thereby establishing an intelligent, adaptive, and scal-
+able AFDD.
+2.2. Ontology
+Serving as the backbone of building energy systems, the ontology 
+enables unified, machine-interpretable modeling of equipment, points, 
+locations, and control logic across multiple subsystems, such as heating, 
+ventilation, and air conditioning (HVAC), lighting, and beyond. 
+Ontology is developed by leveraging the Brick schema and its extensions 
+for control logic [38], as illustrated in Fig. 2.
+At its core, the Brick schema defines three primary object classes: 
+equipment, point, and location. These three classes are interconnected 
+through standardized relationships, including "isPointOf", "isLocatedIn", 
+and "feeds" [39,40]. For example, a point (such as a temperature sensor) 
+can be linked to a specific equipment or location using "isPointOf". A 
+clear semantic connection is established between the physical asset and 
+its associated data point. Table 1 provides a comprehensive summary of 
+Table 1 
+Relationships in the ontology.
+Relationship Definition Domain Range
+isLocatedIn The subject location encapsulates equipment or points Location Equipment/Point
+isPartOf The subject equipment/location has some part point/equipment/location Equipment/Location Point/Equipment/Location
+isPointOf The subject equipment/location is measured by point Equipment/Location Point
+feeds The subject location/equipment is connected to the equipment Location/Equipment Equipment
+isInputOf The subject sensor/setpoint is the input variable for the controller Sensor/Setpoint Controller
+adjusts The subject controller adjusts the actuator Controller Actuator
+control The subject actuator controls the plant Actuator Plant
+hasPart The subject plant has some components for the sensor Plant Sensor
+feeds The subject sensor is connected to the setpoint Sensor Setpoint
+hasPoint The subject setpoint/sensor/actuator is the measurement for the point Setpoint/Sensor/Actuator Point
+contains The subject equipment contains the plant Equipment Plant
+Fig. 3. Pseudocode for generalized FDD rules.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+4 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 5 ===
+these relationships.
+To support advanced applications of the AFDD, the ontology is 
+further extended to control logic and loop structure in detail [41]. This 
+extension introduces additional entities: setpoint, controller, actuator, 
+plant, and sensor. They are connected through control-oriented re-
+lationships such as "isInputOf", "adjusts", and "controls". All control loop 
+elements are instantiated as entities within the Brick schema, and their 
+interconnections are represented topologically through relationships 
+like "contains" and "hasPoint".
+The AFDD can achieve consistent and extensible semantic modeling 
+for diverse building systems and control scenarios by unifying equip-
+ment, points, locations, and control logic in the ontology framework. 
+This provides a robust logical foundation, enabling the AI agent to 
+automatically extract, extend, and interpret system information, and 
+deliver accurate and interpretable diagnosis results. The ontology’s 
+structured representation enhances the scalability and adaptability of 
+the AFDD in the face of evolving building configurations and operational 
+requirements.
+Fig. 4. Schematic diagram and control principle for the target HVAC system.
+Table 2 
+Specifications of the main equipment and sensors.
+Name Model Quantity Specification
+Water source heat pump WPWE080 1 Rated power: 4.8 kW; Cooling capacity: 19 kW; Heating capacity: 29.5 kW
+Chilled water pump 2HMS3T 2 Rated power: 0.3 kW; Flow rate: 1.2 m3/h–4.2 m3/h
+Cooling water pump MHI402 2 Rated power: 0.55 kW; Flow rate: 1.0 m3/h–5.0 m3/h
+Cooling tower LBCM-5 1 Rated power: 0.2 kW; Rated flow: 0.389 m3/h
+Air handling unit KDC050E-30R4 1 Rated power: 1.1 kW; Rated airflow: 5000 m3/h
+VAV terminal VCWT05 6 Flow rate: 68 m3/h–595 m3/h
+Water side temperature PT100 4 Accuracy: ±0.04 ◦C
+Flow rate YF-E-40-C 2 0–10 m3/h; Accuracy: ±0.5 %FS
+Differential pressure of the pump QBE3100–6 2 0–600 kPa; Accuracy: ±0.5 %FS
+Temperature and humidity QFM3171 4   40 ◦C–70 ◦C; 0–100 %; Accuracy: ±3 %RH; ±0.3 ◦C
+Differential pressure QBM3120–3 7 0–300 Pa; Accuracy: ±0.25 %FS
+Carbon dioxide QPM2100 2 0–2000 ppm; Accuracy: ±30 ppm
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+5 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 6 ===
+2.3. Generalized diagnosis rules
+Generalized FDD rules are developed by incorporating operational 
+and maintenance experience, system configuration, and historical data 
+to diagnose the actuator, sensor, load, plant in other control loops, and 
+setpoint. During diagnosis, it evaluates whether the control objective is 
+satisfied by analyzing the difference between setpoints and measure-
+ments. If a difference greater than the threshold is detected, a sequential, 
+rule-based diagnostic process is initiated for each control loop compo-
+nent including the sensor, actuator, load, plant in other control loops, 
+and setpoint, as shown in Fig. 3. 
+• Fault A: Sensor fault in the target control loop
+When the difference between the actual measurement and the set-
+point exceeds the threshold, the AFDD further evaluates the difference 
+between the measurement and the virtual model output. If this 
+difference exceeds the predefined threshold, the sensor fault is identi-
+fied; otherwise, the sensor is considered normal. Note that virtual model 
+output is obtained using data-driven methods, with inputs such as 
+equipment power consumption, frequency, or control signals. They are 
+assumed to be fault-free during operation. Additionally, if the sensor 
+measurement can be guaranteed to be fault-free, it may also be used as 
+an input. 
+• Fault B: Actuator fault in the target control loop
+If the sensor fault is excluded, the AFDD further analyzes changes in 
+actuator output such as valve position, damper position, frequency. If 
+the actual value between the maximum and minimum threshold and the 
+actuator response is abnormal (e.g., response is not timely), an actuator 
+fault is determined; otherwise, the actuator is considered normal. 
+• Fault C: Load issue in the target control loop
+Fig. 5. Brick schema for the target HVAC system.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+6 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 7 ===
+Suppose neither sensors nor actuators exhibit fault, but the target 
+plant’s load (e.g., terminal cooling or heating capacity) still fails to meet 
+control requirements. In that case, the AFDD determines the load issue, 
+which may be related to operation and management. 
+• Fault D: Plant fault in other control loops
+The AFDD further analyzes the plant output variable in other control 
+loops. This output variable can be obtained using the correlation anal-
+ysis algorithm. If any difference between the output variable and the 
+setpoint exceeds its threshold, a potential fault is localized to variables 
+or equipment; otherwise, the plant is considered normal. 
+• Fault E: Setpoint unreasonable in the target control loop
+If all entities within the target loop are identified as normal, the fault 
+will be attributed to the unreasonable setpoint.
+Generalized diagnosis rules integrate thresholds with ontology, 
+enabling efficient and interpretable identification of multi-source and 
+multi-level faults in complex building energy systems. The specific 
+system configuration can flexibly extend and adapt them to ensure that 
+the AFDD maintains high practical engineering scalability.
+2.4. FDD tool
+By synthesizing the expert knowledge, engineering experience, his-
+torical measurement data, and the structured relationships embedded 
+within the ontology, the FDD tool formulates multi-level logical 
+reasoning for each control loop. It involves the code, ontology, and 
+diagnosis rules. The code is developed to assist virtualization because it 
+may be challenging to generate satisfactory virtualization results by 
+relying only on knowledge engineering. During implementation, the 
+FDD tool is executed based on the following steps. First, the ontology is 
+loaded to identify and retrieve relevant equipment, points, and control 
+loop entities within the target building energy system. Second, 
+comprehensive queries (e.g., via SPARQL) are executed to obtain all 
+objects and associated attributes linked to the control loop, leveraging 
+the formal relationships. Third, the system imports operational datasets 
+by the AI agent for the database and diagnosis thresholds based on 
+system configuration, the quantitative basis for subsequent inferential 
+Fig. 6. Ontology-based semantic representation of multiple control loops.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+7 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 8 ===
+processes. Finally, actuator, sensor, load, plant in other control loops, 
+and setpoint are diagnosed based on generalized FDD rules, which en-
+sures the stable operation of building energy systems.
+3. Application
+3.1. Target building HVAC system
+In this study, a real-world HVAC system is employed as a target 
+building energy system to validate the applicability and effectiveness of 
+the AFDD, as shown in Fig. 4. The building, with a floor area of 160 m², 
+serves as the student office, faculty office, and meeting room. The 
+heating and cooling source is a water-source heat pump, while the air 
+side utilizes a variable air volume air conditioning system to satisfy in-
+door thermal and humidity control requirements.
+The building automation system enables centralized monitoring and 
+intelligent regulation of key equipment, including the water-source heat 
+pump, chilled water pump, cooling water pump, cooling tower, supply 
+fan, and exhaust fan. Table 2 shows that 21 sensors are deployed to 
+collect measurements such as temperature, humidity, differential 
+Fig. 7. The example for the diagnosis rule for the supply air temperature control loop.
+Fig. 8. System architecture for the application of the AFDD.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+8 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 9 ===
+pressure, pressure, and flow rate. These sensors are distributed across 
+the chilled water loop, cooling water loop, and air handling unit. Each 
+critical node is equipped with actuators that facilitate valve/damper 
+position adjustment and variable frequency control of fans and pumps.
+From a control architecture perspective, the HVAC system imple-
+ments the PID control strategy, encompassing five typical control loops: 
+supply air temperature, static pressure, indoor temperature, chilled 
+water pump differential pressure, and cooling water pump differential 
+pressure. All monitoring and control data are exported via the RS-485 
+interface and collected and stored at one-minute intervals. This pro-
+vides a robust foundation for subsequent intelligent diagnosis using the 
+Brick schema and control ontology. The HVAC system is characterized 
+by its high complexity, diversity of equipment types, and substantial 
+operational variability. As such, it enables a comprehensive evaluation 
+of the AFDD for automation, interpretability, and decision-making.
+3.2. Ontology for the HVAC system
+To enable structured and semantic management of the target HVAC 
+system, this study adopts an ontology modeling approach that integrates 
+both system operation’s physical and logical aspects. As illustrated in 
+Fig. 5, the Brick schema encompasses a wide range of equipment (e.g., 
+the heat pump, cooling tower, supply fan), points (e.g., temperature 
+sensors, differential pressure sensors, valve positions), and locations (e. 
+g., chilled water loop, cooling water loop). Meantime, the Brick schema 
+leverages a set of formalized relationships, such as "isPointOf", "isLoca-
+tedIn", "hasPoint", and "feeds", to semantically connect points with 
+equipment and locations. Each equipment node is meticulously anno-
+tated with its associated input and output points. For example, the 
+chilled water pump is linked to the chilled water loop via "hasPart", and 
+to its speed and power measurements via "hasPoint". This ontology- 
+based modeling enables rapid information retrieval, intuitive visuali-
+zation, and seamless knowledge transfer to the AI agent to enhance the 
+generalizability and scalability of the AFDD.
+Building upon the Brick schema, the ontology is extended with 
+explicit representations of control logic to accommodate advanced 
+diagnostic requirements. As depicted in Fig. 6, five control loop ontol-
+ogies are constructed, each structured around the five essential control 
+entities, including setpoint, controller, actuator, plant, and sensor, 
+which are interconnected by standardized relationships such as "isIn-
+putOf", "adjusts", etc. For example, entities such as the supply air tem-
+perature setpoint, controller (PID), actuator (temperature control 
+valve), plant (air handling unit), and sensor are instantiated and con-
+nected in the supply air temperature control loop. Each of these entities 
+is mapped to the corresponding physical equipment and real-time 
+operational data point. It preserves the control loop’s functional struc-
+ture and its integration with the HVAC system. This control ontology can 
+be readily extensible to other loops, such as indoor temperature, static 
+pressure, and various differential pressure loops to support consistent 
+and scalable modeling across diverse operational scenarios.
+3.3. Generalized FDD rules for the HVAC system
+Upon completion of the ontology modeling, the generalized FDD 
+rules are developed. In the operation and maintenance of the target 
+HVAC system, the complex system structure, changeable working con-
+ditions, and significant data noise often limit the interpretability of 
+purely model-based or data-driven FDD approaches. Rule-based FDD 
+approaches, grounded in operation and maintenance experience, design 
+instruction, expert knowledge, assisted codes, and historical data, create 
+inferable diagnosis rules. This approach offers high interpretability and 
+strong generalizability. And it renders suitable for the HVAC system 
+characterized by multiple sensors, equipment, and control loops. The 
+rules involve two key aspects: (1) translating engineering experience 
+and expert knowledge into multi-level, executable logical rules. For 
+example, if the absolute difference between the measurement and set-
+point is less than the threshold, the supply air temperature setpoint is 
+reasonable; otherwise, the problem may be from other entities, and (2) 
+determining thresholds that reflect normal system operation based on 
+relevant references, system and control configurations, and operational 
+experience.
+As illustrated in Fig. 7, this study defines the diagnosis rule using the 
+supply air temperature control loop as an example, comprising the 
+following specific steps:
+First, the AFDD judges whether the difference between the supply air 
+temperature measurement and its setpoint falls within a ± 1 ◦C 
+threshold [42]. If the difference is within this range, the control loop is 
+deemed to be operating normally.
+Second, if the difference exceeds the threshold, the underlying causes 
+are further investigated, encompassing the supply air temperature 
+sensor, temperature control valve, cooling capacity, supply chilled water 
+temperature, and supply air temperature setpoint. 
+Fault A: Supply Air Temperature Sensor Fault
+This study generates the virtual model output using a Multilayer 
+Perceptron (MLP) algorithm using data from June 1 to June 30, 2022, 
+and the ratio of training and testing data is 80 % and 20 %. The 
+hyperparameters is configurated with batch size 32, epochs 20, and 
+hidden layers 2 (128–64). The loss function is the mean squared error, 
+and optimizer is Adam. The RMSE is 0.32 ◦C for model accuracy. The 
+return chilled water temperature and mixed air temperature are the 
+input variables, as shown in Eq. (1). Throughout the diagnosis, it is 
+assumed that these two sensors are fault-free to ensure the reliability of 
+the virtual model output.
+The AFDD determines the sensor fault by comparing the actual 
+measurement and the virtual model output. If the difference is less than 
+the ±1 ◦C threshold from the modeling result and experience, the sensor 
+is considered normal; otherwise, the sensor is faulty. 
+T3, vir = MLP(T6, T2) (1) 
+Table 3 
+Knowledge engineering for the practical application.
+Application Classification Prompt inputs
+Central 
+agent
+Expert 
+instructions
+You are a helpful assistant by using tools or your own knowledge. 
+When user want to diagnose faults in the control loop, you can invoke FDD tool. The diagnosis result will be described in the report
+FDD tool Tool 
+explanations
+You are an AI assistant who generates only pure Python code. 
+It only outputs Python code and provides results. 
+When user want to conduct diagnosis, you must use Rules in context. 
+When performing basic machine learning tasks, use scikit-learn or TensorFlow as appropriate. 
+The diagnosis report will be described in two paragraphs. The first paragraph is detailed diagnosis result report including that number of fault 
+data. The second paragraph is fault reason location
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+9 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 10 ===
+Fig. 9. The information extraction for the ontology.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+10 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 11 ===
+Fault B: Temperature Control Valve Fault
+Temperature control valve faults are detected by assessing whether 
+the valve opening exceeds the maximum threshold (95 %) based on the 
+control configuration in the design instruction when the difference be-
+tween the supply air temperature measurement and its setpoint is more 
+than +1 ◦C or falls below the minimum threshold (35 %) when the 
+difference is less than   1 ◦C. 
+Fault C: Cooling Capacity Issue
+The AFDD evaluates whether the load is adequate by comparing the 
+actual system load with the maximum achievable load (19 kW) based on 
+the system configuration, as shown in Table 2. The actual system load is 
+calculated based to the return chilled water temperature, supply chilled 
+water temperature, chilled water flow rate, as shown in Eq. (2). If the 
+actual load is less than the maximum achievable load when the differ-
+ence is more than +1 ◦C, the load is considered to meet the requirement; 
+otherwise, there is too high a load for the air handling unit due to 
+operation and management. 
+W= 4.186 ×
+(Q1× 1000
+3600
+)
+× (T6  T7) (2) 
+Fault D: Supply Chilled Water Temperature Issue
+According to control strategies and Pearson correlation analysis, the 
+supply chilled water temperature is the most highly correlated variable 
+affecting supply air temperature. The AFDD checks whether the supply 
+chilled water temperature surpasses the upper threshold (8 ◦C) when the 
+difference is more than +1 ◦C or drops below the lower threshold (6 ◦C) 
+when the difference is less than   1 ◦C. If the fault is detected, further 
+diagnosis is conducted to determine whether the fault originates from 
+Fig. 9. (continued).
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+11 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 12 ===
+the chilled water pump or the heat pump. Specifically, the chilled water 
+pump fault is identified if the pump speed exceeds the maximum 
+threshold (95 %) or falls below the minimum threshold (80 %) under 
+corresponding working conditions. If no fault is detected in the pump, 
+the fault is attributed to the heat pump. 
+Fault E: Unreasonable Supply Air Temperature Setpoint
+Suppose no faults are detected or diagnosed in the supply air tem-
+perature sensor, temperature control valve, cooling capacity, or supply 
+chilled water temperature. In that case, the fault is attributed to an 
+unreasonable setpoint. This may be caused by external climatic condi-
+tions. The setpoint should be adjusted to meet operational requirements.
+3.4. Implementation of the AFDD for the HVAC system
+The AI agent integrates with the developed ontology and FDD rules 
+to achieve the AFDD in the HVAC system. The AFDD uses a multi- 
+component collaborative architecture as shown in Fig. 8. Centered on 
+the AI agent, the architecture integrates expert knowledge engineering, 
+user prompts, the FDD tool, database, and ontology to realize full- 
+process intelligent and automatic diagnosis. GPT-4o powers the AI 
+agent during implementation. LangChain will be employed to link Py-
+thon with the GPT-4o [43]. LangChain is a software development kit 
+that facilitates the creation of applications using the GPT-4o, offering 
+various possibilities for application development. The specific steps are 
+as follows:
+First, experts give knowledge engineering including expert in-
+structions and tool explanations to develop the domain-specific AI 
+agent, as shown in Table 3. Expert instructions provide an overview for 
+the entire diagnostic process. It enables the AI agent to determine which 
+tools to invoke and what results to generate. Otherwise, tool in-
+terpretations require the AI agent to produce the codes and interpretable 
+diagnostic reports based on datasets and generalized FDD rules, thereby 
+helping users better understand the system’s operational status. These 
+knowledge engineering is structured and injected, enhancing GPT-4o’s 
+understanding and reasoning capabilities for the target HVAC system 
+and reducing hallucinations.
+Second, users can give the AI agent information queries and diag-
+nosis requests according to their needs, involving the information 
+extraction, ontology extension, and fault diagnosis. Various cases are 
+designed as follow: 
+(1) Case 1: The information extraction for the ontology.
+Fig. 10. Automatic extension for the supply chilled water temperature control loop.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+12 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 13 ===
+(2) Case 2: The automatic extension for the control ontology.
+(3) Case 3: The diagnosis for the supply air temperature control loop.
+(4) Case 4: Suggestions on system operation and maintenance.
+Third, the ontology, supported by Brick schema metadata and 
+control logic, provides system information for the AI agent and FDD tool, 
+as discussed in detail in Section 3.2. The ontology captures the structural 
+and operational relationships among HVAC equipment, sensors, control 
+loops, and associated variables. This enables consistent information 
+retrieval, rule execution, and semantic reasoning for diverse tasks.
+Fig. 11. The diagnosis result for the supply air temperature control loop using one hour of data.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+13 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 14 ===
+Fourth, the dataset is provided to the AI agent to enable the complete 
+diagnosis process. Historical data are utilized to develop virtual models, 
+which are used to determine whether the target sensor is faulty. 
+Meanwhile, correlation analysis is applied to identify correlation vari-
+ables related to the target sensor. Real-time data fed into the AFDD 
+framework enable fault diagnosis and provide an intuitive visualization 
+of control loop performance.
+Fifth, the FDD tool is executed with the AI agent. The FDD tool is 
+developed based on generalized FDD rules in the target HVAC system, as 
+discussed in Section 3.3. During application, the fault is first detected 
+based on the difference between the measurement and the setpoint. 
+Upon detection of a fault, different entities are sequentially examined 
+from the supply air temperature sensor, temperature control valve, 
+cooling capacity, supply chilled water temperature, and to the supply air 
+temperature setpoint. If any entity is found to violate the FDD rules, the 
+fault is diagnosed.
+Finally, interpretable diagnosis reports and O&M suggestions are 
+generated and provided to the user. It enables them to intuitively trace 
+faults and take conduct the next step to alleviate the fault. Information 
+extraction and extension results are directly incorporated into the 
+Fig. 11. (continued).
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+14 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 15 ===
+existing ontology to facilitate real-time management. This process con-
+verts HVAC, control loop, and rule information into computer language 
+and achieve different user requirements. Moreover, the diagnosis results 
+are fed back to the database for recording and storage, which is 
+convenient for users to analyze and study.
+In summary, this AFDD combines with expert knowledge engineer-
+ing, user prompts, the FDD tool, database, an ontology, and the AI agent 
+establishes an efficient, intelligent, and scalable new framework for 
+automated FDD.
+4. Results and discussion
+The AFDD is executed on a computer equipped with an AMD Ryzen 9 
+7950 × 3D processor. It offers 16 cores and 32 threads with a base clock 
+frequency of 4.2 GHz. The system features 64 GB of DDR5 RAM and a 1 
+TB solid-state drive for data storage, with 240 GB of free space available 
+during the FDD period.
+Fig. 11. (continued).
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+15 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 16 ===
+4.1. Information for the brick schema and control ontology (Case 1)
+By applying the ontology to the target HVAC system, the AFDD 
+achieves automated parsing of building equipment, sensors, and their 
+control logic. As shown in Fig. 9, users only need to input the system 
+structure and control requirements to the AFDD, and it can automati-
+cally identify key equipment, various sensors, and location without the 
+need for manual mapping of complex topologies. For typical control 
+loops such as supply air temperature, static pressure, and indoor tem-
+perature, the AFDD can rapidly generate the equipment–point–control 
+Fig. 12. The diagnosis result for the supply air temperature control loop using one day of data.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+16 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 17 ===
+Fig. 13. Suggestions on operation and maintenance for the AFDD.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+17 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 18 ===
+chain and associate core elements, including control objectives, actua-
+tors, sensors, setpoints, and controllers. For example, when users query 
+system or control loop information using natural language (e.g., “Please 
+tell me information about the HVAC system or supply air temperature 
+control loop”), the AFDD automatically returns the corresponding an-
+swers. It reduces the workload and expertise required for operation and 
+maintenance personnel. Moreover, automated modeling based on the 
+ontology enhances the flexibility of HVAC system configuration. Rapid 
+deployment and secondary development are supported for buildings of 
+various types and scales.
+4.2. Automatic extension for the control ontology (Case 2)
+Fig. 10 illustrates the results of automatic extension for the control 
+ontology. According to the established ontology, the AFDD can 
+dynamically extend control ontology in real time to accommodate 
+adding or removing the control loop within the target HVAC system. For 
+example, when operation and maintenance personnel find changes in 
+the system information, such as the introduction of a supply chilled 
+water temperature control loop, they will give a prompt to the AFDD 
+(“Based on the information of the control loop, please help me extend 
+the control loop for Supply_Chilled_Water_Temperature.”). The AFDD 
+will first automatically examine the current ontology; if no relevant 
+information is defined, it will request the user to provide the controller, 
+actuator, setpoint, and plant. Upon receipt of the necessary information, 
+the system will construct the control ontology for the supply chilled 
+water temperature in TTL format. Subsequently, corresponding diag-
+nosis rules are generated based on the latest ontology. It enriches the 
+existing rule library and enabling more robust and reliable detection and 
+diagnosis.
+4.3. FDD results for the supply air temperature control loop (Case 3)
+Fig. 11 presents the diagnosis results of the supply air temperature 
+control loop under different fault conditions over one hour, including 
+the temperature control valve, cooling capacity, supply air temperature, 
+supply air temperature setpoint, and supply chilled water temperature 
+in the other control loop.
+In Fig. 11(a), the diagnosis interval is from 19:01 to 20:00 on July 8, 
+2022, during which the AFDD analyzes and diagnoses 60 data points. 
+The results demonstrates that the detection is accurate, with all 58 fault 
+points correctly identified. Furthermore, the AFDD achieves complete 
+fault diagnosis for these 58 fault points using 18 diagnosis rules designed 
+for five types of faults. Specifically, 57 faults are attributed to the high 
+supply chilled water temperature, while one is caused by high cooling 
+capacity for the air handling unit; no faults are found in the supply air 
+temperature sensor or temperature control valve.
+To further demonstrate the effectiveness and good interpretability, 
+the user performs a diagnosis on data from 11:01 to 12:00 on July 9, 
+2022, as shown in Fig. 11(b). The results indicates that all 60 fault data 
+points are detected. The cause is diagnosed due to a high cooling ca-
+pacity for the air handling unit. For the temperature control valve fault 
+and unreasonable setpoint, the AFDD can perform accurate diagnosis, as 
+shown in Fig. 11(c). For the 60 given data points from 17:01 to 18:00 on 
+July 4, 2022, the diagnosis rules identify 22 fault data points. Further 
+analysis shows that improper PID parameters cause the temperature 
+control valve fault, while external meteorological conditions may in-
+fluence unreasonable setpoints. These results show that the AFDD 
+accurately detects and diagnoses faults and enabled fault tracing and 
+interpretation.
+To further validate the accuracy of the AFDD under different fault 
+Fig. 14. Running time of different diagnostic data amount.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+18 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 19 ===
+conditions, this study conducts diagnosis using one day of data for 
+supply air temperature control loop, as shown in Fig. 12. The results 
+shows that even as the data number increases from one hour to one day, 
+the AFDD can detect and diagnose these faults. When users request a 
+one-day diagnosis to assess control performance, the AFDD examines all 
+variables involved in the control loop and identified 648 fault points and 
+12 fault-free points. This indicates that the control performance does not 
+meet expectations on July 8, 2022.
+Further analysis reveals that among the 648 fault points, 7 are supply 
+air temperature sensor faults, 407 are attributed to cooling capacity, and 
+234 are due to higher supply chilled water temperature, with no faults 
+are detected in the temperature control valve and setpoint. Further 
+Fig. 15. Application of supply air temperature control loop using the AFDD.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+19 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 20 ===
+analysis indicates that sensor faults are attributed to dynamic fluctua-
+tions in return chilled water temperature, which result in a bigger dif-
+ference between the model output and sensor measurement. 
+Nevertheless, the supply air temperature is fault-free compared to other 
+diagnostic results. Overall, the AFDD can identify all faults without 
+misjudgment compared with actual operation data, which means high 
+reliability and accuracy for operation and maintenance.
+4.4. Suggestions on system operation and maintenance (Case 4)
+For faults in the temperature control valve, cooling capacity, supply 
+chilled water temperature, and unreasonable setpoints, the AFDD can 
+provide suggestions on operation and maintenance based on the diag-
+nosis results. The diagnosis is from 09:01 on July 8, 2022, to 20:00 on 
+July 14, 2022. A total of 4429 data points is analyzed. Of these, 2973 
+data points are identified as faulty, while 1456 are fault-free. The 
+breakdown of the faults is as follows: 26 data points are due to sensor 
+faults, 38 are actuator faults, 1260 are related to cooling capacity, 1373 
+are due to output variable issues, and 276 are caused by unreasonable 
+setpoints. The diagnosis report format is similar to that shown in 
+Figs. 11–12 and will not be displayed in this section to focus on sug-
+gestions from the identified faults. The sensor fault is not included in the 
+suggestions because uncertainties in the virtual model caused this fault. 
+As shown in Fig. 13, the system conducts a comprehensive analysis from 
+six perspectives: actuator inspection and optimization, optimizing load 
+management, plant equipment inspection and maintenance, reviewing 
+and adjusting settings, developing a preventive maintenance plan, and 
+operator education and training. For example, the actuator fault is 
+attributed to an improper PID parameter that caused its behavior to lag, 
+considering that it will not appear continuously. After detecting this 
+fault, the AFDD recommends that user must adjust the PID parameters to 
+optimize control performance. This demonstrates that diagnosis and 
+O&M can be integrated to reduce the time and cost required to locate 
+faults. Most importantly, even for operation and maintenance personnel 
+lacking extensive professional knowledge, the AFDD allows for accurate 
+identification of the root cause of faults and provides solutions.
+4.5. Discussions for the application
+To implement the AFDD in practical the target HVAC system, it is 
+essential to discuss the running time and field experiment. The running 
+time can reflect the efficiency of the AFDD. Real-time can be achieved 
+for the entire control loop only when the running time is shorter than the 
+data acquisition interval. Additionality, the field experiment can be 
+conducted using real-time data to validate the effectiveness of the AFDD 
+in response to user queries and its integration with the building man-
+agement system. The following provides a detailed discussion.
+4.5.1. Running time
+The running time of the AFDD under varying amounts of diagnostic 
+data is illustrated in Fig. 14. The results indicates that as the data volume 
+increases, the running time also rises significantly. Notably, when 
+diagnosing a full day’s data (660 data), the system requires 473.3 s, 
+which may adversely impact operational efficiency. However, consid-
+ering that the diagnosis time per data point is 43.87 s and the data 
+sampling interval is one-minute, real-time diagnosis will be possible. In 
+summary, the target HVAC system can transmit real-time data to the 
+AFDD. This enables diagnosis of the sensor, actuator, load, setpoint, and 
+plant based on user prompts.
+4.5.2. Field experiment
+Fig. 15 illustrates the field experiment of the AFDD at a specific time 
+point during August 2025. In this scenario, the user provides diagnostic 
+queries to the AFDD based on the developed ontology, diagnosis rules, 
+and data to execute diagnosis across the supply air temperature, tem-
+perature control valve, cooling capacity, supply air temperature 
+setpoint, and supply chilled water temperature. The AFDD is run using 
+Python scripts integration with the AI agent via LangChain. During the 
+diagnostic process, users operate the AFDD by providing their personal 
+OpenAI API key. This ensures that all information is stored securely 
+within the user’s own account, thereby safeguarding data privacy, and 
+preventing information leakage. In the building management system 
+interface, each related variable is paired with an indicator light: green in 
+normal, red in fault states. This visual design allows users to identify 
+fault points clearly without further analysis. For example, when the 
+difference between the measurement and setpoint is 0.8 ◦C below the 
+threshold, the supply air temperature control loop is determined to be 
+normal, and all indicator lights display green. The building energy sys-
+tem achieves efficient O&M using the AFDD.
+5. Conclusions
+In this study, the AFDD that integrates the AI agent, ontology, and 
+generalized FDD rules is developed and validated in a real-world HVAC 
+application. The proposed framework enables automated, scalable, and 
+interpretable fault diagnosis in complex building environment. Case 
+studies demonstrates that the system can extract information and extend 
+the control loop for the ontology, accurately identify, and trace the 
+sources of faults under various operational scenarios and generate 
+diagnosis reports and suggestions for operation and maintenance. These 
+reduce the workload and expertise required of facility managers. The 
+following conclusions are drawn: 
+(1) By developing the ontology, the AFDD can extract the building 
+information and control logic. Furthermore, when the user wants 
+to increase new control loop, it can be automatically extended in 
+a standardized format to reduce development and deployment 
+time and costs.
+(2) By integrating the generalized diagnosis rules, the AFDD can di-
+agnose all faults for the sensor, actuator, load, setpoint, and plant 
+in other control loops without misjudgment. Additionally, the 
+real-time diagnosis is achieved by interacting with the actual 
+building energy system through API key and user’s prompt.
+(3) By using the AI agent, the AFDD can automatically generates 
+intuitive and easily understandable interpretable report from 
+diagnosis to decision-making. This reduces the requirement for 
+specialized domain knowledge among operation and mainte-
+nance personnel and enhances the reliability of fault diagnosis 
+results.
+In the future, automatic generation for ontologies and diagnosis rules 
+should be developed using the AI agent. Building energy systems have 
+become increasingly complex and diverse in practical operation and 
+maintenance. Ontologies and diagnosis rules will contain many equip-
+ment and points, and manual development will reduce the automation 
+level of building management. The autonomous development by the AI 
+agent based on architectural drawings and design specifications con-
+stitutes a significant avenue for future research. Otherwise, the AFDD 
+framework combines with services in building digital twins should be 
+considered. As a component of digital twins, services can integrate 
+multi-source databases to enable prediction, diagnosis, and calibration 
+of physical entities and virtual models. A promising research direction 
+lies in combining the developed AFDD with digital twins to facilitate the 
+diagnosis of virtual models, virtual sensors, and control logic.
+CRediT authorship contribution statement
+Jiteng Li: Writing – original draft, Methodology, Investigation. 
+Jabeom Koo: Validation, Investigation. Jeyoon Lee: Methodology, 
+Data curation. Peng Wang: Software, Resources. Tianyi Zhao: Soft-
+ware, Resources. Sungmin Yoon: Writing – review & editing, Supervi-
+sion, Methodology.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+20 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 21 ===
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgements
+This work was supported by the Korea Institute of Energy Technol-
+ogy Evaluation and Planning (KETEP) and the Ministry of Trade, In-
+dustry & Energy (MOTIE) of the Republic of Korea (No. RS- 
+2024–00398693).
+Data availability
+The authors do not have permission to share data.
+References
+[1] M. Toub, C.R. Reddy, R.D. Robinett III, M. Shahbakhti, Integration and optimal 
+control of microcsp with building hvac systems: review and future directions, 
+Energies 14 (3) (2021) 730.
+[2] L. Chen, Y. Hu, R. Wang, X. Li, Z. Chen, J. Hua, A.I. Osman, M. Farghali, L. Huang, 
+J. Li, Green building practices to integrate renewable energy in the construction 
+sector: a review, Environ. Chem. Lett. 22 (2) (2024) 751–784.
+[3] A.M. Omer, Renewable building energy systems and passive human comfort 
+solutions, Renew. Sustain. Energy Rev. 12 (6) (2008) 1562–1587.
+[4] S. Zhan, Z. Liu, A. Chong, D. Yan, Building categorization revisited: a clustering- 
+based approach to using smart meter data for building energy benchmarking, Appl. 
+Energy 269 (2020) 114920.
+[5] D. Vijayan, A.L. Rose, S. Arvindan, J. Revathy, C. Amuthadevi, Automation systems 
+in smart buildings: a review, J. Ambient. Intell. Humaniz. Comput. (2020) 1–13.
+[6] S.M. Zanoli, C. Pepe, Thermal, Lighting and IAQ Control System for Energy Saving 
+and Comfort Management, Processes 11 (1) (2023) 222.
+[7] V. Srivastava, J. Schaub, S. Pischinger, Model-based closed-loop control strategies 
+for flex-fuel capability, Appl. Energy 350 (2023) 121795.
+[8] X. Sun, H. Ye, S. Fei, A closed-loop detection and open-loop control strategy for 
+booms of truck-mounted concrete pump, Autom. Constr. 31 (2013) 265–273.
+[9] J. Wang, T. Zhao, Event-driven online decoupling control mechanism for the 
+variable flow rate HVAC system based on the medium response properties, Build. 
+Environ. 218 (2022) 109104.
+[10] W.-H. Chen, F. You, Energy optimization of bitcoin mining integrated greenhouse 
+with model predictive control, Appl. Energy 395 (2025) 126256.
+[11] Z. Li, Z. Chen, J. Zhang, S. Mu, Passenger-Centric Model Predictive Control for 
+Indoor Temperature to Facilitate Energy-Efficient Airport Terminal, Build. Environ. 
+(2025) 113344.
+[12] B. Zhang, Y. Rezgui, Z. Luo, T. Zhao, Fault detection research on novel transfer 
+learning-based method for cross-condition, cross-system and cross-operation in 
+public building HVAC sensors, Energy 313 (2024) 133704.
+[13] T. Li, Y. Zhou, Y. Zhao, C. Zhang, X. Zhang, A hierarchical object oriented Bayesian 
+network-based fault diagnosis method for building energy systems, Appl. Energy 
+306 (2022) 118088.
+[14] Z. Du, L. Chen, X. Jin, Data-driven based reliability evaluation for measurements of 
+sensors in a vapor compression system, Energy 122 (2017) 237–248.
+[15] J. Li, P. Wang, J. Li, X. Han, T. Zhao, S. Yoon, Improvement for energy efficiency 
+and control characteristics in variable air volume system using in-situ sensor 
+calibration method based on autoencoder, J. Build. Eng. 63 (2023) 105559.
+[16] J. Verhelst, G. Van Ham, D. Saelens, L. Helsen, Economic impact of persistent 
+sensor and actuator faults in concrete core activated office buildings, Energy Build. 
+142 (2017) 111–127.
+[17] L. Zhao, S. Kang, S. Yoon, J. Li, P. Wang, Fault diagnosis method for data 
+imbalance in chiller systems based on CWGAN-GP and DS evidence theory fusion, 
+Build. Environ. (2025) 113271.
+[18] F. Xiao, Y. Zhao, J. Wen, S. Wang, Bayesian network based FDD strategy for 
+variable air volume terminals, Autom. Constr. 41 (2014) 106–118.
+[19] Y. Yu, D. Woradechjumroen, D. Yu, A review of fault detection and diagnosis 
+methodologies on air-handling units, Energ. Build. 82 (2014) 550–562.
+[20] A. Ranade, G. Provan, A.E.-D. Mady, D. O’Sullivan, A computationally efficient 
+method for fault diagnosis of fan-coil unit terminals in building Heating Ventilation 
+and Air Conditioning systems, J. Build. Eng. 27 (2020) 100955.
+[21] J. Cui, S. Wang, A model-based online fault detection and diagnosis strategy for 
+centrifugal chiller systems, Int. J. Therm. Sci. 44 (10) (2005) 986–999.
+[22] A. Montazeri, S.M. Kargar, Fault detection and diagnosis in air handling using data- 
+driven methods, J. Build. Eng. 31 (2020) 101388.
+[23] G. Li, Y. Hu, Improved sensor fault detection, diagnosis and estimation for screw 
+chillers using density-based clustering and principal component analysis, Energ. 
+Build. 173 (2018) 502–515.
+[24] Y. Zhao, J. Wen, F. Xiao, X. Yang, S. Wang, Diagnostic Bayesian networks for 
+diagnosing air handling units faults–part I: faults in dampers, fans, filters and 
+sensors, Appl. Therm. Eng. 111 (2017) 1272–1286.
+[25] T. Li, Y. Zhao, C. Zhang, K. Zhou, X. Zhang, A semantic model-based fault detection 
+approach for building energy systems, Build. Environ. 207 (2022) 108548.
+[26] P. Mercorelli, Recent advances in intelligent algorithms for fault detection and 
+diagnosis, Sensors 24 (8) (2024) 2656.
+[27] Z.-C. Wang, S.-C. Wang, D. Li, Z.-W. Cao, Y.-L. He, An intelligent fault detection 
+and diagnosis model for refrigeration systems with a comprehensive feature 
+selection method, Int. J. Refrig. 160 (2024) 28–39.
+[28] J. Li, J. Koo, J. Lee, Y. Li, J. Song, P. Wang, T. Zhao, S. Yoon, AI agent-based virtual 
+model development, diagnosis, and calibration for building digital twins, J. Ind. 
+Inf. Integr. (2025) 100990.
+[29] J. Song, S. Yoon, Ontology-assisted GPT-based building performance simulation 
+and assessment: implementation of multizone airflow simulation, Energ. Build. 325 
+(2024) 114983.
+[30] A.J. Thirunavukarasu, D.S.J. Ting, K. Elangovan, L. Gutierrez, T.F. Tan, D.S. 
+W. Ting, Large language models in medicine, Nat. Med. 29 (8) (2023) 1930–1940.
+[31] G. Jiang, Z. Ma, L. Zhang, J. Chen, EPlus-LLM: a large language model-based 
+computing platform for automated building energy modeling, Appl. Energy 367 
+(2024) 123431.
+[32] S. Chen, X. Liang, Y. Liu, X. Li, X. Jin, Z. Du, Customized large-scale model for 
+human-AI collaborative operation and maintenance management of building 
+energy systems, Appl. Energy 393 (2025) 126169.
+[33] J. Lee, J. Song, J. Koo, S. Choi, J. Hwang, S.M.H. Saif, Y. Li, J. Li, J. Yoo, G. Lee, 
+Agentic built environments: a review, Energ. Build. (2025) 116159.
+[34] G. Langer, T. Hirsch, R. Kern, T. Kohl, G. Schweiger, Large Language Models for 
+Fault Detection in Buildings’ HVAC Systems, in: Energy Informatics Academy 
+Conference, Springer, 2024, pp. 49–60.
+[35] C. Zhang, J. Lu, Y. Zhao, Generative pre-trained transformers (GPT)-based 
+automated data mining for building energy management: advantages, limitations 
+and the future, Energy Built Environ. 5 (1) (2024) 143–169.
+[36] J. Zhang, C. Zhang, J. Lu, Y. Zhao, Domain-specific large language models for fault 
+diagnosis of heating, ventilation, and air conditioning systems by labeled-data- 
+supervised fine-tuning, Appl. Energy 377 (2025) 124378.
+[37] J. Li, J. Koo, J. Lee, P. Wang, T. Zhao, S. Yoon, AI agent-driven virtual in-situ 
+calibration for intelligent building digital twins, Energy (2025) 138968.
+[38] J. Bjørnskov, A. Thomsen, M. Jradi, Large-scale field demonstration of an 
+interoperable and ontology-based energy modeling framework for building digital 
+twins, Appl. Energy 387 (2025) 125597.
+[39] B. Balaji, A. Bhattacharya, G. Fierro, J. Gao, J. Gluck, D. Hong, A. Johansen, J. Koh, 
+J. Ploennigs, Y. Agarwal, Brick: metadata schema for portable smart building 
+applications, Appl. Energy 226 (2018) 1273–1292.
+[40] B. Balaji, A. Bhattacharya, G. Fierro, J. Gao, J. Gluck, D. Hong, A. Johansen, J. Koh, 
+J. Ploennigs, Y. Agarwal, Brick: towards a unified metadata schema for buildings, 
+in: Proceedings of the 3rd ACM International Conference on Systems for Energy- 
+Efficient Built Environments, 2016, pp. 41–50.
+[41] G.F. Schneider, P. Pauwels, S. Steiger, Ontology-based modeling of control logic in 
+building automation systems, IEEe Trans. Industr. Inform. 13 (6) (2017) 
+3350–3360.
+[42] ASHRAE, ASHRAE Guideline 36-2021: High-Performance Sequences of Operation 
+for HVAC Systems, American Society of Heating, Refrigerating and Air- 
+Conditioning Engineers, Inc, Atlanta, GA, USA, 2021.
+[43] R. Jay, Generative AI Apps with LangChain and Python, 2024.
+J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104 
+21 
+Downloaded from https://iranpaper.ir

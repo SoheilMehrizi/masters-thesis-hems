@@ -1,0 +1,1155 @@
+
+=== PDF PAGE 1 ===
+ 
+Contents lists available at ScienceDirect
+Applied Energy
+journal homepage: www.elsevier.com/locate/apen 
+Large language model-enhanced home energy management with dynamic 
+user preference elicitation and hierarchical data-sharing
+Xunning Zhang a,1, Yuheng Cheng a, b,1 iD, Xuanang Gui a, Huan Zhao c,∗ iD, Junhua Zhao a, b, 
+Jinyue Yan c
+a School of Science and Engineering, The Chinese University of Hong Kong(Shenzhen), Shenzhen, 518172, China
+b Shenzhen Institute of Artificial Intelligence and Robotics for Society (AIRS), Shenzhen, 518129, China
+c Department of Building Environment and Energy Engineering, The Hong Kong Polytechnic University, Kowloon, Hong Kong, China
+H I G H L I G H T S
+• A large language model-enhanced home energy management framework is proposed, integrating Large Language Models with Deep Reinforcement Learning.
+• Knowledge-guided chain-of-thought method is introduced to achieve precise, real-time user preference perception via natural language interaction.
+• LLM-generated reference actions are leveraged to guide DRL agent, accelerating convergence and improving performance under limited data conditions.
+• A hierarchical data-sharing mechanism is developed to protect user privacy, utilizing LLMs for knowledge extraction and efficient data selection.
+A R T I C L E  I N F O
+Keywords:
+Home energy management
+Deep reinforcement learning
+Large language model
+Preference elicitation
+Action guidance
+Data sharing
+A B S T R A C T
+The residential sector has received great attention worldwide due to its significant contribution to energy con­
+sumption and carbon emissions. Although Deep Reinforcement Learning (DRL) based Home Energy Management 
+(HEM) has provided promising solutions for user comfort satisfaction and energy savings, existing approaches 
+still face three challenges: (1) accurately perceiving dynamic user preferences, (2) efficient learning with limited 
+data samples, and (3) protecting user privacy during data sharing. To address these issues, a Large Language 
+Model (LLM)-enhanced HEM with dynamic user preference elicitation and hierarchical data-sharing is proposed, 
+introducing three key innovations. First, the Knowledge-Guided Chain-of-Thought method is proposed to per­
+ceive dynamic user preferences from unconstrained natural language interactions, by leveraging users’ historical 
+knowledge as explicit guidance. Second, the LLM-generated reference actions based on shared knowledge and 
+preference descriptions are proposed to accelerate the learning process under conditions of cold-start situations. 
+Third, a hierarchical data-sharing mechanism integrated with LLM-based knowledge extraction is introduced to 
+enable effective knowledge inference from natural language while preserving user privacy. Simulation results in 
+the household scenario with dynamic user preferences demonstrate that the proposed framework achieves sig­
+nificant improvements in both user preference elicitation and learning efficiency, ultimately leading to a 28.8% 
+reduction in cost and a 9.3% improvement in comfort compared to fixed preference DRL methods.
+1 . Introduction
+The continuous growth in global energy consumption needs has in­
+tensified environmental pollution and climate change, leading to a shift 
+toward greener energy systems. The residential energy sector is a crit­
+ical area for low-carbon transitions [ 1] due to its high proportion of 
+total energy consumption, and its energy demand is still rising. In 2019, 
+residential electricity consumption accounted for 26.6% of total elec­
+tricity consumption [ 2]. The Home Energy Management (HEM) plays 
+a crucial role in enhancing home energy efficiency by optimizing en­
+ergy usage, improving reliability, and integrating renewable energy 
+sources [3,4].
+∗ Corresponding author.
+ Email addresses: xunningzhang@link.cuhk.edu.cn (X. Zhang), yuhengcheng@link.cuhk.edu.cn (Y. Cheng), xuananggui@link.cuhk.edu.cn (X. Gui), 
+huan-paul.zhao@polyu.edu.hk (H. Zhao), zhaojunhua@cuhk.edu.cn (J. Zhao), j-jerry.yan@polyu.edu.hk (J. Yan).
+1 These authors contributed equally to this work.
+https://doi.org/10.1016/j.apenergy.2026.127540
+Received 13 November 2025; Received in revised form 26 January 2026; Accepted 7 February 2026
+Applied Energy 410 (2026) 127540 
+Available online 13 February 2026 
+0306-2619/© 2026 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 2 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Current approaches to HEM primarily fall into two paradigms: 
+model-based and data-driven. Model-based energy management meth­
+ods reduce total energy costs by modelling and controlling the energy 
+usage of a house while meeting the comfort requirements of occu­
+pants [5–7]. A typical model-based method is Model Predictive Control 
+(MPC) [8], which first predicts model parameters and then optimizes 
+control actions using a mathematical solver. To integrate the PV-battery, 
+the scenario-based stochastic MPC is applied  [ 9]. Also, adaptive ro­
+bust MPC is utilized by introducing an additional uncertainty model to 
+represent load disturbances  [10]. Moreover, reference [11] introduced 
+MPC through Monte Carlo uncertainty quantification and vehicle-to-
+home communication protocols. Although model-based methods offer 
+a promising solution for HEM, these methods rely on precise modelling 
+and struggle to adapt to dynamic preferences, which prevents achieving 
+optimal performance of HEM in the high uncertainty environment.
+Data-driven approaches have transformed HEM by eliminating mod­
+elling dependencies while enhancing adaptability [ 12]. Reinforcement 
+Learning (RL) is the typical method that can minimize home energy 
+cost in a dynamic environment [ 13,14]. An important research direc­
+tion of RL-based HEM is to consider the application in a more complex 
+environment, such as extending to multi-energy coordination  [ 15,16], 
+considering real-time demand response for optimal scheduling of home 
+appliances  [ 17,18], and dealing with the uncertainty of electricity 
+prices [19]. Also, the learning efficiency and performance are improved 
+through reward shaping  [ 20] and combining a knowledge-driven 
+model [21]. Recently, the new attempt is to incorporate the personal­
+ized preferences in the HEM process, such as customers’ and operators’ 
+perspectives  [ 22], and residents’ feedback and activity [ 23]. Despite 
+the significant improvements in the approaches, existing data-driven 
+methods still face two major challenges. First, difficulty in accurately 
+perceiving users’ dynamic numerical preferences, or preference elicita­
+tion, through a human-friendly, unconstrained natural language dialog. 
+Second, the low learning efficiency and performance occur under condi­
+tions of limited data samples, especially when the environment and user 
+preferences change.
+Recent advancements in Large Language Model (LLM) have demon­
+strated strong capabilities in natural language understanding, reasoning, 
+and judgment [24,25]. On one hand, LLMs have emerged as a promis­
+ing approach to augment RL, referred to as LLM-enhanced RL, improving 
+multitask learning, sample efficiency, and high-level task planning [26]. 
+The Action-Guider paradigm of LLM-enhanced RL demonstrates how 
+LLMs improve learning efficiency through two key mechanisms. First, 
+for large action spaces, such as text-based games, LLMs directly gen­
+erate high-value action candidates [ 27,28]. Second, LLMs improve the 
+quality of policy-generated actions by utilizing inherent expert knowl­
+edge [29,30]. On the other hand, for the HEM, the natural language 
+understanding and reasoning capabilities of LLMs enable precise user 
+preference elicitation through unconstrained natural language. This, in 
+turn, assists RL agents in formulating a more accurate reward func­
+tion and addresses the traditional difficulty of modelling personalized 
+preferences in RL-based HEM.
+Building on these insights, an innovative LLM-enhanced HEM frame­
+work with dynamic user preference elicitation and a hierarchical 
+data-sharing mechanism is proposed, which introduces four major con­
+tributions:
+1. Innovative LLM-Enhanced HEM Framework: A novel control 
+framework that synergistically integrates LLM, RL, and a data-
+sharing mechanism is proposed to address the core challenges of 
+dynamic user preference elicitation, efficient learning, and privacy 
+protection in RL-based HEM.
+2. Dynamic User Preference Elicitation: To accurately perceive dy­
+namic user preferences through unconstrained natural language 
+interaction, the Knowledge-Guided Chain-of-Thought (KG-CoT) 
+reasoning is proposed by leveraging users’ historical knowledge 
+as explicit guidance and incorporating a reflection mechanism, 
+enabling the accurate capture of hourly comfort and objective 
+numerical changes in users.
+3. LLM-enhanced Action Guidance: To mitigate cold-start explo­
+ration risks in home energy systems, the LLM-enhanced action 
+guidance mechanism which leverages relevant knowledge from 
+similar users is proposed. By transferring such cross-user knowl­
+edge, the mechanism accelerates RL learning under limited data 
+samples and improves energy management performance in envi­
+ronments with dynamic user preferences.
+4. Hierarchical Data-Sharing Mechanism: A hierarchical data-sharing 
+mechanism integrated with LLM-based knowledge extraction is 
+proposed to enable effective knowledge inference from uncon­
+strained natural language while preserving user privacy, which 
+facilitates efficient and targeted data selection for downstream 
+learning and decision-making.
+The remainder of this paper is organized as follows. An overview of 
+the HEM model is introduced in Section 2. Then, a detailed method­
+ology of our proposed framework is presented in Section 3. Section 4 
+demonstrates the framework’s control performance through comprehen­
+sive simulation results. Section 5 concludes with key findings and future 
+research directions.
+2 . Home energy management modelling
+HEM needs to monitor and control energy generation, storage, and 
+consumption within a household. HEM usually optimizes for a goal 
+such as cost reduction, self-sufficiency maximization, or emissions mini­
+mization. With the increasing adoption of electric mobility and heating, 
+residential PV, and dynamic tariffs, HEM is gaining popularity as the sav­
+ings potential increases. The models normally include renewable energy 
+generation, battery energy storage, and heat transfer.
+Fig. 1 illustrates the modular architecture of the HEM system. The 
+core of the system is the HEM Controller, which is responsible for mak­
+ing intelligent energy management decisions. It perceives the current 
+environmental state by collecting information from both indoor (e.g., 
+indoor temperature, power usage) and the external system (e.g., outdoor 
+temperature, real-time electricity prices). Based on this information, the 
+controller sends control signals to the physical components within the 
+home environment, including the renewable energy generation, energy 
+storage, and controllable loads. The ultimate goal of this control process 
+is to optimize a set of predefined long-term objectives, namely energy 
+cost, carbon emissions, and user comfort. The detailed mathematical 
+models for the key components within the environment are presented 
+in the following subsections.
+Fig. 1. Architecture for HEM.
+Applied Energy 410 (2026) 127540 
+2 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 3 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+2.1 . Renewable energy generation
+The rooftop photovoltaic (PV) power generation can be modelled 
+as [4]:
+𝑃 𝑡PV = 𝑃 STCPV
+(
+𝑆𝑅𝑡
+𝑆𝑅ST
+C
+) [1 − 𝛾temp (𝑇 𝑡Cell − 𝑇STC)] , (1)
+𝑇 𝑡Cell = 𝑇 𝑡out + 𝑆𝑅𝑡𝑆𝑅ST C × (𝑇NOC − 20), (2)
+𝑆𝑅𝑡 = cos 𝜃𝑖 × 𝐼 𝑡 × 𝐴𝑝𝑣. (3)
+where 𝑃 𝑡PV is 
+the output power of PV at time t; 𝑃 STCPV  is the rated power 
+of PV under standard test conditions; 𝑆𝑅𝑡 is the actual solar radiation 
+intensity at time t; 𝑆𝑅STC is the solar radiation intensity under standard 
+test conditions; 𝛾tem is the power temperature coefficient; 𝑇 𝑡Cell is the 
+actual working temperature of the PV cell at time t; 𝑇STC is the standard 
+test condition temperature; 𝑇 𝑡out is the ambient temperature at time t; 
+𝑇NOC is the nominal operating cell temperature; 𝐼 𝑡 is light intensity at 
+time t; 𝐴𝑃 𝑉  is PV panel area; and 𝜃𝑖 is incidence angle.
+2.2 . Battery energy storage
+The State of Charge, Socbatt, is modelled as  [31]:
+Soc𝑡+1batt = Soc𝑡batt + (
+𝜂𝑐ℎ,batt𝑃 𝑡batt+ + 𝑃 𝑡batt-∕𝜂𝑑𝑖𝑠,batt ) ⋅ Δ𝑡 (4)
+where 𝜂𝑐ℎ,batt and 𝜂𝑑
+𝑖𝑠,batt are the battery charging and discharging effi­
+ciency factors; 𝑃 𝑡batt+ and 𝑃 𝑡batt+ are the charging power and discharging 
+power. The battery power variables follow a consistent sign convention 
+throughout this paper. Positive values represent charging power flowing 
+into the battery from the PV system or grid, while negative values rep­
+resent discharging power flowing out of the battery to supply household 
+loads.
+The battery energy storage constraints include:
+Socbatt ≤ Socbatt ≤ Socbatt (5)
+0 ≤ 𝑃batt+ ≤ 𝑃 batt (6)
+𝑃 batt ≤ 𝑃batt- ≤ 0 (7)
+where Socbatt and Socbatt are minimum 
+and maximum allowable states of 
+charge; 𝑃 batt is maximum 
+charging power; 𝑃 batt is minimum discharging 
+power.
+2.3 . Heat transfer
+The heat 
+transfer leads to the changes in indoor temperature (𝑇 𝑖𝑛), 
+which can be modelled as [32,33]:
+𝑄wall = 𝐴wall𝑅wall (𝑇 𝑡out − 𝑇 𝑡in) (8)
+𝑄win = 𝐴win𝑈win(𝑇 𝑡out − 𝑇 𝑡in) (9)
+𝑄ac = 𝑃AC ⋅ 𝜂A
+C ⋅ Θ(𝑇 𝑡set, 𝑇 𝑡in) (10)
+Δ𝑇 𝑡in = Δ𝑡𝑉room ⋅ 𝜌air ⋅ 𝑐air [𝑄wall + 𝑄win + 𝑄ac] (11)
+where 𝑇 𝑡𝑖𝑛, 𝑇 𝑡𝑜𝑢𝑡, and 𝑇 𝑡𝑠𝑒𝑡 are
+ the indoor temperature, outdoor tempera­
+ture, and set temperature of air conditioner at time 𝑡; 𝑄wall, 𝑄win, and 
+𝑄ac represent the heat flow rate through the wall, window, and air con­
+ditioner, respectively; 𝐴wall and 𝐴win are wall surface area and window 
+surface area; 𝑅wall is wall thermal resistance; 𝑈win is window heat trans­
+fer coefficient; 𝑃AC is air conditioner rated power; 𝜂AC is AC efficiency 
+coefficient; 𝑉room is room volume; 𝜌air is air density; 𝑐𝑎𝑖𝑟 is specific heat 
+capacity of air; Δ𝑡 is time step duration.
+The fixed-frequency air 
+conditioner is assumed in this paper, as seen 
+in Eq. (12). The air conditioner starts operating (Θ = 1) at a fixed effi­
+ciency when the air conditioner is turned on and the indoor temperature 
+exceeds a certain range from the set temperature.
+Θ(𝑇 𝑡set,
+𝑇 𝑡in) =
+⎧
+⎪
+⎨
+⎪⎩
+1 if AC on and
+|𝑇 𝑡in − 𝑇 𝑡set| > Δ𝑇deadband
+0 otherwise
+(12)
+where Δ𝑇𝑑𝑒𝑎𝑑
+𝑏𝑎𝑛𝑑 is temperature control deadband.
+3 . Methodology
+3.1 . Large language model enhanced home energy management framework
+3.1.1 . Problem reformulation
+The target of 
+HEM is to reduce the electricity costs 𝐶 𝑡𝑐𝑜𝑠𝑡 and carbon 
+emissions 𝐶 𝑡𝑐𝑎𝑟𝑏𝑜𝑛, and to maximize user comfort 𝐶 𝑡𝑐𝑜𝑚𝑓 𝑜𝑟𝑡. The definition 
+of each target is shown as follows.
+Electricity cost is the cost of purchasing electricity from the grid 
+(Eq. (13)) and should be deducted from the generation of renewable 
+energy and battery (Eqs. (14)–(16)).
+𝐶 𝑡cost = 𝐸𝑡gr
+id × 𝜆RTP𝑡 (13)
+𝐸𝑡grid= 𝐸𝑡t
+otal − 𝐸𝑡pv + 𝐸𝑡batt (14)
+𝐸𝑡total = 𝐴𝐶 𝑡on/off ⋅ ∑ 𝑃AC ⋅ Θ(𝑇 𝑡set, 𝑇 𝑡in) ⋅ Δ𝑡 + 𝑊 𝑀 𝑡status ⋅ 𝑃washer ⋅ Δ𝑇
++ 𝑃 𝑡others ⋅ Δ𝑇 (15)
+𝐸𝑡batt = 𝑃 𝑡batt- × Δ
+𝑇 + 𝑃 𝑡batt+ × Δ𝑇 (16)
+where 𝐸𝑡tot
+al is total load energy demand; 𝐸𝑡pv is photovoltaic generation 
+output; 𝐸𝑡batt is battery charge/discharge energy; 𝐸𝑡grid is grid-purchased 
+electricity; 𝜆RTP𝑡  is real-time electricity price at time 𝑡, 𝐴𝐶 𝑡𝑜𝑛∕𝑜𝑓 𝑓 denotes 
+whether the air conditioner is on or off at time t, 𝑊 𝑀 𝑡𝑠𝑡𝑎𝑡𝑢𝑠 denotes 
+whether the washer machine is on or off at time t, 𝑃washer represents 
+the power of the washer machine, 𝑃 𝑡others represents the power of other 
+appliances, such as lights, televisions and so on, at time t. Δ𝑡 is the time 
+step for the air conditioner computation with a higher frequency e.g., 
+one minute, and, Δ𝑇  is the time step for other appliances with lower 
+frequency, e.g., one hour. The ∑ Δ𝑡 = Δ𝑇 .
+The carbon emission costs 𝐶 𝑡𝑐𝑎𝑟𝑏𝑜𝑛 represent the carbon emission of 
+grid-purchased electricity.
+𝐶 𝑡𝑐𝑎𝑟𝑏𝑜𝑛 = 𝐸𝑡gr
+id × 𝐽grid (17)
+where 𝐽grid 
+is carbon emission factor of power system. To evaluate the 
+thermal comfort of users, the following thermal comfort model is for­
+mulated by combining the quadratic function  [34] and noise exposure 
+[35]: 
+𝐶 𝑡𝑐𝑜𝑚𝑓 𝑜𝑟𝑡 = max (0, [𝑎(𝑇 𝑡𝑖𝑛 − 𝑇opt)2 + 𝑏] ⋅ 𝜈(𝑁 𝑡)) (18)
+where 𝑇𝑖𝑛 is indoor temperature; 𝑇opt is optimal temperature for occu­
+pants provided by users; 𝑎 ≈ −0.028 is thermal sensitivity coefficient; 
+𝑏 = 1 is baseline comfort score at 𝑇opt; 𝜈(𝑁 𝑡) is noise penalty coefficient 
+to the comfort at time 𝑡, which is in a range of ∈ (0, 1]; 𝑁 𝑡 is noise level 
+at time 𝑡 caused by operation of equipment.
+In this paper, we assume that the controllable devices include the air 
+conditioner, the washing machine, and the battery storage. Then, the 
+HEM problem can be formulated as the following optimization model:
+min𝑥𝑡
+𝑇∑
+𝑖
+(𝛼𝐶 𝑡𝑐
+𝑜𝑠𝑡 + 𝛽𝐶 𝑡𝑐𝑎𝑟𝑏𝑜𝑛 − 𝜒𝐶 𝑡𝑐𝑜𝑚𝑓 𝑜𝑟𝑡) (19)
+subject to Eqs. (1)–(18)
+Applied Energy 410 (2026) 127540 
+3 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 4 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Fig. 2. The control framework of the LLM-enhanced HEM.
+The control variables 𝑥𝑡 include air conditioner on/off operation 
+AC𝑡on/off, air conditioner temperature setpoint 𝑇 𝑡set, washing machine 
+operation WM𝑡op, and battery charge/discharge rates 𝑃 𝑡batt+ and 𝑃 𝑡batt-.
+To solve the above optimization problem with reinforcement learn­
+ing, the problem needs to be reformulated as the Markov Decision 
+Process (MDP), including the state space, action space, and reward 
+function. The detailed definition of MDP is shown as follows:
+State: For HEM control problem, the state space 𝑆 comprises six 
+critical variables: current hour 𝑡, indoor temperature 𝑇 𝑡in, outdoor tem­
+perature 𝑇 𝑡out, washing machine operational status WM𝑡status, battery State 
+of Charge Soc𝑡batt, and current season 𝑆𝑠𝑒𝑎.
+Action: The action space includes both discrete control decisions, 
+air conditioner on/off operation AC𝑡on/off and washing machine opera­
+tion WM𝑡op, along with continuous variables including air conditioner 
+temperature setpoint 𝑇 𝑡set and battery charge/discharge rate 𝑃 𝑡batt+ and 
+𝑃 𝑡batt-. WM𝑡op will cause WM𝑡status to maintain its set state for a duration of 
+Δ𝑇 .
+Reward: To align with the target in Eq. (19), the reward function 
+is defined as 𝑅(𝑥𝑡) = − 𝛼𝐶 𝑡𝑐𝑜𝑠𝑡 −𝛽𝐶 𝑡𝑐𝑎𝑟𝑏𝑜𝑛 +𝜒𝐶 𝑡𝑐𝑜𝑚𝑓 𝑜𝑟𝑡, weighted by coeffi­
+cients 𝛼𝑡, 𝛽𝑡, and 𝜒𝑡 respectively. Specifically, the coefficients represent 
+the user’s preferences and change over time. To ensure that the battery 
+energy storage does not sell all the energy to achieve a high reward 
+at the last time step leaving no initial energy for the next day, the re­
+maining battery energy will be transferred to the income by multiplying 
+the electricity price at a certain time tomorrow, which assumes that the 
+energy will be used the next day.
+Terminal States: The terminal states represent that one episode 
+ends, and HEM ends when the time interval 𝑡 is equal to 𝑇 .
+Discount factor: The framework employs a discount factor of 𝛾=
+0.99 to balance immediate and future rewards while ensuring numerical 
+stability.
+3.1.2 . Overall framework
+To address the core challenges of accurately perceiving dynamic user 
+preferences, overcoming the slow convergence of traditional reinforce­
+ment learning, and protecting user privacy, this paper proposes a com­
+prehensive LLM-enhanced HEM framework. As illustrated in Fig. 2, the 
+architecture is structured around three functionally distinct yet deeply 
+interconnected modules: the Dynamic Preference Elicitation Module for 
+understanding user preferences; the Energy Management Module for ef­
+ficient energy management, and a Hierarchical Data Sharing Module for 
+leveraging other users’ data while preserving privacy. These modules 
+collaborate synergistically: the preference elicitation module defines 
+the optimization objective, the data-sharing mechanism provides gen­
+eralized strategic knowledge, and the Energy Management module 
+synthesizes this information to execute and learn the optimal control 
+policy. In this framework, we assume that all LLM modules that process 
+user data (both raw and abstracted data) are deployed on local devices 
+within the user’s home network, mitigating LLM-related privacy risks.
+Applied Energy 410 (2026) 127540 
+4 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 5 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+For the hourly control loop, at each time step, the RL Agent sub­
+module generates the base action according to the state received from 
+the environment. Concurrently, the agent determines if LLM inter­
+vention is needed. If so, an LLM expert consults both generalized 
+Shared Knowledge and user-specific Personal Knowledge to generate a 
+high-quality reference action via the Action Guidance submodule. This 
+reference is then intelligently blended with the base action to form the 
+final control decision sent to the household Environment. The next state 
+and cost information are further received, stored, and processed by the 
+Reward Computing submodule, which calculates the reward based on 
+the user’s current preferences as determined by the Dynamic Preference 
+Elicitation Module. This complete experience tuple is then used to train 
+the Actor and Critic networks, continuously refining the agent’s policy. 
+The detailed algorithm is shown in Section 3.3.
+For the daily data-sharing process, at the end of each operational cy­
+cle (e.g., 24 o’clock), the system extracts knowledge from raw system 
+information (such as control trajectories) and the current preference in­
+formation. An LLM-based two-stage knowledge extraction is performed: 
+first, it converts this specific, private data into anonymized textual de­
+scriptions. Second, it further generalizes these descriptions into Shared 
+Knowledge without private information. This knowledge extraction pro­
+cess ensures that valuable control strategies can be shared among a 
+community of users to improve collective performance without com­
+promising any individual’s privacy. The shared knowledge becomes a 
+key input for the Data Selection process, which selects the suitable 
+knowledge for the Action Guidance submodule, allowing it to make 
+more informed decisions. The detailed process is further elaborated in 
+Section 3.4.
+For the seasonal elicitation process, the system actively interacts 
+with the user through unconstrained natural language to elicit user 
+preferences. When the user provides feedback, the Knowledge-Guided 
+Chain-of-Thought (KG-CoT) reasoning process is applied to infer the 
+preference step by step in the preference inference submodule. After 
+achieving the updated preference, the system will determine whether 
+to conduct the second round of interaction. If the second round of user 
+feedback is obtained, the preference evaluation submodule will evaluate 
+and modify the updated preference to improve the accuracy. The final 
+outcome is a precise update to the user’s Preference Information, which 
+is immediately applied to the Reward Computing in the energy man­
+agement module and informs the knowledge extraction process in the 
+data-sharing module. The detailed process is introduced in Section 3.2.
+3.2 . LLM-based dynamic preference elicitation
+To address the limitations of obtaining accurately user preferences, 
+this paper proposes the following LLM-based dynamic preference elic­
+itation framework. The two-round interaction is designed within the 
+framework. The first round feedback is used to infer the user preference, 
+and the second round feedback is used to evaluate and further improve 
+the accuracy of the inference result. The LLM functions as the reasoning 
+engine in the process. The detailed process is shown in Fig. 3.
+The first round of interaction is triggered when any of the following 
+conditions occur: seasonal transitions happen, the percentage of neigh­
+bors exhibiting preference changes exceeds the threshold 𝛽, or manual 
+modifications are made to appliance states. The preference inference 
+process begins by capturing the user’s natural language feedback (NL1). 
+Then KG-CoT reasoning process is proposed to transform the natural 
+language feedback into numerical preferences through three sequen­
+tial, specialized reasoning steps, each guided by knowledge graphs to 
+enhance precision and stability: (1) KG-CoT1 establishes the temporal 
+scope for affected actions. (2) KG-CoT2 identifies the variable name 
+and the direction of modification intended by the natural language. 
+(3) KG-CoT3 updates memory using historical control patterns. The 
+KG-CoT3 is required to output preference values and thermal comfort 
+values in JSON format, facilitating the comprehension and utilization of 
+RL. A JSON example is: `weights': {`alpha': 1.2, `beta': 0.09, 
+Fig. 3. The dynamic preference elicitation process.
+`gamma': 10}, `T_opt': 22.5. The system can then extract the exact 
+numerical values, and update the reward function coefficients in Eq. (19) 
+and thermal comfort coefficient Eq. (18). This structured mapping elim­
+inates ambiguity in preference updates. KG-CoT Prompts are detailed as 
+follows.
+1. KG-CoT1: Target Season Identification Given the natural lan­
+guage input: “[User Input]” and the previous understanding ex­
+perience “[Transient Memory]”, analyze the user’s statement to 
+identify which season’s preference is being modified. Consider ex­
+plicit keywords (e.g., “summer”, “winter”) and implicit contextual 
+cues (e.g., “when it’s hot”, “during the holidays”). Output the iden­
+tified target season (e.g., “Summer”, “Winter”, “All-Season”) with 
+a brief justification based on the input text.
+2. KG-CoT2: Relevant Parameter Extraction For the preference ex­
+pressed in: “[User Input]”, the target season “[Target Season]” and 
+the previous understanding experience “[Transient Memory]”, ex­
+tract the specific preference parameters the user intends to change. 
+Output a list of key parameters mentioned or implied in the input, 
+along with the direction of change.
+3. KG-CoT3: Parameterized Adjustment Given the parameter 
+needs to change, “[User Input]” and the historical preference data 
+“[Transient Memory]” for the “[Target Season]” from the memory 
+module. Generate a concrete, parameterized update.
+Output structured JSON containing: (1) target season: [Target 
+Season]; (2) updated parameters: [Parameter]: [Recommended 
+Applied Energy 410 (2026) 127540 
+5 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 6 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Value/Adjustment]; (3) rationale: A brief explanation of how the new 
+input and historical data were combined to determine the final values.
+Here, the “Transient Memory” serves as a short-term conversational 
+cache, implemented as a sliding window that retains the most recent 
+three interaction turns without additional processing. After obtaining 
+the new preferences, we will wait and decide whether to collect sec­
+ond round of user feedback to evaluate the inference results. There 
+are two judgments: one is when the user makes manual device adjust­
+ments, and the other is based on a predefined probability equation to 
+determine whether to trigger the collection. When manual adjustments 
+are detected, the preference acquisition framework actively solicits user 
+feedback ( NL2) for storage. And the feedback collection probability 
+𝑃collect(𝑡) is:
+𝑃collect(𝑡) = max(0 .2, 0.8 − 𝑡 ⋅ 𝐶decay) (20)
+where 𝑡 represents the time step. 𝐶decay is a constant that indicates the 
+rate at which the frequency of feedback collection decreases with time 
+step. If the feedback is given, the preference acquisition framework 
+records this change in transient preferences Mtransnew, where Δ𝑃  is the 
+change of preference described by LLMs with specific numbers:
+Mtransnew = (NL1, Δ𝑃 , NL2) (21)
+The preference acquisition framework sends the previous and current 
+comfort functions and preference weights to the LLM, lets it compare 
+the differences between them, and then obtains the result.
+3.3 . LLM-enhanced DDPG algorithm
+To enhance the DRL agent’s learning efficiency and performance 
+for HEM with dynamic user preferences, this paper proposes an LLM-
+enhanced DDPG algorithm with the action guidance. The LLM acts as 
+an expert advisor, providing high-quality reference actions to steer the 
+DDPG agent’s exploration, especially during the early stages of learn­
+ing or after a significant change in the environment or user preferences. 
+This collaborative approach accelerates convergence and helps the agent 
+avoid suboptimal policies. To adapt this hybrid discrete-continuous ac­
+tion space to the DDPG algorithm, we employ a relaxation-thresholding 
+mapping. The actor network outputs a continuous vector 𝑎 ∈ [−1 , 1]4, 
+which is mapped to physical actions as follows: 𝐴𝐶𝑜𝑛 = I(𝑎[0] > 0), 
+𝑇𝑠𝑒𝑡 = round(18 + 6(𝑎[1] + 1)), 𝑊 𝑀𝑜𝑛 = I(𝑎[2] > 0), and 𝑃𝑏𝑎𝑡𝑡 = 𝑎[3] ⋅ 𝑃𝑚𝑎𝑥. 
+The I is the indicator function. This relaxation-thresholding approach 
+maintains a unified continuous action space for DDPG efficiency while 
+handling discrete control decisions. The complete algorithm is detailed 
+in Algorithm 1.
+The algorithm’s workflow begins with the standard initialization of 
+networks and the replay buffer. For each timestep within an episode, the 
+DDPG agent’s actor network first generates a base action 𝑎base𝑡 . Then the 
+dynamic intervention of LLM is determined by the ‘TriggerLLM(𝑡)’ func­
+tion. This function implements an adaptive invocation schedule, calling 
+the LLM frequently in early training phases for strong guidance and grad­
+ually reducing the frequency as the agent’s policy matures. When LLM 
+guidance is triggered, the LLM-generated reference action (Line 6) is 
+created by prompting the LLM with current state (𝑠 𝑡), user preferences 
+(𝑃𝑡), recent history (𝐻𝑡), and relevant memory (𝑀𝑝). The factor 𝜆 is also 
+scheduled to evolve, initially prioritizing the LLM’s suggestion and later 
+giving more weight to the agent’s learned policy. If LLM guidance is not 
+triggered, standard exploration noise N𝑡 is added to the base action to 
+ensure sufficient exploration.
+Following action selection, the final action 𝑎′𝑡 is validated and clipped 
+by the ‘ConstrainAction’ function to satisfy the following constraints:
+𝑇min ≤ 𝑇set(𝑎′𝑡) ≤ 𝑇max (22)
+𝑃 batt ≤ 𝑃batt( 𝑎′𝑡) ≤ 𝑃 batt (23)
+WMop(𝑎′𝑡)
+is feasible w.r.t. cycle and time-of-day (24)
+The first constraint ensures the air conditioner’s temperature setpoint 
+remains within a safe range. The second enforces the battery’s power 
+Algorithm 1 LLM-enhanced DDPG with Action Guidance.
+1: Initialize: Replay 
+buffer D, actor 𝜋𝜃, critic 𝑄𝜙, and target networks 
+𝜋𝜃′, 𝑄𝜙′. 
+2: Observe initial state 𝑠0. 
+3: for 𝑡 = 0, 1, 2, … , 𝑇 do
+4: 𝑎base𝑡 ∼ 𝜋𝜃(𝑠𝑡). 
+5: if TriggerLLM(𝑡) then
+6: 𝑎ref𝑡 ← LLM(𝑠𝑡, 𝑃𝑡, 𝐻𝑡, 𝑀𝑝)
+7: 𝑎′𝑡 ← 𝜆𝑎base𝑡 + (1 − 𝜆)𝑎ref𝑡
+8: else
+9: 𝑎′𝑡 ← 𝑎base𝑡 + N𝑡
+10: end if
+11: 𝑎′𝑡 ← ConstrainAction(𝑎′𝑡)
+12: Execute 𝑎′𝑡, observe 𝑟𝑡, 𝑠𝑡+1
+13: Store (𝑠𝑡, 𝑎′𝑡, 𝑟𝑡, 𝑠𝑡+1) in D
+14: Sample minibatch {(𝑠𝑖, 𝑎𝑖, 𝑟𝑖, 𝑠𝑖+1)}𝑁𝑖=1 from D
+15: Set target 𝑦𝑖 = 𝑟𝑖 + 𝛾𝑄 𝜙′ (𝑠𝑖+1, 𝜋𝜃′ (𝑠𝑖+1))
+16: Update critic by minimizing loss: L𝜙 = 1𝑁 ∑ (𝑦𝑖 − 𝑄𝜙( 𝑠𝑖, 𝑎𝑖))2
+17: Update actor 
+via policy gradient: ∇𝜃𝐽 (
+𝜃) ≈
+1
+𝑁
+∑ ∇𝑎𝑄𝜙(𝑠𝑖, 𝑎)|𝑎=𝜋𝜃 (𝑠𝑖)∇𝜃𝜋𝜃(𝑠𝑖)
+18: Soft update target networks: 
+19: 𝜃′ ← 𝜏
+𝜃 + (1 − 𝜏)𝜃′
+20: 𝜙′ ← 𝜏𝜙 + (1 − 𝜏)𝜙′
+21: end for
+22: return 𝜋𝜃
+limits. The 
+third constraint ensures that once a laundry cycle starts, it 
+must run to completion without interruption. No cycle may be repeated 
+within the same day, and all tasks must be finished by the end of the day. 
+The air conditioner setpoint temperature is clamped to the predefined 
+upper or lower threshold if the suggested value exceeds the allowable 
+range. For the washing machine, operation is regulated to fulfill the con­
+tinuous runtime requirement: it remains active if currently running and 
+not yet completed, and is scheduled immediately if the remaining hours 
+match the needed operation time and it has not been used that day. 
+Additional constraints, such as maintaining battery power within rated 
+limits, are also applied to guarantee safe and feasible device operation.
+After executing the validated action, the agent receives a reward and 
+observes the next state, and this experience tuple is stored in the re­
+play buffer D. The learning phase (Lines 15-20) then proceeds with the 
+standard DDPG updates, where a minibatch is sampled from the replay 
+buffer. The target values, 𝑦𝑖, are computed for the critic update. The 
+critic network is then updated by minimizing the mean squared error 
+between its Q-value estimates and these target values. Subsequently, 
+the actor network is updated by ascending the policy gradient, which 
+is derived from the critic’s evaluation of the actor’s output. To stabi­
+lize training, the target networks are updated slowly using a soft update 
+parameter, 𝜏.
+3.4 . Hierarchical data sharing with LLM-based knowledge extraction
+To protect user privacy while ensuring sufficient historical data sup­
+ports LLMs and RL in making optimal action selections, the mechanism 
+faces the challenge of balancing privacy and information sharing. To 
+solve this problem, the paper proposes the hierarchical data sharing with 
+LLM-based knowledge extraction, as illustrated in Fig. 4. Two key sub­
+modules are applied to support hierarchical data sharing: Knowledge 
+Extraction and Data Selection.
+LLM-based knowledge extraction is the core process that enables 
+privacy-preserving data sharing, which involves a two-stage abstraction 
+performed by an LLM, namely, from raw information to natural language 
+description, and then from natural language description to privacy-
+preserving knowledge. To improve the effectiveness of knowledge ex­
+traction, the data is divided into two parallel parts, user preference 
+Applied Energy 410 (2026) 127540 
+6 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 7 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Fig. 4. 
+Hierarchical data sharing with LLM-based knowledge extraction.
+and system information. Therefore, the lowest level consists of raw 
+System Information (e.g., control trajectories, energy consumption val­
+ues) and Preference Information (e.g., numerical weights for comfort 
+and cost). This data is highly specific and private. The next level holds 
+the System Description and Preference Description, which are textual 
+summaries of the raw data generated by the LLM. The last level stores 
+generalized System Knowledge and Preference Knowledge, which is 
+anonymized, stripped of all specific numerical values and personally 
+identifiable patterns, and represents generalized control strategies and 
+preference-driven insights. The strict separation ensures that only non-
+sensitive, high-level knowledge is shared, forming the foundation of the 
+privacy-preserving architecture.
+The detailed LLM-based knowledge extraction process is shown as 
+follows. For preference-related data, the process begins when the LLM 
+receives the user’s raw Preference Information (Flow ➀). It first trans­
+forms this numerical data into a qualitative, natural language Preference 
+Description. This description captures the essence of the user’s priorities 
+(e.g., “prioritizes comfort heavily in the evening”) without revealing 
+the exact weightings. In the second stage (Flow ➁), the LLM further 
+generalizes this description into actionable Preference Knowledge (e.g., 
+“for users who prioritize evening comfort, increasing the heating set­
+point is a valid strategy”). A parallel process occurs for system-related 
+data. The LLM takes the raw System Information from the user’s op­
+erational history (Flow ➂) and synthesizes it into a System Description, 
+summarizing the agent’s behavior. Subsequently (Flow ➃), it distills this 
+description into generalized System Knowledge, representing effective 
+control heuristics (e.g., “pre-cooling during off-peak hours is an effective 
+cost-saving measure”). Only the final, the doubly-abstracted Preference 
+Knowledge and System Knowledge are saved to the Shared Memory 
+(Flow ➄) at the end of day if LLM-based knowledge extraction is in­
+voked on that day. To manage the memory size effectively, the Shared 
+Memory is capped at 64 items. A three-tiered partition deletion strategy 
+is employed when this limit is reached: the oldest section has the most 
+data removed, the middle section has a moderate amount of data re­
+moved, and the most recent section has the least data removed, thereby 
+striking a balance between timeliness and diversity.
+Data selection process (Flow ➅) ensures the effective usage of the 
+shared memory. Since there is a large amount of knowledge in the shared 
+memory from other users, agents should filter out the most relevant sug­
+gestions and prioritize the most beneficial ones from the shared memory. 
+As the preference data is most relevant and useful to the energy man­
+agement strategy, only the user preference information is used in the 
+data selection process. More specifically, the LLM selects the data from 
+shared memory by comparing the user’s personal preference descrip­
+tion and other users’ preference knowledge. The most similar preference 
+knowledge from other users is selected by LLM, and the corresponding 
+shared memory is used as the selected knowledge.
+4 . Experiment
+4.1 . Set up
+To verify the performance of the proposed method, a house with a 
+photovoltaic generation system and a battery energy storage system is 
+simulated in the experiment, and the system operates at 1-hour discrete 
+time steps. The hourly ambient temperature from Kaggle is chosen, and 
+the time range is from 2012/01/01 to 2012/12/31. The time-of-use elec­
+tricity prices for households are assumed in this paper, where the peak 
+price, flat price, and off-peak price are 1.3, 0.8, and 0.4 RMB/kWh. Actor 
+Network has 2 hidden layers with 256 neurons each, ReLU activations; 
+output layer uses Tanh activation to output continuous actions. Critic 
+Network has 2 hidden layers with 256 neurons each, ReLU activations; 
+it takes state–action concatenation as input and outputs Q-value esti­
+mates. Experiments involve training for 300 episodes, each representing 
+a full 24-hour day. Exploration Noise Ornstein-Uhlenbeck process. In 
+each season, the frequency at which the LLM is awakened gradually de­
+creases (from being awakened every 5 days to every 10 days to every 
+20 days). To simplify implementation, a cloud-based LLM (Gemini 2.0 
+Flash with temperature setting of 1 and default max output tokens) is 
+used in the experiment instead of locally deployed model. Table 1 shows 
+the hyperparameter information of the model and RL algorithm.
+In the experiment, both dynamic user thermal comfort and user 
+objective preferences are redefined and adjusted with ambient temper­
+ature changes. A volunteer is asked to simulate user preferences and 
+potential preference changes. Preference estimation was conducted once 
+per interaction and season using a direct question-and-answer protocol. 
+The ‘ground truth’ preference weights (𝛼, 𝛽, 𝛾) and optimal temperatures 
+(𝑇𝑜𝑝𝑡) are predefined for each season, enabling precise MAPE calculation 
+for preference elicitation accuracy evaluation. To verify the performance 
+of the proposed method and particularly the data-sharing mechanism, 
+we simulate a community of 3 distinct households (Household 0, 1, 
+2), each equipped with a photovoltaic generation system and a battery 
+energy storage system. Each household varies in building characteris­
+tics (wall area: 30–90 𝑚2, window area: 5–12 𝑚2, thermal resistance: 
+0.08–0.12) and preference parameters (cost weight 𝛼: 1–20, carbon 
+emission weight 𝛽: 0.08–1, comfort weight 𝛾: 1–10, noise impact: 0–1) 
+to realistically represent the heterogeneity of actual communities.
+Table 1 
+Hyperparameters for experiments.
+Symbol Value Symbol Value
+𝜆ear
+ly 0.9 Critic learning rate 0.001
+𝜆late 0.1 Actor learning rate 0.0001
+𝜇 0.05 𝑃𝐴𝐶 ℎ𝑒𝑎𝑡 1800 W
+Δ𝑇𝑑𝑒𝑎𝑑𝑏𝑎𝑛𝑑 1 ◦C 𝑃𝐴𝐶 𝑐𝑜𝑜𝑙 1300 W
+𝑇𝑁𝑂𝐶 45.0 ◦C 𝑈𝑤𝑖𝑛 2.6 W/(m2⋅ K)
+𝑇𝑚𝑎𝑥 30.0 ◦C 𝑇𝑚𝑖𝑛 18.0 ◦C
+𝜂𝑐ℎ,𝑏𝑎𝑡𝑡 0.85 PV panel area 2.0 m2
+𝜂𝑑𝑖𝑠,𝑏𝑎𝑡𝑡 0.85 𝑅𝑤𝑎𝑙𝑙 0.12 W/(m⋅K)
+Socbatt 2.0 kWh 𝑃 𝑡o thers 500 W
+𝛾tem −0.4%/◦C 𝜂AC𝑐𝑜𝑜𝑙 and 𝜂ℎ𝑒𝑎𝑡AC 3.0
+WM power 500 W Training Batch Size 64
+WM duration 2.0 h Replay buffer size 10,000
+Applied Energy 410 (2026) 127540 
+7 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 8 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Various metrics are employed to evaluate the results. The MAPE is 
+calculated as shown in  Eq. (25).
+MAPE = 100%𝑁
+𝑁∑
+𝑖=1
+|||| 𝑦𝑖 − ̂ 𝑦𝑖𝑦𝑖 |||| (25)
+where N is number of observations, 𝑦𝑖 is ground truth value, ̂ 𝑦𝑖 is 
+predicted value.
+We select the following methods as baselines to provide a com­
+prehensive evaluation that spans static preference RL, model-based 
+optimization with perfect preferences, and adaptive supervised learn­
+ing.All baseline methods utilized the same simulation environment, and 
+were reasonably tuned to ensure a fair comparison.
+Fixed Preference DDPG: Utilize static preference weights ( 𝛼 =
+1.0, 𝛽 = 0.09293, 𝛾 = 10) throughout the year and DDPG algorithm.
+MPC: Utilize Neural network-based model (with two 128-
+dimensional hidden layers and ReLU activation) to predict the next 
+state and then apply the COBYLA optimizer to calculate the optimal 
+action.
+Incremental Learning: Hybrid training every 6 hours (30% new data 
++ 70% historical experience) to predict the next state, and then applying 
+the COBYLA optimizer to calculate the optimal action.
+4.2 . Comparison of different control methods
+To demonstrate the performance of our proposed framework, four 
+approaches are compared in this experiment: (1) Fixed Preference 
+DDPG, (2) MPC, (3) Incremental Learning (IL), and (4) the proposed 
+LLM-enhanced HEM framework. The Fixed Preference DDPG adopts 
+fixed winter thermal comfort preferences and the constant weightings 
+among cost, carbon emissions, and comfort. The MPC and IL directly 
+apply the accurate preference information, without any error. The IL 
+method incrementally trains a neural network every 6 hours to better 
+predict random variables such as temperature, and then the parameters 
+are applied to the MPC.
+The learning process is compared and shown in Fig. 5. The solid line 
+represents the average results from five repeated experiments, reflecting 
+the overall learning trend, while the shaded area indicates the range of 
+mean ± 1 standard deviation. The Fixed Preference DDPG achieves perfor­
+mance similar to the proposed framework in winter (cold) due to the 
+correct user thermal comfort preferences. However, inaccurate prefer­
+ence settings in other seasons lead to misaligned reward calculations 
+and reduced learning performance, particularly in summer (hot) when 
+preference discrepancies are most pronounced. The proposed frame­
+work maintains superior performance, especially when converging to 
+stable fluctuation states (e.g., spring around the 50th day and summer 
+around the 200th day). These results highlight its adaptability and ro­
+bust decision-making, which significantly improve user satisfaction and 
+overall system performance.
+To evaluate the performance during convergence, the average results 
+over the last 20 days of each season are summarized in Table 2, the val­
+ues in parentheses represent the standard deviation(std). The proposed 
+framework maintained its performance advantage over other methods 
+across all seasons. Particularly, in terms of cost, the proposed method 
+reduced costs by over 81.4% compared to MPC and over 28.8% com­
+pared to Fix-Preference DDPG. In terms of comfort, the proposed method 
+increased comfort by over 29.9% compared to MPC and over 9.3% com­
+pared to Fix-Preference DDPG. This is because proposed method enables 
+a more accurate understanding of user comfort requirements, reducing 
+the likelihood of getting trapped in local optima that would compro­
+mise comfort performance. Consequently, it guides actions to better 
+maintain comfort while achieving energy savings. Overall, inaccurate 
+user preference parameters and inaccurate parameter predictions signif­
+icantly impact control effectiveness. Comparing Fixed Preference DDPG 
+and the proposed method reveals that the greater the deviation in user 
+parameter accuracy, the greater the difference in control effectiveness, 
+reaching its peak in summer. The non-zero std in MPC arises because a 
+Fig. 5. Comparison of Fixed Preference DDPG, MPC, IL, and the proposed 
+framework.
+Table 2 
+Seasonal performance metrics comparison (values in parentheses for 
+Reward indicate standard deviation).
+Method Reward↑ Carbon(KG)↓ Comfort↑ Cost↓
+Fixed preference DDPG
+Spring −27.35(70.5) 4.552 22.830 4.976
+Summer −7.65(29.0) 10.907 0.658 13.211
+Fall −94.17(106.8) 9.804 13.976 10.723
+Winter 219.89(1.5) 3.867 22.397 3.715
+Total 41.49 7.629 12.249 8.760
+Incremental learning
+Spring −271.64(127.9) 30.555 15.203 28.400
+Summer 12.97(43.6) 31.946 5.056 34.616
+Fall −265.95(97.5) 28.481 11.091 27.439
+Winter 97.43(52.4) 32.551 13.657 36.119
+Total −48.11 31.496 9.991 33.085
+MPC
+Spring −320.14(99.7) 40.367 11.657 32.804
+Summer 35.92(45.9) 34.831 7.344 34.285
+Fall −284.29(102.3) 31.805 11.103 29.244
+Winter 99.64(52.8) 38.672 13.782 34.585
+Total −49.04 36.683 10.308 33.583
+LLM-enhanced DDPG
+Spring −20.11(42.4) 5.564 19.373 3.897
+Summer 43.81(61.5) 15.881 5.395 8.669
+Fall −65.47(60.7) 14.210 11.524 7.568
+Winter 220.68(2.3) 3.956 22.462 3.574
+Total 68.22 10.436 13.391 6.233
+neural network-based prediction model is employed here, which inher­
+ently introduces certain uncertainties. The LLM-enhanced DDPG exhibits 
+a markedly lower std in shorter, more volatile seasons like spring and 
+fall compared to alternative approaches. This result signifies a supe­
+rior performance stability afforded by the LLM guidance. Comparing 
+MPC, IL, and the proposed method shows that accurate random vari­
+able predictions can improve control effectiveness (MPC vs. IL), but the 
+improvement is limited.
+4.3 . Comparison of different preference elicitation methods
+To demonstrate the performance of the proposed preference elicita­
+tion method, this experiment compares three approaches: (1) feedback-
+only elicitation, (2) feedback and historical experience elicitation, and 
+Applied Energy 410 (2026) 127540 
+8 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 9 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Table 3 
+Preference elicitation accuracy comparison.
+Method Iterations↓ MAPE↓
+Feedback-only 9.50 42.60%
+Feedback & experience 3.50 5.43%
+Proposed KG-CoT 1.25 0.30%
+(3) the 
+proposed KG-CoT method. The first method utilizes LLM to in­
+fer user preferences only based on user feedback. The second method 
+directly infers the preferences using both feedback and historical ex­
+perience. The last one is the proposed Chain-of-Thought method. Each 
+iteration represents one complete preference elicitation cycle. In the ex­
+periment, the ground truth preferences are defined as numerical weights 
+of the reward function and the optimal temperature setpoint, which are 
+obtained through direct entry from one volunteer. We first obtain these 
+user preferences in numerical form and then simulate natural-language 
+interactions consistent with these numerical settings. Consequently, the 
+natural-language inputs can be directly mapped to their corresponding 
+numerical targets within this experimental setup.
+The accuracy and iteration numbers of the preference elicitation 
+methods are shown in Table 3 . The feedback-only method serves as 
+a baseline for evaluating the LLM’s ability to infer user preferences. 
+Incorporating historical experience substantially accelerates the elici­
+tation process from 9.5 to 3.5 iterations and improves accuracy from 
+42.6% to 5.43%. The proposed KG-CoT method further enhances perfor­
+mance, achieving an accurate user preference with only 0.3% MAPE and 
+converging within approximately 1.25 iterations. These results clearly 
+demonstrate that integrating historical control data with real-time feed­
+back significantly improves elicitation efficiency and accuracy, while 
+the CoT reasoning mechanism enables the LLM to interpret and utilize 
+information more effectively.
+To further validate the impact of preference elicitation on the learn­
+ing process, different preference elicitation methods are combined with 
+RL to observe how the rewards change. Table 4 shows the average re­
+sults over the first 20 days of each season, corresponding to the seasonal 
+transition periods when new preference elicitation occurs. Compared 
+with the feedback-only method, the KG-CoT achieves an average im­
+provement of 22.8% in the thermal comfort, demonstrating the benefit 
+of enhanced preference inference. Interestingly, despite exhibiting less 
+preference accuracy, the reward of feedback-only method outperforms 
+the feedback and experience method in winter to spring transition and 
+spring to summer transition. This may occur when historical memories 
+from previous seasons bias the elicitation process in new environments. 
+Also, combined with the convergence results in Table 2, the findings 
+confirm that the proposed framework learns faster and adapts more 
+effectively across seasonal transitions.
+4.4 . Ablation study
+To verify the 
+performance improvement of each module, the abla­
+tion study of preference elicitation, action guidance, and data-sharing 
+mechanism is compared. Table 5 shows the convergence results by com­
+puting the average data from the last 20 days of each season. The 
+results indicate that during seasons like spring and fall when electricity 
+cost is prioritized, the proposed method demonstrates a clear advan­
+tage in cost reduction, achieving the lowest electricity expense among 
+the four methods. In seasons such as winter and summer where comfort 
+is highly valued, the proposed method also attains the highest comfort 
+score. This demonstrates the framework’s capability to flexibly adapt 
+and control according to varying user requirements. Overall, the ab­
+sence of the preference elicitation module (Fixed Preference method) 
+leads to the largest performance decline, for example, the reward drops 
+from 43.807 to −7.645 in summer. This is followed by the removal of 
+the action guidance module, which reduces the performance to 17.112. 
+And the exclusion of data sharing module shows the smallest impact 
+Table 4 
+Performance metrics during season transition periods.
+Transition period/method Reward↑ Carbon(KG)↓ Comfort↑ Cost↓
+Winter → spring transition
+Fixed preference −48.909 15.607 20.041 13.400
+Feedback-only −32.008 9.932 15.916 10.074
+Feedback & experience −44.365 16.282 19.656 13.657
+KG-CoT −24.012 12.270 20.954 11.114
+Spring → summer transition
+Fixed preference 20.346 21.035 5.808 22.827
+Feedback-only 28.787 17.120 5.675 16.347
+Feedback & experience 23.981 16.010 4.880 15.045
+KG-CoT 37.911 14.151 6.055 12.368
+Summer → fall transition
+Fixed preference −158.685 15.202 13.284 17.056
+Feedback-only −97.964 12.775 11.570 10.835
+Feedback & experience −91.644 18.568 11.538 10.146
+KG-CoT −85.800 15.519 11.738 9.610
+Fall → winter transition
+Fixed preference 133.623 19.392 15.427 18.844
+Feedback-only 76.374 13.903 8.994 12.269
+Feedback & experience 101.671 18.254 12.198 18.609
+KG-CoT 140.576 17.979 15.853 16.285
+Total
+Fixed preference −13.406 17.809 13.640 18.031
+Feedback-only −6.203 13.432 10.538 12.381
+Feedback & experience −2.589 17.278 12.068 14.364
+KG-CoT 17.169 14.980 13.650 12.344
+Table 5 
+Average results 
+of the ablation studies (values in parentheses for Reward indicate 
+standard deviation).
+Method Reward↑ Carbon(KG)↓ Comfort↑ Cost↓
+Fixed preference
+Spring −27.35(70.5) 4.552 22.830 4.976
+Summer −7.65(29.0) 10.907 0.658 13.211
+Fall −94.17(106.8) 9.804 13.976 10.723
+Winter 219.89(1.5) 3.867 22.397 3.715
+Total 41.49 7.629 12.249 8.760
+w/o action guidance
+Spring −25.84(41.9) 4.556 15.677 4.110
+Summer 17.11(42.4) 6.769 2.194 4.200
+Fall −78.34(66.2) 11.627 11.643 8.891
+Winter 220.26(0.6) 3.800 22.397 3.350
+Total 54.15 5.994 11.259 4.406
+w/o data sharing
+Spring −26.00(46.0) 4.919 20.415 4.596
+Summer 33.02(52.1) 11.621 4.102 6.916
+Fall −70.71(68.5) 13.890 12.669 8.209
+Winter 220.16(1.1) 4.115 22.412 3.574
+Total 61.72 8.473 13.136 5.675
+Proposed framework
+Spring −20.11(42.4) 5.564 19.373 3.897
+Summer 43.81(61.5) 15.881 5.395 8.669
+Fall −65.47(60.7) 14.210 11.524 7.568
+Winter 220.68(2.3) 3.956 22.462 3.574
+Total 68.22 10.436 13.391 6.233
+on overall 
+performance. The results of the standard deviation demon­
+strate that during the shorter autumn season, when the DDPG algorithm 
+itself had not reached a stable state by the end of the operational pe­
+riod, the proposed framework achieved the smallest std. This indicates 
+that the frequent guidance provided by the LLM with full memory dur­
+ing seasonal transitions enhances system stability, thereby contributing 
+to a more consistent and satisfactory user comfort experience. These 
+findings are consistent with the previous experiments, indicating that 
+the user preferences have the greatest influence on the overall control 
+performance. The relatively minor effect of data sharing aligns with its 
+Applied Energy 410 (2026) 127540 
+9 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 10 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+Fig. 6. Learning process of the ablation studies.
+primary purpose of protecting user privacy rather than directly enhanc­
+ing control accuracy. The performance improvement is governed by the 
+presence of semantically similar neighbor users in the shared memory, 
+rather than the total number of users.
+The detailed learning process of the ablation studies is shown 
+in Fig. 6 . Overall, the proposed framework (purple line) shows su­
+perior performance and faster convergence. Specifically, the Fixed 
+Preference method fails to learn an optimal thermal comfort strategy 
+and exhibits considerable bias, ultimately resulting in a significant re­
+duction in overall reward. The contributions of the data-sharing and 
+action-guidance modules are primarily reflected in learning efficiency. 
+Compared with the proposed framework, the absence of the data-sharing 
+method (blue line) leads to lower learning efficiency in thermal com­
+fort during the early stages of seasonal transitions (e.g., days 0–10 
+and 95–105). Similarly, removing the action-guidance module (orange 
+line) reduces learning efficiency for cost and carbon-emission control 
+at the beginning of each seasonal change. During relatively stable 
+periods (e.g., days 200–240), the performance reduction caused by 
+omitting the data-sharing module is smaller than that of removing the 
+action-guidance module, while the Fixed Preference method exhibits 
+the greatest overall decline. Simulation results demonstrate that when 
+the LLM guidance frequency is reduced to zero (i.e., complete cessation 
+of guidance for DDPG action selection), system performance shows a 
+significant decline, corresponding to the “w/o Action Guidance” condi­
+tion in Table 5. This phenomenon confirms that substantially reducing 
+the number of LLM calls leads to quantifiable degradation in control
+effectiveness.
+5 . Conclusion
+This paper presents an LLM-enhanced HEM framework that inte­
+grates dynamic user preference elicitation and the hierarchical data-
+sharing mechanism. First, Knowledge-Guided Chain-of-Thought is pro­
+posed to achieve precise and efficient hourly thermal comfort and 
+objective preference elicitation. Second, the LLM-generated reference 
+actions are introduced to accelerate RL under limited data conditions. 
+Third, a hierarchical data-sharing mechanism with LLM-based knowl­
+edge extraction is designed to protect user privacy while enabling 
+efficient data selection. Experimental results demonstrate that the pro­
+posed framework significantly outperforms the existing methods in both 
+adaptability and control effectiveness. In particular, the costs are re­
+duced by more than 28.8% and the comfort is improved by over 9.3% 
+compared to fix preference RL method.
+Future research will pursue several key directions to advance this 
+work, including extending the current framework to multi-agent collabo­
+rative scenarios, conducting in-depth analyses of performance variations 
+under different user scales and diversity, and validating its general­
+izability across diverse climate zones and real-time electricity pricing 
+structures.
+CRediT authorship contribution statement
+Xunning Zhang: Writing – review & editing, Writing – origi­
+nal draft, Visualization, Validation, Software, Resources, Methodology, 
+Investigation, Formal analysis, Data curation, Conceptualization.
+Yuheng Cheng: Writing – review & editing, Writing – original 
+draft, Validation, Supervision, Resources, Methodology, Formal anal­
+ysis, Conceptualization. Xuanang Gui: Writing – original draft.
+Huan Zhao: Writing – review & editing, Writing – original 
+draft, Validation, Supervision, Resources, Project administration, 
+Methodology, Conceptualization. Junhua Zhao: Writing – review & 
+editing, Supervision, Funding acquisition. Jinyue Yan: Writing – review 
+& editing, Supervision, Funding acquisition.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Appendix A . Action guidance prompt template
+Data availability
+Data will be made available on request.
+References
+[1] Nejat P, Jomehzadeh F, Taheri MM, Gohari M, Majid MZA. A global review of 
+energy consumption, CO 2 emissions and policy in the residential sector (with 
+an overview of the top ten CO 2 emitting countries. Renew Sustain Energy Rev 
+2015;43:843–62.
+[2] International Energy Agency. Electricity information: overview, technical report. 
+Paris: IEA; 2021. Licence: CC BY 4.0.
+Applied Energy 410 (2026) 127540 
+10 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 11 ===
+X. Zhang, Y. Cheng, X. Gui et al.
+[3] Rokonuzzaman M, Rahman S, Hannan M, Mishu MK, Tan W-S, Rahman 
+KS, Pasupuleti J, Amin N. Levenberg-marquardt algorithm-based solar PV en­
+ergy integrated internet of home energy management system. Appl Energy 
+2025;378:124407.
+[4] Zhou Y, Wang L, Fan H, Wang Y, Sun Y. Research on interaction between 
+hems-vpp and power system with high renewable energy penetration under net 
+zero emissions: operation strategy and economy viability boundary. Appl Energy 
+2025;390:125773.
+[5] Dimara A, Papaioannou A, Papaioannou C, Krinidis S, Anagnostopoulos C-N. An 
+intelligent IOT framework for real-time energy-efficient smart building manage­
+ment. In: Olympus international conference on supply chains. Springer; 2024. p. 
+201–14.
+[6] Stefanopoulou A, Dimara A, Michailidis I, Karatzinis G, Papaioannou A, Krinidis 
+S, Anagnostopoulos C-N, Kosmatopoulos E, Ioannidis D, Tzovaras D. Ensuring 
+reliability in smart building IOT operations through real-time holistic data treat­
+ment. In: IFIP international conference on artificial intelligence applications and 
+innovations. Springer; 2023. p. 207–18.
+[7] Papaioannou C, Dimara A, Papaioannou A, Tzitzios I, Anagnostopoulos C-N, 
+Krinidis S. Hierarchical resources management system for internet of things-
+enabled smart cities. Sensors 2025;25:616.
+[8] Serale G, Fiorentini M, Capozzoli A, Bernardini D, Bemporad A. Model predictive 
+control (MPC) for enhancing building and HVAC system energy efficiency: problem 
+formulation, applications and opportunities. Energies 2018;11:631.
+[9] Van der Meer D, Wang GC, Munkhammar J. An alternative optimal strategy for 
+stochastic model predictive control of a residential battery energy management 
+system with solar photovoltaic. Appl Energy 2021;283:116289.
+[10] Hosseini SM, Carli R, Dotoli M. A residential demand-side management strategy 
+under nonlinear pricing based on robust model predictive control. In: 2019 IEEE 
+international conference on systems, man and Cybernetics (SMC). IEEE; 2019. p. 
+3243–8.
+[11] Seal S, Boulet B, Dehkordi VR, Bouffard F, Joos G. Centralized MPC for home energy 
+management with EV as mobile energy storage unit. IEEE Trans Sustain Energy 
+2023;14:1425–35.
+[12] Chen Z, Xiao F, Guo F, Yan J. Interpretable machine learning for building energy 
+management: a state-of-the-art review. Adv Appl Energy 2023;9:100123.
+[13] Yu L, Xie W, Xie D, Zou Y, yin Zhang D, Sun Z, Zhang L, Zhang Y, Jiang T. Deep 
+reinforcement learning for smart home energy management. IEEE Internet Things 
+J 2019;7:2751–62.
+[14] Liu Y, Zhang D, Gooi H. Optimization strategy based on deep reinforcement 
+learning for home energy management. CSEE J Power Energy Syst 2020;6:572–82.
+[15] Ye Y, Qiu D, Wu X, Strbac G, Ward J. Model-free real-time autonomous control for 
+a residential multi-energy system using deep reinforcement learning. IEEE Trans 
+Smart Grid 2020;11:3068–82.
+[16] Ren K, Liu J, Wu Z, Liu X, Nie Y, Xu H. A data-driven drl-based home energy 
+management system optimization framework considering uncertain household 
+parameters. Appl Energy 2024;355:122258.
+[17] Li H, Wan Z, He H. Real-time residential demand response. IEEE Trans Smart Grid 
+2020;11:4144–54.
+[18] Chen Y, Feng X, Li Z, Xu Y, Miragha A. Multi-stage coordinated operation of a multi-
+energy microgrid with residential demand response under diverse uncertainties. 
+Energy Convers Econ 2020;1:20–33.
+[19] Lu R, Hong S, Yu M. Demand response for home energy management using 
+reinforcement learning and artificial neural network. IEEE Trans Smart Grid 
+2019;10:6629–39.
+[20] Lu R, Jiang Z, Wu H, Ding Y, Wang D, Zhang H-T. Reward shaping-based actor–
+critic deep reinforcement learning for residential energy management. IEEE Trans 
+Ind Informatics 2023;19:2662–73.
+[21] Zhao H, Zhao J, Shu T, Pan Z. Hybrid-model-based deep reinforcement learning 
+for heating, ventilation, and air-conditioning control. Frontiers in Energy Research 
+2021;8:610518.
+[22] Amer A, Shaban K, Massoud A. Drl-hems: deep reinforcement learning agent for 
+demand response in home energy management systems considering customers and 
+operators perspectives. IEEE Trans Smart Grid 2023;14:239–50.
+[23] Shuvo SS, Yılmaz Y. Home energy recommendation system (hers): a deep rein­
+forcement learning method based on residents’ feedback and activity. IEEE Trans 
+Smart Grid 2022;13:2812–21.
+[24] Kumar P. Large language models (llms): survey, technical frameworks, and future 
+challenges. Artif Intell Rev 2024;57:260.
+[25] Liu W, Zhou X, Wang X, Cheng Y, Ye L, Berry R, Tassiulas L, Huang J, Zhao J. 
+An LLM agent-based framework for analytical characterization of nash equilibria. 
+Nexus 2026;3.
+[26] Cao Y, Zhao H, Cheng Y, Shu T, Chen Y, Liu G, Liang G, Zhao J, Yan J, Li Y. Survey 
+on large language model-enhanced reinforcement learning: concept, taxonomy, 
+and methods. IEEE Trans Neural Netw Learn Syst 2025;36(6):9737–57.
+[27] Hausknecht M, Ammanabrolu P, Côté M-A, Yuan X. Interactive fiction games: a 
+colossal adventure. In: Proceedings of the AAAI conference on artificial intelli­
+gence, vol. 34. 2020. p. 7903–10.
+[28] Yao S, Rao R, Hausknecht M, Narasimhan K. Keep calm and explore: language 
+models for action generation in text-based games. In: Proceedings of the 2021 con­
+ference on empirical methods in natural language processing (EMNLP). Association 
+for Computational Linguistics; 2021. p. 161–76.
+[29] Hu H, Sadigh D. Language instructed reinforcement learning for human-ai co­
+ordination. In: International conference on machine learning, PMLR; 2023. p. 
+13584–98.
+[30] Zhou Z, Hu B, Zhao C, Zhang P, Liu B. Large language model as a policy teacher 
+for training reinforcement learning agents. [arXiv preprint] arXiv:2311.13373.
+2023. 
+[31] Ajitha A, Akhilesh G, Rajkumar T, Radhika S, Goel S. Design and implementation 
+of smart home energy management system for Indian residential sector. Energy 
+Convers Manag 2024;307:118369.
+[32] Sinitsyn NA, Kundu S, Backhaus S. Safe protocols for generating power pulses with 
+heterogeneous populations of thermostatically controlled loads. Energy Convers 
+Manag 2013;67:297–308.
+[33] Bashash S, Fathy HK. Modeling and control of aggregate AIR conditioning loads 
+for robust renewable power management. IEEE Trans Control Syst Technol 
+2012;21:1318–27.
+[34] Zhang H, Arens E, Huizenga C, Han T. Thermal sensation and comfort models for 
+non-uniform and transient environments, Part II: local comfort of individual body 
+parts. Build Environ 2010;45:389–98.
+[35] Guo T, Hu S, Liu G. Evaluation model of specific indoor environment overall 
+comfort based on effective-function method. Energies 2017;10:1634.
+Applied Energy 410 (2026) 127540 
+11 
+Downloaded from https://iranpaper.ir

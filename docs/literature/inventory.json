@@ -1,0 +1,330 @@
+[
+  {
+    "key": "10.1016/j.apenergy.2026.127976",
+    "title": "Adaptive home energy management to self-motivated user preferences via iterative LLM-augmented reinforcement learning",
+    "doi": "10.1016/j.apenergy.2026.127976",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Adaptive_home_energy_management_to_self_motivated_user_preferences(Du, LA-UPAHEM).pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Adaptive_home_energy_management_to_self_motivated_user_preferences(Du, LA-UPAHEM).pdf"
+    ],
+    "pages": 20,
+    "sha256": "2c6c3562f1a498d4d7573f179d7e40c9e8a232e780a15e5b8b4f939c2dbb9e8a",
+    "category": "Preferences, scheduling & planning",
+    "id": "la-upahem",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.enbuild.2024.114378",
+    "title": "An entropy-based causality framework for cross-level faults diagnosis and isolation in building HVAC systems",
+    "doi": "10.1016/j.enbuild.2024.114378",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\An entropy-based causality framework for cross-level faults diagnosis and isolation in building HVAC systems.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\An entropy-based causality framework for cross-level faults diagnosis and isolation in building HVAC systems.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\An entropy-based causality framework for cross-level faults diagnosis and isolation in building HVAC systems.pdf"
+    ],
+    "pages": 18,
+    "sha256": "7d123f286a130e2e92908d783aa3e082bc02fe7a2231cf2c063b6d2c3c4f95b8",
+    "category": "Causal & probabilistic diagnosis",
+    "id": "article-02",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.buildenv.2026.115265",
+    "title": "Whole building HVAC diagnostic Bayesian networks for comfort-related  fault detection and diagnosis, application, evaluation and operational testing",
+    "doi": "10.1016/j.buildenv.2026.115265",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\Whole building HVAC diagnostic Bayesian networks for comfort-related  fault detection and diagnosis, application, evaluation and operational testing.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\Whole building HVAC diagnostic Bayesian networks for comfort-related  fault detection and diagnosis, application, evaluation and operational testing.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Whole building HVAC diagnostic Bayesian networks for comfort-related  fault detection and diagnosis, application, evaluation and operational testing.pdf"
+    ],
+    "pages": 21,
+    "sha256": "e3bbd51fdcc0fcc55568fcd583336cfcde819891456976c1e3890d08f02404f4",
+    "category": "Causal & probabilistic diagnosis",
+    "id": "article-03",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.enbuild.2026.117763",
+    "title": "A data-driven iterative digital twin framework for dynamic building energy performance: Integrating virtual sensing and anomaly diagnosis",
+    "doi": "10.1016/j.enbuild.2026.117763",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A data-driven iterative digital twin framework for dynamic building energy performance, Integrating virtual sensing and anomaly diagnosis.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A data-driven iterative digital twin framework for dynamic building energy performance, Integrating virtual sensing and anomaly diagnosis.pdf"
+    ],
+    "pages": 27,
+    "sha256": "6918bdf92f166a6d9823738f2961f240570b1d43443b23cc88fea567eee8bb05",
+    "category": "Digital Twins & safety",
+    "id": "article-04",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.buildenv.2025.114104",
+    "title": "Agentic fault detection and diagnosis for building HVAC systems using AI agent, ontology, and diagnosis rules",
+    "doi": "10.1016/j.buildenv.2025.114104",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic fault detection and diagnosis for building HVAC systems using AI agent , ontology, and diagram rules.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic fault detection and diagnosis for building HVAC systems using AI agent , ontology, and diagram rules.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\Agentic fault detection and diagnosis for building HVAC systems using AI agent , ontology, and diagram rules.pdf"
+    ],
+    "pages": 21,
+    "sha256": "ecdba260b22ae315aaeec67a77570eb8c49550c660c4b6a4bac6fc6fb67e9225",
+    "category": "Causal & probabilistic diagnosis",
+    "id": "article-05",
+    "status": "Report available"
+  },
+  {
+    "key": "10.3390/en19163817",
+    "title": "DARC A Constraint-Diagnostic LLM Agent Framework for Day-Ahead Dispatch of Campus-Level Integrated Energy Microgrids Under Natural-Language Preferences and Forecast Uncertainty",
+    "doi": "10.3390/en19163817",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\DARC A Constraint-Diagnostic LLM Agent Framework for Day-Ahead Dispatch of Campus-Level Integrated Energy Microgrids Under Natural-Language Preferences and Forecast Uncertainty.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\DARC A Constraint-Diagnostic LLM Agent Framework for Day-Ahead Dispatch of Campus-Level Integrated Energy Microgrids Under Natural-Language Preferences and Forecast Uncertainty.pdf"
+    ],
+    "pages": 25,
+    "sha256": "88008a2bd865439abb6601dce793392da16f9deefeb0736882924cb2e7f4ebc5",
+    "category": "Preferences, scheduling & planning",
+    "id": "article-06",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.rineng.2026.109857",
+    "title": "Agentic AI home energy management system: A large language model framework for residential load scheduling",
+    "doi": "10.1016/j.rineng.2026.109857",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#Agentic AI home energy management system A large language model framework for residential load scheduling.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#Agentic AI home energy management system A large language model framework for residential load scheduling.pdf"
+    ],
+    "pages": 15,
+    "sha256": "f3352c13cfa96353b3789f2e71250206e122fcef786c33ca0a91bed89817d519",
+    "category": "Preferences, scheduling & planning",
+    "id": "article-07",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.apenergy.2026.129073",
+    "title": "Human-in-the-loop preference calibration for home energy management",
+    "doi": "10.1016/j.apenergy.2026.129073",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Human-in-the-loop preference calibration for home energy management.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Human-in-the-loop preference calibration for home energy management.pdf"
+    ],
+    "pages": 25,
+    "sha256": "2948f76ba2e3433da1d395c25efd7f4b39e2bbab359fe403867cd2df813172bd",
+    "category": "Preferences, scheduling & planning",
+    "id": "article-08",
+    "status": "Report available"
+  },
+  {
+    "key": "10.3390/en19133098",
+    "title": "A Digital-Twin-Aided Safe Multi-Agent Reinforcement Learning Framework for Renewable-Integrated Residential Energy Management",
+    "doi": "10.3390/en19133098",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A Digital-Twin-Aided Safe Multi-Agent Reinforcement Learning Framework for Renewable-Integrated Residential Energy Management.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A Digital-Twin-Aided Safe Multi-Agent Reinforcement Learning Framework for Renewable-Integrated Residential Energy Management.pdf"
+    ],
+    "pages": 34,
+    "sha256": "40757c1ae057db943d03539d2eb0c51c4a59eb381d7948666092e12aa31bb546",
+    "category": "Digital Twins & safety",
+    "id": "article-09",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.enbuild.2026.116978",
+    "title": "Digital twin assisted real-time energy management system for smart homes",
+    "doi": "10.1016/j.enbuild.2026.116978",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twin assisted real-time energy management system for smart homes.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twin assisted real-time energy management system for smart homes.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\Digital twin assisted real-time energy management system for smart homes.pdf"
+    ],
+    "pages": 15,
+    "sha256": "95334824378637fda59ba30f56169add6a8cdcbb1d1d9f66fa55200287919519",
+    "category": "Digital Twins & safety",
+    "id": "article-10",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.apenergy.2026.127540",
+    "title": "Large language model-enhanced home energy management with dynamic user preference elicitation and hierarchical data-sharing",
+    "doi": "10.1016/j.apenergy.2026.127540",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Large language model-enhanced home energy management with dynamic user preference elicitation and hierarchical data-sharing.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Large language model-enhanced home energy management with dynamic user preference elicitation and hierarchical data-sharing.pdf"
+    ],
+    "pages": 11,
+    "sha256": "c7a1d9c2ca81acf5ec1ed00faa732ed57e61c45ca60ae969c0050d82e3532f7a",
+    "category": "Preferences, scheduling & planning",
+    "id": "article-11",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.energy.2025.136162",
+    "title": "DT-BEMS: Digital twin-enabled building energy management system for information fusion and energy efficiency",
+    "doi": "10.1016/j.energy.2025.136162",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twin-enabled building energy management system for information fusion and energy efficiency.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twin-enabled building energy management system for information fusion and energy efficiency.pdf"
+    ],
+    "pages": 17,
+    "sha256": "d8d6d980d00dbe224c97d795b424abd7ac435410ee7c55ffb0ff15a25e46b3b5",
+    "category": "Digital Twins & safety",
+    "id": "article-12",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.jmsy.2025.11.020",
+    "title": "Agentic digital twin-embedded maintenance methodology for energy equipment A self-evolving operational paradigm",
+    "doi": "10.1016/j.jmsy.2025.11.020",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic digital twin-embedded maintenance methodology for energy equipment A self-evolving operational paradigm.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic digital twin-embedded maintenance methodology for energy equipment A self-evolving operational paradigm.pdf"
+    ],
+    "pages": 17,
+    "sha256": "f77d920cffe6e2a6aaa7ca90b0b5e9fd8fd277066f40d2e629d359a022f43c89",
+    "category": "Digital Twins & safety",
+    "id": "article-13",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1080/0144929X.2026.2672579",
+    "title": "A smart home platform integrating an energy-aware digital twin and an LLM-enabled conversational agent",
+    "doi": "10.1080/0144929X.2026.2672579",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#A smart home platform integrating an energy-aware digital twin and an LLM-enabled conversational agent.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#A smart home platform integrating an energy-aware digital twin and an LLM-enabled conversational agent.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A smart home platform integrating an energy-aware digital twin and an LLM-enabled conversational agent.pdf"
+    ],
+    "pages": 25,
+    "sha256": "20c07efab396b41a0bce8549ef871aa3aee829f68fb989a2263068077d4cdfd3",
+    "category": "Digital Twins & safety",
+    "id": "article-14",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.egyai.2026.100853",
+    "title": "From systematic evidence to agentic architectures: A systematic review and framework for large language model–driven smart grids",
+    "doi": "10.1016/j.egyai.2026.100853",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\From systematic evidence to agentic architectures, A systematic review and framework for large language model–driven smart grids.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\From systematic evidence to agentic architectures, A systematic review and framework for large language model–driven smart grids.pdf"
+    ],
+    "pages": 26,
+    "sha256": "be7f2d9e6997d65c9ce43473fed936ae479ed8bcb6178ae6bad36aed44f8a484",
+    "category": "Reviews & context",
+    "id": "article-15",
+    "status": "Report available"
+  },
+  {
+    "key": "10.3390/s25175265",
+    "title": "AI-Powered Building Ecosystems: A Narrative Mapping Review on the Integration of Digital Twins and LLMs for Proactive Comfort, IEQ, and Energy Management",
+    "doi": "10.3390/s25175265",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#AI-Powered Building Ecosystems A Narrative Mapping Review on the Integration of Digital Twins and LLMs for Proactive Comfort, IEQ, and Energy Management.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#AI-Powered Building Ecosystems A Narrative Mapping Review on the Integration of Digital Twins and LLMs for Proactive Comfort, IEQ, and Energy Management.pdf"
+    ],
+    "pages": 44,
+    "sha256": "5dd2086d18f80293ad10f5c9b744eb9a4412e26318b5b231d015d5206e1b04c8",
+    "category": "Reviews & context",
+    "id": "article-16",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.isci.2025.113867",
+    "title": "Automated building energy modeling for energy retrofits using a large language model-based multi-agent framework",
+    "doi": "10.1016/j.isci.2025.113867",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#Automated building energy modeling for energy retrofits using a large language model-based multi-agent framework.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\#Automated building energy modeling for energy retrofits using a large language model-based multi-agent framework.pdf"
+    ],
+    "pages": 22,
+    "sha256": "d42ce634193c257d5397dfa5d0ee82533b5bb4952fd91ee1aab76c3dcc050541",
+    "category": "Modeling & automation",
+    "id": "article-17",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1007/s42791-024-00083-z",
+    "title": "A review on digital twin application in photovoltaic energy systems: challenges and opportunities",
+    "doi": "10.1007/s42791-024-00083-z",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A review on digital twin application in photovoltaic energy systems challenges and opportunities.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A review on digital twin application in photovoltaic energy systems challenges and opportunities.pdf"
+    ],
+    "pages": 26,
+    "sha256": "11816d60dc48367c1a592b947886dacdc83ca62340f51e2915c6e88890618877",
+    "category": "Reviews & context",
+    "id": "article-18",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.apenergy.2025.126670",
+    "title": "A systematic review of transformers and large language models in the energy sector, twards agentic digital twins",
+    "doi": "10.1016/j.apenergy.2025.126670",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A systematic review of transformers and large language models in the energy sector, twards agentic digital twins.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\A systematic review of transformers and large language models in the energy sector, twards agentic digital twins.pdf"
+    ],
+    "pages": 22,
+    "sha256": "9ef66a9338e3430069b7f93b0d19cf676e056e7f2dee589cccd161bee5f63206",
+    "category": "Reviews & context",
+    "id": "article-19",
+    "status": "Report available"
+  },
+  {
+    "key": "10.3390/en19030617",
+    "title": "Agentic Artificial Intelligence for Smart Grids A Comprehensive Review of Autonomous, Safe, and Explainable Control Frameworks",
+    "doi": "10.3390/en19030617",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic Artificial Intelligence for Smart Grids A Comprehensive Review of Autonomous, Safe, and Explainable Control Frameworks.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Agentic Artificial Intelligence for Smart Grids A Comprehensive Review of Autonomous, Safe, and Explainable Control Frameworks.pdf"
+    ],
+    "pages": 35,
+    "sha256": "ee9588d6e930f7a945c8a2288eba8c59143fc2df8d9c99882cde9418d3b06c3f",
+    "category": "Reviews & context",
+    "id": "article-20",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.ecmx.2025.101329",
+    "title": "Artificial intelligence and machine learning for smart grids, from foundational paradigms to emerging technologies with digital twin and large language model-driven intelligence",
+    "doi": "10.1016/j.ecmx.2025.101329",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Artificial intelligence and machine learning for smart grids, from foundational paradigms to emerging technologies with digital twin and large language model-driven intelligence.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Artificial intelligence and machine learning for smart grids, from foundational paradigms to emerging technologies with digital twin and large language model-driven intelligence.pdf"
+    ],
+    "pages": 35,
+    "sha256": "7a382eccde0047c7bdfa4d58eef14d0e3a1750a4295e9f1947e6ef73710f7f0a",
+    "category": "Reviews & context",
+    "id": "article-21",
+    "status": "Report available"
+  },
+  {
+    "key": "datasetthecitylearnchallenge2022overviewresultsandleasonslearned",
+    "title": "The CityLearn Challenge 2022: Overview, Results, and Lessons Learned",
+    "doi": "",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\DataSet, The CityLearn Challenge 2022 Overview, Results, and Leasons Learned.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\DataSet, The CityLearn Challenge 2022 Overview, Results, and Leasons Learned.pdf",
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\New\\DataSet, The CityLearn Challenge 2022 Overview, Results, and Leasons Learned.pdf"
+    ],
+    "pages": 20,
+    "sha256": "97c9c27175ffc14ee060c091a08a3f8f232e6fb1cd09b27dbf0fd37d8917f96f",
+    "category": "Simulation & benchmark",
+    "id": "article-22",
+    "status": "Report available"
+  },
+  {
+    "key": "10.1016/j.esr.2025.101814",
+    "title": "Digital twins in renewable energy systems A comprehensive review of",
+    "doi": "10.1016/j.esr.2025.101814",
+    "path": "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twins in renewable energy systems A comprehensive review of.pdf",
+    "copies": [
+      "A:\\University\\Master\\3rd Semester\\LLM Course\\Working\\Literature review\\Digital twins in renewable energy systems A comprehensive review of.pdf"
+    ],
+    "pages": 21,
+    "sha256": "13be092913c06f06221d4ef839f3882a5bd817023b2fd2449c7920b6a528c623",
+    "category": "Reviews & context",
+    "id": "article-23",
+    "status": "Report available"
+  }
+]

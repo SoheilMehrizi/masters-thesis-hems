@@ -1,0 +1,1311 @@
+=== PDF PAGE 1 ===
+Academic Editor: Tek-Tjing Lie
+Received: 21 June 2026
+Revised: 16 July 2026
+Accepted: 12 August 2026
+Published: 14 August 2026
+Copyright: © 2026 by the authors.
+Licensee MDPI, Basel, Switzerland.
+This article is an open access article
+distributed under the terms and
+conditions of the Creative Commons
+Attribution (CC BY) license.
+Article
+DARC: A Constraint-Diagnostic LLM Agent Framework
+for Day-Ahead Dispatch of Campus-Level Integrated Energy
+Microgrids Under Natural-Language Preferences
+and Forecast Uncertainty
+Bingnan Li 1, Yiwei Guo 2,3,*, Huaizhong Hu 2, Debei Rao 1 and Donghe Li 2
+1 RunDian Energy Science and Technology Co., Ltd., Zhengzhou 450003, China;
+libingnan5@crpower.com.cn (B.L.); raodebei@crpower.com.cn (D.R.)
+2 School of Automation Science and Engineering, Xi’an Jiaotong University, Xi’an 710049, China;
+huhuaizhong@mail.xjtu.edu.cn (H.H.); lidonghe2020@xjtu.edu.cn (D.L.)
+3 National Innovation Platform (Center) for Industry-Education Integration of Energy Storage Technology,
+Xi’an Jiaotong University, Xi’an 710049, China
+* Correspondence: guoyw@stu.xjtu.edu.cn
+Abstract
+Day-ahead dispatch of integrated energy systems (IESs) is commonly solved by mixed-
+integer linear programming when objectives, constraints, and forecasts are fully specified.
+In practice, however, operators often express temporary preferences in natural language,
+and day-ahead forecasts inevitably deviate from realized operation. These two conditions
+make a fixed optimization interface difficult to use without additional modeling effort.
+This paper proposes DARC (Decompose-Act-Repair-Critique), a constraint-diagnostic LLM
+agent framework for day-ahead dispatch of campus-level microgrid-type IES with under-
+specified operating requirements. DARC combines three language modules, namely a
+Decomposer for temporal structure, a Resolver for numerical schedule generation, and a
+Critic for root-cause diagnosis, with deterministic repair, constraint checking, and metric
+evaluation. In all main experiments, the Decomposer is instantiated by its determinis-
+tic rule-based variant for reproducibility, so the reported results reflect a loop with two
+LLM modules (Resolver and Critic). The Projector repairs candidate schedules where
+possible, while the Checker supplies mathematical facts that ground the Critic’s feedback.
+DARC does not model forecast uncertainty through sets or scenarios; robustness to forecast
+deviation is pursued operationally, through margin-aware repair and checker-grounded
+revision, and is assessed empirically. Experiments on a campus-level microgrid IES testbed
+show that DARC can incorporate natural-language preferences, improve realized feasibility
+under forecast noise relative to both a point-forecast MILP and an interval-robust MILP
+baseline in terms of strictly feasible configurations, at higher operating cost, and produce
+diagnostic feedback that is robustly more useful than an ungrounded LLM diagnoser under
+judge models from three families, and at least as useful as checker facts alone, with its ad-
+vantage concentrated in actionable revision guidance. DARC is therefore positioned not as
+a replacement for MILP , robust formulations, or model predictive control on fully specified
+problems, but as a complementary interface for operational settings where preferences and
+forecasts are not completely formalized.
+Keywords: integrated energy systems; large language models; day-ahead dispatch; natural-
+language preferences; forecast uncertainty; constraint diagnosis
+Energies 2026, 19, 3817 https://doi.org/10.3390/en19163817
+=== PDF PAGE 2 ===
+Energies 2026, 19, 3817 2 of 25
+1. Introduction
+As low-carbon transition and campus energy digitalization continue to advance,
+distributed photovoltaics (PV), battery storage, combined heat and power (CHP) units,
+and electrified heating devices are increasingly coordinated through unified energy-
+management platforms. Energy hubs and multi-carrier optimal power flow provide early
+modeling foundations for integrated energy systems (IESs) [1,2]. Mancarella [3] reviewed
+multi-energy-system concepts and evaluation models, while Mohammadi et al. [4] summa-
+rized the development of the energy-hub model. Compared with single-carrier electricity
+dispatch, day-ahead IES dispatch must simultaneously coordinate grid transactions, bat-
+tery charging and discharging, CHP operation, electric boilers, and thermal storage. Its
+difficulty arises from the joint effects of electricity–heat coupling, inter-temporal storage
+dynamics, and device-level safety limits.
+When objectives, constraints, and exogenous forecasts are fully formalized, MILP and
+MPC remain mainstream and verifiable tools for IES dispatch. Zhang et al. [5] reviewed
+modeling and solution methods for integrated electricity–heat operation, and Wu et al. [6]
+proposed a multi-time-scale economic MPC framework that responds to forecast updates
+and state changes through rolling optimization. Constrained MPC has a mature theoretical
+basis [7] and has been applied to microgrid and risk-aware operation problems [8,9]. This
+paper therefore does not position LLMs as replacements for MILP or MPC on fully specified
+mathematical models. Instead, it focuses on operational information that is not yet fully
+formalized but still affects dispatch decisions.
+Such under-formalized information commonly appears in two forms. The first is
+operator preference. Requirements such as maintenance windows, asset-life management,
+low-carbon operation, or peak-period output suppression are often expressed in natural
+language during operation. They can be translated after the fact into inequalities, soft
+objectives, or counting constraints, but this process requires manual modeling and is
+difficult to scale to changing operational expressions. The second is forecast deviation.
+Day-ahead load and PV forecasts inevitably differ from realized profiles, and a schedule
+optimized for point forecasts may violate power balance, state-of-charge (SOC) bounds,
+or terminal conditions on the execution day. Robust optimization characterizes the trade-
+off between conservativeness and economic performance [10], and has been used in IES
+planning and hybrid AC/DC microgrid energy management [ 11,12]. However, these
+methods usually require uncertainty to be represented as sets, intervals, distributions, or
+risk measures, and cannot directly process temporary operating preferences expressed in
+free text.
+LLMs provide a possible bridge between natural-language requirements and struc-
+tured decision workflows. Retrieval-augmented generation enables language models to
+use external memory [ 13], while ReAct and Toolformer show that LLMs can combine
+language reasoning with external actions or tool calls [ 14,15]. In the energy domain,
+Majumder et al. [ 16] discussed the capabilities and limitations of LLMs in the electric-
+energy sector; Antonesi et al. [17] and Zhang et al. [18] further reviewed opportunities and
+reliability challenges for LLM-enabled energy systems. Existing applications include inter-
+pretable building control [19], optimization with unstructured building-energy data [20],
+distribution-system state estimation [21], and virtual-power-plant analysis [22]. However,
+day-ahead dispatch differs from question answering, explanation, or state recognition. It
+requires 24 h numerical schedules that satisfy electricity–heat balance, device capacities,
+SOC dynamics, and terminal constraints at every time step. If LLMs are introduced into
+IES dispatch, their outputs must therefore be coupled with deterministic repair, constraint
+checking, and feedback grounded in mathematical facts.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 3 ===
+Energies 2026, 19, 3817 3 of 25
+Based on these considerations, this paper proposes DARC (Decompose-Act-Repair-
+Critique), a constraint-diagnostic LLM agent framework for day-ahead dispatch of campus-
+level integrated energy microgrids under natural-language preferences and forecast un-
+certainty. DARC uses LLMs for temporal-structure interpretation, numerical candidate
+generation, and root-cause diagnosis, while deterministic programs perform repair, fea-
+sibility verification, and metric evaluation. We state the scope of the claims explicitly.
+Architecturally, each ingredient of DARC has clear precedents: delegating computation
+to executable programs follows program-aided reasoning [ 23], iterative revision under
+feedback follows self-refine-style loops [24,25], and repairing candidate actions onto the
+feasible region parallels action projection in safe reinforcement learning [26]. The contri-
+bution claimed here is therefore not the invention of this pattern but its transfer to and
+instantiation for day-ahead IES dispatch with hard physical constraints, where the feedback
+signal must be grounded in checker-computed mathematical facts rather than in model
+self-evaluation. With respect to forecast deviation, DARC does not construct uncertainty
+sets or scenario trees; committed plans are repaired and verified against realized profiles,
+and the resulting feasibility improvement is an empirical property evaluated against both
+point-forecast and interval-robust MILP baselines (Section 5.3). The main contributions are:
+1. A domain-specific instantiation of the decompose–generate–project–critique pattern
+for day-ahead IES dispatch. DARC partitions modules by function (temporal-structure
+decomposition, numerical action generation, deterministic repair, and root-cause
+diagnosis) rather than by device boundary, so that arithmetic and physical-consistency
+checks are not delegated solely to linguistic reasoning.
+2. Unlike generic LLM-as-judge feedback loops, DARC’s Critic separates the determinis-
+tic constraint assessment, which is computed by a checker rather than the LLM, from
+the LLM’s role of root-cause attribution. The resulting feedback signal therefore car-
+ries not only the list of violated constraints but also a structured root-cause diagnosis
+and concrete revision instructions. Judged evaluation, replicated with judges from
+two additional model families, shows that checker grounding is load-bearing—the
+ungrounded diagnoser collapses under every judge—and that the two-layer design is
+at least as useful as checker facts alone in aggregate, with a judge-dependent margin,
+while consistently leading in the actionability dimensions (revision specificity and
+physical consistency) that feed the revision loop (Section 5.4).
+3. Across three independent random seeds, DARC reduces operator-preference violations
+relative to a preference-blind MILP baseline when preferences are supplied as free
+text. Under realized forecast noise, it attains more strictly feasible configurations than
+both the point-forecast MILP (16/27 vs. 0/27) and an interval-robust MILP baseline
+(16/27 vs. 11/27), while the robust baseline achieves lower cost regret; we therefore
+position DARC as a complementary interface rather than a replacement for robust
+formulations. We report operating cost together with feasibility metrics to characterize
+the trade-off introduced by the natural-language interface. All main experiments run
+the rule-based Decomposer variant, i.e., two LLM modules in the loop (Section 4.2).
+2. Related Work
+Research related to IES day-ahead dispatch under natural-language preferences and
+forecast uncertainty can be organized into three strands: optimization-based dispatch for
+fully specified models, learning-based energy management under uncertain environments,
+and LLM agents for language interaction and tool use. These strands respectively provide
+verifiable optimization, policy adaptability, and natural-language interfaces, but they differ
+in task scope and constraint handling. Table 1 compares them in terms of task object,
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 4 ===
+Energies 2026, 19, 3817 4 of 25
+treatment of preferences or uncertainty, constraint-handling mechanism, and remaining
+limitation, thereby clarifying the position of this paper.
+Table 1. Comparison of related work and the position of this paper.
+Research Direction Representative Studies What Is Handled Remaining Gap
+Model-driven IES
+dispatch [5,6,8,9]
+Fully specified electricity–
+heat and microgrid dispatch;
+constraints enforced by
+MILP or MPC.
+Temporary natural-language
+preferences still require
+manual translation into
+objectives or constraints.
+Robust and
+uncertainty-aware
+optimization
+[10–12]
+Forecast, renewable, and
+load uncertainty represented
+by sets, intervals, or risk
+measures.
+Semantic operating require-
+ments must be predefined
+before optimization.
+RL-based energy
+management [27–32]
+Adaptive policies for de-
+mand response, storage, and
+energy management; safety
+layers or action projection.
+Free-text operator prefer-
+ences are not native, and
+hard feasibility is usually
+only partially guaranteed.
+LLM agents and
+tool feedback [14,15,23–25]
+Natural-language instruc-
+tions, tool use, feedback
+revision, and program-aided
+computation.
+Energy-system physics and
+dispatch feasibility checks
+are not embedded in the
+agent loop.
+LLMs in energy
+systems [16,18–21]
+Building control explanation,
+distribution-system state
+estimation, and virtual-
+power-plant analysis.
+Existing studies rarely gen-
+erate executable 24 h IES
+schedules with hard physi-
+cal constraints.
+2.1. Optimization-Based Dispatch and the Limits of Complete Formalization
+The foundations of IES dispatch can be traced to the energy-hub concept and multi-
+carrier optimal power flow. Geidl and Andersson [ 2] formulated optimal power flow
+across multiple energy carriers, and Geidl et al. [1] introduced the energy hub as a system
+abstraction for multi-energy conversion. Mancarella [ 3] and Mohammadi et al. [ 4] later
+reviewed multi-energy-system concepts, evaluation models, and energy-hub modeling
+developments. These studies address the representation of multi-energy coupling and
+provide the basis for the electricity–heat balance, storage dynamics, and device-limit
+constraints considered in this paper.
+Building on this foundation, MILP , MPC, and other mathematical programming
+methods have long served as core tools for IES day-ahead dispatch. Zhang et al. [ 5]
+reviewed modeling and solution methods for integrated electricity–heat operation. Alabi
+et al. [ 33] further discussed optimization, forecasting, and machine learning within a
+unified IES decision-making perspective. In the MPC literature, Mayne et al. [7] established
+foundational results for constrained MPC, Parisio et al. [ 8] applied MPC to microgrid
+operation, Hans et al. [9] introduced risk-averse MPC for uncertain islanded microgrids,
+and Wu et al. [6] extended economic MPC to multi-time-scale IES operation. For objectives
+and constraints that have already been formalized, these methods provide interpretable
+and verifiable dispatch solutions.
+Forecast errors and renewable fluctuations have motivated robust and stochastic
+formulations. Bertsimas and Sim [10] characterized the price of robustness; Dong et al. [11]
+proposed a hybrid robust-interval method for IES planning; and Fu et al. [12] used robust
+optimization for hybrid AC/DC distribution systems with microgrid clusters. These
+studies show that uncertainty can be incorporated into optimization models through sets,
+distributions, or risk measures. By contrast, operator preferences are often expressed as
+temporary text, with semantic ambiguity and contextual dependence. If each preference
+must be manually converted into constraints or objective terms, the responsiveness and
+scalability of the dispatch workflow are limited.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 5 ===
+Energies 2026, 19, 3817 5 of 25
+Reinforcement learning provides another dispatch paradigm by learning policies
+through environment interaction rather than solving a complete optimization problem
+for every operating day. Vázquez-Canteli and Nagy [27] reviewed reinforcement learning
+for demand response; Ruelens et al. [28] controlled thermostatically controlled loads with
+batch reinforcement learning; Bahrami et al. [29] applied deep reinforcement learning to
+distribution-network demand response; and Cao et al. [ 30] optimized storage arbitrage
+while accounting for battery degradation. Because energy-dispatch actions must respect
+power limits, SOC bounds, and device constraints, safe and constrained reinforcement learn-
+ing has become important. Garcia and Fernandez [34] surveyed safe reinforcement learning,
+Achiam et al. [35] proposed constrained policy optimization, Berkenkampet al. [36] studied
+safe model-based learning with stability guarantees, and Brunke et al. [37] reviewed safe
+learning from control to robotics. Closer to energy dispatch, Pham et al. [26] introduced an
+optimization layer for action correction, Wang et al. [31] proposed a physics-informed safe
+RL approach for multi-energy microgrids, and Hou et al. [32] developed constraint-aware
+RL for energy scheduling. DARC follows the design principle of candidate generation,
+feasibility repair, and constraint verification, but it does not train an RL policy. Instead, it
+uses an LLM to interpret operator preferences, generate candidate schedules, and explain
+the root causes of constraint violations.
+2.2. LLM Agents and Verifier-Grounded Feedback
+Recent work on LLM agents has provided task decomposition, tool use, and feedback-
+revision mechanisms from the language side. Wei et al. [38] showed that chain-of-thought
+prompting elicits multi-step reasoning, and Kojima et al. [ 39] showed that zero-shot
+prompts can also induce reasoning. Zhou et al. [40] decomposed complex problems into
+easier subproblems, while Wang et al. [41] improved reasoning stability through multiple
+reasoning paths. At the agent level, Yao et al. [14] proposed ReAct, Schick et al. [15] showed
+that models can learn tool use, and Tree of Thoughts organized intermediate reasoning into
+searchable candidates [42]. These studies indicate that LLMs are better suited to intermedi-
+ate roles such as task decomposition, candidate generation, and tool orchestration than to
+unverified direct decision-making.
+Iterative-feedback methods further support this positioning. Madaan et al. [24] pro-
+posed Self-Refine, in which a model critiques and revises its own output; Shinn et al. [25]
+transformed external feedback into verbal memory for subsequent attempts; Park et al. [43]
+demonstrated the role of memory, reflection, and planning in generative agents; and Shen
+et al. [44] used an LLM as a controller to orchestrate external models. For numerical rea-
+soning, Gao et al. [23] proposed program-aided language models, delegating computation
+to executable programs. A related line of work translates natural-language optimization
+problems directly into solver-ready formulations, from the NL4Opt competition [ 45] to
+agentic modeling systems such as OptiMUS [ 46] and Chain-of-Experts [ 47]; Section 5.7
+discusses how this formalize-then-solve interface relates to, and can be combined with,
+DARC. When these ideas are applied to IES dispatch, the key requirement is that feedback
+must be grounded in physical constraints. Power balance, device capacities, and SOC limits
+are determined by equations and parameters, and should not be replaced by the subjective
+judgment of a language model. Ruan et al. [48] and Majumder et al. [16] also emphasize
+reliability and safety challenges when applying general-purpose LLMs in power systems.
+DARC therefore does not let the Critic directly judge schedule quality; instead, the Critic
+reads checker-computed constraint assessments and organizes violations, evidence, and
+possible root causes into feedback for the next revision.
+A complementary line of work concerns retrieval-augmented generation. Lewiset al. [13]
+combined parametric language models with non-parametric external memory for knowledge-
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 6 ===
+Energies 2026, 19, 3817 6 of 25
+intensive tasks. In power systems, Li et al. [21] used in-context learning for distribution-
+system state estimation under noise, missing data, bad data, and topology changes. Inspired
+by this direction, DARC offers an optional case-library extension (Section 4.8) that retrieves
+similar historical days and uses MILP-derived operating modes as contextual priors. The
+core pipeline evaluated in the main experiments does not depend on this extension.
+2.3. LLMs in Energy Systems: Applications and the Remaining Gap
+As LLM capabilities have expanded, energy applications have moved from general
+question answering toward task-specific engineering workflows. Majumder et al. [ 16]
+examined the capabilities and limitations of LLMs in the electric-energy sector, highlighting
+opportunities for decision support while cautioning that general-purpose models do not
+directly satisfy power-system reliability requirements. Antonesi et al. [17] systematically
+reviewed transformers and LLMs across the energy sector, and Zhang et al. [18] summarized
+their opportunities, challenges, and future roles. At the application level, Zhang and
+Chen [19] combined Shapley values with LLMs to explain building-control decisions;
+Xiao and Xu [ 20] proposed an LLM-based multi-agent framework for building-energy
+optimization with unstructured data; Li et al. [ 21] used LLM-based in-context learning
+for distribution-system state estimation; and Wang et al. [22] reviewed large AI models in
+virtual power plants.
+Overall, existing LLM-energy studies demonstrate clear value in knowledge retrieval,
+unstructured-data processing, interpretation, and specialized estimation tasks. Most of
+them, however, focus on explanation, recognition, or decision support rather than exe-
+cutable long-horizon dispatch. Day-ahead IES dispatch poses a different challenge because
+it requires numerical decisions that remain consistent with power balance, storage states,
+device limits, and terminal conditions. As Table 1 indicates, model-driven optimization is
+strong under complete formalization, reinforcement learning offers experience in candidate
+generation and safety correction, and LLM agents provide language interaction and tool
+orchestration. A practical interface for the setting considered here must combine free-text
+input, long-horizon numerical scheduling, and hard physical-constraint verification. This
+gap motivates DARC: LLMs interpret preferences, generate candidate schedules, and ex-
+plain root causes, while the Projector and Checker perform repair, verification, and metric
+computation. The feedback process is therefore supported by mathematical facts rather
+than model self-evaluation.
+3. Problem Definition
+We consider a 24 h day-ahead dispatch problem for a campus-level IES with time set
+T = {1, . . ., 24} and a 1 h time step. The system comprises PV , CHP , battery, TES, electric
+boiler, and a grid interface. Exogenous inputs include electrical load Let, thermal load Lht ,
+PV output Ppvt , buying price cbuyt , and selling price csellt .
+3.1. Decision Variables
+The primary decision variables at each time step are:
+Pchpt , Pbat,cht , Pbat,dist , Pts,cht , Pts,dist , Pboilert , Pgrid,buyt , Pgrid,sellt , (1)
+where Pboilert denotes the electric boiler’s electrical input power (not thermal output).
+3.2. Power Balance
+Electrical power balance:
+Ppvt + Pbat,dist + Pchpt + Pgrid,buyt = Let + Pbat,cht + Pboilert + Pgrid,sellt . (2)
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 7 ===
+Energies 2026, 19, 3817 7 of 25
+Thermal power balance:
+αPchpt + ηboiler Pboilert + Pts,dist = Lht + Pts,cht , (3)
+where α is the CHP heat-to-power ratio and ηboiler is the electric boiler COP .
+3.3. Storage State Constraints
+Battery SOC dynamics:
+SOCbatt+1 = SOCbatt + ηbat,chPbat,cht ∆tEbat
+− Pbat,dist ∆tηbat,disEbat , (4)
+subject to SOC bounds and terminal SOC requirements. TES state dynamics include
+standby losses:
+SOCtst+1 = (1 − λ)SOCtst + ηts,chPts,cht ∆tEts
+− Pts,dist ∆tηts,disEts . (5)
+3.4. Objective Function
+Operating cost comprises grid purchase cost, grid selling revenue, and CHP gas cost:
+C = ∑
+t
+cbuyt Pgrid,buyt ∆t − ∑
+t
+csellt Pgrid,sellt ∆t
++ ∑
+t
+cgas Pchpt
+ηchp,e ∆t.
+(6)
+The MILP benchmark minimizes this cost subject to all physical constraints. For LLM-
+generated schedules, we additionally report the penalty cost for constraint violations
+but do not conflate it with operating cost, preserving the distinction between economic
+performance and feasibility.
+4. Method: The DARC Framework
+4.1. Overview
+DARC (Decompose-Act-Repair-Critique) is a constraint-diagnostic LLM agent frame-
+work for IES day-ahead dispatch. Its core design principle is strategies by LLMs, physics by
+programs: LLMs handle temporal-structure understanding, numerical action generation,
+and error root-cause diagnosis, while deterministic programs handle constraint repair,
+feasibility verification, and metric computation. The Resolver is the only LLM module that
+emits numerical dispatch variables; every other LLM module operates over symbolic or
+textual representations. The Decomposer has both an LLM-based and a rule-based instanti-
+ation sharing the same output schema; as stated in the abstract, the main experiments use
+the rule-based variant (Section 4.2), so the empirical results in Section 5 certify a loop with
+two active LLM modules (Resolver and Critic).
+Given day-ahead inputs
+x = {Le1:T, Lh1:T, Ppv1:T,
+cbuy1:T , csell1:T }, T = 24. (7)
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 8 ===
+Energies 2026, 19, 3817 8 of 25
+and an optional natural-language operator preference π (free text), DARC outputs a dis-
+patch plan
+u =
+
+Pchp , Pbat,ch, Pbat,dis, Pts,ch,
+Pts,dis, Pboiler , Pgrid,buy, Pgrid,sell 	1:T. (8)
+The core DARC pipeline (Figure 1) is formalized as:
+m = Dθ(x, π), (9)
+˜u = Rθ(x, m, π), (10)
+u = P ( ˜u, x, C), (11)
+a = M(u, x, C), (12)
+d = Cθ(x, u, a), (13)
+where Dθ, Rθ, and Cθ denote the LLM-driven modules (Decomposer, Resolver, and Critic);
+P (·) is the deterministic repair projector; M(·) is the Checker-and-Metrics evaluator; and
+C collects system physical and economic parameters. The preference text π is empty when
+the dispatcher is solving the standard cost-minimization problem and is non-empty when
+the operator supplies a textual preference; both modes share the same architecture. The
+full pipeline iterates through the Critic loop (Section 4.6) until convergence or revision-
+budget exhaustion.
+Optional extension. A retrieval-augmented strategy-transfer module can be inserted
+between Dθ and Rθ when an offline MILP-solved case library is available. This extension is
+described in Section 4.8; the main experiments in Section 5 report the core pipeline without
+it, since the contribution of the case-library extension to feasibility is small (Section 5.6).
+Table 2 summarizes the input, output, and responsibility of each core module.
+Table 2. Functional definition of the core DARC modules. The optional case-library extension is
+described in Section 4.8.
+Module Input Output Numerical? Responsibility
+Decomposer x, π decision map m No Identify critical/flexible periods
+Resolver x, m, π raw plan ˜u Yes Emit 24 h numerical dispatch
+Projector ˜u, x, C plan u Yes Deterministic constraint repair
+Checker+Metrics u, x, C assessment a – Exact verification and metrics
+Critic x, u, a diagnosis d No Root-cause diagnosis and suggestions
+4.2. Stage I: Temporal Structure Decomposition
+The Decomposer transforms the raw forecast x (and optional preference text π) into a
+structured decision map m = Dθ(x, π) that provides a temporal skeleton for downstream
+numerical generation. Its output contains no power values—only structural priors.
+The economics and feasibility of an IES dispatch are typically determined by a small
+number of critical periods and cross-carrier coupling relationships rather than by uniform
+treatment of all 24 h. If the Resolver must independently discover these structures from
+raw numerical tables on every call, its reasoning burden and error probability both increase.
+The Decomposer factors this structural reasoning out of the Resolver’s job.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 9 ===
+Energies 2026, 19, 3817 9 of 25
+INPUTS
+Day-ahead profile  
+x
+Electric load
+Heat load
+PV generation
+Market prices
+Natural-language
+preference  π
+“Prioritize 
+reliability.”
+Operator
+Optional case library
+(similar-day MILP cases)
+LANGUAGE / REASONING LAYER
+D Decomposer
+Interprets x and π;
+builds temporal structure.
+R Resolver LLM
+Generates a raw schedule
+conditioned on x, m, and π.
+C Critic LLM
+Diagnoses u(i) from x and a(i);
+proposes targeted revisions.
+Decision map  m
+ Raw plan  ũ
+ Root-cause diagnosis  d(i)
+m
+x, π
+d(i)
+DETERMINISTIC PROGRAMS LAYER
+P
+Projector
+Repairs each raw plan into a checkable 
+candidate.
+✓
+Checker + Metrics
+Verifies constraints; computes costs and 
+violations.
+Repaired plan  u(i)
+ Assessment  a(i)
+Best-so-far selection
+Ranks U={u(0),...,u(R)} using checker metrics.
+SELECTED DISPATCH  u*
+with checker-verified feasibility status
+Language/reasoning
+ Deterministic programs
+ Optional context
+ Selection/output
+Figure 1. Overall architecture of the core DARC pipeline. Blue modules denote language or reasoning
+components, gray modules denote deterministic programs, green modules denote candidate selection
+and final output, and the orange module denotes the optional case library. The four input mini-
+plots show the Normal-day, seed-0 profiles generated by the experimental data pipeline; each is
+independently normalized to display temporal shape rather than cross-carrier magnitude. Solid
+arrows show the forward data path, the orange dashed arrow provides optional case context to the
+Resolver, and the blue dashed arrow carries Critic-to-Resolver diagnostic feedback. The day-ahead
+profile x and natural-language preference π enter the Decomposer and Resolver, but π is not encoded
+as a hard constraint. The Projector repairs each raw plan ˜u into a candidate ui; the Checker produces
+assessment ai; and the Critic returns diagnosis di. For readability, repeated x inputs to the Projector,
+Checker, and Critic and the configuration C inputs to the Projector and Checker are not redrawn;
+their exact arguments are given in Equations (9)–(13) and Table 2. The finite candidate history is
+U = {u0, . . ., uR}, from which u⋆ is selected. The checker-reported feasibility status of u⋆ must be
+consulted before implementation. In the main experiments, the Decomposer is instantiated by its
+rule-based variant, so only the Resolver and the Critic are LLM-driven.
+The decision map m contains: (1) critical period sets (price peaks, load peaks, high-PV
+hours); (2) flexible period sets (low-price charging windows, PV absorption windows,
+terminal-SOC correction windows); (3) cross-device coupling annotations indicating which
+carriers are tightly bound in which hours; and (4) directional strategy hints conditioned by
+the preference text π when supplied. A concrete example is provided in Appendix A.
+We support both LLM-based and rule-based Decomposers; the two variants share
+the same output schema. The main experiments use the rule-based variant to maximize
+reproducibility, while the LLM-based variant is preferable when operational rules are
+complex or evolving over time. We emphasize the consequence for interpretation, also
+stated in the abstract and Section 4: the reported empirical results demonstrate a pipeline
+with a deterministic Decomposer and two LLM modules (Resolver and Critic), not three
+LLM modules.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 10 ===
+Energies 2026, 19, 3817 10 of 25
+4.3. Stage II: Numerical Schedule Generation
+The Resolver Rθ is the only LLM module that directly outputs numerical dispatch
+variables. It consumes the day-ahead forecast x, the decision map m from the Decomposer,
+and (optionally) the natural-language preference π, and emits a raw plan:
+˜u = Rθ(x, m, π). (14)
+DARC uses a single Resolver that simultaneously observes electrical, thermal, storage,
+and grid variables rather than partitioning generation across multiple device agents. The
+rationale is that IES dispatch difficulty arises primarily from inter-device coupling: CHP
+simultaneously alters electrical and thermal supply; the electric boiler converts electrical
+load into thermal supply; battery charge/discharge affects PV absorption and peak-hour
+grid purchase. If multiple device agents generate independently, merged plans readily
+exhibit local rationality but global imbalance.
+When π is non-empty, the Resolver receives the natural-language preference as addi-
+tional context in its prompt. The Resolver is instructed to interpret the preference and reflect
+it in the output schedule but is not provided with any constraint enforcement mechanism.
+The resulting compliance is therefore a prompt-conditioned approximation rather than a
+hard guarantee—a fundamental property discussed in Section 5.7.
+Because LLMs are unreliable for long-sequence numerical consistency, ˜u may contain
+array-length errors, SOC drift, or power-balance violations. Therefore, ˜u is never used as
+the final schedule and must pass through the Projector.
+4.4. Stage III: Deterministic Repair Projection
+The Projector is a deterministic repair layer that converts LLM dispatch output into
+physically checkable candidate schedules:
+u = P ( ˜u, x, C). (15)
+The Projector is neither a MILP solver nor a cost optimizer: it does not search the
+full feasible domain, and it does not generate optimal solutions independent of the LLM
+strategy. Instead, it functions as a repair decoder, converting an LLM-proposed operating
+mode into a physically checkable candidate plan. This separation enables the strategic
+quality of the LLM’s output to be assessed independently of its arithmetic accuracy.
+The Projector does not guarantee that every repaired candidate is strictly feasible.
+Coupled limits or a poor proposed operating mode may leave residual violations; the
+Checker remains the final authority on feasibility.
+The Projector executes deterministic repairs in the following order: (1) device variable
+bound clipping; (2) CHP ramp-rate correction; (3) thermal balance closure with forward TES
+SOC correction; (4) TES terminal SOC repair; (5) battery charge/discharge mutual exclusion,
+SOC bounds, and terminal SOC correction; (6) grid buy/sell closure of electrical balance
+with mutual exclusion enforcement. The guiding principle is to preserve the LLM-proposed
+operating mode wherever possible, intervening only to repair hard constraint violations.
+4.5. Stage IV: Math-Grounded Diagnostic Critic
+The Critic is the key module distinguishing DARC from generic LLM-agent pipelines.
+It is organized into two layers: a deterministic mathematical assessment and an LLM-based
+root-cause diagnosis conditioned on that assessment.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 11 ===
+Energies 2026, 19, 3817 11 of 25
+4.5.1. Deterministic Assessment
+a = M(u, x, C). (16)
+This assessment is computed entirely by programs without LLM involvement. The Checker
+verifies electrical and thermal power balance, device bounds, CHP ramp rates, storage
+SOC, terminal SOC, and buy/sell mutual exclusion at each time step, recording the viola-
+tion category, period, and magnitude. Metrics compute operating cost, penalty cost, PV
+utilization, and CO2 emissions.
+4.5.2. LLM Root-Cause Diagnosis
+d = Cθ(x, u, a). (17)
+The Critic supplies the mathematical facts a together with the forecast x to the LLM,
+which then produces a structured diagnosis containing a problem description, supporting
+evidence, the inferred root cause, corrective actions, the periods that should be modified
+first, and the decisions that should be preserved. The diagnostic feedback is therefore
+actionable: it reports not only the violation but also its inferred cause and a suggested
+correction. The LLM does not compute operating costs and does not judge constraint
+satisfaction; it performs root-cause attribution and generates corrective suggestions based
+on the deterministic facts provided to it. The output format is detailed in Appendix C.
+4.6. Iterative Revision and Best-So-Far Selection
+DARC employs closed-loop iterative revision. Given round- i candidate ui and di-
+agnosis di, if the diagnosis determines that the plan meets quality thresholds, iteration
+stops; otherwise, the diagnosis is fed back to the Resolver, which regenerates the schedule
+conditioned on the prior plan and the diagnostic instructions:
+˜ui+1 = Rθ(x, m, π, di, ui),
+ui+1 = P ( ˜ui+1, x, C).
+(18)
+The Decomposer output m remains fixed across iterations because the forecast does not
+change; only the Resolver receives the diagnostic feedback.
+Since LLM revision does not guarantee monotonic improvement, DARC performs
+best-so-far selection over the finite candidate set:
+u⋆ = arg min
+ui∈{u0,...,uR}
+Jselect(ui), (19)
+where the selection score is:
+Jselect(u) =Cop(u) +λ f 1[¬feasible(u)]
++ λpvWpv(u) +λpeak Gpeak (u)
++ λsell Esell (u) +λchp Hvalley (u).
+(20)
+This score selects among LLM-generated finite candidates only and does not optimize
+over the continuous feasible domain. The weights are fixed throughout all experiments at
+λ f = 106, λpv = 1.00, λpeak = 0.30, λsell = 0.15, and λchp = 0.05, respectively.
+4.7. Algorithm
+The complete DARC-IES procedure is given in Algorithm 1.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 12 ===
+Energies 2026, 19, 3817 12 of 25
+Algorithm 1 DARC-IES (core pipeline)
+Require: Day-ahead profile x, optional preference text π, system config C, max revisions R
+Ensure: Final dispatch plan u⋆
+1: m ← Decomposer(x, π)
+2: ˜u0 ← Resolver(x, m, π)
+3: u0 ← Projector( ˜u0, x, C)
+4: best ← u0
+5: for r = 0, . . . ,R − 1 do
+6: a ← Checker&Metrics(ur, x, C)
+7: d ← Critic(x, ur, a)
+8: if d.should_revise = false then
+9: break
+10: end if
+11: ˜ur+1 ← Resolver.revise(x, m, π, d, ur)
+12: ur+1 ← Projector( ˜ur+1, x, C)
+13: if Jselect(ur+1) < Jselect(best) then
+14: best ← ur+1
+15: end if
+16: end for
+17: return best
+4.8. Optional Extension: Case-Library Strategy Transfer
+When an offline corpus of MILP-solved historical days is available, DARC supports an
+optional retrieval-augmented strategy-transfer module inserted between the Decomposer
+and the Resolver. Given a historical profile set {xj}Nj=1, MILP is solved offline to obtain ref-
+erence dispatches umilpj ; from each solution, we extract a device operating-mode summary
+gj (per-period charge/discharge/idle/high/low labels) and compressed numerical-scale
+anchors qj (per-period averages, total throughput), forming a case library
+L = {(xj, gj, qj, ϕj)}Nj=1. (21)
+At inference time, top-k similar cases Kx = TopKj sim(x, xj) are retrieved by normalized
+profile distance. Their operating-mode summaries and compressed numerical anchors are
+formatted as structured strategy context for the Resolver. The current-day MILP solution is
+never accessed at inference time; only historical solutions enter the library.
+We emphasize that this extension isoptional: the main experiments in Section 5 run the
+core pipeline (Algorithm 1) without case-library retrieval, and the ablation in Section 5.6
+shows that the case library contributes modest economic guidance but does not materially
+change feasibility behavior. Implementation details of the extension are provided in
+Appendix B.
+5. Experiments and Results
+Section 5.1 describes the testbed, methods, and metrics common to all subsequent
+experiments. Section 5.2 evaluates dispatch under natural-language operator preferences,
+Section 5.3 evaluates plan robustness to forecast noise, and Section 5.4 evaluates the di-
+agnostic quality of the Critic. Section 5.5 reports the standard cost-minimization baseline.
+Section 5.6 provides architectural ablations and Section 5.7 discusses positioning and threats
+to validity.
+5.1. Experimental Setup
+The test system is the campus-level IES described in Section 3: a CHP unit, lithium-ion
+battery, thermal energy storage, electric boiler, photovoltaic generation, and a grid interface.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 13 ===
+Energies 2026, 19, 3817 13 of 25
+The dispatch horizon is 24 h at 1 h resolution. Three representative days are used in the
+main experiments: Normal (baseline), Sunny (PV scaled by 1.35), and Cloudy (PV scaled
+by 0.55); a high-thermal Winter-peak scenario is reserved for the ablation in Section 5.6.
+Five methods are compared: MILP , the centralized oracle on the standard cost-
+minimization task; MILP-base, the same solver run without observing operator preferences
+(used in Section 5.2); MILP-robust, an interval-robust variant of the same solver that immu-
+nizes the plan against forecast error by margining the forecast and backing the storage-state
+bounds off their limits (defined and used in Section 5.3); Naive-LLM, a single-LLM baseline
+that emits the full schedule from one prompt followed by deterministic projection; and
+DARC, the proposed framework of Section 4.
+The DARC and Naive-LLM stacks use DeepSeek-V4-Flash in non-thinking mode
+(accessed through the API alias deepseek-chat, which routes to deepseek-v4-flash) via
+the OpenAI-compatible endpoint at https://api.deepseek.com, with JSON-mode structured
+generation and default temperature 0.2. The Critic loop is capped at three revision rounds.
+Each experiment is replicated across three random seeds (0, 1, 2); we report mean values
+together with inter-seed standard deviation where applicable. The per-row CSV traces are
+available from the corresponding author upon reasonable request.
+The deterministic components and MILP baselines were implemented in Python using
+Pyomo and the HiGHS solver through the appsi_highs interface. ChatGPT (OpenAI;
+accessed June 2026) was used solely to assist in refining the visual presentation of Figure 1.
+The framework architecture, scientific content, labels, and inter-component relationships
+were specified and verified by the authors; ChatGPT was not used to generate research
+data, perform data analysis, or interpret results.
+Reproducibility. No model training or fine-tuning is involved anywhere in DARC: all
+LLM modules are off-the-shelf models accessed through an OpenAI-compatible API and
+steered only by prompts, so reproducing the experiments requires no learning pipeline.
+The deterministic components (rule-based Decomposer, Projector, Checker, metrics, and all
+MILP baselines) are fully specified by the system parameters of Section 3 and the implemen-
+tation used in this study. Unless stated otherwise, generation uses temperature 0.2 with
+JSON-mode structured output, the Critic loop is capped as stated above, and the random
+seeds are {0, 1, 2}. The day-type grid and the noise-seed formula that generates every noisy
+forecast in Section 5.3 are deterministic functions of the seed, so the exact experimental
+instances can be regenerated; the MILP and MILP-robust rows are exactly reproducible in
+our environment (bit-identical realized costs across re-runs). The implementation, prompt
+templates for the Resolver and Critic, and per-row CSV traces for every experiment are
+available from the corresponding author upon reasonable request.
+We report operating cost (purchase − sell + CHP fuel), total constraint violation in
+kWh against the deterministic checker, strict physical-feasibility rate, and, where applicable,
+regret as realized cost relative to the per-day oracle.
+5.2. Operator Preference Compliance
+Two hard-threshold preferences are evaluated: transformer_cap (grid import ≤ 120 kW
+during h1–h6 and h23, modeling a transformer-maintenance window) and boiler_limited (at
+most six hours of boiler operation per day). Each preference is paired with the three day-
+types under three seeds, giving nine independent observations per (preference, method) cell.
+The three methods are MILP-base (no preference information), optimizer-pref (preference
+encoded as a hard constraint by hand), and DARC-pref (preference supplied as free text).
+Table 3 reports the per-day results for the transformer-maintenance preference; Table 4
+aggregates both preferences; Figure 2 visualizes the resulting electric-balance schedules for
+the Normal day at seed 0.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 14 ===
+Energies 2026, 19, 3817 14 of 25
+Table 3. Per-day results for the transformer_cap preference, averaged over three seeds. “Peak grid
+max” is the maximum grid import during the maintenance window (h1–h6, h23); “Peak grid total”
+is the kWh imported during that window; “Pref. viol.” is the kWh exceeding the 120 kW cap. Peak
+quantities are reported in kW or kWh.
+Day Method Peak Grid Max (kW) Peak Grid Total (kWh) Pref. Viol. (kWh)
+Normal MILP-base 234 1407 569
+Normal optimizer-pref 120 829 0
+Normal DARC-pref 193 605 200
+Sunny MILP-base 234 1414 575
+Sunny optimizer-pref 120 829 0
+Sunny DARC-pref 195 587 217
+Cloudy MILP-base 334 1574 705
+Cloudy optimizer-pref 120 840 0
+Cloudy DARC-pref 195 686 233
+Table 4. Per-preference summary across three day-types and three seeds (nine observations per cell).
+Mean values with inter-seed standard deviation in parentheses where applicable. “Cost gap” is
+DARC-pref versus MILP-base.
+Preference Method Pref. Viol. (kWh) Cost (¥) Cost Gap
+transformer_cap MILP-base 616 (78) 2481 (192) —
+optimizer-pref 0 2537 (214) +2.3%
+DARC-pref 217 (77) 2784 (287) +12.2%
+boiler_limited MILP-base 5.0 (4.0) 2481 (192) —
+optimizer-pref 0 2541 (189) +2.4%
+DARC-pref 4.2 (2.0) 2753 (221) +11.0%
+0
+50
+100
+150
+200
+250
+300Power (kW)
+(a) MILP-base — blind to preference; grid imports peak at 234 kW during h1--h6
+0 2 4 6 8 10 12 14 16 18 20 22
+Hour of day
+0
+50
+100
+150
+200
+250
+300Power (kW)
+(b) DARC-pref — natural-language preference applied; grid imports flattened
+120 kW cap Total electric demand PV CHP Battery discharge Grid buy
+Figure 2. Hour-by-hour electric balance under the transformer_cap preference (Normal day, seed 0).
+Shaded bands mark the maintenance window (h1–h6 and h23); the dotted red line marks the 120 kW
+cap. Stacked bars decompose the supply side into PV , CHP , battery discharge, and grid buy; the
+black line is total electric demand (load + boiler + battery charge + grid sell). MILP-base, blind to
+the preference, draws over 200 kW from the grid throughout the maintenance window. DARC-pref,
+reading the preference as free text, suppresses grid imports during the same window by raising CHP
+output and shifting battery discharge into those hours.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 15 ===
+Energies 2026, 19, 3817 15 of 25
+On transformer_cap, MILP-base exceeds the 120 kW cap by an average of 616 kWh
+per day; DARC-pref reduces this to 217 kWh, a 65% reduction obtained without any
+modification to the solver or any manual constraint engineering. The hand-engineered
+optimizer-pref reaches full compliance via explicit constraint rewriting. DARC-pref’s
+residual violation is the expected consequence of the natural-language preference entering
+as prompt context rather than as a hard inequality. On boiler_limited, DARC-pref also trims
+the marginal over-cap of MILP-base. The associated operating costs are reported in Table 4
+and should be read jointly with physical feasibility and preference compliance.
+5.3. Forecast Robustness
+For each day-type and seed, a noisy forecast is generated by applying multiplicative
+Gaussian noise ε ∼ N(1, σ2) to PV , electric load, and thermal load; prices are observed
+exactly. Each method solves on the noisy forecast, and the committed plan is realized against
+the true profile via the deterministic projector. We sweep σ ∈ {0.05, 0.10, 0.20}, covering
+typical industry forecast-error magnitudes for short-horizon distributed photovoltaics and
+demand. Realized cost is compared against the per-day oracle, defined as an MILP solved
+on the true profile. The design yields nine independent observations per (method, σ) cell.
+Because a point-forecast MILP is not designed to absorb forecast error, we addition-
+ally benchmark MILP-robust, a box-uncertainty (Soyster-style) robust counterpart that
+represents the standard margining response to forecast deviation within the optimiza-
+tion paradigm [10,11]. MILP-robust solves the same model against the worst corner of
+a per-hour box uncertainty set—electric and thermal loads scaled by (1 + γσ) and PV
+by (1 − γσ)—and additionally tightens all battery and TES SOC bounds, including the
+terminal windows, by a back-off of min(0.05, γσ), so that realized state drift stays inside
+the true bounds. The conservativeness parameter is γ = 1 in Table 5; γ ∈ {0.5, 1.5} is
+reported as a sensitivity check in the text. Rolling-horizon MPC [6–9] responds to the same
+deviation through intra-day recourse; because every method in this experiment commits
+to a single day-ahead plan that is then realized, an MPC comparison would change the
+information structure of the task, and we leave it outside the present protocol.
+Table 5 aggregates realized cost regret and residual violation; Figure 3 visualizes the
+same data with inter-seed standard-deviation error bars.
+Table 5. Forecast-robustness results aggregated over three day-types and three seeds per noise
+level. Regret is realized_cost − oracle_cost (%). Mean values with inter-seed standard deviation in
+parentheses. “Feas.” counts strictly feasible configurations. MILP-robust uses γ = 1.
+σ Method Realized Cost (¥) Regret (%) Feas. Mean Violation (kWh)
+0.05 MILP 2509 1.4 (0.4) 0/9 35.9 (6.5)
+0.05 MILP-robust 2548 3.2 (0.1) 2/9 3.4 (2.1)
+0.05 Naive-LLM 3203 29.1 (16.4) 0/9 118.0 (52.1)
+0.05 DARC 2787 12.5 (3.2) 8/9 0.4 (1.2)
+0.10 MILP 2569 3.7 (1.3) 0/9 28.4 (12.7)
+0.10 MILP-robust 2606 5.5 (0.7) 3/9 9.7 (14.6)
+0.10 Naive-LLM 3273 32.1 (14.4) 1/9 113.7 (67.1)
+0.10 DARC 2873 15.8 (2.9) 3/9 14.0 (18.6)
+0.20 MILP 2659 7.4 (3.4) 0/9 34.8 (5.3)
+0.20 MILP-robust 2659 7.7 (1.9) 6/9 0.8 (1.4)
+0.20 Naive-LLM 3503 41.5 (14.3) 0/9 151.7 (53.4)
+0.20 DARC 2853 15.1 (2.4) 5/9 18.3 (29.2)
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 16 ===
+Energies 2026, 19, 3817 16 of 25
+0.05 0.10 0.20
+Forecast noise σ
+0
+10
+20
+30
+40
+50Realized cost regret vs oracle (\%)
+(a) Realized cost regret
+MILP
+Naive-LLM
+DARC
+0.05 0.10 0.20
+Forecast noise σ
+0
+50
+100
+150
+200Mean residual violation (kWh)
+(b) Residual violation
+MILP
+Naive-LLM
+DARC
+Figure 3. Forecast robustness across three day-types and three seeds. Error bars indicate inter-seed
+standard deviation. (a) Realized cost regret saturates for DARC and rises withσ for MILP . (b) DARC’s
+mean residual violation remains far below MILP’s across the swept noise range.
+Point-forecast MILP plans are physically infeasible against the realized profile on all
+27 (day, σ, seed) configurations, with a mean residual violation of 33.0 kWh; the violations
+concentrate in early-morning thermal balance (hours 4–6), where the committed plan
+retains no thermal headroom, and the initially low TES state cannot cover an under-forecast
+heat load. We stress that this baseline was never designed to handle forecast error, so its
+0/27 should be read as the expected behavior of a deterministic plan operating at binding
+constraints, not as a deficiency of MILP as such. MILP-robust recovers most of this gap at
+moderate extra cost: at γ = 1, it attains 11/27 strictly feasible configurations with mean
+residual violation 4.6 kWh and a cost regret of 3.2–7.7%, roughly half of DARC’s. DARC
+attains 16/27 strictly feasible configurations with mean residual violation 10.9 kWh. The
+comparison is therefore two-sided. Once forecast uncertainty is explicitly parameterized,
+the robust formulation is the stronger pure-optimization answer on cost and mean violation;
+DARC reaches more strictly feasible configurations without requiring an uncertainty set at
+all, through the same interface that ingests free-text preferences. The γ sweep quantifies
+the cost of that parameterization: under-margining ( γ = 0.5) achieves only 2/27 strict
+feasibility, and over-margining is not monotonically safer either (γ = 1.5 yields 9/27; at
+σ = 0.10, it commits surplus heat that the TES cannot absorb and strict feasibility collapses
+to 0/9), so the margin parameter itself becomes a per-noise-level tuning problem. Cost
+regret is reported in Table 5 as a secondary metric and should be read jointly with residual
+violations, since not every realized plan is strictly feasible. Naive-LLM remains uniformly
+costly and largely infeasible across noise levels, indicating that the LLM-only baseline
+contributes neither robustness nor competitive cost without the surrounding architecture.
+5.4. Diagnostic Explainability
+Three flawed dispatch plans with known root causes are constructed: PV curtailment
+caused by excess CHP during the PV peak; idle battery during peak-price hours despite
+available state of charge; and thermal undersupply at cold morning hours. Three diagnosers
+produce diagnoses: critic_full (DARC’s Critic), critic_facts (the deterministic checker
+output as text), and critic_naive (a single LLM call without math-grounded facts). An
+independent judge LLM scores each diagnosis from 1 to 5 on six anchored dimensions:
+evidence localization, root-cause accuracy, causal explanation, revision specificity, physical
+consistency, and focus.
+Table 6 reports the mean scores; Figure 4 visualizes the same.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 17 ===
+Energies 2026, 19, 3817 17 of 25
+Table 6. Judge scores aggregated over three constructed scenarios, three random seeds, and three
+judge rounds (1–5; higher is better).critic_full is DARC’s Critic; critic_facts is the deterministic-
+checker output only; critic_naive is the LLM with no math-grounded facts. Bold values indicate
+the highest score in each rubric dimension.
+Diagnoser Evidence Root Cause Causal Revision Physics Focus Overall
+critic_full (DARC) 4.22 4.22 4.22 4.22 3.74 3.96 4.10
+critic_facts 4.07 4.67 3.85 2.93 3.19 3.89 3.77
+critic_naive 2.67 2.26 2.67 3.33 2.37 1.56 2.47
+Evidence
+localization
+Root-cause
+accuracy
+Causal
+explanation
+Revision
+specificity
+Physical
+consistency
+Focus
+1
+2
+3
+4
+5Judge score (1--5)
+Diagnostic quality across 6 rubric dimensions
+DARC Critic (full) Facts only LLM only (no facts)
+Figure 4. Judge scores for the three diagnosers across six anchored rubric dimensions, averaged over
+three constructed scenarios, three random seeds, and three judge rounds.
+Under the refined rubric, critic_full achieves the highest overall score (4.10), fol-
+lowed by critic_facts (3.77) and critic_naive (2.47). The deterministic facts alone are
+already strong for root-cause accuracy, because the checker exposes the relevant violations
+and diagnostic aggregations. The LLM diagnosis layer contributes most clearly in causal
+explanation, revision specificity, physical consistency, and focus, where it converts facts into
+prioritized repair instructions. The per-scenario results are not uniform: for the relatively
+simple peak-grid-buying case, facts alone are sufficient and slightly outscore the full Critic,
+whereas the full Critic is stronger in the PV-curtailment and thermal-imbalance cases. These
+scores should therefore be read as directional evidence, not as a calibrated measure of
+diagnostic superiority.
+Cross-family judge replication. Because the judge above shares the diagnoser’s model
+family, and self-preference bias in LLM-as-judge settings is well documented, we replicated
+the scoring during revision with judges from two different model families (Qwen-plus and
+GLM-4.7). The original diagnosis texts were not retained by the first run, so all diagnoses
+were regenerated with the same diagnoser model and mode ( deepseek-v4-flash, non-
+thinking, served through an OpenAI-compatible gateway), and the identical batch of
+regenerated texts was scored by both judges, three rounds each; Table 7 reports the overall
+scores. The ungrounded critic_naive collapses under both cross-family judges, so the
+load-bearing role of checker grounding is judge-robust. The GLM judge preserves the
+original ordering with a wider margin (4.30 vs. 3.22); under the Qwen judge, the two
+grounded diagnosers are close, with the facts-only diagnoser nominally ahead (4.62 vs. 4.42
+on the five-point rubric). No judge reverses the grounded-pair ordering by more than
+0.20 points, while critic_full leads critic_facts in revision specificity and physical
+consistency under every judge. We therefore read the replication as follows: the qualitative
+conclusion—the two-layer Critic is at least as useful as checker facts alone and clearly
+more useful than an ungrounded diagnoser—survives cross-family judging, while the
+size (and, within noise, the sign) of the aggregate full-versus-facts margin is judge- and
+sample-dependent, so we do not rest claims on that margin. The full Critic’s consistent
+lead in the actionability dimensions that the Resolver consumes in the revision loop is the
+operative advantage.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 18 ===
+Energies 2026, 19, 3817 18 of 25
+Table 7. Overall judge scores (1–5) under cross-family judge replication. The first column reproduces
+Table 6 (original diagnosis texts, same-family judge). The remaining columns score one identical batch
+of diagnoses regenerated with the same diagnoser model (deepseek-v4-flash) using judges from
+two different model families. Three (Qwen) and four (GLM) of 81 judge rounds, all on critic_naive,
+returned malformed output and are excluded.
+Original Texts Regenerated Texts (Identical Batch)
+Diagnoser DeepSeek (Paper) Qwen GLM
+critic_full 4.10 4.42 4.30
+critic_facts 3.77 4.62 3.22
+critic_naive 2.47 2.34 2.78
+5.5. Standard Cost-Minimization Task
+Table 8 reports performance on the standard cost-minimization task without operator
+preferences and without forecast noise, evaluated over twelve configurations.
+Table 8. Standard cost-minimization task: twelve configurations (Normal, Sunny, Cloudy, Winter-
+peak × three seeds). Mean values per method.
+Method Feas.
+Cost
+(¥)
+Cost Gap
+vs. MILP
+Mean Viol.
+(kWh)
+PV
+Util.
+MILP 12/12 2658 — 0.0 97.5%
+DARC (full) 8/12 3027 +13.6% 18.9 91.4%
+DARC w/o cases 8/12 3047 +14.4% 15.4 89.9%
+DARC w/o critic 2/12 3143 +18.1% 220.8 74.3%
+heuristic projector 0/12 3380 +26.7% 284.8 96.4%
+DARC incurs a higher operating cost than MILP on the fully specified standard
+task. This gap reflects the limit of LLM-based numerical generation on a fully specified
+linear problem, together with DARC’s best-so-far selection score, which penalizes PV
+waste and peak-hour grid purchase and so steers the Resolver away from the strict cost-
+minimum extreme point. Because some DARC candidates retain residual violations, the
+cost column should be interpreted together with feasibility. The standard task is included
+for completeness; DARC’s structural advantage lies in the settings of Sections 5.2 and 5.3.
+Failure analysis. Because the standard task contains none of the complexity DARC is
+designed for, its 8/12 feasibility rate is an important measurement of the core pipeline’s
+reliability and deserves scrutiny rather than a passing mention. We therefore break the
+four infeasible configurations down individually. Three of the four are the Winter-peak
+day (all three seeds); the fourth is the Normal day at seed 0. The residual violations
+are small relative to the schedules in which they occur—29.5, 54.7, and 86.8 kWh on the
+Winter-peak days and 56.2 kWh on the Normal day, i.e., 0.7–2.0% of the corresponding
+daily thermal demand—and in all four cases, the Critic loop exhausted its revision budget
+without converging, with best-so-far selection retaining a near-feasible candidate. The
+concentration on Winter-peak has a structural explanation. On the Normal, Sunny, and
+Cloudy days, the thermal load never exceeds the CHP’s maximum thermal output (280 kW),
+so heat can be served by a single device at every hour, and the Resolver’s thermal reasoning
+is loosely coupled. Winter-peak raises thermal load by30% (peak ≈ 300 kW), which exceeds
+CHP-only capacity around the morning peak: serving those hours requires coordinating
+CHP near its maximum with the electric boiler and pre-positioned TES energy, while the
+same day-type also raises electric load by 8% and cuts PV by 45%, tightening the electric
+side from which the boiler draws. The jointly optimizing MILP oracle is unaffected (12/12);
+a causal generate-then-repair pipeline is most exposed exactly here, because an early under-
+commitment of thermal resources propagates forward and the Projector’s forward-in-time
+repair cannot retroactively re-charge storage. The implication for trusting the system is
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 19 ===
+Energies 2026, 19, 3817 19 of 25
+stated plainly: DARC’s raw generate-and-repair reliability on tightly coupled days is not
+sufficient for unsupervised use. Every one of these residuals is flagged by the deterministic
+Checker, so the operational interface must retain the Checker as a hard gate, with fallback
+to the MILP solution whenever the problem is fully specified—which is precisely the
+positioning of Section 5.7.
+5.6. Architectural Ablations
+Two ablations relative to the full DARC pipeline are reported in Table 8.DARC w/o
+critic replaces the Critic loop with a single-shot generation; strict feasibility collapses from
+8/12 to 2/12 and mean residual violation rises from 18.9 kWh to 220.8 kWh. The math-
+grounded Critic feedback loop is therefore the load-bearing component of the architecture.
+DARC w/o cases removes the optional similar-day retrieval module; feasibility is unchanged
+and the cost difference is modest, indicating that the case library, when available, provides
+limited economic guidance but is not required for feasibility. The heuristic projector row
+(a fixed-rule dispatcher passed through DARC’s projector) achieves 0/12 feasibility, con-
+firming that the LLM-based reasoning layer contributes substantively beyond what the
+deterministic projector alone delivers.
+5.7. Discussion
+On the fully specified cost-minimization task, MILP remains the rational choice.
+DARC’s contribution is the two settings that MILP cannot ingest directly: natural-language
+operator preferences and noisy forecasts. Because both enter as prompt context rather than
+hard constraints, the resulting compliance is a prompt-conditioned approximation rather
+than a guarantee. Operating cost is therefore reported as part of the feasibility–economy
+trade-off rather than as a standalone optimization claim. Robust and stochastic MILP
+variants address forecast noise under additional modeling assumptions but do not provide
+a route to ingest natural-language preferences; DARC’s contribution is the unified prompt-
+driven interface, not the per-setting numerical optimum. Section 5.3 now quantifies this
+positioning directly: once a well-chosen uncertainty margin is supplied, MILP-robust is
+the stronger answer on cost and mean violation, while DARC attains more strictly feasible
+configurations without any uncertainty parameterization. The two occupy different points
+on the specification-effort axis rather than competing on a single leaderboard.
+An alternative division of labor: formalize-then-solve. A natural alternative dele-
+gates less to the language model: an LLM translates the operator’s text into constraints
+and objective terms, and a conventional MILP solves the resulting model, as pursued by
+NL4Opt, OptiMUS, and Chain-of-Experts [45–47]. We consider this design complemen-
+tary rather than competing, and often preferable when preferences are crisp, hard, and
+expressible in the solver’s algebra: the hand-engineered optimizer-pref rows in Table 4
+represent exactly the upper bound of such a pipeline, achieving full compliance at a
+2.3–2.4% cost premium. Three limitations define the setting where DARC adds value.
+First, mis-formalization is silent: an incorrectly translated constraint yields a schedule that
+is confidently optimal for the wrong problem, and nothing inside the solver reports the
+discrepancy; DARC instead verifies the final numerical schedule directly against system
+physics, keeping the failure surface observable regardless of how the preference was inter-
+preted. Second, some operator preferences are soft or under-specified (“avoid stressing the
+transformer in the morning if it does not cost too much”), admitting no unique inequal-
+ity; a prompt-conditioned Resolver can trade such intent off without forcing a premature
+formalization. Third, the two designs compose: a formalizer could hand crisp inequalities
+to the Projector as hard constraints while soft intent remains prompt context, with the
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 20 ===
+Energies 2026, 19, 3817 20 of 25
+Checker–Critic loop unchanged. We regard this hybrid as the most promising engineering
+path and leave it to future work.
+The main threats to the present evidence are the three-seed sample size, the single
+LLM family (DeepSeek-V4-Flash), and the single-bus electrical and aggregated thermal
+model. A fourth threat, the LLM judge in Section 5.4 sharing the diagnoser’s model
+family, was addressed directly during revision. Three protocol features already limit
+stylistic self-preference (the judge receives the ground-truth root cause, scores against an
+anchored six-dimension rubric, and is blinded to diagnoser identity); in addition, the
+evaluation harness used in this study decouples the judge provider from the diagnoser
+provider, and the scoring was replicated with two cross-family judges on an identical
+regenerated diagnosis batch (Table 7). The replication preserved the naive-diagnoser
+gap and the full Critic’s lead in the actionability dimensions under every judge, while
+the aggregate full-versus-facts margin proved judge-sensitive; the corresponding claims
+in the abstract, contribution list, and Section 5.4 have been softened accordingly. An
+ablation that feeds facts-only feedback into the closed revision loop, isolating how much
+the diagnosis layer’s actionability matters operationally, is a natural follow-up we leave
+to future work. None of these alter the directional findings but each constrains the scope
+of the quantitative claims; broader cross-family and cross-network replication is deferred
+to future work.
+6. Conclusions
+This paper has proposed DARC, a constraint-diagnostic LLM agent framework
+that complements MILP-based day-ahead dispatch of campus-level integrated energy
+microgrids in two operationally common settings that the standard solver cannot ingest
+directly: natural-language operator preferences and noisy day-ahead forecasts. Experi-
+ments on a campus-level microgrid IES testbed, run with the rule-based Decomposer
+variant (two LLM modules in the loop) and evaluated across three independent random
+seeds, show that DARC reduces preference violations relative to a preference-blind
+MILP baseline without manual constraint engineering, and that under industry-typical
+forecast noise, its plans achieve strict feasibility on 16 of 27 (day, noise, seed) configu-
+rations against the realized profile while the point-forecast MILP achieves 0 of 27 and
+an interval-robust MILP baseline achieves 11 of 27 at roughly half of DARC’s cost re-
+gret. The math-grounded Critic, which pairs a deterministic constraint checker with
+an LLM-based root-cause diagnoser, dominates an LLM-only diagnoser on a judged-
+quality rubric under judges from three model families; relative to checker facts alone,
+its judged advantage concentrates in revision specificity and physical consistency—the
+actionability that feeds the revision loop—while the aggregate margin over facts alone is
+judge-dependent (Section 5.4). On the fully specified, noise-free task, DARC remains
+behind MILP (8/12 vs. 12/12 strictly feasible), with failures concentrated on the ther-
+mally tight Winter-peak day (Section 5.5); the deterministic Checker gate is therefore an
+integral part of the interface rather than an optional safeguard.
+The architectural principle behind these results is to bind LLM reasoning to determin-
+istic repair and verification: physical balance is repaired by a projector rather than by the
+LLM, and the Critic’s feedback signal originates in checker-computed facts rather than in
+LLM self-evaluation. The reported operating costs characterize the trade-off introduced by
+the natural-language interface and should be interpreted jointly with feasibility.
+Future work. Three directions remain open. First, the prompt-conditioned natural-
+language interface yields partial compliance for hard preferences; a structured preference
+channel that can express hard inequalities while preserving the natural-language entry
+point would extend the practical envelope. Second, the present results use a single LLM
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 21 ===
+Energies 2026, 19, 3817 21 of 25
+family (DeepSeek-V4-Flash) and a limited number of random seeds; cross-family replica-
+tion (Qwen, GPT, Claude) and larger-sample confidence intervals are the natural validation
+extensions. Third, the testbed uses a single-bus electrical model and an aggregated ther-
+mal model; a network-aware Projector that exposes power-flow and pipe-temperature
+constraints to the same Critic loop would test whether the architecture generalizes to
+distribution-level IES dispatch.
+Author Contributions: Conceptualization, B.L. and Y.G.; methodology, Y.G.; software, Y.G. and H.H.;
+validation, H.H., D.R. and D.L.; formal analysis, Y.G.; investigation, B.L. and D.R.; resources, B.L.
+and D.R.; data curation, Y.G. and H.H.; writing—original draft preparation, B.L. and Y.G.; writing—
+review and editing, H.H., D.R. and D.L.; visualization, Y.G. and H.H.; supervision, D.L.; project
+administration, B.L.; funding acquisition, D.L. All authors have read and agreed to the published
+version of the manuscript.
+Funding: This work was supported by the National Natural Science Foundation of China under
+Grants 62373297 and 62203350, by the Key Research and Development Program of Shaanxi under
+Grant 2022GY-033, and by the XJTU Research Fund for AI Science under Grant 2025YXYC004.
+Institutional Review Board Statement: Not applicable.
+Informed Consent Statement: Not applicable.
+Data Availability Statement: The data and code supporting the findings of this study are available
+from the corresponding author upon reasonable request.
+Acknowledgments: The authors gratefully acknowledge the support of the K. C. Wong Education
+Foundation. During the preparation of this manuscript, the authors used ChatGPT (OpenAI; accessed
+June 2026) solely to assist in refining the visual presentation of Figure 1. The authors reviewed and
+edited the output and take full responsibility for the content of this publication.
+Conflicts of Interest: Bingnan Li and Debei Rao were employed by RunDian Energy Science and
+Technology Co., Ltd. The remaining authors declare that the research was conducted in the absence
+of any commercial or financial relationships that could be construed as a potential conflict of interest.
+Abbreviations
+The following abbreviations are used in this manuscript:
+CHP Combined heat and power
+DARC Decompose-Act-Repair-Critique
+IES Integrated energy system
+LLM Large language model
+MILP Mixed-integer linear programming
+MPC Model predictive control
+PV Photovoltaic
+SOC State of charge
+TES Thermal energy storage
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 22 ===
+Energies 2026, 19, 3817 22 of 25
+Appendix A. Decomposer Output Example
+The decision map m output by the Decomposer has the following structure:
+{
+" c r i t i c a l _ p e r i o d s ": {
+" p e a k _ p r i c e _ h o u r s ": [18 , 19 , 20 , 21] ,
+" p e a k _ l o a d _ h o u r s ": [17 , 18 , 19 , 20] ,
+" h i g h _ p v _ h o u r s ": [10 , 11 , 12 , 13 , 14]
+} ,
+" f l e x i b l e _ p e r i o d s ": {
+" v a l l e y _ c h a r g e _ h o u r s ": [0 , 1 , 2 , 3 , 4 , 5 , 6 , 7] ,
+" p v _ a b s o r p t i o n _ h o u r s ": [9 , 10 , 11 , 12 , 13 , 14 , 15] ,
+" t e r m i n a l _ s o c _ c o r r e c t i o n ": [22 , 23]
+} ,
+" k e y _ c o u p l i n g s ": [" CHP electro - thermal " , ...] ,
+" s t r a t e g i c _ h i n t s ": [...]
+}
+Appendix B. Optional Case-Library Extension: Retrieved Strategy
+Context Format
+The optional retrieval-augmented strategy-transfer module described in Section 4.8
+formats the retrieved operating-mode summaries and numerical anchors as structured
+context s for the Resolver. The strategy context s has the JSON structure:
+{
+" c a s e _ t r a n s f e r _ a n a l y s i s ": [
+{
+" me ch an is m ": " battery temporal a rb itr ag e " ,
+" t r a n s f e r _ d e c i s i o n ": " s h i f t _ h o u r s " ,
+" reason ": " current PV peak shifted later " ,
+" a d a p t a t i o n ": " charge during hours 10 -14"
+}
+] ,
+" n u m e r i c _ a n c h o r s _ f o r _ r e s o l v e r ": {
+" chp ": {" v a l l e y _ a v g _ k w ": 40 , " p e a k _ a v g _ k w ": 80} ,
+" battery ": {" t o t a l _ c h a r g e _ k w h ": 120 ,
+" t o t a l _ d i s c h a r g e _ k w h ": 100}
+} ,
+" d e v i c e _ s t r a t e g i e s ": {
+" chp ": [{" hours ": [18 ,21] , " d ir ec ti on ": " high " ,
+" reason ": " peak price + thermal demand "}] ,
+" battery ": [{" hours ": [10 ,14] , " d ire ct io n ": " charge " ,
+" reason ": " PV surplus a b s o r p t i o n "}]
+}
+}
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 23 ===
+Energies 2026, 19, 3817 23 of 25
+Appendix C. Critic Output Format
+The structured diagnosis d output by the Critic:
+{
+" o v e r a l l _ a s s e s s m e n t ": " Feasible but e c o n o m i c a l l y
+s u b o p t i m a l due to ex ce ss iv e peak - hour grid purchase " ,
+" s h o u l d _ r e v i s e ": true ,
+" r o o t _ c a u s e s ": [
+{
+" issue ": " Peak - hour grid purchase ex ce ss iv e " ,
+" evidence ": " Hours 18 -20: grid_buy avg 85 kW
+while battery SOC > 40%" ,
+" cause ": " Battery not d i s c h a r g e d during peak " ,
+" fix ": " Increase battery d is ch ar ge hours 18 -21 ,
+reduce grid_buy a c c o r d i n g l y "
+}
+] ,
+" p r i o r i t y _ h o u r s ": [18 , 19 , 20] ,
+" w h a t _ t o _ k e e p ": " CHP thermal output adequate ,
+TES terminal SOC s a t i s f a c t o r y "
+}
+References
+1. Geidl, M.; Koeppel, G.; Favre-Perrod, P .; Klockl, B.; Andersson, G.; Frohlich, K. Energy hubs for the future.IEEE Power Energy
+Mag. 2007, 5, 24–30. [CrossRef]
+2. Geidl, M.; Andersson, G. Optimal power flow of multiple energy carriers. IEEE Trans. Power Syst. 2007, 22, 145–155. [CrossRef]
+3. Mancarella, P . MES (multi-energy systems): An overview of concepts and evaluation models. Energy 2014, 65, 1–17. [CrossRef]
+4. Mohammadi, M.; Noorollahi, Y.; Mohammadi-ivatloo, B.; Yousefi, H. Energy hub: From a model to a concept—A review. Renew.
+Sustain. Energy Rev. 2017, 80, 1512–1527. [CrossRef]
+5. Zhang, M.; Wu, Q.; Wen, J.; Lin, Z.; Fang, F.; Chen, Q. Optimal operation of integrated electricity and heat system: A review of
+modeling and solution methods. Renew. Sustain. Energy Rev. 2021, 135, 110098. [CrossRef]
+6. Wu, L.; Yin, X.; Pan, L.; Liu, J. Economic model predictive control of integrated energy systems: A multi-time-scale framework.
+Appl. Energy 2022, 328, 120187. [CrossRef]
+7. Mayne, D.Q.; Rawlings, J.B.; Rao, C.V .; Scokaert, P .O. Constrained model predictive control: Stability and optimality.Automatica
+2000, 36, 789–814. [CrossRef]
+8. Parisio, A.; Rikos, E.; Glielmo, L. A model predictive control approach to microgrid operation optimization. IEEE Trans. Control
+Syst. Technol. 2014, 22, 1813–1827. [CrossRef]
+9. Hans, C.A.; Sopasakis, P .; Raisch, J.; Reincke-Collon, C.; Patrinos, P . Risk-averse model predictive operation control of islanded
+microgrids. IEEE Trans. Control Syst. Technol. 2020, 28, 2136–2151. [CrossRef]
+10. Bertsimas, D.; Sim, M. The price of robustness. Oper. Res. 2004, 52, 35–53. [CrossRef]
+11. Dong, Y.; Zhang, H.; Ma, P .; Wang, C.; Zhou, X. A hybrid robust-interval optimization approach for integrated energy systems
+planning under uncertainties. Energy 2023, 274, 127267. [CrossRef]
+12. Fu, Y.; Zhang, Z.; Li, Z.; Mi, Y. Energy management for hybrid AC/DC distribution system with microgrid clusters using
+non-cooperative game theory and robust optimization. IEEE Trans. Smart Grid 2020, 11, 1510–1525. [CrossRef]
+13. Lewis, P .; Perez, E.; Piktus, A.; Petroni, F.; Karpukhin, V .; Goyal, N.; Küttler, H.; Lewis, M.; Yih, W.T.; Rocktäschel, T.; et al.
+Retrieval-augmented generation for knowledge-intensive nlp tasks. Adv. Neural Inf. Process. Syst. 2020, 33, 9459–9474.
+14. Yao, S.; Zhao, J.; Yu, D.; Du, N.; Shafran, I.; Narasimhan, K.R.; Cao, Y. ReAct: Synergizing Reasoning and Acting in Language
+Models. In Proceedings of the Eleventh International Conference on Learning Representations, Kigali, Rwanda, 1–5 May 2023.
+15. Schick, T.; Dwivedi-Yu, J.; Dessì, R.; Raileanu, R.; Lomeli, M.; Hambro, E.; Zettlemoyer, L.; Cancedda, N.; Scialom, T. Toolformer:
+Language models can teach themselves to use tools. Adv. Neural Inf. Process. Syst. 2023, 36, 68539–68551. [CrossRef]
+16. Majumder, S.; Dong, L.; Doudi, F.; Cai, Y.; Tian, C.; Kalathil, D.; Ding, K.; Thatte, A.A.; Li, N.; Xie, L. Exploring the capabilities
+and limitations of large language models in the electric energy sector. Joule 2024, 8, 1544–1549. [CrossRef]
+17. Antonesi, G.; Cioara, T.; Anghel, I.; Michalakopoulos, V .; Sarmas, E.; Toderean, L. A systematic review of transformers and large
+language models in the energy sector: Towards agentic digital twins. Appl. Energy 2025, 401, 126670. [CrossRef]
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 24 ===
+Energies 2026, 19, 3817 24 of 25
+18. Zhang, C.; Zhang, J.; Lu, J.; Zhao, Y. Large language models meet energy systems: Opportunities, challenges, and future
+perspectives. Appl. Energy 2026, 403, 127076. [CrossRef]
+19. Zhang, L.; Chen, Z. Large language model-based interpretable machine learning control in building energy systems. Energy
+Build. 2024, 313, 114278. [CrossRef]
+20. Xiao, T.; Xu, P . Exploring automated energy optimization with unstructured building data: A multi-agent based framework
+leveraging large language models. Energy Build. 2024, 322, 114691. [CrossRef]
+21. Li, Y.; Cheng, G.; Zhao, J.; Liu, Y. In-context learning enhanced large language model for robust distribution system state
+estimation. Appl. Energy 2026, 407, 127344. [CrossRef]
+22. Wang, D.; Peng, D.; Huang, D. Application and prospects of large AI models in virtual power plants. Electr. Power Syst. Res. 2025,
+241, 111403. [CrossRef]
+23. Gao, L.; Madaan, A.; Zhou, S.; Alon, U.; Liu, P .; Yang, Y.; Callan, J.; Neubig, G. PAL: Program-aided language models.
+In Proceedings of the International Conference on Machine Learning, Honolulu, HI, USA, 23–29 July 2023 ; Volume 202,
+pp. 10764–10799.
+24. Madaan, A.; Tandon, N.; Gupta, P .; Hallinan, S.; Gao, L.; Wiegreffe, S.; Alon, U.; Dziri, N.; Prabhumoye, S.; Yang, Y.; et al.
+Self-refine: Iterative refinement with self-feedback. Adv. Neural Inf. Process. Syst. 2023, 36, 46534–46594. [CrossRef]
+25. Shinn, N.; Cassano, F.; Gopinath, A.; Narasimhan, K.; Yao, S. Reflexion: Language agents with verbal reinforcement learning.
+Adv. Neural Inf. Process. Syst. 2023, 36, 8634–8652. [CrossRef]
+26. Pham, T.H.; De Magistris, G.; Tachibana, R. OptLayer: Practical constrained optimization for deep reinforcement learning in the
+real world. In Proceedings of the 2018 IEEE International Conference on Robotics and Automation, Brisbane, Australia, 21–25
+May 2018; pp. 6236–6243. [CrossRef]
+27. Vázquez-Canteli, J.R.; Nagy, Z. Reinforcement learning for demand response: A review of algorithms and modeling techniques.
+Appl. Energy 2019, 235, 1072–1089. [CrossRef]
+28. Ruelens, F.; Claessens, B.J.; Vandael, S.; De Schutter, B.; Babuška, R.; Belmans, R. Residential demand response of thermostatically
+controlled loads using batch reinforcement learning. IEEE Trans. Smart Grid 2017, 8, 2149–2159. [CrossRef]
+29. Bahrami, S.; Chen, Y.C.; Wong, V .W. Deep reinforcement learning for demand response in distribution networks.IEEE Trans.
+Smart Grid 2021, 12, 1496–1506. [CrossRef]
+30. Cao, J.; Harrold, D.; Fan, Z.; Morstyn, T.; Healey, D.; Li, K. Deep reinforcement learning-based energy storage arbitrage with
+accurate lithium-ion battery degradation model. IEEE Trans. Smart Grid 2020, 11, 4513–4521. [CrossRef]
+31. Wang, Y.; Qiu, D.; Sun, M.; Strbac, G.; Gao, Z. Secure energy management of multi-energy microgrid: A physical-informed safe
+reinforcement learning approach. Appl. Energy 2023, 335, 120759. [CrossRef]
+32. Hou, S.; Vergara Barrios, P .P .; Salazar Duque, E.M.; Palensky, P . Optimal energy system scheduling using a constraint-aware
+reinforcement learning algorithm. Int. J. Electr. Power Energy Syst. 2023, 152, 109230. [CrossRef]
+33. Alabi, T.M.; Aghimien, E.I.; Agbajor, F.D.; Yang, Z.; Lu, L.; Adeoye, A.R.; Gopaluni, R.B. A review on the integrated optimization
+techniques and machine learning approaches for modeling, prediction, and decision making on integrated energy systems.Renew.
+Energy 2022, 194, 822–849. [CrossRef]
+34. García, J.; Fernández, F. A comprehensive survey on safe reinforcement learning. J. Mach. Learn. Res. 2015, 16, 1437–1480.
+35. Achiam, J.; Held, D.; Tamar, A.; Abbeel, P . Constrained policy optimization. In Proceedings of the 34th International Conference
+on Machine Learning, Sydney, Australia, 6–11 August 2017; Volume 70, pp. 22–31.
+36. Berkenkamp, F.; Turchetta, M.; Schoellig, A.; Krause, A. Safe model-based reinforcement learning with stability guarantees. In
+Proceedings of the Advances in Neural Information Processing Systems, Long Beach, CA, USA, 4–9 December 2017; Volume 30,
+pp. 908–918.
+37. Brunke, L.; Greeff, M.; Hall, A.W.; Yuan, Z.; Zhou, S.; Panerati, J.; Schoellig, A.P . Safe learning in robotics: From learning-based
+control to safe reinforcement learning. Annu. Rev. Control. Robot. Auton. Syst. 2022, 5, 411–444. [CrossRef]
+38. Wei, J.; Wang, X.; Schuurmans, D.; Bosma, M.; Ichter, B.; Xia, F.; Chi, E.H.; Le, Q.V .; Zhou, D. Chain-of-thought prompting elicits
+reasoning in large language models. In Proceedings of the Advances in Neural Information Processing Systems, New Orleans,
+LA, USA, 28 November–9 December 2022; Volume 35, pp. 24824–24837.
+39. Kojima, T.; Gu, S.S.; Reid, M.; Matsuo, Y.; Iwasawa, Y. Large language models are zero-shot reasoners. In Proceedings of the
+Advances in Neural Information Processing Systems, New Orleans, LA, USA, 28 November–9 December 2022; Volume 35,
+pp. 22199–22213.
+40. Zhou, D.; Schärli, N.; Hou, L.; Wei, J.; Scales, N.; Wang, X.; Schuurmans, D.; Cui, C.; Bousquet, O.; Le, Q.V .; et al. Least-to-most
+prompting enables complex reasoning in large language models. In Proceedings of the International Conference on Learning
+Representations, Kigali, Rwanda, 1–5 May 2023.
+41. Wang, X.; Wei, J.; Schuurmans, D.; Le, Q.V .; Chi, E.H.; Narang, S.; Chowdhery, A.; Zhou, D. Self-consistency improves chain of
+thought reasoning in language models. In Proceedings of the International Conference on Learning Representations, Kigali,
+Rwanda, 1–5 May 2023.
+https://doi.org/10.3390/en19163817
+=== PDF PAGE 25 ===
+Energies 2026, 19, 3817 25 of 25
+42. Yao, S.; Yu, D.; Zhao, J.; Shafran, I.; Griffiths, T.; Cao, Y.; Narasimhan, K. Tree of thoughts: Deliberate problem solving with large
+language models. Adv. Neural Inf. Process. Syst. 2023, 36, 11809–11822. [CrossRef]
+43. Park, J.S.; O’Brien, J.; Cai, C.J.; Morris, M.R.; Liang, P .; Bernstein, M.S. Generative agents: Interactive simulacra of human behavior.
+In Proceedings of the 36th Annual ACM Symposium on User Interface Software and Technology, San Francisco, CA, USA, 29
+October–1 November 2023; pp. 1–22. [CrossRef]
+44. Shen, Y.; Song, K.; Tan, X.; Li, D.; Lu, W.; Zhuang, Y. HuggingGPT: Solving AI tasks with ChatGPT and its friends in Hugging
+Face. In Proceedings of the Advances in Neural Information Processing Systems, New Orleans, LA, USA, 10–16 December 2023;
+Volume 36.
+45. Ramamonjison, R.; Yu, T.T.; Li, R.; Li, H.; Carenini, G.; Ghaddar, B.; He, S.; Mostajabdaveh, M.; Banitalebi-Dehkordi, A.; Zhou, Z.;
+et al. NL4Opt competition: Formulating optimization problems based on their natural language descriptions. In Proceedings of
+the NeurIPS 2022 Competitions Track, New Orleans, LA, USA, 28 November–9 December 2022; Proceedings of Machine Learning
+Research; 2023; Volume 220, pp. 189–203.
+46. AhmadiTeshnizi, A.; Gao, W.; Udell, M. OptiMUS: Scalable optimization modeling with (MI)LP solvers and large language
+models. In Proceedings of the International Conference on Machine Learning, Vienna, Austria, 21–27 July 2024.
+47. Xiao, Z.; Zhang, D.; Wu, Y.; Xu, L.; Wang, Y.J.; Han, X.; Fu, X.; Zhong, T.; Zeng, J.; Song, M.; et al. Chain-of-Experts: When
+LLMs meet complex operations research problems. In Proceedings of the International Conference on Learning Representations,
+Vienna, Austria, 7–11 May 2024.
+48. Ruan, J.; Liang, G.; Zhao, H.; Liu, G.; Sun, X.; Qiu, J.; Xu, Z.; Wen, F.; Dong, Z.Y. Applying large language models to power
+systems: Potential security threats. IEEE Trans. Smart Grid 2024, 15, 3333–3336. [CrossRef]
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.
+https://doi.org/10.3390/en19163817

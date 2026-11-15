@@ -1,0 +1,150 @@
+Energy & Buildings 317 (2024) 114378
+17
+Fig. C16.  
+References 
+[1] United Nations Environment Programme. 2022 global status report for buildings 
+and construction: towards a zero‑emission, efficient and resilient buildings and 
+construction sector. 2022. 
+[2] L. P´erez-Lombard, J. Ortiz, C. Pout, A review on buildings energy consumption 
+information, Energy Build 40 (3) (2008) 394–1338. 
+[3] IEA - Annex 25 - Real Time Simulation for Building Optimization, Fault Detection 
+and Diagnosis: https://www.iea-ebc.org/Data/publications/EBC_Annex_25_source_ 
+book.pdf. 
+[4] M.R. Brambley, S. Katipamula, Commercial building retuning: a low-cost approach 
+to improved performance and energy efficiency, ASHRAE J 51 (10) (2009) 12–23. 
+[5] K.W. Roth, D. Westphalen, P. Llana, M. Feng, The energy impact of faults in us 
+commercial buildings, in: Proceedings of the 2004 International Refrigeration and 
+Air Conditioning Conference, 2004, p. 665. 
+[6] M.A. Piette, S.K. Kinney, P. Haves, Analysis of an information monitoring and 
+diagnostic system to improve building operations, Energy Build 33 (8) (2001) 
+783–791. 
+[7] J. Granderson, G. Lin, A. Harding, P. Im, Y. Chen, Building fault detection data to 
+aid diagnostic algorithm creation and performance testing, Sci Data 7 (2020) 65. 
+[8] B.L. Capehart, M.R. Brambley, Automated diagnostics and analytics for buildings, 
+first ed., River Publishers, New York, 2014. 
+[9] CIBSE Guide H: Building Control Systems, Routledge, Oxford, British, 2007. 
+[10] S. Ginestet, D. Marchio, O. Morisot, Evaluation of faults impacts on energy 
+consumption and indoor air quality on an air handling unit, Energy Build 40 
+(2008) 51–57. 
+[11] Y. Yan, P.B. Luh, K.R. Pattipati, Fault diagnosis of HVAC air-handling systems 
+considering fault propagation impacts among components, IEEE Trans Autom Sci 
+Eng 14 (2017) 705–717. 
+[12] N. Cauchi, K.A. Hoque, M. Stoelinga, A. Abate, Maintenance of smart buildings 
+using fault trees, ACM Trans Sen Netw 14 (2018) 1–25. 
+[13] Y. Chen, J. Wen, O. Pradhan, L.J. Lo, T. Wu, Using discrete Bayesian networks for 
+diagnosing and isolating cross-level faults in HVAC systems, Appl Energy 327 
+(2022) 120050. 
+[14] Z. Chen, Z. O’Neill, J. Wen, O. Pradhan, T. Yang, X. Lu, et al., A review of data- 
+driven fault detection and diagnostics for building HVAC systems, Appl Energy 339 
+(2023) 121030. 
+[15] J. Wang, Z. Yang, J. Su, Y. Zhao, S. Gao, X. Pang, D. Zhou, Root-cause analysis of 
+occurring alarms in thermal power plants based on Bayesian networks, Int J Electr 
+Power Energy Syst 103 (2018) 67–74. 
+[16] A. Lokrantz, E. Gustavsson, M. Jirstrand, Root cause analysis of failures and quality 
+deviations in manufacturing using machine learning, Procedia CIRP 72 (2018) 
+1057–1062. 
+[17] N. Liu, M. Hu, J. Wang, Y. Ren, W. Tian, Fault detection and diagnosis using 
+Bayesian network model combining mechanism correlation analysis and process 
+data: Application to unmonitored root cause variables type of faults, Process Saf 
+Environ Prot 164 (2022) 15–29. 
+[18] M.T. Amin, F. Khan, S. Ahmed, S. Imtiaz, A data-driven Bayesian network learning 
+method for process fault diagnosis, Process Saf Environ Prot 150 (2021) 110–122. 
+J. Huang et al.                                                                                                                                                                                                                                   
+Downloaded from https://iranpaper.ir
+
+Energy & Buildings 317 (2024) 114378
+18
+[19] M.T. Amin, F. Khan, S. Imtiaz, Fault detection and pathway analysis using a 
+dynamic Bayesian network, Chem Eng Sci 195 (2019) 777–790. 
+[20] Y. Wang, Z. Wang, S. He, Z. Wang, A practical chiller fault diagnosis method based 
+on discrete Bayesian network, Int J Refrig 102 (2019) 159–167. 
+[21] Y. Chen, J. Wen, T. Chen, O. Pradhan, Bayesian Networks for whole building level 
+fault diagnosis and isolation, in: Proceedings of the 2018 International High 
+Performance Buildings Conference, 2018, p. 266. 
+[22] Z. Wang, L. Wang, Y. Tan, J. Yuan, X. Li, Fault diagnosis using fused reference 
+model and Bayesian network for building energy systems, J Build Eng 34 (2021) 
+101957. 
+[23] A. Taal, L. Itard, P&ID-based automated fault identification for energy performance 
+diagnosis in HVAC systems: 4S3F method, development of DBN models and 
+application to an ATES system, Energy Build. 224 (2020) 110289. 
+[24] Pradhan O, Wen J, Chen Y, Lu X, Chu M, Fu Y, et al. Dynamic bayesian network- 
+based fault diagnosis for ASHRAE guideline 36: high performance sequence of 
+operation for HVAC systems. In: Proceedings of the 8th ACM International 
+Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation. 
+2021, p. 365-68. 
+[25] L. Cheng, R. Guo, R. Moraffah, P. Sheth, K.S. Candan, H. Liu, Evaluation methods 
+and measures for causal learning algorithms, IEEE Trans Artif Intell 3 (2022) 
+924–943. 
+[26] B. Sch¨olkopf, Causality for machine learning, in: H. Geffner, R. Dechter, J. 
+Y. Halpern (Eds.), Probabilistic and Causal Inference: the Works of Judea Pearl, 
+first ed., Association for Computing Machinery, New York, 2022, pp. 765–804. 
+[27] J. Pearl, Causality: models, reasoning and inference, second ed., Cambridge 
+University Press, New York, 2009. 
+[28] J. Pearl, Probabilistic reasoning in intelligent systems: networks of plausible 
+inference, first ed., Morgan Kaufmann Publishers Inc, San Francisco, 1988. 
+[29] L. Jiang, L. Zhang, C. Li, J. Wu, A correlation-based feature weighting filter for 
+naïve Bayes, IEEE Trans Knowl Data Eng 31 (2) (2019) 201–213. 
+[30] L. Jiang, L. Zhang, L. Yu, D. Wang, Class-specific attribute weighted naïve Bayes, 
+Pattern Recognit 88 (2019) 321–330. 
+[31] Y. Chen, J. Wen, L.J. Lo, Using weather and schedule based pattern catching and 
+feature based PCA for whole building fault detection — part I development of the 
+method, ASME J Eng Sustain Build Cities 3 (1) (2022) 011001. 
+[32] Y. Chen, J. Wen, L.J. Lo, Using weather and schedule based pattern catching and 
+feature based PCA for whole building fault detection — part II field evaluation, 
+ASME J Eng Sustain Build Cities 3 (1) (2022) 011002. 
+[33] J. Huang, H. Yoon, T. Wu, K.S. Candan, O. Pradhan, J. Wen, Z. O’Neill, Eigen- 
+Entropy: a metric for multivariate sampling decisions, Inf Sci 619 (2023) 84–97. 
+[34] D. Barber, Bayesian reasoning and machine learning, first ed., Cambridge 
+University Press, Cambridge, 2012. 
+[35] J. Pearl, Probabilities of causation: three counterfactual interpretations and their 
+identification, Synthese 121 (1999) 93–149. 
+[36] J. Tian, J. Pearl, Probabilities of causation: bounds and identification, Annals of 
+Mathematics and Articial Intelligence 28 (2000) 287–313. 
+[37] C.E. Shannon, A mathematical theory of communication, Bell Syst. Technol 27 
+(1948) 379–423. 
+[38] J. Huang, H. Yoon, O. Pradhan, T. Wu, J. Wen, Z. O’Neill, K.S. Candan, A cosine- 
+based correlation information entropy approach for building automatic fault 
+detection baseline construction, Sci Technol Built Environ 28 (9) (2022) 
+1138–1149. 
+[39] J. Huang, T. Wu, H. Yoon, O. Pradhan, J. Wen, Z., O’Neill, Automatic fault 
+detection baseline construction for building HVAC systems using joint entropy and 
+enthalpy, in: Proceedings of 2021 Institute of Industrial and Systems Engineers, 
+2021, pp. 536–541. 
+[40] P. Fritzson, Principles of object oriented modeling and simulation with Modelica 
+3.3: a cyber-physical approach, 2nd ed.,, Wiley-IEEE Press, Piscataway, 2014. 
+[41] M. Wetter, W. Zuo, T.S. Nouidui, X. Pang, Modelica buildings library, J Build 
+Perform Simul 7 (4) (2014) 253–270. 
+[42] S. Goel, R.A. Athalye, W. Wang, Enhancements to ASHRAE standard 90.1 
+prototype building model, Richland, WA (United States): Pacific Northwest 
+National Lab, (PNNL) (2014). 
+[43] D.B. Crawley, L.K. Lawrie, F.C. Winkelmann, W.F. Buhl, Y.J. Huang, C.O. Pedersen, 
+et al., EnergyPlus: creating a new-generation building energy simulation program, 
+Energy Build 33 (4) (2001) 319–331. 
+[44] ASHRAE, ASHRAE Guideline 36-2018, High-Performance Sequences of Operation 
+for HVAC Systems. Tullie Cir NE, Atlanta, GA; 2018. 
+[45] Taylor Engineering LLP, S.T. Taylor, B. Gill, R. Kiriu, Advanced sequences of 
+operation for HVAC systems – Phase II Central plants and hydronic systems. 
+Technical report research project 1711. Task 5: Reporting of findings, Atlanta, GA: 
+ASHRAE; 2019. 
+[46] Y. Fu, Z. O’Neill, Z. Yang, V. Adetola, J. Wen, L. Ren, et al., Modeling and 
+evaluation of cyber-attacks on grid-interactive efficient buildings, Appl Energy 303 
+(2021) 117639. 
+[47] Y. Fu, Z. O’Neill, V. Adetola, A flexible and generic functional mock-up unit based 
+threat injection framework for grid-interactive efficient buildings: A case study in 
+Modelica, Energy Build 250 (2021) 111263. 
+[48] X. Lu, Y. Fu, Z. O’Neill, J. Wen, A holistic fault impact analysis of the high- 
+performance sequences of operation for HVAC systems: Modelica-based case study 
+in a medium-office building, Energy Build 252 (2021) 111448. 
+[49] G. Li, Z. Yang, Y. Fu, Z. O’Neill, L. Ren, O. Pradhan, J. Wen, A hardware-in-the-loop 
+(HIL) testbed for cyber-physical energy systems in smart commercial buildings, Sci 
+Technol Built Environ (2024) 1–18. 
+[50] X. Li, H. Yu, Bayesian Network Structure Learning Algorithm Based on Node Order 
+Constraint, In: 2022 3rd International Conference on Electronic Communication 
+and Artificial Intelligence (IWECAI). 2022, p. 214-217. 
+[51] O. Pradhan, A,, dynamic Bayesian network framework for data-driven fault 
+diagnosis and prognosis of smart building systems. Doctoral dissertation, Drexel 
+University, 2023. 
+[52] BayesFusion. SMILE Wrappers Programmer’s Manual. 2021. 
+[53] BayesFusion. GeNIe Modeler User Manual Version 2.2.4. 2018. 
+J. Huang et al.                                                                                                                                                                                                                                   
+Downloaded from https://iranpaper.ir

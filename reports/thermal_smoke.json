@@ -2742,7 +2742,8 @@
         "dhw_electricity_consumption",
         "electrical_storage_electricity_consumption"
       ]
-    ]
+    ],
+    "export_directory": null
   },
   "on": {
     "rows": [
@@ -5479,6 +5480,7 @@
         "dhw_electricity_consumption",
         "electrical_storage_electricity_consumption"
       ]
-    ]
+    ],
+    "export_directory": null
   }
 }

@@ -1,0 +1,314 @@
+{
+  "id": "article-22",
+  "short_title": "CityLearn Challenge 2022",
+  "title": {
+    "en": "The CityLearn Challenge 2022: Overview, Results, and Lessons Learned",
+    "fa": "چالش CityLearn ۲۰۲۲: مرور، نتایج و درس‌آموخته‌ها"
+  },
+  "bibliography_start_page": 12,
+  "bibliography_end_page": 13,
+  "coverage_notes": {
+    "en": "The supplied20-page competition report includes the main text, AppendixA evaluation equations and AppendixB solution details,4 figures and1 evaluation table. The bibliography occupies PDF pp.12–13; appendices follow it. All visual evidence is provided through original source pages. This is a historical competition benchmark, not the specification of our pinned CityLearn3.2.0 Alameda environment.",
+    "fa": "گزارش مسابقه۲۰صفحه‌ای شامل متن،معادلات ارزیابی پیوستA،جزئیات راه‌حل پیوستB،چهار شکل و یک جدول ارزیابی است. کتاب‌نامه در صفحات۱۲و۱۳ و پیوست‌ها پس از آن‌اند. تصاویر اصلی حفظ شده‌اند. این معیار مسابقه تاریخی است و مشخصات محیط Alameda با CityLearn3.2.0 پروژه ما نیست."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, objective & research-question status",
+        "fa": "مشخصات، هدف و وضعیت پرسش پژوهش"
+      },
+      "paragraphs": [
+        {
+          "en": "Nweye et al., Proceedings of Machine Learning Research220:85–103,2023, NeurIPS2022 Competition Track. The task is crowdsourcing generalizable battery-control policies that reduce electricity cost,carbon emissions and grid ramping while increasing load factor. It is a competition overview and solution synthesis; no numbered experimental hypothesis set is given.",
+          "fa": "Nweye و همکاران، PMLR جلد۲۲۰،صفحات۸۵تا۱۰۳،سال۲۰۲۳. هدف گردآوری سیاست تعمیم‌پذیر کنترل باتری برای کاهش هزینه،کربن و رمپ شبکه و افزایش ضریب بار است. این مرور مسابقه و ترکیب راه‌حل‌هاست؛فرضیه آزمایشی شماره‌دار ارائه نشده است.",
+          "pages": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "benchmark",
+      "title": {
+        "en": "Benchmark, observations & generalization split",
+        "fa": "معیار، مشاهدات و تقسیم تعمیم"
+      },
+      "paragraphs": [
+        {
+          "en": "The neighborhood has17 single-family buildings derived from a real zero-net-energy community in Fontana,California. Participants control only battery charging/discharging. The public training set contains5 buildings,private validation another5,and private test the remaining7. All have one year of hourly weather,carbon intensity,prices and building time series; building-specific series differ among splits.",
+          "fa": "محله۱۷خانه تک‌خانواری از جامعه واقعی با انرژی خالص صفر در Fontana کالیفرنیا دارد. فقط شارژ/تخلیه باتری کنترل می‌شود. آموزش عمومی۵ساختمان،اعتبارسنجی خصوصی۵دیگر و آزمون خصوصی۷باقیمانده است. داده یک‌سال ساعتی هوا،کربن،قیمت و ساختمان دارد و سری ساختمان‌ها میان تقسیم‌ها متفاوت است.",
+          "pages": [
+            3,
+            4
+          ]
+        },
+        {
+          "en": "Starter-kit code supplies dependencies,baseline implementations,training data and submission instructions. The report links the competition and top-team repositories. These source links describe the2022 competition; version,license,availability and compatibility would need checking before reuse in our current simulator.",
+          "fa": "کد آغازگر وابستگی،خط‌مبنا،داده آموزش و دستور ارسال را فراهم می‌کند. مقاله مخزن مسابقه و تیم‌ها را پیوند می‌دهد. این‌ها منابع نسخه۲۰۲۲اند و نسخه،مجوز،دسترسی و سازگاری پیش از استفاده در شبیه‌ساز فعلی باید بررسی شوند.",
+          "pages": [
+            4,
+            6,
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": {
+        "en": "Evaluation metrics & baseline policies",
+        "fa": "معیارهای ارزیابی و سیاست‌های پایه"
+      },
+      "paragraphs": [
+        {
+          "en": "Three baselines: poorly tuned RBC,fine-tuned RBC,and SAC initialized with fine-tuned RBC for its first7000 steps before learning. SAC is trained for8 episodes with reward min(0,−E_h)×(price_h+carbon_h). These are battery-control baselines,not causal diagnostic baselines.",
+          "fa": "سه خط‌مبنا شامل RBC نامناسب،RBC تنظیم‌شده و SAC است که۷۰۰۰گام اول از RBC تنظیم‌شده استفاده می‌کند. SAC هشت اپیزود و پاداش min(0,−E_h)×(price_h+carbon_h) دارد. این‌ها پایه کنترل باتری‌اند،نه تشخیص علّی.",
+          "pages": [
+            6
+          ]
+        },
+        {
+          "en": "AppendixA normalizes cost C and carbon G by a no-battery-control scenario. Grid KPI D combines normalized ramping and1−load-factor. PhaseIII adds D; TableA.1 gives public/private aggregation and train/validation/test weights(.2/.3/.5 for the private combined score). Lower is better. Preserve import/export clipping and normalization exactly if reusing a KPI.",
+          "fa": "پیوستA هزینه C و کربن G را نسبت به حالت بدون کنترل باتری نرمال می‌کند. D ترکیبی از رمپ نرمال و۱منهای ضریب بار است. فازIII معیارD را اضافه می‌کند و جدولA.1 وزن‌های آموزش/اعتبارسنجی/آزمون خصوصی را۰٫۲/۰٫۳/۰٫۵ می‌دهد. کمتر بهتر است؛برش واردات/صادرات و نرمال‌سازی در اقتباس باید دقیق حفظ شوند.",
+          "pages": [
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solutions",
+      "title": {
+        "en": "Top-five solution mechanisms",
+        "fa": "سازوکار پنج راه‌حل برتر"
+      },
+      "paragraphs": [
+        {
+          "en": "TeamTogether combines GBDT/linear forecasting with adaptive error correction,rolling-horizon stochastic optimization using MindOpt and shared-parameter MAPPO. ambitiousengineers combines forecasting and CMA-ES policy optimization; PhaseI dynamic programming is replaced by learned single-agent networks in later phases.",
+          "fa": "TeamTogether پیش‌بینی GBDT/خطی با اصلاح خطا،بهینه‌سازی تصادفی افق‌غلتان MindOpt و MAPPO با پارامتر مشترک دارد. ambitiousengineers پیش‌بینی و CMA-ES را ترکیب می‌کند و در فازهای بعد شبکه تک‌عامل را جایگزین برنامه‌ریزی پویا می‌کند.",
+          "pages": [
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "en": "CUFE combines linear/autoregressive forecasts updated every168 steps with a24-step linear-program battery controller; Eq.B.1 gives the optimization. DivMARL averages shared SAC and a hand-crafted forecast/decision-tree controller. Greener learns a shared MLP by imitation of dynamic-programming trajectories for surrogate objectives,then averages policies trained across objectives/augmented environments.",
+          "fa": "CUFE پیش‌بینی خطی/خودرگرسیو با به‌روزرسانی هر۱۶۸گام و کنترل باتری برنامه خطی۲۴گامی دارد؛معادلهB.1 مدل را می‌دهد. DivMARL میانگین SAC مشترک و کنترل دستی مبتنی بر پیش‌بینی/درخت است. Greener شبکه مشترک را با تقلید مسیر برنامه‌ریزی پویا برای هدف جانشین می‌آموزد و سیاست‌ها را تجمیع می‌کند.",
+          "pages": [
+            8,
+            9,
+            10,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Competition outcomes & reported comparisons",
+        "fa": "نتایج مسابقه و مقایسه‌ها"
+      },
+      "paragraphs": [
+        {
+          "en": "The report counts1005 valid submissions:196/401/408 in PhasesI/II/III;655 participants;201 formed105 teams.41 participants/teams entered selected submissions for winner selection. It is a competition sample,not a controlled equal-compute algorithm study.",
+          "fa": "مقاله۱۰۰۵ارسال معتبر شامل۱۹۶/۴۰۱/۴۰۸در سه فاز،۶۵۵شرکت‌کننده و۱۰۵تیم از۲۰۱نفر گزارش می‌کند؛۴۱شرکت‌کننده/تیم ارسال منتخب وارد انتخاب برنده کردند. این نمونه مسابقه است،نه مقایسه الگوریتم با بودجه همسان.",
+          "pages": [
+            6
+          ]
+        },
+        {
+          "en": "AppendixB.1 reports participant medians C=.792,G=.940,D=.996,and final score=.907. SAC exceeds the other provided baselines but is worse than the top8 submissions on average evaluation score. All top5 solutions use advanced/adaptive control;4/5 consider future load/PV. These scores are specific to the challenge datasets and score functions.",
+          "fa": "پیوستB.1 میانه C=۰٫۷۹۲،G=۰٫۹۴۰،D=۰٫۹۹۶و امتیاز نهایی۰٫۹۰۷ گزارش می‌کند. SAC از پایه‌های ارائه‌شده بهتر ولی از هشت ارسال نخست بدتر است. هر پنج راه‌حل برتر کنترل پیشرفته/تطبیقی و چهارتا پیش‌بینی بار/خورشید دارند. امتیازها ویژه داده و تابع مسابقه‌اند.",
+          "pages": [
+            11,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated lessons, scope limits & outlook",
+        "fa": "درس‌ها، محدودیت دامنه و آینده"
+      },
+      "paragraphs": [
+        {
+          "en": "Authors suggest separate deterministic/adaptive tracks,warm-up rounds dedicated to code/data testing,more standard RL/MPC integrations,and a broader action space including EV and heat pumps. The2022 battery-only setting deliberately reduces complexity and flexible-resource coverage. Teams emphasize forecast quality,generalization,data analysis,ensembles and surrogate optimization.",
+          "fa": "نویسندگان مسیر جدا برای کنترل قطعی/تطبیقی،گرم‌کردن برای آزمون کد/داده،ادغام کتابخانه استاندارد RL/MPC و افزودن EV و پمپ حرارتی را پیشنهاد می‌کنند. دامنه فقط باتری عمداً پیچیدگی و انعطاف را محدود می‌کند. تیم‌ها بر پیش‌بینی،تعمیم،تحلیل داده،تجمیع و هدف جانشین تأکید دارند.",
+          "pages": [
+            10,
+            11,
+            17,
+            18,
+            19,
+            20
+          ]
+        }
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Median normalized participant values are.792 cost,.940 carbon,.996 grid,and.907 overall; these are aggregate competition outcomes,not our benchmark results or a guarantee about a specific baseline implementation.",
+      "fa": "میانه‌های نرمال مسابقه هزینه۰٫۷۹۲،کربن۰٫۹۴۰،شبکه۰٫۹۹۶و کلی۰٫۹۰۷اند؛نتیجه معیار ما یا تضمین یک پیاده‌سازی خاص نیستند.",
+      "pages": [
+        15
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 5,
+      "caption": {
+        "en": "Competition timeline",
+        "fa": "خط زمان مسابقه"
+      },
+      "explanation": {
+        "en": "The diagram labels PhaseI July18,PhaseII August15,PhaseIII September30,competition end November2,and workshop December7. The prose instead says PhaseIII begins November2 and lasts34 days; the contradiction is retained.",
+        "fa": "نمودار فازI را۱۸ژوئیه،II را۱۵اوت،III را۳۰سپتامبر،پایان را۲نوامبر و کارگاه را۷دسامبر می‌نامد. متن آغاز فازIII را۲نوامبر با۳۴روز مدت می‌گوید؛تعارض حفظ شده است."
+      },
+      "data": {
+        "en": "Printed dates are listed above; no inferred correction is applied.",
+        "fa": "تاریخ‌های چاپ‌شده در بالا آمده و اصلاح استنباطی اعمال نشده است."
+      }
+    },
+    {
+      "id": "B.1",
+      "page": 16,
+      "caption": {
+        "en": "PhaseIII participant and baseline KPI distributions",
+        "fa": "توزیع شاخص شرکت‌کنندگان و پایه‌ها در فازIII"
+      },
+      "explanation": {
+        "en": "Boxplots compare participants with two RBCs and SAC for cost,carbon,grid and overall score. The caption mentions R and1−L as well,while visible plot rows are C,G,D and score.",
+        "fa": "نمودارها شرکت‌کننده را با دو RBC و SAC برای هزینه،کربن،شبکه و کلی مقایسه می‌کنند. عنوان R و۱−L را هم ذکر می‌کند،اما ردیف‌های نمایشی C,G,D و امتیازند."
+      },
+      "data": {
+        "en": "Text-reported medians C=.792,G=.940,D=.996,score=.907. Unprinted box endpoints or individual baseline coordinates are not estimated.",
+        "fa": "میانه‌های صریح متن۰٫۷۹۲،۰٫۹۴۰،۰٫۹۹۶و۰٫۹۰۷اند؛دو سر جعبه یا مختصات پایه بدون چاپ تخمین زده نمی‌شود."
+      }
+    },
+    {
+      "id": "B.2",
+      "page": 16,
+      "caption": {
+        "en": "TeamTogether solution framework",
+        "fa": "چارچوب راه‌حل TeamTogether"
+      },
+      "explanation": {
+        "en": "Three stages connect historical time series,building attributes and external inputs to forecasting and stochastic-optimization/RL decisions. Algorithm details are in§3.1; the diagram alone is not executable code.",
+        "fa": "سه مرحله سری تاریخی،مشخصات و ورودی خارجی را به پیش‌بینی و تصمیم بهینه‌سازی تصادفی/RL متصل می‌کنند. جزئیات در۳٫۱ است و شکل به‌تنهایی کد اجرایی نیست."
+      },
+      "data": {
+        "en": "Conceptual flow; no new numerical experimental data.",
+        "fa": "گردش مفهومی است و داده آزمایشی عددی جدید ندارد."
+      }
+    },
+    {
+      "id": "B.3",
+      "page": 19,
+      "caption": {
+        "en": "DivMARL hand-crafted policy decision tree",
+        "fa": "درخت تصمیم سیاست دستی DivMARL"
+      },
+      "explanation": {
+        "en": "Forecast net demand δ guides charge/discharge with crucial-hour restrictions. Text specifies up to40% battery discharge during crucial hours and10% otherwise,with charging restrictions before crucial hours.",
+        "fa": "تقاضای خالص پیش‌بینی δ شارژ/تخلیه را با محدودیت ساعت حساس هدایت می‌کند. متن تخلیه تا۴۰٪در ساعت حساس و۱۰٪در سایر ساعات و محدودیت شارژ پیش از ساعت حساس می‌گوید."
+      },
+      "data": {
+        "en": "Thresholds are transcribed from§3.4. The complete source tree is retained for auditing branch signs and time conventions.",
+        "fa": "آستانه‌ها از۳٫۴ثبت شده‌اند؛درخت اصلی برای بررسی علامت شاخه و قرارداد زمان حفظ شده است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "A.1",
+      "page": 15,
+      "title": {
+        "en": "Public/private score functions across phases",
+        "fa": "تابع امتیاز عمومی/خصوصی در فازها"
+      },
+      "summary": {
+        "en": "PhaseIII private score weights training,validation,test district scores by.2,.3,.5; the public score combines train/validation by.4,.6. The original table uses colored dataset symbols; inspect the source rather than interpreting flattened mathematical text.",
+        "fa": "امتیاز خصوصی فازIII آموزش/اعتبارسنجی/آزمون را با۰٫۲/۰٫۳/۰٫۵و عمومی آموزش/اعتبارسنجی را با۰٫۴/۰٫۶ترکیب می‌کند. جدول اصلی نماد رنگی دارد؛متن تخت معادله جای منبع را نمی‌گیرد."
+      }
+    }
+  ],
+  "critical": [
+    {
+      "en": "The supplied paper contains inconsistent PhaseIII dates between its timeline and prose. We should not propagate one as a verified benchmark schedule. This does not alter the reported dataset split or score definitions.",
+      "fa": "تاریخ فازIII در خط زمان و متن ناسازگار است و نباید یکی به‌عنوان برنامه تأییدشده منتشر شود. این تعارض تقسیم داده یا تعریف امتیاز گزارش‌شده را تغییر نمی‌دهد.",
+      "pages": [
+        5
+      ]
+    },
+    {
+      "en": "This benchmark uses Fontana battery-only control. Our Alameda building includes different devices,thermal dynamics and synthetic EV/tariff extensions. Published leaderboard values therefore cannot serve as direct comparative results for our system.",
+      "fa": "این معیار کنترل فقط باتری Fontana است. ساختمان Alameda ما تجهیزات،دینامیک حرارتی و افزونه مصنوعی EV/تعرفه متفاوت دارد. مقادیر جدول مسابقه نتیجه مقایسه مستقیم سامانه ما نیستند.",
+      "pages": [
+        3,
+        4,
+        11
+      ]
+    },
+    {
+      "en": "Competition ranking is not a matched-budget ablation. The winning ensemble does not establish which component alone causes improvement; our causal-diagnosis experiments require controlled comparisons with the same evidence and action access.",
+      "fa": "رتبه مسابقه حذف مؤلفه با بودجه همسان نیست. تجمیع برنده سهم علّی هر مؤلفه را ثابت نمی‌کند؛آزمایش تشخیص علّی ما به مقایسه کنترل‌شده با شاهد و کنش همسان نیاز دارد.",
+      "pages": [
+        6,
+        7,
+        15
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "It is foundational benchmark context for CityLearn’s demand-response task,evaluation normalization,unseen-building generalization and battery-control baselines. It also prevents confusing the2022 challenge with our selected Alameda setup.",
+      "fa": "زمینه بنیادی وظیفه پاسخ‌گویی بار CityLearn،نرمال‌سازی،تعمیم ساختمان ندیده و پایه کنترل باتری است و مانع اشتباه نسخه۲۰۲۲با Alameda منتخب می‌شود.",
+      "pages": [
+        3,
+        4,
+        14
+      ]
+    },
+    "contribution": {
+      "en": "It contributes explicit KPI formulas and score aggregation,a train/validation/test separation example,baseline policy descriptions,and implementation lessons from forecasting/optimization/RL ensembles. It contributes no five-family causal diagnosis or conditional intervention planner.",
+      "fa": "فرمول شاخص،تجمیع امتیاز،نمونه تفکیک داده،توصیف پایه و درس پیش‌بینی/بهینه‌سازی/RL فراهم می‌کند؛تشخیص پنج‌خانواده‌ای یا برنامه‌ریز مداخله شرطی ندارد.",
+      "pages": [
+        6,
+        7,
+        14,
+        15
+      ]
+    },
+    "employment": {
+      "en": "Use P0/P1/P8 to document KPI semantics,normalization,information availability and leakage prevention. Consult the pinned3.2.0 code for current behavior. Adapt relevant RBC/MPC battery controls in P3 and run them under our own identical scenarios,not by copying competition scores.",
+      "fa": "در P0/P1/P8 معنای شاخص،نرمال‌سازی،دسترسی اطلاعات و منع نشت ثبت شود. رفتار فعلی با کد پین‌شده۳٫۲٫۰تأیید شود. کنترل باتری RBC/MPC مرتبط در P3اقتـباس و با سناریوی همسان خودمان اجرا شود،نه با کپی امتیاز مسابقه.",
+      "pages": [
+        4,
+        6,
+        8,
+        14
+      ]
+    },
+    "baseline": {
+      "en": "Implement an agreed simple rule-based control and classical optimization baseline appropriate to our devices; this paper informs them. Reproducing all five winning teams is unnecessary for the causal contribution. SAC or an ensemble is an optional secondary comparison if justified and budgeted; no default return to an RL-centered architecture.",
+      "fa": "پایه قاعده‌ای ساده و بهینه‌سازی کلاسیک متناسب با تجهیزات و پس از توافق پیاده شود؛این مقاله راهنماست. بازتولید هر پنج تیم برای سهم علّی لازم نیست. SACیا تجمیع مقایسه ثانویه مشروط به توجیه و بودجه است و معماری را خودکار RLمحور نمی‌کند.",
+      "pages": [
+        6,
+        10,
+        11
+      ]
+    }
+  }
+}

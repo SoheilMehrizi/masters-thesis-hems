@@ -1,0 +1,353 @@
+{
+  "id": "article-06",
+  "title": {
+    "en": "DARC A Constraint-Diagnostic LLM Agent Framework for Day-Ahead Dispatch of Campus-Level Integrated Energy Microgrids Under Natural-Language Preferences and Forecast Uncertainty",
+    "fa": "ترمیم مقید و مبتنی بر شواهد DARC"
+  },
+  "short_title": "DARC constraint-grounded repair",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Problem, questions and scope",
+        "fa": "مسئله، پرسش‌ها و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Bingnan Li et al., Energies 19 (2026),3817. DARC targets 24-hour campus integrated-energy dispatch when temporary preferences arrive as natural language and forecasts deviate. It instantiates decompose–generate–project–critique; no numbered formal hypotheses are stated. Authors position it as a complementary operational interface, not a replacement for exact optimization on fully specified problems.",
+          "fa": "Bingnan Li و همکاران،۲۰۲۶. هدف دیسپاچ۲۴ساعته ریزشبکه چندانرژی با ترجیحات زبانی و انحراف پیش‌بینی است. تجزیه–تولید–تصحیح–نقد پیاده شده و فرضیه رسمی شماره‌دار ندارد. روش رابط عملیاتی مکمل است، نه جایگزین بهینه‌سازی دقیق مسئله کامل.",
+          "pages": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Module contracts and deterministic grounding",
+        "fa": "قرارداد ماژول و اتکای قطعی"
+      },
+      "paragraphs": [
+        {
+          "en": "The Decomposer identifies time structure; Resolver proposes a numerical schedule; Projector repairs; Checker computes physical/constraint facts; Critic turns facts into root-cause/revision instructions. Main experiments use a deterministic rule-based Decomposer, so only Resolver/Critic are LLMs. The optional historical MILP case library is not used by the core main pipeline. JSON output is parsed and scored over finite candidates, with a best-so-far plan retained.",
+          "fa": "تجزیه‌گر ساختار زمانی، حل‌گر برنامه عددی، تصحیح‌گر ترمیم، بررسی‌گر حقایق قید و منتقد دستور اصلاح می‌سازند. در آزمایش اصلی تجزیه‌گر قاعده‌ای است؛ فقط حل‌گر/منتقد مدل زبانی‌اند. کتابخانه اختیاری موارد MILP در خط اصلی به کار نمی‌رود. انتخاب روی نامزدهای محدود انجام می‌شود.",
+          "pages": [
+            7,
+            8,
+            9,
+            11,
+            12
+          ]
+        },
+        {
+          "en": "The model couples CHP, battery, thermal storage, electric boiler, PV and grid balances with storage/device/terminal limits. Deep Seek API uses JSON mode and default temperature.2; Critic revisions cap at 3. Deterministic code/MILP use Python, Pyomo, Hi GHS via appsi_highs. No model training/fine-tuning is involved. Implementation/prompts/CSV traces are available on request, not claimed as inspected public code.",
+          "fa": "CHP، باتری، ذخیره حرارتی، بویلر برقی، PV و شبکه با موازنه و قیود دستگاه/ذخیره/پایان افق ترکیب می‌شوند. API با JSON و دمای۰٫۲ و حداکثر۳اصلاح اجرا می‌شود. Python/Pyomo/HiGHS استفاده شده؛ آموزش مدل وجود ندارد. کد/پرامپت/CSV با درخواست عرضه می‌شوند.",
+          "pages": [
+            6,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Protocol, baselines and evaluation",
+        "fa": "پروتکل، خط‌مبنا و ارزیابی"
+      },
+      "paragraphs": [
+        {
+          "en": "Hourly 24 h horizons; Normal, Sunny(PV×1.35), Cloudy(PV×.55), plus Winter-peak for ablation; seeds 0/1/2. Preference tests compare MILP-base, manually constrained optimizer-pref, and free-text DARC-pref for transformer cap 120 kW and boiler duration≤6 h. Forecast tests perturb PV/electric/heat loads multiplicative ly at σ=.05/.10/.20 while prices remain exact; plans commit once and are projected against realized profiles.",
+          "fa": "افق۲۴گام ساعتی؛ روز عادی، آفتابی با PV×۱٫۳۵، ابری×۰٫۵۵ و اوج زمستان؛ بذر۰/۱/۲. ترجیح سقف ترانس۱۲۰کیلووات و بویلر≤۶ساعت با MILP بدون ترجیح، قید دستی و DARC زبانی مقایسه می‌شود. نویز پیش‌بینی روی بار و PV با σ=۰٫۰۵/۰٫۱۰/۰٫۲۰ است و قیمت دقیق می‌ماند.",
+          "pages": [
+            13,
+            15
+          ]
+        },
+        {
+          "en": "Baselines include point-forecast MILP, interval-robust MILP, Naive-LLM+projection and heuristic projection. Three constructed flawed plans test critic_full, checker-facts-only and ungrounded critic using six 1–5 rubric dimensions. Original same-family judge scores are replicated with Qwen and GLM on regenerated diagnosis texts. Architectural ablations remove critic or case retrieval.",
+          "fa": "خط‌مبنا شامل MILP نقطه‌ای/مقاوم، مدل ساده با تصحیح و تصحیح‌گر ابتکاری است. سه برنامه معیوب ساخته‌شده، منتقد کامل، حقایق تنها و منتقد بی‌شاهد را در شش محور۱تا۵ می‌سنجند. داوری با Qwen/GLM روی متن بازتولیدشده تکرار و حذف منتقد/بازیابی آزموده می‌شود.",
+          "pages": [
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Feasibility and cost must be read together",
+        "fa": "مجازبودن و هزینه باید هم‌زمان خوانده شوند"
+      },
+      "paragraphs": [
+        {
+          "en": "DARC reduces transformer preference violation 616→217 kWh at a 12.2% cost premium; manually formalized optimizer-pref has zero violation at+2.3%. Under forecast noise DARC is strictly feasible 16/27 versus point MILP 0/27 and robust MILP 11/27; robust MILP has lower mean residual 4.6 kWh versus DARC 10.9 kWh and lower regret 3.2–7.7% versus 12.5–15.8%.",
+          "fa": "DARC نقض ترجیح ترانس را۶۱۶به۲۱۷کیلووات‌ساعت با۱۲٫۲٪ هزینه بیشتر کاهش می‌دهد؛ قید دستی نقض صفر و۲٫۳٪ هزینه بیشتر دارد. در نویز، مجازبودن DARC برابر۱۶/۲۷، MILP نقطه‌ای۰/۲۷ و مقاوم۱۱/۲۷ است؛ اما میانگین باقیمانده مقاوم۴٫۶ و DARC۱۰٫۹ و پشیمانی مقاوم کمتر است.",
+          "pages": [
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "en": "On the fully specified standard task MILP is 12/12 feasible at cost 2658, DARC 8/12 at 3027(+13.6%), no-critic 2/12, heuristic-projector 0/12. Critic scores are 4.10(full),3.77(facts),2.47(ungrounded); Qwen replication scores facts 4.62 versus full 4.42. The full critic advantage is clearest in actionable revision, not universal aggregate superiority.",
+          "fa": "در مسئله کامل، MILP مجاز۱۲/۱۲ با هزینه۲۶۵۸ و DARC مجاز۸/۱۲ با۳۰۲۷(+۱۳٫۶٪) است؛ بدون منتقد۲/۱۲ و تصحیح ابتکاری۰/۱۲. امتیاز منتقد کامل۴٫۱۰، حقایق۳٫۷۷ و بی‌شاهد۲٫۴۷ است؛ Qwen حقایق۴٫۶۲ و کامل۴٫۴۲ می‌دهد. مزیت روشن‌تر در دستور اصلاح است، نه برتری مطلق داوری.",
+          "pages": [
+            17,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author limits and operational trust",
+        "fa": "محدودیت و اعتماد عملیاتی"
+      },
+      "paragraphs": [
+        {
+          "en": "Authors explicitly state residual feasibility errors make raw generate-and-repair insufficient for unsupervised use. Checker must remain a hard gate with MILP fallback where formalization is complete. Preference compliance is approximate prompt-conditioning, not guaranteed hard constraints. Limited representative days/seeds, API/model variability and judge/sample dependence constrain generalization. MPC recourse is outside the single-commitment protocol.",
+          "fa": "نویسندگان اجرای خودکار بدون نظارت را با باقیمانده قید کافی نمی‌دانند؛ Checker باید دروازه سخت و در مسئله کامل همراه بازگشت MILP باشد. رعایت ترجیح زبانی تقریبی است. روزها/بذر محدود، تغییر API و وابستگی داور محدودیت‌اند. بازتصمیم MPC خارج از پروتکل تعهد یک‌باره است.",
+          "pages": [
+            15,
+            18,
+            19,
+            20
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Directly informs deterministic validation and adaptive revision; it is a close planning comparison for our diagnosis-to-intervention loop.",
+      "fa": "مبنای مستقیم اعتبارسنجی قطعی و بازنگری تطبیقی و مقایسه نزدیک حلقه تشخیص–مداخله ماست.",
+      "pages": [
+        8,
+        19
+      ]
+    },
+    "contribution": {
+      "en": "Offers explicit language-module/tool responsibilities, checkable residual facts, revision budgets and failure analysis instead of treating LLM self-critique as proof.",
+      "fa": "تقسیم مسئولیت مدل/ابزار، حقایق باقیمانده قابل بررسی، بودجه اصلاح و تحلیل شکست فراهم می‌کند.",
+      "pages": [
+        8,
+        17,
+        18
+      ]
+    },
+    "employment": {
+      "en": "Adapt Checker/Projector and critic-guided revision to our typed plan library; gate unsafe plans and verify evaluator outcomes after staged actions. Keep schedule-constraint diagnosis separate from latent cause inference.",
+      "fa": "Checker/Projector و اصلاح مبتنی بر منتقد به کتابخانه عملیات ما اقتباس شود؛ برنامه نامجاز رد و نتیجه محیط پس از مرحله‌ها سنجیده شود. تشخیص قید از استنتاج علت پنهان جدا بماند.",
+      "pages": [
+        9,
+        19
+      ]
+    },
+    "baseline": {
+      "en": "High-priority adapted iterative-repair planning baseline, with the same evidence/actions/safety gate. Reproduce the shared repair logic rather than campus CHP/TES physics; compare full causal planner against a DARC-inspired repair planner.",
+      "fa": "نامزد خط‌مبنای اقتباسی با اولویت بالا برای ترمیم تکراری است؛ شاهد/عمل/دروازه یکسان باشد. منطق اصلاح مشترک، نه فیزیک CHP/TES، اقتباس شود.",
+      "pages": [
+        8,
+        18,
+        19
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "More strictly feasible cases does not imply dominance on cost or mean violations. Always include the robust optimizer comparison. A judge rubric measuring “causal explanation” is not causal identification of five degradation families.",
+      "fa": "موارد مجاز بیشتر به معنی برتری هزینه یا میانگین نقض نیست؛ مقایسه بهینه‌ساز مقاوم حفظ شود. معیار داوری توضیح علّی، شناسایی علّی پنج خانواده نیست.",
+      "pages": [
+        16,
+        17
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Forecast strict feasibility 16/27; standard-task 8/12 versus MILP 12/12.",
+      "fa": "مجازبودن در نویز۱۶/۲۷؛ مسئله استاندارد۸/۱۲ در برابر MILP۱۲/۱۲.",
+      "pages": [
+        16,
+        18
+      ]
+    }
+  ],
+  "bibliography_start_page": 24,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 9,
+      "caption": {
+        "en": "Figure 1. Overall architecture of the core DARC pipeline. Blue modules denote language or reasoning components, gray modules denote deterministic programs, green modules denote candidate selection and final output, and the orange module denotes the optional case library. The four input mini-",
+        "fa": "معماریDARCتجزیه زمانی،تولیدعدد،تصحیح،بررسی ونقدراجدامی‌کند."
+      },
+      "explanation": {
+        "en": "DARC architecture separates temporal decomposition, numerical generation, projection, checking and critique.",
+        "fa": "معماریDARCتجزیه زمانی،تولیدعدد،تصحیح،بررسی ونقدراجدامی‌کند."
+      },
+      "data": {
+        "en": "Input mini-plots are normalized Normal-day seed 0 profiles; not cross-carrier magnitude comparisons. Main Decomposer is rule-based.",
+        "fa": "نمودارورودی پروفایل نرمالروزعادی بذرضفراست،نه مقایسه بزرگی حامل‌ها؛تجزیه‌گراصلی قاعده‌ای است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 14,
+      "caption": {
+        "en": "Figure 2. Hour-by-hour electric balance under the transformer_cap preference (Normal day, seed 0). Shaded bands mark the maintenance window (h 1–h 6 and h 23); the dotted red line marks the 120 kW cap. Stacked bars decompose the supply side into PV , CHP , battery discharge, and grid buy; the",
+        "fa": "موازنه برق تحت ترجیح سقف ترانس دیسپاچ ساعتی رامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Electric balance under transformer-cap preference compares committed hourly dispatch.",
+        "fa": "موازنه برق تحت ترجیح سقف ترانس دیسپاچ ساعتی رامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Maintenance cap 120 kW; mean preference violation 616→217 kWh in Table 4, while manual optimizer has 0.",
+        "fa": "سقف۱۲۰کیلووات؛نقض میانگین۶۱۶به۲۱۷کیلووات‌ساعت وجدول۴برای قیددستی صفراست."
+      }
+    },
+    {
+      "id": "3",
+      "page": 16,
+      "caption": {
+        "en": "Figure 3. Forecast robustness across three day-types and three seeds. Error bars indicate inter-seed standard deviation. (a) Realized cost regret saturates for DARC and rises withσ for MILP . (b) DARC’s mean residual violation remains far below MILP’s across the swept noise range.",
+        "fa": "پنل نویزپیش‌بینی پشیمانی وباقیمانده راباانحراف بین‌بذرمقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Forecast-noise panels compare realized regret and residual violations with inter-seed standard deviations.",
+        "fa": "پنل نویزپیش‌بینی پشیمانی وباقیمانده راباانحراف بین‌بذرمقایسه می‌کند."
+      },
+      "data": {
+        "en": "σ=.05/.10/.20; DARC regret 12.5/15.8/15.1%, mean violation.4/14.0/18.3 kWh(Table 5).",
+        "fa": "σ=۰٫۰۵/۰٫۱۰/۰٫۲۰؛پشیمانیDARC۱۲٫۵/۱۵٫۸/۱۵٫۱٪وباقیمانده۰٫۴/۱۴/۱۸٫۳کیلووات‌ساعت."
+      }
+    },
+    {
+      "id": "4",
+      "page": 17,
+      "caption": {
+        "en": "Figure 4. Judge scores for the three diagnosers across six anchored rubric dimensions, averaged over three constructed scenarios, three random seeds, and three judge rounds. Under the refined rubric, critic_full achieves the highest overall score (4.10), fol-",
+        "fa": "شش محورداروی منتقدکامل،حقایق تنهاومدل بی‌شاهدرا مقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Six-dimensional judge scores compare full Critic, facts-only and ungrounded LLM.",
+        "fa": "شش محورداروی منتقدکامل،حقایق تنهاومدل بی‌شاهدرا مقایسه می‌کند."
+      },
+      "data": {
+        "en": "Overall original scores 4.10/3.77/2.47; facts root-cause accuracy 4.67 exceeds full 4.22.",
+        "fa": "امتیازکلی۴٫۱۰/۳٫۷۷/۲٫۴۷؛صحت ریشه حقایق۴٫۶۷ازکامل۴٫۲۲بیشتراست."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Comparison of related work and DARC positioning",
+        "fa": "مقایسه پیشینه وجایگاهDARC"
+      },
+      "summary": {
+        "en": "The original comparison of related work and darc positioning are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "مقایسه پیشینه وجایگاهDARCبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "2",
+      "page": 8,
+      "title": {
+        "en": "Functional contracts of DARC modules",
+        "fa": "قرارداد عملکرد ماژول"
+      },
+      "summary": {
+        "en": "The original functional contracts of darc modules are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "قرارداد عملکرد ماژولبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 14,
+      "title": {
+        "en": "Transformer-cap preference results by day",
+        "fa": "نتیجه ترجیح سقف ترانس"
+      },
+      "summary": {
+        "en": "The original transformer-cap preference results by day are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "نتیجه ترجیح سقف ترانسبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "4",
+      "page": 14,
+      "title": {
+        "en": "Preference compliance and cost across day types/seeds",
+        "fa": "رعایت ترجیح وهزینه"
+      },
+      "summary": {
+        "en": "The original preference compliance and cost across day types/seeds are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "رعایت ترجیح وهزینهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "5",
+      "page": 15,
+      "title": {
+        "en": "Forecast robustness: realized costs, regret and feasibility",
+        "fa": "استحکام پیش‌بینی"
+      },
+      "summary": {
+        "en": "The original forecast robustness: realized costs, regret and feasibility are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "استحکام پیش‌بینیبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "6",
+      "page": 17,
+      "title": {
+        "en": "Six-dimensional diagnostic judge scores",
+        "fa": "امتیاز داوری تشخیص"
+      },
+      "summary": {
+        "en": "The original six-dimensional diagnostic judge scores are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "امتیاز داوری تشخیصبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "7",
+      "page": 18,
+      "title": {
+        "en": "Cross-family judge replication",
+        "fa": "تکرار داوری چندخانواده"
+      },
+      "summary": {
+        "en": "The original cross-family judge replication are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "تکرار داوری چندخانوادهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "8",
+      "page": 18,
+      "title": {
+        "en": "Standard cost-minimization and architectural ablations",
+        "fa": "هزینه استاندارد وحذف مؤلفه"
+      },
+      "summary": {
+        "en": "The original standard cost-minimization and architectural ablations are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "هزینه استاندارد وحذف مؤلفهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    }
+  ]
+}

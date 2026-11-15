@@ -1,0 +1,479 @@
+{
+  "id": "article-03",
+  "title": {
+    "en": "Whole building HVAC diagnostic Bayesian networks for comfort-related  fault detection and diagnosis, application, evaluation and operational testing",
+    "fa": "شبکه بیزی تشخیصی کل سامانه HVAC"
+  },
+  "short_title": "Whole-HVAC diagnostic BN",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, scope and research questions",
+        "fa": "مشخصات، دامنه و پرسش‌ها"
+      },
+      "paragraphs": [
+        {
+          "en": "Mosteiro-Romero et al., Building and Environment 305 (2026), 115265. DBN here means Diagnostic Bayesian Network. The paper develops and partially validates a whole-HVAC diagnostic network in an occupied Netherlands office, combining component, control and sensor faults with comfort symptoms. Its scope/contribution sections state objectives; no numbered H 1/H 2 hypothesis list is presented.",
+          "fa": "Mosteiro-Romero و همکاران، ۲۰۲۶. DBN در این مقاله شبکه بیزی تشخیصی است. هدف ساخت و اعتبارسنجی جزئی تشخیص کل HVAC در ساختمان اداری واقعی هلند با خطای تجهیز، کنترل، حسگر و نشانه آسایش است. فهرست فرضیه شماره‌گذاری‌شده ارائه نشده است.",
+          "pages": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Structure and inference implementation",
+        "fa": "ساختار و پیاده‌سازی استنتاج"
+      },
+      "paragraphs": [
+        {
+          "en": "The four-symptoms/three-faults methodology maps expected operation and P&ID/control documentation to a DAG. The case network has 43 fault nodes, 50 symptom nodes and 177 edges. Fault/symptom variables are binary; Noisy-OR reduces conditional-table specification. pgmpy Discrete Bayesian Network with exact Variable Elimination computes posteriors; a fault is present at posterior ≥50%.",
+          "fa": "روش چهار نشانه/سه خطا، رفتار مورد انتظار و اسناد کنترل را به گراف بدون دور نگاشت می‌کند. شبکه موردی ۴۳ خطا، ۵۰ نشانه و ۱۷۷ یال دارد. متغیرها دودویی و CPT با Noisy-OR ساخته می‌شود. استنتاج دقیق حذف متغیر در pgmpy و آستانه پسین ۵۰٪ استفاده شده است.",
+          "pages": [
+            3,
+            7,
+            8
+          ]
+        },
+        {
+          "en": "Measurements are resampled to 10 minutes (mean for numerical variables, mode for categorical), change-only control signals are forward-filled, constant sensors over the historical period are dropped, and missing samples excluded. Hourly-mode symptom detection was selected after comparing subhourly, hourly threshold and daily variants. Temperature sensor checks wait three hours after system shutdown to avoid transients.",
+          "fa": "داده‌ها به ده دقیقه بازنمونه‌برداری می‌شوند؛ میانگین برای عددی و نما برای دسته‌ای است. سیگنال کنترل نگهداری رو به جلو، حسگر ثابت حذف و نمونه گمشده کنار گذاشته می‌شود. تشخیص نمای ساعتی با روش‌های زیرساعتی و روزانه مقایسه شده است. برای اثر گذرا سه ساعت پس از خاموشی صبر می‌شود.",
+          "pages": [
+            7,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Data, fault experiments and parameter sensitivity",
+        "fa": "داده، آزمایش خطا و حساسیت پارامتر"
+      },
+      "paragraphs": [
+        {
+          "en": "Historical evaluation uses 2022–2023 BMS records without fault labels, so it cannot produce verified accuracy. Six days of 2024 AHU-control experiments supply labeled partial validation, including simultaneous faults. Safety/operator restrictions prevented boiler/chiller injection. September 1–10, 2024 operational testing follows occupant complaints of suspected ventilation malfunction.",
+          "fa": "مرور تاریخی ۲۰۲۲–۲۰۲۳ فاقد برچسب خطا و مناسب محاسبه دقت تأییدشده نیست. شش روز آزمایش کنترل AHU در ۲۰۲۴ برای اعتبارسنجی جزئی برچسب‌دار، شامل خطاهای هم‌زمان، استفاده شده است. محدودیت ایمنی مانع تزریق خطای بویلر/چیلر شد. آزمون عملیاتی سپتامبر پس از شکایت ساکنان انجام شده است.",
+          "pages": [
+            9
+          ]
+        },
+        {
+          "en": "Threshold cases: knowledge-based, 0.5σ, σ and 3σ. Prior component/sensor probabilities vary across .5%,2%,5%,10%; control priors across 1%,5%,10%. Conditional cases are Uniform 95%, Weighted strong 90%/weak 30%, and distance-decaying P&ID. These are internal parameter comparisons, not a controlled leaderboard against independent FDD algorithms.",
+          "fa": "آستانه دانشی و ۰٫۵، ۱ و ۳ انحراف معیار؛ پیشین تجهیز/حسگر ۰٫۵،۲،۵،۱۰٪ و کنترل ۱،۵،۱۰٪ مقایسه شده‌اند. CPT یکنواخت ۹۵٪، وزن‌دار قوی۹۰/ضعیف۳۰ و مبتنی بر فاصله P&ID است. این‌ها مقایسه داخلی پارامترند، نه رقابت کنترل‌شده الگوریتم‌های مستقل.",
+          "pages": [
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Diagnostic outcomes and their denominators",
+        "fa": "نتایج و مخرج معیارها"
+      },
+      "paragraphs": [
+        {
+          "en": "Uniform CPT with σ thresholds gives CR 87.8%, MR 29.2%, FAR 3.8%, precision 90.4%, F 1 79.4% and balanced accuracy 83.5% (means over prior combinations). Lowest MR is 27.5% at 0.5σ. All miss rates exceed 25%. Sensor faults are excluded from partial performance scoring; simultaneous faults in different AHUs count as concurrent individual outcomes, while subcomponent faults within one AHU aggregate into one AHU fault.",
+          "fa": "CPT یکنواخت با آستانه σ: نرخ طبقه‌بندی۸۷٫۸٪، عدم‌کشف۲۹٫۲٪، هشدارکاذب۳٫۸٪، دقت مثبت۹۰٫۴٪، F1 برابر۷۹٫۴٪ و دقت متوازن۸۳٫۵٪. کمینه عدم‌کشف۲۷٫۵٪ است. خطاهای حسگر از امتیاز جزئی کنار گذاشته شده و خطاهای زیرجزء یک AHU تجمیع می‌شوند.",
+          "pages": [
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations and ongoing work",
+        "fa": "محدودیت‌ها و کار جاری نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors stress partial validation, unreliable sensing, absence of fault-free historical data, documentation/manual-effort dependence and case-specific transferability. Sensor biases can con ta min ate historical thresholds. More component fault experiments, reusable DBN modules, automated P&ID interpretation and occupant feedback are proposed; occupant feedback is explored as future incorporation rather than implemented quantitative evidence here.",
+          "fa": "نویسندگان اعتبارسنجی جزئی، حسگر نامطمئن، نبود تاریخچه سالم، نیاز به اسناد و کار دستی و انتقال‌پذیری موردی را محدودیت می‌دانند. سوگیری حسگر آستانه تاریخی را آلوده می‌کند. آزمایش بیشتر، ماژول قابل استفاده مجدد، تفسیر خودکار P&ID و بازخورد ساکن پیشنهاد شده‌اند؛ بازخورد ساکن هنوز شاهد کمی پیاده‌سازی‌شده نیست.",
+          "pages": [
+            16
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Direct evidence that whole-system diagnosis must handle interacting faults and unreliable evidence; high CR can coexist with substantial missed faults.",
+      "fa": "نشان می‌دهد تشخیص کل سامانه باید خطاهای وابسته و شاهد نامطمئن را بپذیرد؛ دقت کلی بالا می‌تواند با عدم‌کشف زیاد همراه باشد.",
+      "pages": [
+        12,
+        16
+      ]
+    },
+    "contribution": {
+      "en": "Offers a transparent BN parameter-sensitivity and partial-validation protocol, plus a practical component/control/sensor separation for our causal evidence contracts.",
+      "fa": "پروتکل شفاف حساسیت BN و اعتبارسنجی جزئی و تفکیک تجهیز/کنترل/حسگر برای قرارداد شاهد پروژه فراهم می‌کند.",
+      "pages": [
+        7,
+        8,
+        9
+      ]
+    },
+    "employment": {
+      "en": "Adapt its observed/latent fault–symptom mapping and evaluate thresholds/calibration under restricted telemetry; retain separate metrics for single and simultaneous causes. Do not copy unavailable office sensor nodes into Alameda.",
+      "fa": "نگاشت خطا–نشانه و ارزیابی آستانه را به تله‌متری محدود اقتباس کنیم و معیار تک‌خطا و هم‌زمان را جدا نگه داریم؛ حسگر اداری ناموجود را به Alameda اضافه فرض نکنیم.",
+      "pages": [
+        8,
+        12
+      ]
+    },
+    "baseline": {
+      "en": "Recommended candidate for an adapted probabilistic diagnostic baseline, alongside Huang EECL. Implement only the shared observable task, with declared graph/parameter changes; no exact reproduction claim. It does not substitute for a Dynamic SCM or intervention planner.",
+      "fa": "نامزد پیشنهادی خط‌مبنای احتمالاتی اقتباسی کنار EECL است. فقط وظیفه مشترک قابل مشاهده با تغییرات اعلام‌شده پیاده شود؛ جایگزین SCM پویا یا برنامه‌ریز مداخله نیست.",
+      "pages": [
+        8,
+        16
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "The 87.8% classification rate includes true negatives; report MR/F 1 and fault-label coverage alongside it. A diagnostic DAG evaluated on control injections does not establish recovery efficacy or five-family causal identifi ability.",
+      "fa": "نرخ۸۷٫۸٪ شامل منفی درست است؛ عدم‌کشف، F1 و پوشش برچسب باید همراه آن گزارش شوند. ارزیابی گراف روی تزریق کنترل، بازیابی یا شناسایی پنج خانواده را ثابت نمی‌کند.",
+      "pages": [
+        9,
+        12
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Selected setting: CR 87.8%, MR 29.2%, FAR 3.8%; network 43 faults/50 symptoms/177 edges.",
+      "fa": "تنظیم منتخب: طبقه‌بندی۸۷٫۸٪، عدم‌کشف۲۹٫۲٪، هشدارکاذب۳٫۸٪؛ شبکه۴۳ خطا/۵۰ نشانه/۱۷۷ یال.",
+      "pages": [
+        7,
+        12
+      ]
+    }
+  ],
+  "bibliography_start_page": 20,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Fig. 1. Graphical representation of the DBN structure used in the four symptoms  and three faults (4 S 3 F) framework [34].",
+          "fa": "نمایش گرافیکی ساختار شبکه بیزی تشخیصی در چارچوب چهار نشانه و سه خطا (4S3F) [34]."
+      },
+      "explanation": {
+        "en": "The 4S3F example links model, component and control fault nodes to balance, energy-performance, operational-state and additional symptoms. Shared symptom connections illustrate why one observed symptom need not identify a unique cause.",
+        "fa": "نمونه 4S3F گره‌های خطای مدل، تجهیز و کنترل را به نشانه‌های موازنه، عملکرد انرژی، وضعیت عملیاتی و نشانه اضافی متصل می‌کند. اتصال مشترک نشانه‌ها نشان می‌دهد که یک نشانه مشاهده‌شده لزوماً علت یکتا را مشخص نمی‌کند."
+      },
+      "data": {
+        "en": "Illustrative causal template; it is not a numerical accuracy plot.",
+        "fa": "الگوی علّی نمونه است و نمودار دقت عددی نیست."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Fig. 2. Case study building (left) and a typical floor plan for the building (right). Fig. 3. Workflow used to create, test and evaluate the DBN. Each of the cases considered when defining the symptom thresholds, prior probabilities and conditional  probabilities along with the data sources used is shown in a lighter color. (For interpretation of the references to colour in this figure legend, the reader is referred",
+        "fa": "تصویر و پلان دفتر، سامانه‌ها و ناحیه‌های مطالعه واقعی را مشخص می‌کنند."
+      },
+      "explanation": {
+        "en": "The office photograph and floor plan locate the real case-study systems and zones.",
+        "fa": "تصویر و پلان دفتر، سامانه‌ها و ناحیه‌های مطالعه واقعی را مشخص می‌کنند."
+      },
+      "data": {
+        "en": "Building geometry/context, not comparative experimental data.",
+        "fa": "زمینه و هندسه ساختمان است،نه داده مقایسه الگوریتم."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "caption": {
+        "en": "Fig. 3. Workflow used to create, test and evaluate the DBN. Each of the cases considered when defining the symptom thresholds, prior probabilities and conditional  probabilities along with the data sources used is shown in a lighter color. (For interpretation of the references to colour in this figure legend, the reader is referred  to the web version of this article.)",
+        "fa": "گردش‌کار تعریف مسئله،ساختار،پارامتر،ارزیابی تاریخی،آزمایش جزئی و آزمون عملیاتی را جدا می‌کند."
+      },
+      "explanation": {
+        "en": "Workflow separates problem/structure/parameter modeling, historical evaluation, partial experiments and operational testing.",
+        "fa": "گردش‌کار تعریف مسئله،ساختار،پارامتر،ارزیابی تاریخی،آزمایش جزئی و آزمون عملیاتی را جدا می‌کند."
+      },
+      "data": {
+        "en": "Assumption cases correspond to Table 3; validation stages must not be conflated.",
+        "fa": "سناریوهای فرض با جدول۳مرتبط‌اند؛مراحل اعتبارسنجی نباید یکی فرض شوند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 4. Annotated representation of the main systems in the case study building’s BMS software: (a) boiler, (b) chiller, (c) AHU 1, and (d) AHU 2. The aggregated  system boundaries used in the DBN are shown by the dashed line, while the internal sensors used to detect potential sensor faults are shown individually. Fig. 5. Simplified schematic representing the main aggregated systems in the",
+        "fa": "پنلBMSبویلر،چیلرو دوAHUوشاهدهای سامانه را نمایش می‌دهد."
+      },
+      "explanation": {
+        "en": "BMS panels show boiler, chiller and two AHUs with aggregated system/sensor evidence.",
+        "fa": "پنلBMSبویلر،چیلرو دوAHUوشاهدهای سامانه را نمایش می‌دهد."
+      },
+      "data": {
+        "en": "Original operational labels are retained; no sensor readings are inferred from screen shots.",
+        "fa": "برچسب عملیاتی حفظ شده و هیچ قرائت حسگر از تصویر حدس زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 5. Simplified schematic representing the main aggregated systems in the  building, along with the existing temperature (TT), pressure (PT), moisture (MT)  and CO 2 sensors in the case study building.",
+        "fa": "تجمیعP&IDمولد،توزیع و مصرف را به انتشار خطا پیوند می‌دهد."
+      },
+      "explanation": {
+        "en": "P&ID aggregation links generator, distribution and end-use modules to potential fault propagation.",
+        "fa": "تجمیعP&IDمولد،توزیع و مصرف را به انتشار خطا پیوند می‌دهد."
+      },
+      "data": {
+        "en": "Topology is expert/system-documentation input, not a learned intervention effect.",
+        "fa": "توپولوژی ورودی خبره/سنداست،نه اثرمداخله آموخته‌شده."
+      }
+    },
+    {
+      "id": "6",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 6. DBN for the case study HVAC system. System and control faults are color-coded by the system group they represent. Sensor fault edges are shown as dotted  lines to improve readability. Nodes including the subscript 𝑖 indicate that there are actually three nodes: east, west, and atrium. Subscript 𝑗 indicates two nodes:  east and west. Subscript 𝑥 replaces the name of every sensor used as a symptom. 𝐷𝑇𝑦 and 𝐷𝑃𝑧 replace the names of the temperature sensors ( 𝐷𝑇𝑏, sup, 𝐷𝑇𝑏,𝑟𝑒𝑡, 𝐷𝑇𝑐,",
+        "fa": "گراف کلHVACبرایخوانایی گره ناحیه/حسگر راگروه‌بندی و وابستگی کنترل راحفظ می‌کند."
+      },
+      "explanation": {
+        "en": "Whole-HVAC DAG groups zone and sensor nodes for readability while retaining system/control dependencies.",
+        "fa": "گراف کلHVACبرایخوانایی گره ناحیه/حسگر راگروه‌بندی و وابستگی کنترل راحفظ می‌کند."
+      },
+      "data": {
+        "en": "Text reports 43 fault nodes,50 symptoms,177 edges; grouped picture is not the full node count.",
+        "fa": "متن۴۳خطا،۵۰نشانه،۱۷۷یال دارد؛شمار تصویرگروهی شمارکامل نیست."
+      }
+    },
+    {
+      "id": "7",
+      "page": 10,
+      "caption": {
+        "en": "Fig. 7. Symptom detection frequency over two years for four symptom detection timescales. The percentage of samples where each symptom was detected for the  chosen timescale (“Hourly mode”) is shown in green. (For interpretation of the references to colour in this figure legend, the reader is referred to the web version of  this article.)",
+        "fa": "چهارمقیاس زمانی،فراوانی کشف نشانه در۲۰۲۲–۲۰۲۳را مقایسه می‌کنند."
+      },
+      "explanation": {
+        "en": "Four timescales compare symptom-detection frequency across 2022–2023.",
+        "fa": "چهارمقیاس زمانی،فراوانی کشف نشانه در۲۰۲۲–۲۰۲۳را مقایسه می‌کنند."
+      },
+      "data": {
+        "en": "The source heatmap frequencies are retained; no new percentages are estimated.",
+        "fa": "درصدهای نقشه اصلی حفظ و درصد تازه تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 11,
+      "caption": {
+        "en": "Fig. 8. Percentage of hourly samples where each fault was detected during the period 2022–2023. Symptom detection based on the hourly mode. Fig. 9. Percentage of samples in which a fault was detected and each symptom associated with that fault was also detected. used: it is more likely for a symptom to be detected for two timesteps",
+        "fa": "فراوانی تشخیص ساعتی،خطای حسگر پایداردر سابقه را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Hourly fault-detection frequencies show persistent sensor-related diagnoses in historical records.",
+        "fa": "فراوانی تشخیص ساعتی،خطای حسگر پایداردر سابقه را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Historical frequencies lack ground-truth labels and therefore are not accuracy estimates.",
+        "fa": "فراوانی تاریخی برچسب حقیقت ندارد و تخمین دقت نیست."
+      }
+    },
+    {
+      "id": "9",
+      "page": 11,
+      "caption": {
+        "en": "Fig. 9. Percentage of samples in which a fault was detected and each symptom associated with that fault was also detected. used: it is more likely for a symptom to be detected for two timesteps  in a row three times during a day than during an hour. Symptom detec­",
+        "fa": "هم‌کشفی،هرخطای تشخیص‌داده‌شده را به رخدادنشانه مرتبط می‌کند."
+      },
+      "explanation": {
+        "en": "Co-detection relates each fault diagnosis to its associated symptom occurrences.",
+        "fa": "هم‌کشفی،هرخطای تشخیص‌داده‌شده را به رخدادنشانه مرتبط می‌کند."
+      },
+      "data": {
+        "en": "Co-occurrence percentages should not be interpreted as intervention probabilities.",
+        "fa": "درصدهم‌رخدادی احتمال مداخله نیست."
+      }
+    },
+    {
+      "id": "10",
+      "page": 14,
+      "caption": {
+        "en": "Fig. 10. Hourly fault detection results on each of the days when experiments were conducted for each injected fault combination (A–U, as shown in Table 4) using the  best-performing version of the model. Fault-free periods are shown in white, while periods where faults were introduced are shown in gray. Since faults were injected  via the control systems and control signals are used during symptom detection, all faults are detected as AHU control faults. (For interpretation of the references to",
+        "fa": "خروجی ساعتی ترکیب تزریقیAتاUدرشش روزرا دنبال می‌کند."
+      },
+      "explanation": {
+        "en": "Hourly outputs follow injected combinations A–U across six experimental days.",
+        "fa": "خروجی ساعتی ترکیب تزریقیAتاUدرشش روزرا دنبال می‌کند."
+      },
+      "data": {
+        "en": "Ground truth is available for AHU control injections only; Table 4 defines combinations.",
+        "fa": "حقیقت فقط برای تزریق کنترلAHUدر دسترس است؛جدول۴ترکیب‌ها را دارد."
+      }
+    },
+    {
+      "id": "11",
+      "page": 15,
+      "caption": {
+        "en": "Fig. 11. Sensor data on the dates when boiler, boiler control and hydronic control faults were detected.AHU supply and return pressures (which were being changed  in the experiments) are shown along boiler and hydronic group temperatures (which were not changed as part of the experiments).The air pressure setpoint faults  introduced on 24 march 2024 (top) and the simultaneous HCV and HRW faults introduced in AHU 1 on 1 April 2024 (bottom) lead to a sharp increase in boiler supply",
+        "fa": "تاریخچه حسگر/نقطه تنظیم،وابستگی فشارتهویه وکنترل آب/بویلر رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Sensor and setpoint histories expose coupling between ventilation pressures and hydronic/boiler controls.",
+        "fa": "تاریخچه حسگر/نقطه تنظیم،وابستگی فشارتهویه وکنترل آب/بویلر رانشان می‌دهد."
+      },
+      "data": {
+        "en": "No exact curve samples are digitized; reported interpretation remains a suspected interaction.",
+        "fa": "نمونه منحنی استخراج تخمینی نشده و تفسیر،تعامل مشکوک باقی می‌ماند."
+      }
+    },
+    {
+      "id": "12",
+      "page": 15,
+      "caption": {
+        "en": "Fig. 12. Hourly fault detection results during the period when an unknown AHU fault. Building and Environment 305 (2026) 115265  15",
+        "fa": "خروجی عملیاتی هنگام مشکل مشکوکAHUمکمل شکایت ساکن است."
+      },
+      "explanation": {
+        "en": "Operational fault outputs during a suspected AHU issue complement occupant complaints.",
+        "fa": "خروجی عملیاتی هنگام مشکل مشکوکAHUمکمل شکایت ساکن است."
+      },
+      "data": {
+        "en": "Suspected real-world issue is not an independently labeled controlled experiment.",
+        "fa": "مشکل مشکوک واقعی،آزمایش کنترل‌شده مستقل برچسب‌دار نیست."
+      }
+    },
+    {
+      "id": "C.13",
+      "page": 19,
+      "caption": {
+        "en": "Fig. C.13. Individual representation of the DBN structure for each system in the whole HVAC DBN, explicitly including all sensor symptoms and faults. Nodes including  the subscript 𝑖 represent the three building zones: East, West, and Atrium. Subscript 𝑗 indicates zones east and west. Building and Environment 305 (2026) 115265",
+        "fa": "پیوست گراف هر سامانه را با نشانه و خطای حسگر منفرد بازمی‌کند."
+      },
+      "explanation": {
+        "en": "Appendix expands each system DAG with explicit individual sensor symptoms and faults.",
+        "fa": "پیوست گراف هر سامانه را با نشانه و خطای حسگر منفرد بازمی‌کند."
+      },
+      "data": {
+        "en": "Use expanded connections to audit grouped Fig.6; no numerical posterior series is introduced.",
+        "fa": "اتصالات تفصیلی برای ممیزی شکل۶است؛سری پسین عددی تازه ندارد."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Overview of papers in the literature focusing on DBNs for whole-HVAC or cross-level FDD. Ref. Scope Systems Structure Parameter Evaluation Basis/Data source [7] Cooling and",
+        "fa": "جدول1:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 1 provides: Overview of papers in the literature focusing on DBNs for whole-HVAC or cross-level FDD. Ref. Scope Systems Structure Parameter Evaluation Basis/Data source [7] Cooling and. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول1داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "title": {
+        "en": "Knowledge-based thresholds defined for the first DBN symptom detection  scenario. Thresholds marked as [*] were defined based on the build­ ing documentation, including HVAC system control documents, electri­",
+        "fa": "جدول2:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 2 provides: Knowledge-based thresholds defined for the first DBN symptom detection  scenario. Thresholds marked as [*] were defined based on the build­ ing documentation, including HVAC system control documents, electri­. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول2داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 8,
+      "title": {
+        "en": "Model parameters assumed for DBN evaluation based on historical and experi­ mental data and operational testing. Knowledge-based parameters were assumed  during historical evaluation, while all parameter assumptions were assessed as",
+        "fa": "جدول3:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 3 provides: Model parameters assumed for DBN evaluation based on historical and experi­ mental data and operational testing. Knowledge-based parameters were assumed  during historical evaluation, while all parameter assumptions were assessed as. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول3داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 10,
+      "title": {
+        "en": "List of fault experiments conducted in the AHUs in the case study building. Faults were introduced in the control systems for the AHU fans,  heat recovery wheels (HRW), heating coil valves (HCV) and in the pressure and temperature setpoints. Given that the experiments were  injected into the control systems, all faults were detected as control faults.",
+        "fa": "جدول4:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 4 provides: List of fault experiments conducted in the AHUs in the case study building. Faults were introduced in the control systems for the AHU fans,  heat recovery wheels (HRW), heating coil valves (HCV) and in the pressure and temperature setpoints. Given that the experiments were  injected into the control systems, all faults were detected as control faults.. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول4داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 12,
+      "title": {
+        "en": "Performance metrics for detection of AHU faults for the three different conditional probability cases (“Uniform”, “Weighted” and “P&ID”)  and for different symptom detection thresholds 𝜀𝑖 (literature-based fixed thresholds, “0.5⋅𝜎 ”, “𝜎” and “3⋅𝜎 ”) for a fault detection probability  threshold of 50%. Values are shown as the mean (and standard deviation) of all runs of the model with different component, control and",
+        "fa": "جدول5:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 5 provides: Performance metrics for detection of AHU faults for the three different conditional probability cases (“Uniform”, “Weighted” and “P&ID”)  and for different symptom detection thresholds 𝜀𝑖 (literature-based fixed thresholds, “0.5⋅𝜎 ”, “𝜎” and “3⋅𝜎 ”) for a fault detection probability  threshold of 50%. Values are shown as the mean (and standard deviation) of all runs of the model with different component, control and. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول5داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 15,
+      "title": {
+        "en": "Performance metrics for detection of AHU faults for the selected DBN input  parameters by subcomponent fault experiment. Subcomponent",
+        "fa": "جدول6:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 6 provides: Performance metrics for detection of AHU faults for the selected DBN input  parameters by subcomponent fault experiment. Subcomponent. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول6داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "A.7",
+      "page": 17,
+      "title": {
+        "en": "Aggregated component, control and sensor faults",
+        "fa": "خطاهای تجهیز،کنترل وحسگر"
+      },
+      "summary": {
+        "en": "The original aggregated component, control and sensor faults are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "خطاهای تجهیز،کنترل وحسگربه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "B.8",
+      "page": 18,
+      "title": {
+        "en": "Symptom definitions and detection thresholds",
+        "fa": "تعریف نشانه وآستانه"
+      },
+      "summary": {
+        "en": "The original symptom definitions and detection thresholds are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "تعریف نشانه وآستانهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    }
+  ]
+}

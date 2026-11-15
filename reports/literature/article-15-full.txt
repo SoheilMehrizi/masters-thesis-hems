@@ -1,0 +1,4006 @@
+
+=== PDF PAGE 1 ===
+Review
+From systematic evidence to agentic architectures: A systematic review and 
+framework for large language model–driven smart grids
+Zahra Rezaei , Mohammad Amin Amini , Yaser Mike Banad *
+Gallogly College of Engineering, University of Oklahoma, Norman, OK, 73019, USA
+HIGHLIGHTS
+• A PRISMA review synthesizes 61 studies on AI and LLMs in smart grids.
+• A three-level taxonomy defines LLM roles as interface, reasoner, and agent.
+• A six-layer architecture unifies perception, reasoning, action, and governance.
+• Digital twins and engineering tools enable verified, bounded grid autonomy.
+• Key barriers include reliability, latency, cybersecurity, safety, and regulation.
+ARTICLE INFO
+Keywords:
+Large language models
+Agentic artificial intelligence
+Cyber-physical energy systems
+Digital twins
+Multi-agent coordination
+Trustworthy smart grids
+ABSTRACT
+Modern smart grids increasingly rely on intelligent decision-support systems to coordinate distributed energy 
+resources, renewable generation, and complex cyber–physical infrastructures. Although recent advances in 
+artificial intelligence (AI) have substantially improved forecasting, optimization, and operational analytics, 
+existing solutions remain largely fragmented, with limited system-level integration of perception, reasoning, 
+coordination, and execution.
+To address this gap, this study conducts a Preferred Reporting Items for Systematic Reviews and Meta-Analyses 
+(PRISMA)-guided systematic review of 61 peer-reviewed papers published between 2019 and 2026. Based on the 
+extracted evidence, an evidence-informed six-layer architectural framework is proposed that integrates physical 
+data acquisition, semantic context abstraction, large language model reasoning, multi-agent coordination, tool- 
+augmented execution, digital twin validation, and cross-layer governance into a unified smart grid intelligence 
+architecture.
+The review shows that recent research has progressively evolved from isolated predictive models toward 
+cognitive and agent-based decision-support systems; however, no existing framework provides an integrated 
+architecture that simultaneously combines semantic reasoning, engineering tool orchestration, digital twin 
+verification, governance mechanisms, and human oversight. To bridge this gap, the proposed framework es-
+tablishes a perception–reasoning–action workflow and is further illustrated through an operational use-case 
+scenario demonstrating the interaction between heterogeneous data sources, specialized agents, engineering 
+tools, validation mechanisms, and decision support.
+The analysis indicates that large language models can significantly enhance contextual reasoning, coordina-
+tion, explainability, and operational adaptability when deployed as cognitive orchestrators rather than auton-
+omous controllers. Nevertheless, practical deployment remains constrained by challenges including numerical 
+reliability, inference latency, cybersecurity, operational safety, and regulatory compliance, requiring bounded 
+autonomy supported by engineering verification, digital twin simulation, governance policies, and human-in-the- 
+loop supervision.
+This work provides an evidence-informed architectural foundation for trustworthy next-generation smart grid 
+intelligence and offers a structured roadmap for future research on integrating large language models into real- 
+world energy system operation.
+* Corresponding author.
+E-mail address: bana@ou.edu (Y.M. Banad). 
+Contents lists available at ScienceDirect
+Energy and AI
+journal homepage: www.sciencedirect.com/journal/energy-and-ai
+https://doi.org/10.1016/j.egyai.2026.100853
+Energy and AI 25 (2026) 100853 
+Available online 25 July 2026 
+2666-5468/© 2026 The Author(s). Published by Elsevier Ltd. This is an open access article under the CC BY license ( http://creativecommons.org/licenses/by/4.0/ ). 
+
+=== PDF PAGE 2 ===
+1. Introduction
+The rapid evolution of modern power systems toward decentralized, 
+data-intensive, and cyber-physical infrastructures has fundamentally 
+reshaped smart grids. The integration of renewable energy, distributed 
+energy resources (DERs), electric vehicles, and intelligent demand-side 
+management has transformed smart grids into dynamic systems 
+requiring real-time, uncertainty-aware decision-making. In this context, 
+AI and machine learning (ML) have become key enablers of forecasting, 
+optimization, and system resilience [1,2].
+Over the past decade, AI-driven approaches have been widely 
+applied in smart grids, including load forecasting, anomaly detection, 
+demand response, and predictive maintenance. Deep learning models 
+such as recurrent neural networks (RNNs), convolutional neural net-
+works (CNNs), and reinforcement learning (RL) have demonstrated 
+strong performance in modeling nonlinear spatio-temporal dynamics [3,
+4]. More recently, paradigms such as federated learning (FL) and digital 
+twins (DTs) have been introduced to address data privacy, scalability, 
+and cyber-physical integration challenges [5,6]. However, most existing 
+approaches remain task-specific and lack cross-domain reasoning and 
+system-level coordination capabilities.
+Recent comprehensive reviews have further emphasized that the 
+transition toward renewable-dominated power systems introduces sig-
+nificant planning and operational challenges, including distributed 
+resource coordination, uncertainty management, multi-objective opti-
+mization, and resilient microgrid operation. These challenges require 
+integrated decision-support mechanisms capable of combining plan-
+ning, optimization, and operational intelligence across multiple tem-
+poral and spatial scales. Although existing reviews primarily focus on 
+optimization algorithms and energy management strategies, they pro-
+vide important context for understanding why more advanced cognitive 
+architectures based on LLMs and agentic AI are emerging as comple-
+mentary decision-support technologies for future smart grids [7].
+In parallel, large language models (LLMs), enabled by transformer- 
+based architectures [8], have introduced new capabilities in contex-
+tual reasoning, planning, and cross-task generalization. Foundation 
+models such as GPT-style architectures have demonstrated strong per-
+formance in multi-step reasoning, tool utilization, and decision support 
+with minimal task-specific training [9]. These capabilities position LLMs 
+as promising candidates for bridging the gap between data-driven ana-
+lytics and high-level decision intelligence in complex cyber-physical 
+systems.
+However, the application of LLMs in smart grids remains in its early 
+stages. Existing studies primarily employ LLMs as natural language in-
+terfaces for querying data, generating reports, or supporting operator 
+interaction, rather than as integral components of decision-making 
+pipelines [10]. This limited perspective underutilizes their potential as 
+cognitive engines capable of orchestrating heterogeneous models and 
+coordinating distributed energy systems.
+A key limitation of current smart grid intelligence is the absence of a 
+unified architectural framework that integrates perception, reasoning, 
+and action. Existing ML pipelines typically operate in isolation, opti-
+mizing individual tasks without capturing system-level interactions. As 
+smart grids evolve into decentralized and multi-agent environments, 
+there is a growing need for holistic, context-aware intelligence that 
+enables coordinated and adaptive decision-making across heteroge-
+neous components.
+Recent advances in agentic AI and tool-augmented LLMs introduce a 
+new paradigm in which systems can decompose tasks, invoke external 
+tools, and iteratively refine decisions through feedback loops [11,12]. 
+This paradigm enables LLMs to function not merely as predictive 
+models, but as orchestrators of multi-step decision processes across 
+interconnected subsystems.
+To address this gap, this study introduces a structured taxonomy of 
+LLM roles in smart grids across three functional levels: interface, 
+reasoner, and agent. These roles capture the progression from natural 
+language interaction to context-aware reasoning and, ultimately, to 
+autonomous coordination and tool-augmented decision-making.
+Building on this taxonomy, the paper proposes a six-layer architec-
+ture for LLM-driven smart grids, in which LLMs function as central 
+reasoning and orchestration components within a cyber-physical sys-
+tem. The framework integrates data acquisition, context abstraction, 
+LLM-based reasoning, multi-agent coordination, tool-augmented 
+execution, and cross-layer governance, enabling a coherent percep-
+tion–reasoning–action pipeline. In this design, LLMs transform raw grid 
+data into structured representations, generate context-aware decisions, 
+and coordinate domain-specific tools such as forecasting and optimiza-
+tion models. Integration with digital twins further supports closed-loop 
+feedback, allowing decisions to be simulated and refined prior to 
+deployment.
+Methodologically, the study adopts a dual approach combining 
+PRISMA-guided systematic review with conceptual architectural syn-
+thesis. A total of 61 papers are analyzed to identify recurring patterns, 
+capability gaps, and emerging design principles in LLM-enabled smart 
+grid intelligence. The resulting contributions include: (i) a systematic 
+evidence synthesis of LLM and AI applications in smart grids; (ii) a 
+domain-specific taxonomy of LLM roles; (iii) an evidence-informed 
+architectural framework; and (iv) a structured analysis of key chal-
+lenges, including scalability, safety, latency, and trustworthiness.
+Importantly, the proposed taxonomy and architecture are not pre-
+sented as direct outputs of individual studies, but as higher-order con-
+ceptual syntheses derived from structured evidence aggregation. 
+Accordingly, the architecture should be interpreted as a design-oriented 
+abstraction that organizes fragmented literature into a coherent system- 
+level perspective, rather than as a fully validated end-to-end 
+implementation.
+This work does not introduce a new standalone algorithm, but pro-
+vides the first domain-specific integration of LLM role taxonomy with 
+cyber-physical smart grid architectures, bridging semantic reasoning, 
+agentic coordination, and energy system constraints.
+The remainder of the paper is organized as follows. Section 2 pre-
+sents the research methodology. Section 3 introduces the taxonomy of 
+LLM roles. Section 4 describes the proposed architecture. Section 5
+provides the thematic synthesis of the reviewed papers. Section 6 dis-
+cusses challenges and future directions. Section 7 presents the limita-
+tions of the study. Section 8 concludes the paper.
+2. Methodology
+This study was designed as a systematic literature review aimed at 
+identifying, screening, and synthesizing the body of research related to 
+artificial intelligence, machine learning, and more specifically LLM- 
+driven intelligence in smart grids. In addition to summarizing prior 
+studies, the review was structured to support the development of a 
+conceptual taxonomy and a multi-layer architectural framework for 
+LLM-driven autonomous smart grids. Accordingly, the methodology 
+combined a PRISMA-guided screening process with structured evidence 
+extraction and thematic synthesis.
+The review protocol was designed to answer three interrelated 
+research questions: 
+(1) How have AI- and ML-based approaches evolved in smart grid 
+research toward LLM-enabled intelligence?
+(2) What functional roles are currently assigned to LLMs in energy 
+systems, and where are the major conceptual and practical gaps?
+(3) What architectural patterns, enabling technologies, and unre-
+solved challenges can inform the design of autonomous, agentic, 
+and trustworthy smart grid systems?
+To address these questions, the review followed a stepwise pipeline 
+involving search strategy design, eligibility definition, PRISMA-based 
+study selection, and structured data extraction.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+2 
+
+=== PDF PAGE 3 ===
+2.1. Search strategy
+A comprehensive search strategy was designed to retrieve relevant 
+publications at the intersection of smart grids, artificial intelligence, 
+machine learning, digital twins, multi-agent systems, and large language 
+models. The search was conducted across four major scientific sources: 
+Scopus, Web of Science, IEEE Xplore, and ScienceDirect. These data-
+bases were selected because together they provide strong coverage of 
+energy systems, power engineering, artificial intelligence, cyber- 
+physical systems, and intelligent infrastructure research.
+The search period covered publications from 2019 to 2026, reflect-
+ing the recent acceleration of research on foundation models, autono-
+mous AI, and their integration with cyber-physical energy systems. 
+Search strings were constructed using Boolean operators and keyword 
+combinations to capture both established and emerging terminology in 
+the field. To improve retrieval quality, the search was restricted to 
+English-language journal articles, review papers, conference papers, and 
+book chapters that provided substantive technical, methodological, or 
+conceptual contributions. Editorials, notes, abstracts without full text, 
+patents, and purely non-technical opinion pieces were not considered.
+Some of the included papers from 2025 to 2026 consist of preprints 
+and early-access publications. These were included when they provided 
+sufficient methodological detail and relevance to emerging LLM-based 
+paradigms, although their peer-review status may still be pending.
+After merging results from all four databases and removing obvious 
+non-relevant entries during the initial sorting stage, a corpus of 123 
+records was retained as the basis for systematic screening.
+To ensure reproducibility, the final search strings and database- 
+specific query configurations are summarized in Table 1.
+Review papers were initially retained to preserve search sensitivity, 
+but were excluded during eligibility assessment to ensure that the final 
+synthesis is grounded in primary evidence.
+Duplicate records across databases were identified and removed 
+using a combination of automated filtering (based on title, DOI, and 
+metadata matching) and manual verification to ensure accuracy. When 
+multiple versions of the same study were found (e.g., conference and 
+extended journal versions), the most complete and recent version was 
+retained.
+2.2. Inclusion and exclusion criteria
+The study selection criteria were defined a priori to ensure meth-
+odological consistency and to maintain a clear focus on the review 
+objective.
+Inclusion criteria
+Papers were included if they met all of the following conditions: 
+1. The study addressed smart grids, intelligent energy systems, or 
+closely related power-system applications.
+2. The study involved AI, ML, deep learning, digital twin, agent-based, 
+or LLM-related methods relevant to the operation, planning, opti-
+mization, monitoring, forecasting, cybersecurity, or automation of 
+smart grids.
+3. The study contained sufficient methodological or conceptual detail 
+to support evidence extraction and comparative analysis.
+4. The full text was accessible in English.
+5. The publication fell within the 2019–2026 time window.
+Exclusion criteria
+Papers were excluded if they met one or more of the following 
+conditions: 
+1. They were outside the topical scope of smart grids or energy systems.
+2. They mentioned AI or LLMs only tangentially, without a substantive 
+link to energy-system functionality or architecture.
+3. They were duplicated records across databases.
+4. They lacked sufficient methodological clarity, technical depth, or 
+conceptual relevance.
+5. They were short abstracts, editorials, announcements, or non-peer- 
+reviewed commentary without analyzable content.
+These criteria were particularly important because the review was 
+not limited to cataloging applications; it was intended to support a 
+taxonomy of LLM roles and the synthesis of a layered architecture for 
+autonomous smart grids. Therefore, Papers were favored when they 
+provided information relevant to reasoning, orchestration, agentic 
+behavior, tool use, digital twin integration, or governance-oriented AI in 
+energy contexts. This is consistent with the paper’s current emphasis on 
+LLM roles, agentic coordination, and cross-layer feedback and 
+governance.
+2.3. Screening process (PRISMA)
+The study selection process followed the logic of the PRISMA 
+framework to ensure transparency, reproducibility, and traceability of 
+inclusion decisions.
+A total of 123 records were identified through database searching 
+and retained as the unique corpus for screening. Title and abstract 
+Table 1 
+Search Strategy and Query Formulation.
+Database Full Search Query (Executable Form) Search Fields Filters Applied Time Span Last 
+Search 
+Date
+Scopus TITLE-ABS-KEY ((“smart grid” OR “power system*” OR “energy 
+system*”) AND (“large language model*” OR “LLM” OR 
+“generative AI” OR “foundation model*”)) OR TITLE-ABS-KEY 
+((“smart grid” OR “power grid”) AND (“multi-agent” OR “agent- 
+based”) AND (“optimization” OR “control”)) OR TITLE-ABS-KEY 
+(“digital twin” AND “energy system*”)
+Title, Abstract, 
+Keywords
+English; Article + Conference Paper; 
+Subject Areas: Engineering, Energy, 
+Computer Science
+2019–2026 15 Jan 
+2026
+Web of 
+Science
+TS = ((“smart grid” OR “power system*”) AND (“artificial 
+intelligence” OR “machine learning” OR “LLM” OR “large 
+language model*”)) OR TS = ((“multi-agent system*” AND 
+“energy”) OR (“digital twin” AND “power system*”))
+Topic (Title, Abstract, 
+Keywords, Keywords 
+Plus)
+English; Document Types: Article, 
+Proceedings Paper; Indexes: SCI- 
+Expanded, SSCI
+2019–2026 15 Jan 
+2026
+IEEE Xplore ((“smart grid” OR “power system*”) AND (“machine learning” OR 
+“deep learning” OR “reinforcement learning”)) OR (“multi-agent” 
+AND “power system*”) OR ((“large language model” OR “LLM”) 
+AND (“grid” OR “energy system”)) OR (“digital twin” AND “power 
+system*”)
+Metadata + Abstract Journals + Conferences; English; 
+IEEE + IET publications
+2019–2026 16 Jan 
+2026
+ScienceDirect ((“smart grid” OR “energy system*”) AND (“artificial intelligence” 
+OR “machine learning” OR “LLM”)) OR (“digital twin” AND 
+“energy system*”) OR (“optimization” AND “smart grid”)
+Title, Abstract, 
+Keywords
+Research Articles only; English; 
+Energy, Engineering, Computer 
+Science domains
+2019–2026 16 Jan 
+2026
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+3 
+
+=== PDF PAGE 4 ===
+screening was then conducted to eliminate records that were clearly 
+outside the scope of the review, including studies unrelated to smart 
+grids, studies focused on generic AI without energy-system relevance, 
+and publications lacking a clear connection to LLMs, digital twins, 
+autonomous control, or intelligent grid operation.
+Following this first-stage screening, 81 papers were retained for full- 
+text eligibility assessment. During the full-text review stage, each article 
+was examined in detail against the predefined inclusion and exclusion 
+criteria. Studies were excluded at this stage when they were found to be 
+conceptually weak, methodologically insufficient, only marginally 
+related to the topic, or unable to contribute evidence relevant to the 
+review questions.
+As a result, 61 stupapers dies were included in the final systematic 
+review and used for qualitative synthesis, taxonomy development, and 
+architectural analysis.
+The study selection process is summarized in Fig. 1 following the 
+PRISMA framework. A total of 123 records were initially identified 
+through database searching. After screening and eligibility assessment, 
+61 papers were retained for the final qualitative synthesis.
+This screening process ensured that the final review corpus captured 
+not only the mainstream AI/ML literature in smart grids but also the 
+emerging body of work relevant to LLM-based reasoning, agentic AI, and 
+digital-twin-enabled autonomy.
+To enhance the methodological rigor of the screening process, an 
+inter-rater reliability assessment was conducted on a randomly selected 
+subset of the included papers. Approximately 20% of the records were 
+independently reviewed by a second evaluator, and agreement between 
+reviewers was quantified using Cohen’s kappa coefficient. The resulting 
+kappa value of 0.82 indicates strong agreement, suggesting a high level 
+of consistency in the application of inclusion and exclusion criteria. 
+Discrepancies were resolved through discussion to ensure alignment in 
+the final selection.
+The exclusion of prior review papers was a deliberate methodolog-
+ical choice aimed at avoiding secondary-level synthesis and potential 
+duplication of interpretations. Instead, this study focuses on primary 
+research contributions to construct an evidence-to-architecture mapping 
+grounded in original methodological insights. While this approach may 
+reduce coverage breadth, it enhances the granularity and traceability of 
+extracted evidence, which is essential for the development of the pro-
+posed architectural framework.
+The PRISMA flow diagram in Fig. 1 illustrates the systematic study 
+selection process adopted in this review, ensuring transparency, repro-
+ducibility, and methodological rigor. A total of 123 records were 
+initially retrieved from four major scientific databases (Scopus, Web of 
+Science, IEEE Xplore, and ScienceDirect) using predefined search stra-
+tegies. After removing irrelevant records during title and abstract 
+screening (n = 42), 81 papers were retained for full-text evaluation.
+During the eligibility assessment phase, papers were excluded (n =
+20) if they lacked methodological rigor, did not provide sufficient 
+technical depth, or failed to contribute to the architectural or functional 
+understanding of LLM-driven smart grid systems. Notably, pure review 
+papers were excluded to avoid redundancy and to ensure that the syn-
+thesis is grounded in primary evidence rather than secondary in-
+terpretations. This decision aligns with the objective of constructing an 
+evidence-driven architecture based on original methodological 
+contributions.
+Finally, 61 papers were included in the qualitative synthesis and 
+systematically coded to support taxonomy development and architec-
+tural mapping. The PRISMA-based workflow ensures that the final 
+corpus reflects both methodological quality and relevance to agentic, 
+LLM-driven smart grid intelligence.
+Although the final corpus consists of 61 papers, this number reflects a 
+deliberate filtering strategy emphasizing methodological depth, archi-
+tectural relevance, and alignment with LLM-driven paradigms. Given 
+the emerging nature of LLM applications in smart grids, a substantial 
+portion of the broader AI literature was excluded due to insufficient 
+relevance to reasoning, orchestration, or agentic intelligence.
+2.4. Bibliometric analysis (VOSviewer)
+To systematically analyze the research landscape of artificial intel-
+ligence in smart grids and identify emerging trends related to Large 
+Language Models (LLMs), a bibliometric analysis was conducted using 
+VOSviewer. The dataset was collected from major scientific databases, 
+Fig. 1. PRISMA flow diagram illustrating the study selection process for the systematic review of LLM-driven smart grid research (2019–2026).
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+4 
+
+=== PDF PAGE 5 ===
+including Scopus and Web of Science, covering publications from 2019 
+to 2026. The search strategy incorporated keywords such as “smart 
+grid”, “artificial intelligence”, “machine learning”, “internet of things”, 
+“digital twin”, and “large language models”. After removing duplicates 
+and irrelevant records, the final dataset was used to construct keyword 
+co-occurrence networks and density visualizations.
+It is important to distinguish between the datasets used for biblio-
+metric analysis and systematic review. The bibliometric analysis was 
+conducted on a broader dataset retrieved from the initial search results 
+prior to strict eligibility filtering, with the aim of capturing the overall 
+research landscape. In contrast, the PRISMA-guided systematic review 
+focuses on a refined subset of 61 papers selected based on methodo-
+logical and architectural relevance. This distinction allows the study to 
+combine macro-level trend analysis with in-depth qualitative synthesis.
+In this analysis, co-occurrence mapping was performed based on 
+author keywords and index terms, enabling the identification of domi-
+nant research clusters and their interconnections. The minimum 
+occurrence threshold was set to ensure the inclusion of high-impact and 
+frequently studied topics, thereby improving the robustness of the 
+analysis. Two complementary visualizations were generated: (i) a 
+keyword co-occurrence network map and (ii) a density heatmap, which 
+together provide both structural and intensity-based insights into the 
+research domain.
+The co-occurrence network (Fig. 2(a)) reveals a highly inter-
+connected research ecosystem centered around artificial intelligence, 
+machine learning, internet of things, and smart grid, which form the 
+core of the domain. These high-frequency nodes indicate that the ma-
+jority of existing research is focused on data-driven optimization, pre-
+dictive analytics, and IoT-enabled infrastructure. Several well-defined 
+clusters can be observed, including (i) energy systems and optimization, 
+(ii) IoT and big data analytics, (iii) sustainability and smart cities, and (iv) 
+security and cyber-physical systems. Notably, emerging topics such as 
+natural language processing, generative artificial intelligence, and taxonomy 
+appear at the periphery of the network, suggesting that LLM-related 
+research is still in an early developmental stage and has not yet been 
+fully integrated into the core smart grid research paradigm.
+The density visualization (Fig. 2(b)) further reinforces these obser-
+vations by highlighting the concentration of research activity. The 
+highest density regions are centered around artificial intelligence, 
+machine learning, and internet of things, indicating mature and exten-
+sively studied areas. In contrast, terms related to LLMs, such as natural 
+language processing and generative AI, are located in lower-density re-
+gions, reflecting limited exploration and lower research intensity. This 
+imbalance clearly demonstrates a critical research gap: while traditional 
+AI techniques are well-established in smart grid applications, the inte-
+gration of LLM-driven reasoning, agentic intelligence, and cognitive 
+architectures remains underexplored.
+2.5. Quality assessment and coding strategy
+To improve the transparency, reproducibility, and methodological 
+rigor of the systematic review, a structured quality assessment and 
+coding strategy was applied after full-text eligibility screening. This step 
+was designed to ensure that the final corpus of 61 papers was not only 
+topically relevant but also sufficiently informative for evidence extrac-
+tion, thematic synthesis, and architectural mapping.
+2.5.1. Quality assessment criteria
+Each full-text article retained after eligibility screening was assessed 
+using predefined quality and relevance criteria. The assessment focused 
+on whether the study provided sufficient methodological, technical, or 
+architectural information to support inclusion in the synthesis. The 
+criteria were not intended to assign a formal numerical quality score, but 
+rather to ensure consistency in determining whether each study could 
+contribute meaningful evidence to the review questions.
+Before performing evidence extraction, all eligible papers were 
+evaluated using a predefined set of quality and relevance criteria. Rather 
+than assigning a numerical quality score, the assessment ensured that 
+each included study provided sufficient methodological, technical, and 
+architectural information to contribute meaningfully to the evidence 
+synthesis. The criteria used during this quality assessment are summa-
+rized in Table 2. papers were excluded from the final synthesis if they 
+were only marginally related to smart grids, mentioned AI or LLMs 
+without substantive technical relevance, lacked methodological clarity, 
+or did not provide sufficient information to support architectural 
+interpretation. Review papers were used for contextual understanding 
+where necessary but were not treated as primary evidence in the final 
+synthesis to avoid duplication of secondary interpretations.
+Fig. 2. (a)-Keyword Co-occurrence Network of AI Applications in Smart Grids (2019–2026) –(b) Keyword Density Visualization of AI and Smart Grid Research 
+Landscape (2019–2026).
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+5 
+
+=== PDF PAGE 6 ===
+2.5.2. Coding protocol and evidence extraction
+After quality assessment, the included papers were coded using a 
+structured evidence-extraction protocol. The purpose of coding was to 
+transform the reviewed literature from a descriptive list of studies into a 
+traceable evidence base for taxonomy development and architectural 
+synthesis.
+Following quality assessment, each included study was systemati-
+cally coded using a structured evidence-extraction protocol. The coding 
+framework enabled consistent identification of architectural character-
+istics, methodological features, validation evidence, and functional ca-
+pabilities across the reviewed literature, thereby supporting the 
+subsequent taxonomy development and architectural synthesis. The 
+extracted coding dimensions are summarized in Table 3.
+This coding protocol enabled each study to be mapped to functional 
+roles and architectural layers rather than summarized only narratively. 
+Studies contributing to more than one function were assigned both a 
+primary and, where appropriate, secondary architectural placement. 
+The primary placement was determined according to the dominant 
+technical role of the study, while secondary placements were used to 
+preserve cross-layer contributions.
+2.5.3. Evidence-to-architecture mapping
+The coded evidence was aggregated through thematic synthesis. 
+Recurrent patterns across the corpus were grouped into six architectural 
+categories: physical infrastructure and data acquisition, data processing 
+and context abstraction, LLM-based cognitive reasoning, multi-agent 
+coordination, tool-augmented execution, and digital twin validation 
+and governance.
+This mapping process was essential for distinguishing evidence- 
+driven findings from the authors’ conceptual synthesis. The evidence- 
+driven component consists of recurring patterns, application domains, 
+reported capabilities, and limitations extracted from the 61 reviewed 
+papers. In contrast, the proposed six-layer architecture represents an 
+author-level conceptual synthesis that integrates these recurring pat-
+terns into a unified system-level framework. Therefore, the architecture 
+should not be interpreted as a configuration directly implemented in any 
+single reviewed study, but as an evidence-informed integration derived 
+from cross-study synthesis.
+2.5.4. Consistency checking and inter-rater validation
+To improve consistency during study selection and coding, the 
+screening and extraction process followed a consensus-oriented valida-
+tion procedure. The inclusion and exclusion criteria, quality assessment 
+dimensions, and coding categories were defined before final synthesis. 
+Ambiguous cases were reviewed against the research questions and 
+resolved through discussion among the authors.
+Where papers could plausibly fit multiple categories, classification 
+was based on the dominant contribution of the paper. For example, a 
+study combining LLM-based reasoning with optimization solvers was 
+coded under both the LLM cognitive reasoning layer and the tool- 
+augmented execution layer, while its primary placement was deter-
+mined by the main objective emphasized in the study.
+To further reduce subjective interpretation, a subset of the screened 
+papers was independently checked by more than one reviewer for 
+eligibility and coding consistency. Disagreements were resolved through 
+discussion until consensus was reached. This process helped ensure that 
+the final classification of papers was consistent with the predefined 
+criteria and that the architectural synthesis remained traceable to the 
+underlying evidence.
+Overall, this quality assessment and coding strategy strengthens the 
+reproducibility of the review process and provides a transparent meth-
+odological bridge between the PRISMA-guided study selection, the 
+thematic synthesis of the 61 included papers, and the proposed six-layer 
+architecture.
+2.6. Evidence-to-architecture traceability and synthesis logic
+This review was designed not only to summarize the literature, but 
+also to support a traceable transition from empirical evidence to con-
+ceptual system design. To avoid conflating systematic review findings 
+with purely author-driven perspective, the synthesis process was con-
+ducted in two explicitly separated stages.
+In the first stage, each included study was coded using a structured 
+Table 2 
+Quality Assessment Framework Used for Study Selection and Evidence 
+Synthesis.
+Criterion Assessment Focus
+Topical relevance Whether the study addressed smart grids, power systems, 
+energy systems, or closely related cyber-physical energy 
+infrastructures.
+AI/LLM relevance Whether the study involved artificial intelligence, 
+machine learning, deep learning, large language models, 
+agent-based intelligence, digital twins, or related 
+computational intelligence methods.
+Technical contribution Whether the study provided substantive technical, 
+methodological, architectural, or system-design content 
+rather than only general discussion.
+Architectural relevance Whether the study contributed evidence related to 
+system layers, workflows, agent coordination, tool use, 
+semantic abstraction, digital twins, governance, or 
+operational integration.
+Methodological clarity Whether the study described its methods, models, data 
+sources, experimental setting, conceptual design, or 
+implementation logic with sufficient clarity.
+Evidence of validation Whether the study reported experiments, case studies, 
+benchmarks, simulation results, prototype evaluation, or 
+clearly defined conceptual validation.
+Limitations and 
+reproducibility
+Whether the study reported assumptions, constraints, 
+limitations, datasets, tools, or design choices that could 
+support transparent interpretation.
+Table 3 
+Structured Coding Framework for Evidence Extraction and Architectural 
+Mapping.
+Coding Dimension Description
+Bibliographic 
+information
+Author(s), publication year, publication type, and source.
+Application domain Smart grid sub-domain, such as dispatch, control, 
+forecasting, demand response, microgrid operation, 
+cybersecurity, market operation, or asset management.
+Primary objective The main technical or conceptual objective of the study.
+AI/ML method The main computational method, such as machine learning, 
+deep learning, reinforcement learning, federated learning, 
+LLMs, multi-agent systems, or hybrid AI.
+LLM role Whether the LLM functioned primarily as an interface, 
+reasoner, agent, planner, tool user, or decision-support 
+component.
+Agentic behavior Whether the study included autonomous task 
+decomposition, multi-agent coordination, planning, 
+memory, feedback, or iterative reasoning.
+Tool integration Whether external solvers, optimization engines, simulation 
+tools, APIs, energy management systems, or power-system 
+analysis modules were invoked.
+Semantic grounding Whether the study used retrieval-augmented generation, 
+knowledge graphs, ontologies, structured context, or 
+domain-specific representations.
+Digital twin 
+integration
+Whether the study incorporated simulation, virtual 
+representation, closed-loop feedback, or cyber-physical 
+validation.
+Governance and trust Whether the study addressed explainability, safety, 
+reliability, auditability, human oversight, regulatory 
+compliance, or secure deployment.
+Validation evidence Type of validation reported, including simulation, 
+benchmark testing, case study, prototype, comparative 
+experiment, or conceptual demonstration.
+Reported limitations Key limitations, open challenges, or gaps identified by the 
+authors.
+Architectural 
+placement
+Mapping of the study to one or more layers of the proposed 
+framework.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+6 
+
+=== PDF PAGE 7 ===
+evidence-extraction matrix capturing: (i) application domain, (ii) pri-
+mary technical objective, (iii) role of the LLM or AI component, (iv) 
+degree of tool use or external model invocation, (v) presence of agentic 
+or multi-agent behavior, (vi) use of semantic grounding or retrieval 
+mechanisms, (vii) integration with digital twins or closed-loop simula-
+tion, and (viii) governance-related properties such as explainability, 
+validation, safety, or compliance. This coding process enabled each 
+paper to be mapped to one or more functional roles and architectural 
+layers rather than being summarized only narratively.
+This structured extraction framework in Table 4 ensures that all 
+papers are analyzed consistently and mapped to functional architectural 
+layers, enabling traceable synthesis from empirical evidence to system- 
+level design.
+In the second stage, the extracted codes were aggregated through 
+thematic synthesis to identify recurrent design patterns across the 
+corpus. These patterns were then grouped into higher-order categories 
+corresponding to the six architectural layers proposed in this paper: 
+physical data acquisition, context abstraction, LLM reasoning, multi- 
+agent coordination, tool-augmented execution, and cross-layer feed-
+back and governance. Importantly, the taxonomy of LLM roles (inter-
+face, reasoner, and agent) was derived from recurring functional 
+distinctions observed across the reviewed papers, whereas the final six- 
+layer architecture represents a conceptual synthesis proposed by the 
+authors on the basis of those recurring patterns.
+Accordingly, this paper distinguishes between two types of contri-
+butions. The first consists of evidence-driven findings directly grounded 
+in the reviewed literature, including recurring application patterns, 
+capability clusters, and commonly reported limitations. The second 
+consists of author-level conceptual contributions, namely the opera-
+tional taxonomy and the unified six-layer architecture, which were 
+informed by but are not reducible to any single study. This distinction is 
+intended to preserve methodological transparency while enabling the-
+ory building beyond isolated application reports.
+For this reason, the architecture should not be interpreted as a 
+directly observed configuration reproduced across the literature, but as 
+a higher-order synthesis that assembles dispersed empirical and con-
+ceptual signals into a unified analytical framework. Its value lies in 
+explanatory and design-level integration rather than in claiming prior 
+full-stack validation in operational smart grid environments.
+To improve traceability, the reviewed papers were mapped to the-
+matic clusters and architectural placements in the synthesis tables. 
+Where a study contributed to multiple functions, its primary placement 
+was determined according to the dominant technical role emphasized in 
+the paper, while secondary roles were acknowledged when relevant. 
+This approach allowed the review to remain systematic in evidence 
+handling while also supporting architecture-level interpretation of an 
+emerging and methodologically heterogeneous research field.
+3. Taxonomy of LLM roles in smart grids
+The rapid evolution of large language models (LLMs) has introduced 
+a new paradigm in artificial intelligence, enabling systems to perform 
+not only pattern recognition but also contextual reasoning, planning, 
+and tool orchestration. While LLMs have been extensively explored in 
+domains such as natural language processing, software engineering, and 
+knowledge systems, their role in cyber-physical infrastructures partic-
+ularly smart grids remains conceptually fragmented and insufficiently 
+formalized. Existing papers often employ LLMs in an ad hoc manner, 
+primarily as interfaces for querying data or generating reports, without a 
+structured understanding of their functional capabilities within energy 
+systems [1,10].
+While similar conceptual progressions have been explored in prior 
+agentic AI literature, the taxonomy proposed in this study contextualizes 
+these roles specifically within smart grid environments, linking them to 
+domain-specific functions such as grid operation, optimization, and 
+cyber-physical coordination.
+To address this gap, this paper proposes a unified taxonomy that 
+conceptualizes the progressive roles of LLMs in smart grids across three 
+levels of intelligence: LLM-as-interface, LLM-as-reasoner, and LLM-as- 
+agent. This taxonomy reflects an evolutionary trajectory from passive 
+interaction to active decision-making and provides a foundational 
+framework for designing LLM-driven autonomous energy systems.
+3.1. LLM-as-interface: natural language access to energy systems
+At the most fundamental level, LLMs function as intelligent in-
+terfaces that enable natural language interaction between human op-
+erators and complex energy systems. In this role, LLMs act as semantic 
+translators, converting user queries into structured representations and 
+retrieving relevant information from underlying databases, dashboards, 
+or knowledge bases.
+This paradigm aligns with early applications of LLMs in smart grids, 
+where models are primarily used for tasks such as report generation, 
+question answering, and operator assistance [2]. For example, 
+LLM-based systems can allow grid operators to query real-time system 
+status, interpret sensor data, or generate summaries of operational 
+events using natural language. Such capabilities significantly enhance 
+usability and accessibility, especially in environments characterized by 
+high data complexity and heterogeneous information sources.
+Technically, this level is often implemented through retrieval- 
+augmented generation (RAG) frameworks, where LLMs are coupled 
+with structured data repositories or domain-specific knowledge graphs 
+[13]. By grounding responses in external data sources, these systems 
+improve factual accuracy and reduce hallucination risks, which is crit-
+ical in safety-sensitive domains like energy systems.
+Despite its utility, the LLM-as-interface paradigm remains limited in 
+scope. It primarily supports human-in-the-loop interaction and does not 
+directly contribute to autonomous decision-making. The model does not 
+reason deeply about system dynamics nor does it initiate actions. As 
+such, it represents an entry-level integration of LLMs into smart grids, 
+focusing on communication rather than intelligence.
+3.2. LLM-as-reasoner: context-aware intelligence and decision support
+Moving beyond simple interaction, the second level of the taxonomy 
+conceptualizes LLMs as reasoning engines capable of contextual un-
+derstanding, multi-step inference, and cross-domain analysis. In this 
+role, LLMs operate as cognitive layers that integrate heterogeneous data 
+sources—including time-series sensor data, historical records, and 
+domain knowledge—to generate informed insights and support 
+decision-making processes.
+Recent advances in LLM capabilities, such as chain-of-thought 
+reasoning, tool-augmented inference, and few-shot generalization, 
+have significantly enhanced their ability to perform complex analytical 
+Table 4 
+Structured Evidence Extraction Framework.
+Dimension Description Example
+Application 
+Domain
+Smart grid sub-domain (forecasting, 
+control, DR, market)
+Demand response, 
+OPF
+AI/LLM Role Interface, Reasoner, or Agent LLM-as-Reasoner
+Technical 
+Objective
+Main task addressed Optimization, 
+prediction
+Tool Integration Use of external solvers/APIs OPF solver, EMS
+Agentic Behavior Presence of autonomous or multi- 
+agent system
+Multi-agent 
+coordination
+Semantic Context Use of ontology, RAG, or structured 
+knowledge
+Knowledge graph
+Digital Twin 
+Integration
+Simulation/feedback loop presence Closed-loop 
+validation
+Governance & 
+Trust
+Explainability, safety, compliance XAI, auditability
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+7 
+
+=== PDF PAGE 8 ===
+tasks [9,14]. In the context of smart grids, this enables applications such 
+as fault diagnosis, demand forecasting interpretation, scenario analysis, 
+and optimization guidance.
+For instance, LLMs can interpret anomalies in grid behavior by 
+correlating multiple data streams, explain the underlying causes of 
+voltage instability, or recommend corrective actions based on opera-
+tional constraints. Papers such as GridMind and GAIA demonstrate that 
+LLMs can bridge semantic reasoning with numerical computation by 
+interfacing with power system solvers and optimization tools [15,16]. 
+This hybrid capability is particularly valuable in smart grids, where 
+decision-making often requires both symbolic reasoning and quantita-
+tive analysis.
+At this level, LLMs also play a crucial role in explainability and 
+transparency, generating human-understandable justifications for de-
+cisions. This is essential for building trust in AI-assisted energy systems 
+and for meeting regulatory requirements [17].
+However, while LLM-as-reasoner significantly enhances system in-
+telligence, it still operates primarily as a decision-support mechanism 
+rather than an autonomous actor. The execution of actions remains 
+external, typically handled by predefined control systems or human 
+operators. This limitation motivates the transition toward a more 
+advanced paradigm: LLM-as-agent.
+3.3. LLM-as-agent: autonomous coordination and action
+The highest level of the proposed taxonomy represents a paradigm 
+shift in which LLMs function as autonomous agents capable of planning, 
+coordinating, and executing actions within the smart grid ecosystem. In 
+this role, LLMs are no longer passive components but active participants 
+in system operation, interacting with other agents, invoking tools, and 
+adapting to dynamic environments.
+This paradigm is enabled by recent developments in agentic AI, 
+where LLMs are integrated with planning modules, memory systems, 
+and tool-calling mechanisms to form autonomous decision-making en-
+tities [11,12]. Frameworks such as ReAct and generative agents 
+demonstrate how LLMs can iteratively reason, act, and learn through 
+feedback loops, effectively bridging cognition and execution.
+In smart grids, LLM-as-agent enables a wide range of advanced ca-
+pabilities, including autonomous grid control, distributed energy 
+resource coordination, real-time demand response, and adaptive market 
+participation. For example, an LLM-based agent can monitor grid con-
+ditions, identify potential violations, formulate mitigation strategies, 
+and execute control actions through APIs connected to energy man-
+agement systems (EMS) or SCADA platforms.
+Furthermore, when combined with multi-agent systems, LLM agents 
+can coordinate with specialized entities such as EV agents, market 
+agents, or security agents forming a distributed intelligence network 
+that enhances scalability and resilience [18]. This aligns with the 
+increasing decentralization of modern energy systems, where 
+decision-making must occur across multiple nodes and stakeholders.
+A key enabler of this paradigm is the integration with Digital Twin 
+environments, which allow agents to simulate and validate decisions 
+before real-world execution. This creates a closed-loop system where 
+actions are continuously refined based on feedback, improving both 
+performance and safety.
+Despite its transformative potential, the LLM-as-agent paradigm in-
+troduces significant challenges. Issues related to safety, reliability, la-
+tency, interpretability, and governance become critical when 
+autonomous systems operate in mission-critical infrastructures. 
+Ensuring that agentic LLMs adhere to operational constraints, regulatory 
+policies, and ethical standards remains an open research problem [19].
+3.4. From interfaces to autonomous energy intelligence
+The proposed taxonomy highlights a clear evolutionary trajectory in 
+the role of LLMs within smart grids from interface-level interaction to 
+reasoning-driven intelligence and ultimately to fully autonomous 
+agents. This progression reflects a broader shift in artificial intelligence 
+toward agentic, cognitive, and system-level intelligence, where models 
+are not confined to isolated tasks but operate as integrated components 
+of complex systems.
+Importantly, these three levels are not mutually exclusive; rather, 
+they coexist within a layered architecture. An effective LLM-driven 
+smart grid system may simultaneously employ interface-level interac-
+tion for human communication, reasoning capabilities for decision 
+support, and agentic behavior for autonomous operation. This layered 
+perspective directly informs the multi-layer architecture proposed in 
+this paper, where each level of the taxonomy corresponds to specific 
+functional layers within the system.
+By formalizing the roles of LLMs in this manner, the taxonomy pro-
+vides both a conceptual foundation and a practical design framework for 
+advancing smart grids toward cognitive, adaptive, and autonomous 
+energy systems.
+3.5. Comparison with existing grid intelligence frameworks
+The proposed three-level taxonomy (LLM-as-Interface, LLM-as- 
+Reasoner, LLM-as-Agent) and the six-layer architecture build upon and 
+extend several established frameworks in smart grid intelligence.
+Traditional multi-agent systems (MAS) have long been applied to 
+smart grid control. Mahela et al. [20] provide a comprehensive review of 
+MAS architectures for energy management, market operations, and fault 
+handling. These frameworks typically emphasize decentralized 
+decision-making and agent communication via protocols such as FIPA, 
+offering strong scalability and fault tolerance. However, they often lack 
+advanced semantic reasoning and natural language grounding, relying 
+primarily on rule-based or optimization-driven agents.
+More recently, Kiasari et al. [21] proposed a formalized agentic AI 
+framework for smart grids that decomposes agent behavior into five 
+layers: perception, cognition (reasoning and planning), action, coordi-
+nation, and explanation. This framework integrates reinforcement 
+learning, multi-agent coordination, digital twins, and explainable AI 
+(XAI). While highly relevant, it remains largely model-centric and does 
+not fully incorporate the semantic abstraction, tool-augmented execu-
+tion, and LLM-orchestrated reasoning that characterize the present 
+taxonomy. Our proposed taxonomy explicitly positions LLMs as the 
+central cognitive engine across all three functional levels, providing 
+stronger support for contextual interpretation and human-AI collabo-
+ration compared to the more traditional agent archetypes.
+In the domain of digital twins, reference architectures such as ISO 
+23247 [22] and RAMI 4.0 [23] offer structured layers for cyber-physical 
+systems. These focus on data integration, simulation, and feedback loops 
+but typically treat intelligence as modular add-ons rather than a unified 
+cognitive orchestration layer. The six-layer architecture in this paper 
+advances these models by placing LLM-based reasoning at the core, 
+enabling dynamic task planning and semantic bridging between phys-
+ical data and high-level governance.
+Critical Comparison Summary: 
+• Strengths of proposed taxonomy: Superior semantic reasoning, nat-
+ural language interaction, and hybrid tool integration capabilities 
+that remain limited in most prior MAS and digital twin frameworks.
+• Limitations relative to existing works: Like previous architectures, it 
+is currently conceptual and requires empirical validation at scale. It 
+also inherits common challenges such as latency and cybersecurity.
+• Key advancement: By synthesizing LLM roles with cyber-physical 
+constraints, the framework addresses a critical gap the lack of inte-
+grated cognitive orchestration identified across recent agentic AI 
+reviews [1,21].
+This comparison demonstrates that while foundational MAS and 
+digital twin frameworks provide robust building blocks, the integration 
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+8 
+
+=== PDF PAGE 9 ===
+of LLM-driven intelligence introduces a qualitatively new layer of 
+adaptability and interpretability for next-generation smart grids.
+3.6. Critical comparison with existing smart grid intelligence architectures
+Before introducing the proposed six-layer architecture, it is necessary 
+to position it against existing smart grid, multi-agent, digital twin, and 
+LLM-based architectures. Prior research has produced several important 
+architectural paradigms. Smart Grid Architecture Model (SGAM)-based 
+frameworks provide a structured, technology-neutral reference model 
+for describing smart grid interoperability across domains, zones, and 
+layers. Traditional multi-agent system architectures support decentral-
+ized coordination among grid actors and have been widely applied to 
+virtual power plants, demand response, market operation, and distrib-
+uted energy management. Digital twin architectures add cyber-physical 
+simulation and feedback capabilities, enabling virtual representation, 
+what-if analysis, and performance assessment of energy systems. More 
+recently, agentic AI and LLM-based frameworks have introduced plan-
+ning, reasoning, natural-language interaction, tool invocation, and 
+multi-agent orchestration into power-system analysis and operation.
+However, these architectural families remain limited in different 
+ways. SGAM and related interoperability models provide strong struc-
+tural representation but do not define a cognitive reasoning layer or 
+LLM-mediated decision workflow. Classical multi-agent systems 
+improve decentralization and scalability but usually rely on predefined 
+rules, optimization logic, or communication protocols rather than se-
+mantic reasoning and natural-language-grounded task decomposition. 
+Digital twin frameworks enable simulation-based validation but often 
+treat intelligence as an external analytical component rather than as an 
+integrated cognitive orchestration layer. Recent LLM-based systems 
+such as GAIA, GridMind, Grid-Agent, and X-GridAgent demonstrate 
+promising capabilities in dispatch assistance, power-system analysis, 
+solver invocation, and agent coordination, yet most remain task-specific 
+and do not fully integrate semantic abstraction, multi-agent coordina-
+tion, tool-augmented execution, digital twin validation, governance, 
+and auditability within a single system-level architecture.
+Table 5 provides a critical comparison between representative 
+architectural paradigms and the proposed framework. The comparison 
+shows that existing approaches contribute important building blocks, 
+but none simultaneously addresses the full perception–reasoning–action 
+cycle with cross-layer governance and bounded autonomy. This gap 
+motivates the proposed six-layer architecture, which synthesizes frag-
+mented capabilities into an integrated framework for LLM-driven smart 
+grid intelligence.
+This comparison demonstrates that the proposed architecture does 
+not replace prior smart grid, multi-agent, digital twin, or LLM-based 
+frameworks. Instead, it integrates their complementary strengths into 
+a unified system-level design. Its main contribution is the explicit 
+combination of semantic context abstraction, LLM-based cognitive 
+reasoning, distributed agent coordination, tool-augmented engineering 
+execution, digital twin-based validation, and cross-layer governance. 
+This integration directly addresses the fragmented nature of existing 
+research and provides a more coherent architectural foundation for 
+future bounded-autonomy smart grid systems.
+Table 5 
+Critical comparison between existing smart grid intelligence architectures and the proposed framework.
+Architecture / 
+Study
+Main focus Layered 
+structure
+Semantic / 
+LLM 
+reasoning
+Multi-agent 
+coordination
+Tool- 
+augmented 
+execution
+Digital twin 
+validation
+Governance 
+/ auditability
+Main limitation
+(CEN–CENELEC- 
+ETSI 2012)
+Interoperability 
+and system 
+representation
+Yes No Limited No No Limited Strong reference architecture but 
+lacks cognitive reasoning and 
+agentic decision flow
+[24] Distributed smart 
+grid management 
+and virtual power 
+plants
+Partial No Yes Limited No Limited Strong decentralization but mainly 
+rule/agent-protocol driven
+[25] Cyber-physical 
+modeling, 
+simulation, and 
+feedback
+Yes Limited Limited Limited Yes Partial Strong simulation layer but weak 
+cognitive orchestration
+[21] Autonomous, 
+explainable, and 
+safe control 
+frameworks
+Yes Partial / 
+emerging
+Yes Partial Yes Yes Strong agentic perspective but less 
+explicit on LLM-centered semantic 
+abstraction and tool execution 
+pipeline
+[15] LLM-assisted 
+advanced power 
+dispatch
+No / task- 
+specific
+Yes Limited Limited No Limited Focuses on dispatch support rather 
+than full system-level architecture
+GridMind [16] LLM-powered 
+agents for power- 
+system analysis 
+and operations
+Partial Yes Yes Yes No / limited Partial Strong solver integration but 
+limited digital twin and 
+governance integration
+Grid-Agent [26] LLM-powered 
+multi-agent grid 
+control
+Partial Yes Yes Yes Sandboxed 
+validation
+Partial Strong control-oriented workflow 
+but mainly focused on violation 
+resolution
+X-GridAgent [27] LLM-powered 
+agentic AI for grid 
+analysis
+Three-layer 
+hierarchy
+Yes Yes Yes No / limited Partial Strong 
+planning–coordination–action 
+design but less focused on cyber- 
+physical feedback and governance
+[28] LLM, knowledge 
+graph, and AI 
+agents for 
+dispatching
+Modular Yes Yes Partial Limited Partial Focused on dispatch automation 
+rather than generalized smart grid 
+architecture
+Proposed 
+framework
+LLM-driven 
+bounded 
+autonomous 
+smart grid 
+intelligence
+Six-layer 
+architecture
+Yes Yes Yes Yes Yes Conceptual and requires future 
+end-to-end empirical validation
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+9 
+
+=== PDF PAGE 10 ===
+4. Proposed integrative architecture: a multi-layer conceptual 
+framework for LLM-driven smart grids
+The reviewed literature demonstrates significant progress in indi-
+vidual components such as LLM-assisted reasoning, multi-agent coor-
+dination, and digital twin integration. However, these elements remain 
+largely fragmented. To synthesize recurring design patterns identified 
+across the 61 papers, we propose a six-layer conceptual architecture that 
+organizes perception, reasoning, and action into a coherent framework. 
+This architecture should be interpreted as an evidence-informed syn-
+thesis rather than a fully implemented system.
+The preceding sections synthesized the empirical evidence reported 
+across the 61 reviewed papers. Building upon these evidence-driven 
+findings, the following architecture represents the authors' conceptual 
+synthesis rather than a direct extraction from any individual study. Each 
+architectural layer is informed by recurring patterns identified in the 
+literature; however, the overall six-layer integration constitutes the 
+primary conceptual contribution of this work.
+To address this gap, we propose an evidence-informed conceptual 
+architecture that synthesizes recurring design patterns identified across 
+the reviewed papers into a unified smart grid intelligence framework. 
+The proposed architecture is not derived from any single publication and 
+should not be interpreted as a fully validated deployment model. 
+Instead, it represents a higher-level architectural synthesis that orga-
+nizes the major technological capabilities reported in the literature into 
+a coherent perception–reasoning–action structure.
+The framework integrates six complementary layers: (1) Physical 
+Infrastructure and Data Acquisition, (2) Data Processing and Context 
+Abstraction, (3) LLM Cognitive Reasoning, (4) Multi-Agent 
+Coordination, (5) Tool-Augmented Execution, and (6) Digital Twin 
+Validation and Governance. Collectively, these layers establish a closed- 
+loop intelligence cycle that combines contextual understanding, 
+distributed decision-making, analytical execution, and continuous 
+feedback.
+A distinguishing characteristic of the proposed architecture is the 
+integration of LLM-based reasoning, agentic coordination, digital twin 
+validation, and governance mechanisms within a single system-level 
+framework. Rather than replacing established engineering methods, 
+the architecture positions LLMs as cognitive orchestration components 
+that interact with specialized analytical tools, optimization engines, and 
+operational control systems. This design supports bounded autonomy, 
+explainability, safety, and human oversight, which are essential re-
+quirements for future AI-enabled cyber-physical energy systems.
+Fig. 3 presents the operational interpretation of the architecture, 
+while Fig. 4 illustrates its evidence-informed synthesis from the 
+reviewed literature and its positioning within the broader transition 
+from model-centric AI toward agentic smart grid intelligence.
+Each architectural layer was synthesized from recurring evidence 
+identified across the reviewed papers rather than being introduced 
+independently. Specifically, the physical and semantic layers were 
+informed by prior smart grid and interoperability architectures, the 
+cognitive and coordination layers were derived from recent LLM and 
+agentic AI papers, while the execution, digital twin, and governance 
+layers synthesize recurring design patterns reported across cyber- 
+physical energy system literature. Consequently, every architectural 
+component is grounded in prior evidence, although their integration 
+into a unified framework constitutes the primary conceptual contribu-
+tion of this work.
+Fig. 3. Operational interpretation of the proposed six-layer architecture for LLM-driven smart grid intelligence. The framework illustrates the flow of information 
+from physical data acquisition and context abstraction to LLM-based reasoning, multi-agent coordination, tool-augmented execution, and digital twin-based vali-
+dation. Governance and trust mechanisms operate across all layers to enforce safety, explainability, regulatory compliance, and bounded autonomy. The figure 
+should be interpreted as an evidence-informed conceptual workflow synthesized from the reviewed literature rather than a fully validated deployment architecture.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+10 
+
+=== PDF PAGE 11 ===
+1. Physical Infrastructure and Data Acquisition Layer
+This layer represents the foundational sensing and data generation 
+infrastructure of the smart grid. It consists of heterogeneous data sources 
+including smart meters, phasor measurement units (PMUs), IoT sensors, 
+electric vehicles, and distributed renewable energy resources. These 
+components continuously generate large volumes of time-series data, 
+event logs, and operational signals reflecting the real-time state of the 
+grid.
+The primary role of this layer is to capture raw, high-frequency, and 
+multi-modal data streams that serve as the basis for higher-level intel-
+ligence. Given the distributed and dynamic nature of modern energy 
+systems, this layer must ensure data reliability, temporal synchroniza-
+tion, and secure transmission to upstream processing components.
+2. Data Processing and Context Abstraction Layer
+This layer transforms raw sensor data into structured and semanti-
+cally enriched representations that can be effectively utilized by LLM- 
+based reasoning systems. It includes data fusion, feature extraction, 
+embedding generation, and knowledge graph construction to model 
+relationships across heterogeneous energy assets.
+A key contribution of this layer is context abstraction, where raw 
+numerical signals are converted into meaningful representations such as 
+grid states, anomalies, demand patterns, and operational contexts. By 
+bridging the gap between low-level data and high-level reasoning, this 
+layer enables LLMs to operate with structured, interpretable, and 
+context-aware inputs.
+3. LLM Cognitive and Reasoning Layer
+At the core of the proposed architecture lies the LLM-based cognitive 
+engine, which performs context understanding, multi-step reasoning, 
+and decision generation. Unlike traditional AI models that operate on 
+fixed pipelines, this layer enables flexible reasoning across multiple 
+domains by leveraging large-scale pretrained knowledge combined with 
+real-time contextual inputs.
+The LLM operates as a reasoning orchestrator, capable of synthe-
+sizing information from diverse sources, generating explanations, and 
+formulating action plans. It supports advanced capabilities such as 
+chain-of-thought reasoning, scenario analysis, and adaptive decision- 
+making under uncertainty.
+This layer is central to the transition from predictive analytics to 
+cognitive intelligence, where decisions are not only data-driven but also 
+context-aware and explainable.
+4. Multi-Agent Coordination Layer
+This layer operationalizes the agentic paradigm by decomposing 
+complex grid operations into specialized agents, such as grid agents, EV 
+agents, market agents, and security agents. Each agent is responsible for 
+a specific functional domain and interacts with others through coordi-
+nated protocols.
+The LLM acts as a central coordinator, enabling communication, 
+negotiation, and task allocation among agents. This distributed intelli-
+gence framework enhances scalability, modularity, and robustness, 
+allowing the system to manage complex, interdependent energy 
+processes.
+By enabling collaborative decision-making across multiple agents, 
+this layer supports real-time adaptability and resilience in dynamic grid 
+environments.
+5. Tool-Augmented Execution Layer
+This layer connects LLM-driven decisions to executable actions 
+through domain-specific tools and control systems. It includes fore-
+casting models, optimization engines, EMS/SCADA APIs, and control 
+modules that directly interact with the physical grid.
+The LLM dynamically selects and invokes appropriate tools based on 
+Fig. 4. From Model-Centric AI to Agentic Intelligence: A Unified Six-Layer Architecture for Autonomous Smart Grids.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+11 
+
+=== PDF PAGE 12 ===
+task requirements, enabling a flexible and extensible execution frame-
+work. This tool-augmented paradigm allows the system to integrate 
+legacy infrastructure with modern AI-driven decision-making processes.
+The key function of this layer is to translate high-level plans into 
+concrete operational actions, ensuring real-world impact and system 
+control.
+6. Cross-Layer Intelligence, Feedback, and Governance Framework
+This cross-cutting layer ensures system-wide coordination, safety, 
+and continuous learning through integrated feedback mechanisms. It 
+includes Digital Twin environments, governance policies, trust mecha-
+nisms, and data flow orchestration across all architectural layers.
+The Digital Twin component enables simulation, what-if analysis, 
+and validation of decisions before deployment, forming a closed-loop 
+feedback system between virtual and physical environments. Mean-
+while, the governance module enforces safety constraints, regulatory 
+compliance, and explainability requirements, which are critical for 
+mission-critical infrastructures like smart grids.
+Additionally, this layer manages bidirectional data flows and 
+learning loops, allowing the system to continuously adapt, improve, and 
+maintain reliability under evolving conditions.
+The framework should be interpreted as an evidence-informed con-
+ceptual integration of recurring patterns in the literature rather than as a 
+fully validated end-to-end deployment model. Its purpose is to translate 
+fragmented empirical findings into a coherent system-level design 
+perspective for future bounded-autonomy smart grid research. The 
+framework integrates (1) physical infrastructure and data acquisition, 
+(2) semantic context abstraction, (3) LLM-based reasoning and multi- 
+agent coordination, (4) tool-augmented execution and optimization, 
+(5) digital twin-enabled closed-loop feedback, and (6) cross-layer 
+governance for trust, safety, and compliance. The architecture high-
+lights the transition from model-centric AI toward system-level agentic 
+intelligence, where LLMs function as orchestration engines connecting 
+perception, reasoning, and action. Methods identified in the literature 
+are positioned based on their functional roles across layers, while 
+feedback and governance flows ensure reliable, interpretable, and 
+bounded autonomous operation in cyber-physical energy systems.
+The architecture illustrated in Fig. 4 provides a system-level inter-
+pretation of the fragmented literature reviewed in this study. Rather 
+than viewing AI techniques as isolated solutions, the figure organizes 
+them into a coherent perception–reasoning–action pipeline augmented 
+with agentic coordination and governance. At the lower layers, physical 
+sensing and data acquisition establish the informational foundation of 
+the system, while semantic abstraction transforms heterogeneous data 
+into structured context. The LLM reasoning layer acts as a cognitive core, 
+enabling contextual inference and coordination across agents. Above 
+this, tool-augmented execution connects high-level reasoning to 
+domain-specific optimization and control mechanisms. A key differ-
+entiator of the proposed architecture is the integration of digital twin 
+environments, which introduce closed-loop feedback for validation and 
+refinement of decisions prior to deployment. Finally, a cross-layer 
+governance framework ensures that system behavior remains inter-
+pretable, safe, and compliant with operational constraints. Collectively, 
+this layered design reflects the transition from task-specific AI models to 
+integrated, agentic, and trustworthy smart grid intelligence.At the same 
+time, this figure should be read as a synthesis-oriented design abstrac-
+tion rather than as evidence that such a full-stack architecture has 
+already been demonstrated in operational smart grid practice.
+4.1. Illustrative use-case: LLM-driven voltage control in distribution 
+networks
+To illustrate the practical applicability of the proposed architecture, 
+we consider a voltage control scenario in a distribution network with 
+high penetration of distributed energy resources (DERs), including 
+photovoltaic systems and electric vehicles. Maintaining voltage stability 
+under dynamic generation and demand conditions remains a critical 
+operational challenge.
+Within the proposed framework, real-time data from sensors and 
+grid components are processed in the data and context abstraction layer 
+to generate structured representations of system states, such as voltage 
+profiles and load patterns. These inputs are then analyzed by the LLM 
+cognitive layer, which performs context-aware reasoning to detect po-
+tential voltage violations and generate candidate corrective actions.
+A key feature of this architecture is the integration of a multi-agentic 
+AI layer, where specialized agents such as grid agents, EV agents, and 
+demand response agents collaboratively negotiate and refine control 
+strategies. The LLM acts as an orchestration engine, enabling coordi-
+nated decision-making across distributed energy resources while 
+resolving local conflicts and operational constraints.
+The resulting decisions are validated and executed through optimi-
+zation tools and control systems in the execution layer. Prior to 
+deployment, actions are evaluated within a digital twin environment, 
+enabling simulation-based validation and iterative refinement through a 
+closed-loop feedback mechanism.
+This use-case demonstrates how LLM-driven multi-agent coordina-
+tion can support adaptive, interpretable, and system-level decision- 
+making in energy systems. While illustrative, it highlights the potential 
+of integrating LLM-based reasoning with multi-agent control to enhance 
+operational efficiency and resilience in modern smart grids within a 
+bounded and verifiable framework.
+4.2. Operational workflow of the proposed architecture
+To reduce the conceptual abstraction of the proposed six-layer 
+framework and provide a clearer system-level interpretation, this sec-
+tion describes an operational workflow that illustrates how information, 
+reasoning, coordination, validation, and execution interact across the 
+architectural layers. The workflow should be interpreted as an evidence- 
+informed conceptual blueprint synthesized from recurring patterns 
+identified in the reviewed literature rather than as a fully validated 
+deployment architecture.
+The proposed framework follows a perception–reasoning–action 
+paradigm augmented by multi-agent coordination, tool-assisted execu-
+tion, digital twin validation, and governance mechanisms. Information 
+flows sequentially across the layers while continuous feedback enables 
+adaptive refinement and bounded autonomy. The architecture is 
+designed to reflect the requirements of modern cyber-physical energy 
+systems, including scalability, interoperability, resilience, explain-
+ability, and operational safety.
+Step 1: Physical Infrastructure and Data Acquisition
+The workflow begins with the continuous collection of operational 
+information from heterogeneous smart grid assets, including sensing 
+devices, distributed energy resources, advanced metering infrastructure, 
+electric vehicle ecosystems, renewable generation units, and supervisory 
+control systems. These data streams represent the physical state of the 
+grid and provide the informational foundation for all higher-level in-
+telligence functions.
+Given the distributed and dynamic nature of modern energy systems, 
+this layer is responsible for ensuring data availability, synchronization, 
+and quality before information is propagated to subsequent layers. The 
+output of this stage consists of structured operational observations 
+describing the current state of the cyber-physical environment.
+Step 2: Data Processing and Context Abstraction
+Raw measurements alone are insufficient for intelligent decision- 
+making. Therefore, the second layer transforms heterogeneous numer-
+ical and event-based data into semantically meaningful contextual 
+representations.
+This process may include data fusion, state estimation, feature 
+extraction, semantic enrichment, and contextual interpretation. Opera-
+tional conditions are represented as higher-level system states, such as 
+congestion risks, voltage deviations, renewable variability, demand- 
+response opportunities, or asset-health concerns. The resulting 
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+12 
+
+=== PDF PAGE 13 ===
+contextual representation provides a grounded and interpretable view of 
+the grid that can be processed by higher-level reasoning mechanisms.
+Step 3: LLM Cognitive Reasoning and Decision Generation
+Step 3: LLM Cognitive Reasoning and Decision Generation. The 
+contextualized system state is forwarded to the LLM-based cognitive 
+layer. Drawing on patterns observed in studies such as [15,29,16,26] the 
+LLM performs contextual analysis, identifies operational challenges, and 
+generates candidate decision plans using chain-of-thought reasoning 
+and tool-calling interfaces. The output consists of explainable hypothe-
+ses rather than direct control commands.
+Step 4: Multi-Agent Coordination and Distributed Decision 
+Refinement
+Because smart grids comprise multiple interacting stakeholders and 
+distributed resources, candidate decisions generated by the reasoning 
+layer are further refined through multi-agent coordination mechanisms 
+[30].
+Specialized agents representing different functional domains such as 
+distributed generation, demand response, energy storage, electric ve-
+hicles, market participation, or system operations evaluate proposed 
+actions according to local objectives and operational constraints. 
+Through collaborative interaction, negotiation, and distributed 
+decision-making processes, the agents reconcile local requirements with 
+broader system-level goals [31–33].
+This coordination layer enhances scalability and adaptability while 
+reducing the limitations associated with centralized decision-making in 
+highly distributed energy environments.
+Step 5: Tool-Augmented Execution and Operational Planning
+The coordinated decision plan is subsequently translated into 
+executable operational actions through interaction with domain-specific 
+analytical and optimization tools.
+Examples include forecasting models, optimization engines, power- 
+system analysis modules, scheduling frameworks, and energy manage-
+ment platforms. Rather than directly executing actions, the LLM in-
+teracts with these specialized tools to obtain numerically rigorous 
+results, validate feasibility, and ensure compliance with operational 
+constraints.
+This hybrid reasoning paradigm combines the contextual intelli-
+gence of LLMs with the reliability and precision of established engi-
+neering methods, addressing a major limitation of purely language- 
+based decision-making approaches [34,27,35,36].
+To further clarify the execution mechanism, the output of this layer is 
+not a direct autonomous command but a structured execution package. 
+This package may include the selected analytical tool, required input 
+variables, operational constraints, expected performance indicators, 
+confidence level, fallback option, and the responsible human or auto-
+mated control interface. Such a representation enables traceability be-
+tween the LLM-generated reasoning, the agent-refined decision, the 
+engineering tool output, and the final operational recommendation. In 
+this way, the architecture separates cognitive planning from numerical 
+optimization and physical actuation, reducing the risk of unsafe 
+language-model-driven control.
+Step 6: Digital Twin Validation and Governance
+Before any action is considered for deployment, proposed decisions 
+undergo verification within a digital twin and governance environment.
+The digital twin provides a virtual representation of the physical 
+grid, enabling simulation-based assessment of candidate actions under 
+realistic operating conditions. Potential impacts on reliability, stability, 
+resilience, and system performance can therefore be evaluated before 
+implementation.
+Simultaneously, governance mechanisms enforce operational pol-
+icies, safety requirements, regulatory constraints, explainability re-
+quirements, and trustworthiness criteria. This validation stage 
+introduces a bounded-autonomy principle in which decision recom-
+mendations must satisfy predefined operational and governance condi-
+tions prior to execution as supported by works on closed-loop cyber- 
+physical systems [37–39].
+Step 7: Deployment, Monitoring, and Closed-Loop Feedback
+Following successful validation, approved actions may be deployed 
+through operational control and management systems. The resulting 
+system behavior is continuously monitored and compared with expected 
+outcomes generated during earlier stages of the workflow.
+Observed outcomes are subsequently fed back into the architecture, 
+enabling continuous adaptation, performance evaluation, and iterative 
+refinement of future decisions. This closed-loop feedback process sup-
+ports learning, resilience, and long-term system improvement while 
+maintaining alignment with operational objectives and governance 
+requirements.
+Inter-Layer Interaction and System-Level Integration
+Although presented sequentially for clarity, the proposed workflow 
+should not be interpreted as a strictly linear process. Information ex-
+change occurs across multiple layers through iterative feedback loops, 
+enabling continuous interaction between perception, reasoning, coor-
+dination, execution, and validation functions.
+A defining characteristic of the architecture is the integration of 
+cognitive intelligence, distributed agent coordination, tool-assisted 
+analytical execution, and digital twin-based verification within a uni-
+fied system-level framework. Collectively, these mechanisms transform 
+fragmented AI functionalities into an integrated decision-support 
+ecosystem capable of supporting future research on trustworthy, adap-
+tive, and bounded-autonomy smart grid intelligence.
+Importantly, the proposed workflow represents a conceptual opera-
+tional blueprint synthesized from the current state of the literature. 
+While the reviewed studies provide evidence for individual architectural 
+components, comprehensive end-to-end validation of the complete 
+framework remains an important direction for future research. This 
+inter-layer design also establishes an audit trail across the full decision 
+cycle. Each major output raw observation, contextual state, LLM- 
+generated hypothesis, agent-refined plan, tool-derived result, digital- 
+twin validation outcome, and final deployment decision can be logged 
+and reviewed. This auditability is essential for trustworthy operation in 
+critical energy infrastructures because it enables post-event analysis, 
+accountability, human oversight, and regulatory inspection.
+4.2.1. Illustrative operational use case
+To further demonstrate how the proposed architecture can be oper-
+ationalized, this section presents an illustrative use case involving the 
+management of renewable generation variability during peak electricity 
+demand. The objective is not to experimentally validate the framework 
+but to demonstrate how the six architectural layers interact within a 
+realistic smart grid decision-support scenario.
+Assume that a utility operator observes an unexpected reduction in 
+photovoltaic generation caused by rapidly changing weather conditions 
+while electricity demand simultaneously increases during evening peak 
+hours. Such situations require timely coordination among multiple grid 
+resources while satisfying operational constraints and maintaining sys-
+tem reliability.
+The operational workflow begins at the Physical Infrastructure and 
+Data Acquisition layer, where heterogeneous observations are continu-
+ously collected from phasor measurement units (PMUs), smart meters, 
+supervisory control and data acquisition (SCADA) systems, weather 
+forecasting services, distributed energy resources, battery energy stor-
+age systems, and electricity market feeds. These heterogeneous mea-
+surements collectively represent the real-time operating state of the 
+cyber-physical grid.
+Within the Data Processing and Context Abstraction layer, the 
+incoming data streams are synchronized, fused, and transformed into 
+higher-level contextual representations. Rather than processing isolated 
+sensor values, the system identifies a semantic operational situation 
+characterized by renewable generation deficit, increasing system load, 
+reduced operating reserve, and potential voltage stability concerns.
+The contextual representation is subsequently forwarded to the LLM 
+Cognitive Reasoning layer. Acting as a cognitive orchestration 
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+13 
+
+=== PDF PAGE 14 ===
+component, the LLM interprets the operational context, identifies the 
+underlying causes of the disturbance, and generates several explainable 
+candidate mitigation strategies. Possible recommendations include 
+battery dispatch, adaptive demand-response activation, reserve gener-
+ation scheduling, electricity market re-dispatch, or network reconfigu-
+ration. Importantly, these outputs represent decision hypotheses rather 
+than executable control commands.
+Candidate strategies are then evaluated within the Multi-Agent Co-
+ordination layer. Specialized agents representing renewable generation, 
+battery energy storage, demand response, market operation, trans-
+mission operation, and distribution management collaboratively assess 
+the proposed actions according to their local objectives and operational 
+constraints. Through distributed coordination and negotiation, con-
+flicting objectives are reconciled to produce a technically feasible 
+system-wide operational plan.
+The coordinated plan is forwarded to the Tool-Augmented Execution 
+layer, where external engineering tools are invoked to perform rigorous 
+numerical analysis. Typical tools include optimal power flow (OPF) 
+solvers, short-term load forecasting models, renewable generation 
+forecasting modules, energy management systems (EMS), contingency 
+analysis software, and scheduling optimizers. The output of this stage is 
+a structured execution package containing optimized control recom-
+mendations, expected operational impacts, engineering constraints, 
+confidence estimates, and alternative fallback actions.
+Before implementation, the proposed execution package undergoes 
+verification within the Digital Twin Validation and Governance layer. 
+The digital twin simulates the proposed operational strategy under 
+realistic grid conditions to evaluate voltage profiles, frequency stability, 
+line loading, reserve adequacy, and overall system resilience. Simulta-
+neously, governance mechanisms verify compliance with operational 
+policies, regulatory requirements, cybersecurity constraints, explain-
+ability requirements, and human oversight policies. Only recommen-
+dations satisfying predefined safety and governance criteria are 
+considered eligible for operational deployment.
+Finally, the validated recommendation is presented to system oper-
+ators through the Deployment, Monitoring, and Closed-Loop Feedback 
+layer. Following implementation, real-time operational responses are 
+continuously monitored and compared with predicted outcomes. The 
+observed system behavior is subsequently fed back into the architectural 
+workflow, enabling adaptive refinement of contextual representations, 
+reasoning strategies, and future operational recommendations.
+This illustrative scenario demonstrates that the proposed framework 
+should be interpreted as an evidence-informed decision-support archi-
+tecture rather than a fully autonomous control system. The example 
+highlights how semantic reasoning, distributed agent coordination, en-
+gineering tool integration, digital twin validation, governance con-
+straints, and human supervision collectively support bounded 
+autonomy, ensuring that LLM-generated recommendations remain 
+technically verifiable, operationally safe, and consistent with existing 
+smart grid practices.
+To complement the operational workflow described above, Table 6
+summarizes how the proposed six-layer architecture functions within 
+the illustrative renewable generation management scenario. The table 
+maps the operational role of each architectural layer to its representative 
+inputs, computational components, and expected outputs, thereby 
+providing a concise view of the end-to-end perception–reasoning–action 
+process.
+To further improve the practical interpretability of the proposed 
+framework, Table 6 summarizes the operational responsibilities of each 
+architectural layer together with its representative inputs, computa-
+tional components, and expected outputs. This operational mapping 
+complements the illustrative use case and provides a concise reference 
+for understanding how information, reasoning, coordination, validation, 
+and decision support are integrated across the proposed architecture.
+4.3. Validation scope, technology maturity, and research readiness
+The proposed six-layer architecture should be interpreted as an 
+evidence-informed conceptual framework synthesized from recurring 
+architectural patterns identified across the reviewed literature rather 
+than as a fully validated deployment architecture. Although the indi-
+vidual technological components underlying the framework have been 
+investigated extensively in prior research, their integration into a uni-
+fied LLM-driven, agentic, and governance-aware smart grid architecture 
+remains an emerging research direction.
+Importantly, the reviewed studies provide different levels of empir-
+ical evidence for different architectural layers. Technologies associated 
+with physical infrastructure, data acquisition, state estimation, optimi-
+zation, and digital twin simulation have already demonstrated consid-
+erable technical maturity through numerous experimental studies and 
+industrial deployments. Likewise, multi-agent systems have been 
+extensively investigated for distributed coordination, demand response, 
+market operation, distributed energy resources, and virtual power plant 
+management.
+In contrast, recent advances in large language models, agentic arti-
+ficial intelligence, and tool-augmented reasoning represent a rapidly 
+evolving research frontier. Existing studies demonstrate promising ca-
+pabilities in semantic reasoning, task decomposition, planning, natural- 
+language interaction, and orchestration of engineering tools. However, 
+these capabilities have primarily been evaluated within limited opera-
+tional scenarios, prototype implementations, or domain-specific appli-
+cations rather than fully integrated real-world power-system 
+environments.
+Consequently, the proposed framework should not be interpreted as 
+evidence that fully autonomous smart grids have already been achieved. 
+Instead, it illustrates a feasible architectural pathway toward bounded- 
+autonomy, in which cognitive reasoning, engineering optimization, 
+digital twin validation, governance constraints, and human supervision 
+operate together to support trustworthy decision-making. Throughout 
+the workflow, autonomy remains explicitly constrained by safety pol-
+icies, regulatory requirements, engineering validation, explainability 
+mechanisms, and human oversight before any operational deployment is 
+considered.
+Table 7 summarizes the current maturity of the principal architec-
+tural capabilities synthesized in this review. Rather than assigning 
+formal Technology Readiness Levels (TRLs), the table qualitatively re-
+flects the level of empirical support available in the current literature.
+The proposed architecture therefore represents an integration of 
+technological capabilities that individually possess different levels of 
+empirical maturity. Its principal contribution is not the introduction of 
+Table 6 
+Operational Roles, Representative Inputs, Computational Components, and 
+Outputs Across the Proposed Six-Layer Architecture.
+Architectural 
+Layer
+Operational 
+Role
+Example 
+Components / 
+Inputs
+Representative 
+Output
+Physical 
+Infrastructure
+Data acquisition PMUs, SCADA, 
+smart meters, 
+weather APIs
+Real-time grid 
+observations
+Context 
+Abstraction
+Semantic 
+interpretation
+Data fusion, state 
+estimation
+Renewable deficit, 
+congestion risk
+LLM Cognitive 
+Reasoning
+Situation 
+analysis
+LLM + RAG +
+reasoning
+Candidate mitigation 
+strategies
+Multi-Agent 
+Coordination
+Collaborative 
+refinement
+Grid, storage, 
+market, DER 
+agents
+Coordinated 
+operational plan
+Tool- 
+Augmented 
+Execution
+Engineering 
+computation
+OPF, EMS, 
+forecasting, 
+scheduling
+Optimized execution 
+package
+Digital Twin & 
+Governance
+Validation and 
+compliance
+Digital twin, 
+safety rules, 
+policies
+Validated 
+recommendation for 
+deployment
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+14 
+
+=== PDF PAGE 15 ===
+entirely new technological components, but rather the synthesis of 
+existing evidence into a coherent system-level architecture that explic-
+itly connects semantic context abstraction, LLM-based cognitive 
+reasoning, distributed agent coordination, engineering tool execution, 
+digital twin validation, and cross-layer governance within a single 
+bounded-autonomy framework.
+Accordingly, the framework should be viewed as a scientifically 
+grounded architectural blueprint intended to guide future imple-
+mentation and evaluation rather than as a claim of deployment-ready 
+autonomous smart grid operation. Future research should therefore 
+focus on comprehensive end-to-end validation, benchmark-driven per-
+formance evaluation, latency and scalability analysis, cyber-security 
+assessment, human-in-the-loop experimentation, and real-world pilot 
+deployment to establish the operational effectiveness of the proposed 
+architecture.
+Although the proposed architecture has not been validated as a 
+complete end-to-end operational system, every major architectural 
+capability included in the framework is supported by empirical evidence 
+reported in the reviewed literature. The novelty of the proposed 
+framework therefore lies in the evidence-informed integration of these 
+individually validated capabilities into a unified cognitive architecture 
+rather than in claiming experimental validation of the complete system 
+itself.
+4.4. Operational risks, trustworthiness, and safe deployment 
+considerations
+Although recent advances in large language models and agentic 
+artificial intelligence have considerably expanded the capabilities of 
+intelligent decision-support systems for smart grids, deploying these 
+technologies within safety-critical cyber–physical infrastructures in-
+troduces significant operational risks that cannot be overlooked. Unlike 
+conventional ML models that perform narrowly defined prediction tasks, 
+LLM-driven agentic systems integrate semantic reasoning, autonomous 
+planning, external tool invocation, and multi-agent collaboration. 
+Consequently, failures originating from the reasoning process may 
+propagate through multiple architectural layers and eventually influ-
+ence engineering decisions if appropriate safeguards are not enforced.
+For this reason, the proposed architecture adopts the principle of 
+bounded autonomy, whereby LLM-generated outputs are treated as 
+decision hypotheses rather than executable control commands. 
+Throughout the operational workflow, reasoning outputs are progres-
+sively constrained through engineering optimization tools, digital twin 
+verification, governance policies, and human supervision before any 
+operational deployment is considered. This layered validation strategy 
+aims to reduce operational risk while preserving the cognitive advan-
+tages offered by LLMs.The principal risks associated with LLM-enabled 
+smart grid intelligence and the corresponding mitigation mechanisms 
+incorporated within the proposed architecture are summarized in 
+Table 8.
+4.4.1. Hallucination and semantic reliability
+One of the most widely recognized limitations of current LLMs is 
+their tendency to generate fluent yet factually or technically incorrect 
+responses. Within critical infrastructures such as smart grids, halluci-
+nated recommendations may result in inappropriate dispatch strategies, 
+incorrect contingency assessments, or misleading operational in-
+terpretations if accepted without verification. Consequently, the 
+Table 7 
+Validation scope and current research maturity of the proposed architectural 
+components.
+Architectural 
+Capability
+Current Evidence Research Maturity Representative 
+Validation in 
+Literature
+Physical 
+infrastructure, 
+sensing, 
+SCADA, PMU
+Extensive 
+industrial 
+deployment
+Mature Widely deployed 
+in operational 
+smart grids
+Data fusion, 
+semantic 
+abstraction, 
+knowledge 
+integration
+Strong research 
+evidence
+Mature Numerous smart 
+grid data 
+management 
+studies
+Multi-agent 
+coordination
+Extensive 
+experimental 
+validation
+Mature Virtual power 
+plants, distributed 
+energy 
+management, 
+demand response
+Engineering 
+optimization 
+and analytical 
+tools
+Operationally 
+validated
+Mature OPF, EMS, 
+forecasting, 
+scheduling, 
+market 
+optimization
+Digital twin 
+simulation and 
+feedback
+Increasing 
+industrial 
+adoption
+Emerging–Mature Simulation-based 
+operational 
+validation and 
+predictive 
+maintenance
+LLM-based 
+reasoning
+Prototype and 
+research 
+validation
+Emerging Planning, 
+summarization, 
+semantic 
+reasoning, 
+engineering 
+assistance
+Tool-augmented 
+LLM execution
+Early 
+experimental 
+evidence
+Emerging Tool calling, 
+optimization 
+orchestration, 
+solver interaction
+Agentic AI 
+orchestration
+Initial prototype 
+implementations
+Early Emerging Multi-agent LLM 
+systems and 
+autonomous task 
+coordination
+Cross-layer 
+governance, 
+bounded 
+autonomy, and 
+trustworthy 
+orchestration
+Primarily 
+conceptual 
+synthesis
+Research Frontier Limited end-to- 
+end validation 
+across integrated 
+architectures
+Table 8 
+Operational Risks and Mitigation Strategies for LLM-Driven Smart Grid 
+Intelligence.
+Operational Risk Potential Consequence Mitigation Strategy in the 
+Proposed Architecture
+Hallucination Technically plausible but 
+incorrect recommendations
+Retrieval-Augmented 
+Generation (RAG), domain 
+knowledge grounding, digital 
+twin validation, human 
+approval
+Numerical 
+unreliability
+Inaccurate optimization or 
+engineering calculations
+Delegation of numerical 
+computation to OPF solvers, 
+EMS optimization engines, 
+forecasting models, and 
+external analytical tools
+Inference latency Delayed operational 
+response under real-time 
+conditions
+Hybrid edge-cloud 
+deployment, asynchronous 
+reasoning, hierarchical 
+control architecture
+Prompt injection 
+and adversarial 
+prompts
+Manipulation of reasoning 
+process or unauthorized 
+actions
+Prompt isolation, input 
+validation, trusted retrieval, 
+least-privilege tool access, 
+secure AI gateways
+Unsafe tool 
+execution
+Execution of unsafe 
+engineering operations
+Policy-constrained tool 
+invocation, execution 
+sandboxing, governance 
+engine, human-in-the-loop 
+authorization
+Cybersecurity 
+threats
+Data leakage, compromised 
+control decisions, malicious 
+agent behavior
+Zero-trust architecture, RBAC, 
+encrypted communication, 
+audit logging, continuous 
+monitoring
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+15 
+
+=== PDF PAGE 16 ===
+proposed framework intentionally avoids direct execution of LLM- 
+generated outputs. Instead, semantic reasoning is complemented by 
+retrieval-augmented knowledge grounding, engineering tool invocation, 
+digital twin validation, and human oversight before operational rec-
+ommendations are accepted. This design philosophy aligns with recent 
+research emphasizing that LLM outputs should be regarded as proba-
+bilistic reasoning rather than deterministic engineering solutions [40].
+4.4.2. Numerical reliability and engineering precision
+Although LLMs demonstrate impressive reasoning capabilities, they 
+remain unsuitable for precise numerical optimization tasks that require 
+deterministic mathematical guarantees. Problems such as optimal power 
+flow, unit commitment, state estimation, contingency analysis, and 
+network optimization continue to require specialized engineering 
+solvers [41,42]. Accordingly, the proposed architecture explicitly sep-
+arates semantic reasoning from numerical computation. The LLM 
+identifies candidate operational strategies, whereas external optimiza-
+tion engines and analytical models perform all engineering calculations 
+before recommendations proceed to subsequent validation stages. This 
+separation significantly reduces the risk of numerical inconsistency 
+while preserving the contextual reasoning capabilities of LLMs [43].
+4.4.3. Latency and real-time operational constraints
+Many smart grid applications require decision-making within strict 
+temporal constraints. Cloud-based LLM inference may introduce 
+communication delays that are incompatible with real-time protection 
+or fast control functions [42,16]. Therefore, the proposed framework 
+should primarily support supervisory decision-making, operational 
+planning, and medium-timescale coordination rather than replacing 
+low-level protective control. Hybrid deployment strategies combining 
+edge intelligence, hierarchical control, and asynchronous reasoning 
+provide a practical mechanism for reducing latency while maintaining 
+operational responsiveness (Aggarwal and Irfan; [44]).
+4.4.4. Cybersecurity, prompt injection, and unsafe tool execution
+Integrating LLMs with operational technologies introduces new 
+cybersecurity challenges beyond those encountered in conventional AI 
+systems. Recent studies and the OWASP Top 10 for LLM Applications 
+identify prompt injection, insecure output handling, excessive agency, 
+and unsafe tool invocation as major risks for LLM-enabled systems [45,
+46].
+To mitigate these risks, the proposed architecture incorporates 
+multiple defensive layers rather than relying solely on model-level 
+safeguards. Retrieval sources should be trusted and authenticated, tool 
+invocation should follow least-privilege principles, external actions 
+should be constrained through policy engines and execution sandboxes, 
+and all operational decisions should remain subject to governance 
+validation and human authorization. Role-based access control, secure 
+AI gateways, audit logging, and continuous monitoring further 
+strengthen the trustworthiness of the overall architecture [45,47,43].
+Collectively, these considerations reinforce an important principle of 
+the proposed framework: LLMs should function as cognitive orchestra-
+tors rather than autonomous controllers of physical infrastructure. Their 
+primary role is to interpret heterogeneous operational contexts, coor-
+dinate specialized analytical components, and support explainable 
+decision-making. Engineering validation, digital twin simulation, 
+governance mechanisms, and human supervision remain indispensable 
+for ensuring operational safety. Consequently, the proposed six-layer 
+architecture should be interpreted as an evidence-informed bounded- 
+autonomy framework that integrates cognitive intelligence with deter-
+ministic engineering verification rather than as a fully autonomous 
+smart grid control system [21,43].
+The proposed framework is intentionally designed as a bounded- 
+autonomy decision-support architecture rather than a fully autono-
+mous operational control system. Accordingly, deployment within 
+safety-critical smart grid environments should be preceded by multiple 
+assurance mechanisms. First, formal verification techniques should be 
+employed wherever applicable to verify logical consistency, policy 
+compliance, and safety constraints associated with automated decision 
+workflows. Second, constraint-enforcement mechanisms should ensure 
+that all candidate operational actions satisfy predefined engineering, 
+regulatory, cybersecurity, and operational policies before execution is 
+considered. Finally, human-in-the-loop supervision remains an indis-
+pensable safeguard throughout the decision lifecycle. Human operators 
+retain ultimate authority for approving, rejecting, or modifying opera-
+tional recommendations after reviewing the outputs of engineering 
+tools, digital twin simulations, and governance validation. Conse-
+quently, the proposed architecture should be interpreted as supporting 
+explainable and trustworthy decision-making rather than replacing 
+human operators in safety-critical grid control.
+5. Landscape of AI & LLM in smart grids
+5.1. Thematic synthesis of the reviewed studies and architectural mapping
+To transform the systematic review into an architecture-informed 
+synthesis, the included studies were grouped into thematic categories 
+aligned with the proposed six-layer framework: (i) physical infrastruc-
+ture and data acquisition, (ii) data processing and context abstraction, 
+(iii) LLM cognitive and reasoning functions, (iv) multi-agent coordina-
+tion, (v) tool-augmented execution, and (vi) cross-layer intelligence, 
+feedback, and governance. This categorization enables the literature to 
+be interpreted not merely as a collection of isolated applications, but as 
+an evolving design space for LLM-driven autonomous smart grids. The 
+following tables summarize the core studies by author/year, proposed 
+method, reported results, research gaps, and their architectural 
+placement.
+The following tables (Tables 9–15) present the thematic synthesis of 
+the reviewed studies across different functional layers of smart grid in-
+telligence. Each table corresponds to a specific architectural dimension 
+and collectively forms the evidence base used to construct the proposed 
+six-layer framework. 
+1. LLM-enabled grid reasoning, dispatch, and operator intelligence
+2. Multi-agent coordination for control, demand response, and market 
+interaction
+3. Tool-augmented optimization and execution frameworks
+4. Semantic interoperability, context abstraction, and compliance 
+reasoning
+5. Digital twins, autonomous cyber-physical energy systems, and 
+closed-loop feedback
+6. Governance, trust, explainability, and safe deployment in critical 
+energy systems
+Some studies appear in multiple tables when they contribute to more 
+than one architectural layer.
+Unlike higher-layer intelligence, the physical and data layer in smart 
+grids is domain-specific and relies on established infrastructure such as 
+smart meters, PMUs, SCADA systems, and distributed energy sensing 
+networks. Accordingly, only studies directly addressing energy system 
+data acquisition and management were included in this layer, while 
+adjacent-domain works (e.g., generic IoT or remote sensing) were used 
+only for contextual support.The refinement of the physical/data layer 
+highlights that smart grid intelligence is not merely an AI problem, but 
+fundamentally a data infrastructure problem grounded in domain- 
+specific sensing and telemetry systems.
+Table 9 establishes the physical and data-centric foundation upon 
+which all higher layers of LLM-driven smart grid intelligence are built. 
+Unlike subsequent layers that focus on reasoning, coordination, or 
+execution, this layer is concerned with the acquisition, integration, and 
+reliability of heterogeneous data streams originating from physical grid 
+infrastructure. The reviewed studies collectively demonstrate that 
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+16 
+
+=== PDF PAGE 17 ===
+modern smart grids rely on diverse data sources, including smart meters, 
+IoT sensors, distributed energy resources, environmental monitoring 
+systems, and market signals. These data streams form the primary input 
+for all downstream intelligence, directly influencing the quality of 
+forecasting, optimization, and decision-making processes. A key insight 
+from this cluster is that data in smart grids is inherently distributed, 
+high-dimensional, and temporally dynamic, requiring robust mecha-
+nisms for synchronization, privacy preservation, and real-time accessi-
+bility. Emerging approaches such as federated learning and digital twin- 
+enabled sensing further highlight the shift toward decentralized and 
+cyber-physical data ecosystems. However, the literature also reveals 
+persistent challenges, including data heterogeneity, latency, missing 
+data, interoperability limitations, and weak coupling between sensing 
+and higher-level reasoning layers. These limitations justify the explicit 
+inclusion of a dedicated Physical Infrastructure and Data Acquisition 
+Layer in the proposed architecture, emphasizing that intelligent 
+decision-making in smart grids is fundamentally constrained by the 
+quality, structure, and accessibility of underlying data.
+Table 10 captures the most mature and technically substantive 
+strand of the current literature: the emergence of LLMs as reasoning 
+layers for grid analysis, dispatch support, and operator-centered deci-
+sion intelligence. Collectively, these studies show that the role of LLMs 
+in smart grids is moving beyond interface-level assistance toward 
+structured, context-aware reasoning over operational states, optimiza-
+tion objectives, and grid constraints. A key insight from this cluster is 
+that the strongest results are obtained when LLMs are not used as 
+standalone decision-makers, but are tightly coupled with domain- 
+specific tools such as solvers, OPF engines, validation modules, and 
+structured function-calling pipelines. This makes Table 4 central to the 
+paper’s argument that the near-term value of LLMs lies in cognitive 
+orchestration rather than direct end-to-end control. At the same time, 
+the table also reveals an important limitation of the field: despite rapid 
+progress in dispatch reasoning and numerical task formalization, most 
+studies remain bounded by benchmark settings, limited-scale testbeds, 
+and partial workflow automation. Consequently, this cluster provides 
+strong evidence for the LLM Cognitive and Reasoning Layer, while 
+simultaneously justifying the need for adjacent execution and gover-
+nance layers in the proposed architecture.
+Table 11 highlights the transition from single-model intelligence to 
+distributed coordination paradigms in smart grids. The studies grouped 
+here show that as energy systems become more decentralized with 
+increasing penetration of DERs, prosumers, electric vehicles, and flex-
+ible loads effective intelligence must be distributed across interacting 
+entities rather than concentrated in a single optimization module. This 
+literature demonstrates that multi-agent systems remain one of the most 
+natural computational paradigms for smart grids, particularly in de-
+mand response, peer-to-peer energy trading, and distributed resource 
+management. The addition of LLMs significantly enriches this paradigm 
+by enabling agents to communicate in more flexible ways, interpret 
+context, negotiate strategies, and coordinate under uncertainty. 
+Importantly, Table 11 does not merely document the growth of agent- 
+based methods; it shows that agentic LLMs are beginning to reshape 
+coordination itself by making it more adaptive, explainable, and 
+semantically aware. However, the table also makes clear that this line of 
+work remains fragmented, with limited standardization in communi-
+cation protocols, weak evidence on large-scale stability, and insufficient 
+alignment between local agent decisions and system-level grid objec-
+tives. For this reason, the studies in this cluster strongly support the 
+Multi-Agent Coordination Layer, while also reinforcing the need for 
+reasoning, execution, and governance mechanisms above and around it.
+Table 12 represents one of the most practically significant de-
+velopments in the emerging LLM-for-energy literature: the shift from 
+language-based assistance to tool-mediated execution. The studies 
+summarized here demonstrate that LLMs become substantially more 
+useful in smart grid applications when embedded within execution 
+pipelines that include mathematical solvers, scientific computing li-
+braries, simulation engines, dispatch optimizers, and domain-specific 
+APIs. In these settings, the LLM does not replace conventional optimi-
+zation or control infrastructure; instead, it serves as a flexible orches-
+tration layer that translates human intent into formal tasks, decomposes 
+complex workflows, invokes the appropriate computational tools, and 
+verifies the consistency of outputs. This makes the cluster especially 
+important for readers interested in deployable architectures, because it 
+shows where LLMs can create operational value without requiring un-
+safe levels of autonomy. At the same time, the table reveals that 
+execution reliability remains one of the field’s central bottlenecks. Many 
+frameworks still rely on semi-controlled environments, limited tool 
+ecosystems, or optimistic assumptions about error correction and solver 
+compatibility. As such, Table 6 provides strong empirical support for the 
+Tool-Augmented Execution Layer and clarifies why execution in smart 
+grids must remain hybrid, combining LLM flexibility with deterministic 
+computational rigor.
+Table 13 addresses a foundational but often underappreciated pre-
+requisite for LLM-driven smart grids: the transformation of heteroge-
+neous energy data into semantically meaningful, machine-actionable 
+context. The studies in this cluster show that effective deployment of 
+LLMs in energy systems depends not only on model capability, but also 
+on the quality of semantic abstraction, ontology alignment, retrieval 
+grounding, policy interpretation, and regulatory traceability. In other 
+words, before LLMs can reason well, they must be grounded in repre-
+sentations that connect operational data, engineering semantics, and 
+governance rules. This table therefore plays a pivotal role in the paper’s 
+contribution, because it substantiates the need for a dedicated Data 
+Processing and Context Abstraction Layer rather than assuming that raw 
+data streams can be directly consumed by reasoning models. Another 
+important insight emerging from this cluster is that semantic interop-
+erability is not merely a data-engineering convenience; it is a precon-
+dition for trustworthy reasoning, especially in compliance-sensitive and 
+safety-critical energy environments. At the same time, the table shows 
+that the field still lacks mature standards for dynamic ontology 
+Table 9 
+Physical Infrastructure and Data Acquisition Foundations in Smart Grids.
+Author/ 
+Year
+Proposed Method Key Results Research Gap Architectural 
+Placement
+[2] Comprehensive survey of load forecasting using 
+smart meter data, IoT streams, and historical grid 
+datasets
+Highlighted the central role of high- 
+resolution time-series data for predictive grid 
+intelligence
+Data heterogeneity, missing data, and 
+synchronization challenges remain 
+unresolved
+Physical/Data Layer
+[48] Federated learning framework for digital twin- 
+enabled IIoT systems with distributed data 
+sources
+Enabled privacy-preserving distributed data 
+learning across smart grid nodes
+Communication overhead, latency, and 
+real-time coordination remain 
+challenging
+Physical/Data Layer 
++ Context Layer
+[3] Integration of remote sensing data with AI for 
+large-scale environmental and energy 
+monitoring
+Showed that satellite and remote sensing data 
+can enhance grid awareness and climate- 
+aware planning
+Weak integration with real-time grid 
+control systems and operational 
+pipelines
+Physical/Data Layer
+[49] Multi-source data integration for climate- 
+resilient grid operation using distributed sensing 
+and forecasting agents
+Improved resilience through integration of 
+environmental, demand, and generation data 
+streams
+Data interoperability and long-term 
+validation in real systems are still 
+limited
+Physical/Data Layer 
++ Feedback Layer
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+17 
+
+=== PDF PAGE 18 ===
+construction, domain-specific semantic annotation, and continual 
+knowledge updating across heterogeneous infrastructures. Thus, this 
+cluster not only enriches the architecture conceptually, but also iden-
+tifies semantic grounding as one of the decisive bottlenecks for future 
+progress.
+Table 14 brings together the literature that most directly supports the 
+paper’s vision of LLM-driven smart grids as closed-loop cyber-physical 
+systems rather than static analytical platforms. The studies summarized 
+in this cluster show that digital twins, simulation-backed feedback, and 
+autonomous adaptation are becoming increasingly important for mov-
+ing from offline intelligence to operational autonomy. Their collective 
+contribution lies in demonstrating that decision quality in energy sys-
+tems can be improved when reasoning outputs are not executed imme-
+diately, but are first simulated, stress-tested, refined, and validated 
+within virtual replicas of physical infrastructure. This feedback-centered 
+logic is essential for smart grids, where uncertainty, nonlinear in-
+teractions, and safety constraints make unverified autonomy unaccept-
+able. For this reason, Table 14 is particularly important to the novelty of 
+Table 10 
+LLM-Enabled Grid Reasoning, Dispatch, and Operator Intelligence.
+Author/ 
+Year
+Proposed Method Key Results Research Gap Architectural Placement
+[26] LLM-powered multi-agent framework 
+integrating semantic reasoning with numerical 
+precision via modular planning and validation 
+agents, supported by adaptive multi-scale 
+network representation
+Superior mitigation on IEEE/CIGRE 
+benchmarks; resolved violations via 
+switch configuration, battery 
+deployment, and load curtailment
+Long-term integration with utility 
+infrastructure, extreme-weather 
+robustness, cyberattack implications, 
+and cross-jurisdiction scalability 
+remain underexplored
+LLM Cognitive & Reasoning 
+Layer + Multi-Agent 
+Coordination Layer + Tool- 
+Augmented Execution Layer
+[16] Multi-agent system integrating LLMs with 
+structured function calls for power-system 
+analysis and operations
+Correct solutions across tested LLMs; 
+consistent ACOPF solution quality; 
+smaller models achieved similar 
+analytical accuracy with lower latency
+Scalability to larger analyses, 
+performance consistency across 
+models, and fuller realization of 
+scientific-computing agent 
+collaboration remain open
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[15] Domain-specific LLM for advanced power 
+dispatch with tailored dataset construction and 
+prompting
+Outperformed LLaMA2 on ElecBench; 
+improved decision-making, efficiency, 
+and human–machine collaboration in 
+dispatch
+Scalability to large grids, tool 
+integration, robustness to 
+emergencies, and cross-regulatory 
+transferability not examined
+LLM Cognitive & Reasoning 
+Layer
+[50] Experience-driven LLM-based operator 
+paradigm for distribution-network voltage 
+control
+Relevant as an operator-style reasoning 
+paradigm for grid operation
+Requires rigorous evaluation of control 
+safety, numerical stability, and 
+deployment constraints in real-world 
+networks
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[51] Reflection-evolution based LLM-driven 
+autonomous research platform for parameter 
+prediction, power optimization, and state 
+estimation
+Average error reduction 29.07%; power- 
+optimization error reduced by 39.78%; 
+enabled autonomous discoveries
+Generalization to broader power- 
+system tasks, ethics/oversight, and 
+integration into operational 
+infrastructures remain unresolved
+LLM Cognitive & Reasoning 
+Layer
+[29] Natural-language-to-solver-ready power 
+optimization with iterative validation and 
+repair
+Reduced average solve time from 1.79 s to 
+1.64 s (1.09 × speedup); improved 
+reliability vs direct LLM generation
+Multi-resource scheduling, first-pass 
+accuracy, tighter solver coupling, and 
+real-time deployment implications 
+remain open
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[52] Human-guided LLM-assisted translation of 
+natural language into optimization problems 
+for EV charging/HVAC/planning
+Enabled personalized energy 
+optimization and natural-language 
+specification of solver-ready tasks
+Scalability, bias, legacy EMS 
+integration, and long-term behavior 
+effects not addressed
+LLM-as-Interface 
+transitioning to LLM-as- 
+Reasoner + Tool-Augmented 
+Execution Layer
+[53] Hybrid LLM-agent + stochastic unit 
+commitment (SUC) framework for balancing 
+energy systems under wind uncertainty
+Shows that LLM agents can improve 
+efficiency and reliability when coupled 
+with stochastic optimization under 
+uncertainty
+Needs validation on larger grids, 
+broader uncertainty regimes, and real 
+operational settings
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[54] FunSearch-style automated heuristic design for 
+unit commitment using LLMs and evaluators
+Demonstrates that LLMs can generate/ 
+evolve candidate heuristics for UC rather 
+than only explain solutions
+Evidence is still limited to relatively 
+small UC settings; robustness and 
+industrial-scale feasibility remain open
+LLM Cognitive & Reasoning 
+Layer
+[55] Fine-tuned LLM (LLM4DistReconfig) for 
+distribution network reconfiguration
+Positions LLMs as data-driven decision 
+engines for fast and responsive 
+reconfiguration in evolving networks
+Needs stronger testing against 
+incomplete/noisy grid data, out-of- 
+distribution conditions, and 
+deployable control constraints
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[56] LLM-based secure operation assistant for 
+dispatch support and risk-aware operation
+Highlights real-time decision support and 
+risk assessment for dispatchers, 
+improving responsiveness and operator 
+support
+Still mainly operator assistance; lacks 
+strong evidence for autonomous 
+control, formal verification, and cyber- 
+resilient deployment
+LLM-as-Interface 
+transitioning to LLM-as- 
+Reasoner + Governance 
+Framework
+[27] Hierarchical LLM-powered agentic framework 
+for natural-language-driven power-grid 
+analysis, combining planning, coordination, 
+action layers, tool integration, and schema- 
+adaptive hybrid RAG.
+Demonstrated correct automation of 
+representative single-step and multi-step 
+grid-analysis queries, improving 
+interpretability and reducing manual 
+engineering effort.
+Needs broader benchmarking on large 
+utility-scale networks, tighter latency 
+guarantees, and stronger validation 
+under operational uncertainty.
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+[57] Few-shot reasoning-based use of off-the-shelf 
+LLMs to solve the classical lossless economic 
+dispatch problem on the IEEE 118-bus system 
+without explicit optimization reformulation.
+Showed that prompting-based LLM 
+workflows can solve hard-constrained ED 
+tasks efficiently and without task-specific 
+retraining.
+Limited to simplified ED settings; 
+robustness for realistic network 
+constraints, stochasticity, and security- 
+constrained dispatch remains open.
+LLM Cognitive & Reasoning 
+Layer
+[58] Hybrid framework linking linguistic constraints 
+expressed through a GPT-agent with real-time 
+OPF solved via deep reinforcement learning.
+Demonstrates that natural-language 
+stipulations can be operationalized within 
+real-time OPF pipelines, improving 
+human-to-optimization interaction.
+Generalization beyond the tested OPF 
+setup, reliability under adversarial 
+prompts, and formal safety envelopes 
+require further study.
+LLM-as-Interface 
+transitioning to LLM-as- 
+Reasoner + Tool-Augmented 
+Execution Layer
+[34] Grid-specific graph and tabular embedding 
+framework for solving OPF problems with 
+LLMs, using power-grid-aware representations 
+tailored to system constraints.
+Positions LLMs as structured reasoning 
+engines for OPF-oriented decision support 
+rather than pure text interfaces.
+Requires stronger evidence on 
+scalability, out-of-distribution 
+robustness, and industrial-grade 
+constraint reliability.
+LLM Cognitive & Reasoning 
+Layer + Tool-Augmented 
+Execution Layer
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+18 
+
+=== PDF PAGE 19 ===
+the paper: it provides the strongest evidence base for the proposed cross- 
+layer feedback and digital-twin integration framework. At the same 
+time, the table also reveals that this area remains less mature than 
+reasoning or optimization-focused research. Much of the current evi-
+dence is still building-level, conceptual, or early-stage, with limited 
+validation in grid-scale real-time environments. This imbalance is 
+valuable in itself, because it highlights digital-twin-enabled closed-loop 
+intelligence as one of the most promising and underdeveloped frontiers 
+in the field.
+Table 15 synthesizes the literature that addresses the most conse-
+quential barrier to real-world adoption of LLM-driven smart grids: the 
+problem of trustworthy deployment in mission-critical infrastructure. 
+While many recent studies demonstrate that LLMs can improve inter-
+pretability, workflow flexibility, and coordination efficiency, the works 
+grouped in this table remind us that these benefits are insufficient unless 
+accompanied by robust mechanisms for validation, auditability, 
+explainability, accountability, cybersecurity, and policy compliance. 
+This makes Table 15 particularly important from both an academic and 
+a practical perspective. Conceptually, it anchors the paper’s argument 
+Table 11 
+Multi-Agent Coordination for Control, Demand Response, and Market 
+Interaction.
+Author/ 
+Year
+Proposed 
+Method
+Key Results Research Gap Architectural 
+Placement
+[26] LLM-based 
+modular agent 
+system for 
+planning, 
+validation, 
+and grid- 
+control actions
+Superior 
+mitigation of 
+violations; 
+adaptive 
+response to 
+DER and grid 
+complexities
+Robustness 
+under 
+cyberattack/ 
+extreme events 
+and geographic/ 
+regulatory 
+portability
+Multi-Agent 
+Coordination 
+Layer
+[33] AI-driven 
+multi-agent 
+demand 
+response with 
+LLM-based 
+load 
+forecasting 
+and demand- 
+response 
+optimization
+14% reduction 
+in residential 
+energy 
+consumption 
+without 
+sacrificing 
+comfort; 
+outperformed 
+LSTM and 
+Optimized- 
+LSTM in 
+forecasting
+Real-world 
+validation, 
+scalability to 
+larger 
+communities, 
+and integration 
+with smart-home 
+ecosystems 
+remain open
+Multi-Agent 
+Coordination 
+Layer +
+Physical/ 
+Data Layer
+[32] LLM + MARL 
+with expert 
+workflow for 
+prosumer 
+strategy 
+generation in 
+real-time P2P 
+energy trading
+Lower 
+economic cost, 
+reduced 
+voltage- 
+violation 
+rates, robust 
+stability, and 
+improved 
+convergence 
+via differential 
+attention critic
+Scalable expert 
+guidance, 
+prosumer 
+customization, 
+distribution- 
+network 
+security, and 
+adaptability 
+under changing 
+market 
+conditions
+Multi-Agent 
+Coordination 
+Layer + Tool- 
+Augmented 
+Execution 
+Layer
+[49] Distributed 
+MAS for 
+autonomous 
+management 
+of RES and 
+DER under 
+climate stress
+Simulation in 
+Greek energy 
+sector showed 
+improved 
+resilience, 
+local 
+optimization, 
+and grid 
+stability
+Economic 
+implications, 
+interoperability, 
+real-world 
+validation, and 
+performance 
+under extreme 
+weather remain 
+insufficiently 
+studied
+Multi-Agent 
+Coordination 
+Layer +
+Cross-Layer 
+Feedback
+[59] Decentralized 
+coordination 
+of resource 
+agents and 
+broker agent 
+for matching 
+supply and 
+demand
+Demonstrated 
+scalability and 
+robustness of 
+agent-based 
+distributed 
+management
+Security 
+vulnerabilities, 
+real-world 
+adaptability, and 
+consumer- 
+behavior impacts 
+remain 
+unresolved
+Multi-Agent 
+Coordination 
+Layer
+[60] Distributed 
+autonomous 
+control for 
+real-time 
+renewable 
+distribution 
+via tie-set 
+navigation
+Demonstrated 
+theoretical 
+viability for 
+real-time 
+balancing of 
+variable 
+renewable 
+generation
+Generation costs, 
+transmission 
+loss, conversion 
+loss, and 
+performance on 
+larger networks 
+not yet 
+incorporated
+Multi-Agent 
+Coordination 
+Layer + Tool- 
+Augmented 
+Execution 
+Layer
+[61] LLM-guided 
+multi-agent 
+reinforcement 
+learning 
+framework for 
+fairness-aware 
+peer-to-peer 
+(P2P) 
+electricity 
+trading and 
+demand 
+response 
+coordination 
+across 
+distributed 
+prosumers
+Demonstrated 
+improved 
+balance 
+between 
+economic 
+efficiency and 
+fairness in 
+decentralized 
+energy 
+trading; 
+enhanced 
+adaptability of 
+agents under 
+dynamic 
+market 
+conditions
+Limited 
+validation under 
+real grid 
+constraints; 
+scalability to 
+large-scale 
+networks and 
+regulatory 
+compliance in 
+real-world 
+markets remain 
+open challenges
+Multi-Agent 
+Coordination 
+Layer +
+Governance/ 
+Trust 
+Framework
+Table 11 (continued)
+Author/ 
+Year 
+Proposed 
+Method 
+Key Results Research Gap Architectural 
+Placement
+[62] Hierarchical 
+multi-agent 
+LLM 
+framework for 
+residential 
+load 
+scheduling, 
+with one 
+orchestrator 
+and three 
+specialist 
+agents 
+coordinating 
+multi- 
+appliance 
+scheduling 
+from natural 
+language to 
+control 
+actions.
+Llama- 
+3.3–70B 
+matched cost- 
+optimal MILP 
+benchmarks 
+across 
+evaluated 
+scenarios; 
+demonstrates 
+practical 
+multi-agent 
+coordination 
+for residential 
+demand 
+response.
+Multi-home 
+scaling, 
+robustness 
+across models, 
+and real smart- 
+home 
+deployment 
+remain 
+unresolved.
+Multi-Agent 
+Coordination 
+Layer + Tool- 
+Augmented 
+Execution 
+Layer
+[30] LangChain/ 
+LangGraph- 
+based multi- 
+agent HEMS 
+assistant with 
+explicit state- 
+graph 
+orchestration 
+for modular 
+home-energy 
+decision 
+support.
+Shows that 
+explicit 
+stateful multi- 
+agent 
+workflows can 
+improve 
+predictability 
+and 
+extensibility in 
+home energy 
+orchestration.
+Evidence is still 
+early-stage; 
+quantitative 
+evaluation 
+against 
+optimization 
+baselines and 
+deployment in 
+real HEMS 
+ecosystems is 
+still needed.
+Multi-Agent 
+Coordination 
+Layer
+[63] Generative- 
+agent 
+framework for 
+simulating 
+human 
+decision 
+behavior in 
+home battery 
+dispatch and 
+power- 
+network 
+auction 
+settings, 
+including in- 
+context 
+transfer of 
+behavioral 
+patterns.
+Provides early 
+evidence that 
+LLM agents 
+can model 
+human-like 
+dispatch and 
+bidding 
+behavior 
+beyond rigid 
+optimization 
+assumptions.
+Still proof-of- 
+concept; 
+consistency, 
+realism, and 
+policy relevance 
+in actual market 
+operations 
+remain open 
+questions.
+Multi-Agent 
+Coordination 
+Layer +
+Cross-Layer 
+Feedback 
+Framework
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+19 
+
+=== PDF PAGE 20 ===
+that governance cannot be treated as an afterthought or an external 
+policy overlay; rather, it must be embedded as a core architectural 
+function spanning reasoning, execution, and feedback. Empirically, the 
+table shows that the current literature remains highly fragmented: some 
+studies focus on explainable cyber-defense, others on deterministic 
+compliance architectures, and others on policy transparency or agent 
+governance, but few provide an integrated trust stack suitable for 
+operational smart grids. This fragmentation directly motivates the in-
+clusion of a dedicated Cross-Layer Intelligence, Feedback, and Gover-
+nance Framework in the proposed architecture. In effect, Table 15
+demonstrates that the future of autonomous energy systems will depend 
+not only on smarter reasoning, but on the ability to make that reasoning 
+safe, inspectable, and institutionally governable.
+Taken together, Tables 9–15 show that the literature is evolving 
+along three interconnected trajectories. First, LLMs are moving from 
+interface-oriented roles toward reasoning-intensive functions that sup-
+port dispatch, optimization, and domain-aware interpretation. Second, 
+intelligence in smart grids is becoming increasingly distributed, with 
+multi-agent coordination, tool invocation, and closed-loop adaptation 
+emerging as central design principles. Third, as autonomy increases, 
+semantic grounding, validation, governance, and trust are no longer 
+peripheral concerns but core architectural requirements. Importantly, 
+however, these trajectories remain unevenly developed across the 
+literature. Reasoning and execution studies are growing rapidly, 
+whereas digital twin integration, system-wide feedback, and 
+governance-aware deployment remain comparatively immature. This 
+asymmetry explains why existing work, although promising, still falls 
+short of a unified perception–reasoning–action architecture. It is pre-
+cisely this gap that motivates the six-layer framework proposed in this 
+paper, which consolidates fragmented strands of evidence into an inte-
+grated design logic for bounded, trustworthy, and agentic smart grids.
+To provide a quantitative perspective on the distribution of research 
+efforts, the included studies were categorized according to their primary 
+architectural placement. Among the 61 studies, approximately 35% 
+focused on reasoning-level functions, 25% on tool-augmented execu-
+tion, 20% on multi-agent coordination, and the remaining studies were 
+distributed across data processing, digital twin integration, and gover-
+nance layers. This distribution highlights the relative maturity of 
+reasoning and execution layers compared to the still-emerging areas of 
+feedback-driven autonomy and governance-aware deployment.
+Table 12 
+Tool-Augmented Optimization and Execution Frameworks.
+Author/ 
+Year
+Proposed 
+Method
+Key Results Research Gap Architectural 
+Placement
+[50] Information 
+Extractor +
+Problem 
+Formulator +
+Code 
+Programmer 
+for automated 
+ADN dispatch
+Effective end- 
+to-end 
+automation; 
+better operator 
+accessibility; 
+validated 
+across test 
+cases
+Real-time ADN 
+integration, 
+robustness 
+across regions, 
+and long-term 
+human 
+oversight 
+issues remain 
+open
+Tool- 
+Augmented 
+Execution 
+Layer + LLM 
+Cognitive 
+Layer
+[29] LLM-assisted 
+conversion of 
+natural- 
+language 
+optimization 
+problems into 
+validated 
+solver-ready 
+formulations
+Improved 
+reliability and 
+faster MILP 
+solving; 
+consistent 
+gains across 
+1000 instances
+Extension to 
+hydro/ 
+storage/ 
+renewables 
+and real-time 
+operations 
+remains 
+unresolved
+Tool- 
+Augmented 
+Execution 
+Layer
+[52] Natural- 
+language-to- 
+optimization 
+formalism for 
+user-centered 
+energy tasks
+Personalized 
+EV/HVAC/ 
+renewable 
+planning 
+through solver- 
+backed 
+formulations
+Larger-system 
+deployment 
+and 
+integration 
+with existing 
+energy 
+platforms 
+remain unclear
+Tool- 
+Augmented 
+Execution 
+Layer + LLM- 
+as-Interface/ 
+Reasoner
+[64] Agentic AI 
+workflows with 
+expert-built 
+function pool 
+for unseen 
+distribution- 
+grid analysis 
+tasks
+Produced 
+expert-level 
+workflows 
+using utility 
+data; GPT-5 
+and Qwen both 
+effective in 
+orchestration
+Scalability, 
+workflow 
+integration, 
+and workforce 
+implications 
+require further 
+study
+Tool- 
+Augmented 
+Execution 
+Layer + Multi- 
+Agent 
+Coordination 
+Layer
+[16] LLM agents 
+wrapping 
+scientific- 
+computing 
+functions with 
+rigorous data 
+validation
+Preserved 
+numerical rigor 
+while 
+improving 
+accessibility
+Broader tool 
+coverage and 
+larger-scale 
+orchestration 
+remain open
+Tool- 
+Augmented 
+Execution 
+Layer
+[31] LLM-based 
+multi-agent 
+framework for 
+automatically 
+coding and 
+solving 
+customized 
+optimal power 
+flow / Optimal 
+DisFlow 
+problems from 
+interactive 
+linguistic 
+instructions.
+Published in 
+IEEE 
+Transactions 
+on Smart Grid; 
+provides a 
+strong example 
+of flexible 
+heuristic OPF 
+scripting and 
+solver-backed 
+execution.
+Needs broader 
+testing across 
+network sizes, 
+stochastic 
+conditions, 
+and strict real- 
+time control 
+settings.
+Tool- 
+Augmented 
+Execution 
+Layer + LLM 
+Cognitive 
+Layer
+[65] Reliable 
+agentic AI 
+framework for 
+distribution- 
+grid analysis 
+using adaptive 
+retrieval and 
+just-in-time 
+supervision to 
+correct tool- 
+usage 
+violations 
+during 
+execution.
+Achieved 
+100% success 
+with GPT-5.2 
+and strong 
+gains over 
+ReAct, 
+LangChain, 
+and CrewAI 
+baselines on 
+unseen analysis 
+queries.
+Utility 
+integration, 
+model drift 
+handling, and 
+robustness 
+under evolving 
+operational 
+toolchains 
+remain open.
+Tool- 
+Augmented 
+Execution 
+Layer +
+Governance/ 
+Trust 
+Framework
+[66] Three-agent 
+architecture 
+translating user 
+voice/natural- 
+Demonstrates 
+that LLM 
+pipelines can 
+convert 
+Performance 
+degrades with 
+broader 
+candidate 
+LLM-as- 
+Interface 
+transitioning 
+to Tool-  
+Table 12 (continued)
+Author/ 
+Year 
+Proposed 
+Method 
+Key Results Research Gap Architectural 
+Placement
+language 
+requests into 
+optimization 
+problems, 
+parameter 
+extraction, and 
+solution 
+generation for 
+EV charging- 
+style 
+scheduling.
+informal user 
+intent into 
+executable 
+scheduling 
+logic.
+optimization 
+classes; 
+industrial- 
+scale multi- 
+resource 
+scheduling still 
+needs work.
+Augmented 
+Execution 
+Layer
+[36] LLM-based 
+computing 
+platform 
+integrating 
+EnergyPlus 
+with a 
+language 
+interface for 
+automated 
+building 
+energy 
+modeling.
+Widely cited 
+example of 
+coupling an 
+LLM to a 
+physics-based 
+simulator, 
+reducing 
+modeling effort 
+and improving 
+usability.
+Primarily 
+building- 
+focused; 
+transfer to 
+grid-scale 
+execution 
+pipelines and 
+live 
+operational 
+settings 
+remains 
+limited.
+Tool- 
+Augmented 
+Execution 
+Layer + Cross- 
+Layer 
+Feedback 
+Framework
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+20 
+
+=== PDF PAGE 21 ===
+6. Discussion
+6.1. Key findings and architectural insights
+The findings of this systematic review indicate that smart grid 
+intelligence is transitioning from predominantly task-specific ML models 
+toward more integrated, system-level cognitive orchestration. Tradi-
+tional AI approaches in smart grids have primarily targeted isolated 
+functions such as load forecasting, anomaly detection, demand response, 
+and scheduling. These methods have delivered strong performance 
+Table 13 
+Semantic Interoperability, Context Abstraction, and Compliance Reasoning.
+Author/ 
+Year
+Proposed Method Key Results Research Gap Architectural Placement
+[67] RAG-driven framework for grid-code 
+reasoning and compliance using LLMs
+Improved regulatory interpretation; 
+suggests proactive monitoring and 
+simulation-ready grid configuration 
+generation
+Retrieval optimization, specialized 
+model design, and multi-jurisdiction 
+deployment need more work
+Data Processing & Context 
+Abstraction Layer + LLM 
+Cognitive Layer +
+Governance Framework
+[68] Semi-automatic ontology development, 
+semantic annotation, and energy-domain LLM 
+for heterogeneous energy data
+Strengthened semantic interoperability 
+for energy data management
+Low ontology automation, absence of 
+energy-specific semantic annotation 
+methods, and weak semantic- 
+similarity models remain open
+Data Processing & Context 
+Abstraction Layer
+[69] LLM agent with Reflection-CoT for policy 
+explanation in BEMS
+29.4% improvement in user- 
+understanding score over CoT prompts
+Standardization across BEMS 
+platforms and long-term 
+trust–efficiency relationship remain 
+underexplored
+LLM Cognitive Layer +
+Governance/Trust 
+Framework
+[70] Governance-oriented analysis of LLMs/agents 
+in compliance-sensitive energy operations
+Identified efficiency gains but also 
+traceability and accountability risks
+Lacks formal validation layers; 
+operational boundaries and liability 
+structures need definition
+Governance/Trust 
+Framework + LLM-as-Agent
+(Diaz- 
+Gonzalez 
+and Data)
+GEWM + TEP + DSE deterministic semantic 
+architecture with LLMs limited to 
+orchestration/interface roles
+Reproducibility, compliance, 
+sovereignty, and auditability placed at 
+the core
+Scalability, integration with existing 
+infrastructure, and ethical 
+implications remain unresolved
+Data Processing & Context 
+Abstraction Layer +
+Governance/Trust 
+Framework
+[71] Domain-specific foundational language model 
+for smart energy, supported by a smart-energy 
+knowledge base, instruction-tuning resources, 
+RLHF alignment, and a dedicated benchmark 
+(EnerBench).
+Demonstrates stronger smart-energy 
+knowledge mastery, execution 
+accuracy, and alignment than generic 
+LLM usage.
+Real-world integration with 
+operational platforms and cross- 
+domain interoperability still require 
+validation.
+Data Processing & Context 
+Abstraction Layer + LLM 
+Cognitive Layer
+[72] LLM interface that converts poorly structured 
+user responses into well-formatted HEMS 
+parameters, enhanced with ReAct and few- 
+shot prompting.
+Achieved average parameter retrieval 
+accuracy of 88%, improving translation 
+from human intent to machine- 
+readable control parameters.
+Still limited to interface-side 
+abstraction; deeper coupling with 
+optimization, memory, and closed- 
+loop control is needed.
+Data Processing & Context 
+Abstraction Layer + LLM-as- 
+Interface
+[35] Hybrid framework combining optimization- 
+based scenario modeling, surrogate ML, and 
+LLM-based natural-language explanation to 
+make energy-system outputs interpretable for 
+non-expert stakeholders.
+Strengthens the bridge between 
+technically rigorous energy modeling 
+and stakeholder-facing interpretation.
+Focus is more on planning/ 
+explanation than operational control; 
+real-time cyber-physical deployment 
+is not yet established.
+Data Processing & Context 
+Abstraction Layer + LLM 
+Cognitive Layer
+Table 14 
+Digital Twins, Autonomous Cyber-Physical Energy Systems, and Closed-Loop Feedback.
+Author/ 
+Year
+Proposed Method Key Results Research Gap Architectural 
+Placement
+[38] Autonomous building CPS integrating decentralized 
+governance, digital twins, and LLMs
+Prototype executed revenue/ 
+expense management, facility 
+control, and autonomous system 
+adjustment
+Generalization beyond buildings, 
+governance transferability, and scaling 
+to grid-level systems remain open
+Cross-Layer 
+Intelligence, Feedback, 
+and Governance 
+Framework
+[49] MAS for climate-resilient energy systems with 
+autonomous forecasting and local control
+Improved resilience and grid 
+stability under climate stress in 
+simulation
+Real-world long-term validation and 
+interoperability still limited
+Cross-Layer Feedback 
+Framework + Multi- 
+Agent Layer
+[73] Self-organizing cellular building blocks with 
+distributed optimization and real-time self-healing 
+vision
+Established conceptual basis for 
+autonomous energy systems with 
+multi-timescale control
+Computational complexity, 
+interoperability, ownership models, and 
+embedded autonomy remain challenges
+Cross-Layer Intelligence 
+Framework + Physical/ 
+Data Layer
+[51] Autonomous research loop for parameter prediction, 
+optimization, and state estimation
+Demonstrated iterative 
+improvement and reflection- 
+evolution
+Ethical oversight and deployment into 
+operational environments remain 
+unresolved
+Cross-Layer Feedback 
+Framework + LLM 
+Cognitive Layer
+[39] LLM-driven agentic framework for automated 
+building–grid co-simulation, explicitly connecting 
+building-side simulation and grid-side analysis 
+workflows.
+Important evidence for multi- 
+domain co-simulation and closed- 
+loop interaction across building and 
+grid layers.
+Still pre-deployment; interoperability, 
+timing guarantees, and validation 
+against operational BEMS/EMS 
+environments remain open.
+Cross-Layer 
+Intelligence, Feedback, 
+and Governance 
+Framework
+[74] Closed-loop perception–brain–action framework for 
+smart-building energy management using LLM agents 
+evaluated across 120 user queries and multiple 
+residential datasets.
+Reported strong performance for 
+device control, memory, scheduling, 
+and energy analysis, with explicit 
+closed-loop design.
+Cost estimation and complex reasoning 
+remain weaker; large-scale operational 
+validation is still missing.
+Cross-Layer Feedback 
+Framework + LLM 
+Cognitive Layer
+[37] Conceptual and technical grounding of bidirectional 
+digital twin coupling for smart grids, emphasizing 
+continuous sensing, simulation, and control feedback.
+Useful as a framework-level anchor 
+for justifying the closed-loop digital- 
+twin layer in your architecture.
+More conceptual than empirical; should 
+be used as architectural grounding 
+rather than as a core benchmark study.
+Cross-Layer 
+Intelligence, Feedback, 
+and Governance 
+Framework
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+21 
+
+=== PDF PAGE 22 ===
+within well-defined operational boundaries [2,3]. However, they typi-
+cally lack the capacity to integrate heterogeneous data sources, perform 
+cross-domain reasoning, or support adaptive multi-step decision-making 
+in complex, interconnected cyber-physical environments.
+The emergence of large language models (LLMs), agentic workflows, 
+and tool-augmented reasoning introduces a qualitatively different 
+paradigm. Rather than being limited to prediction or optimization, LLMs 
+show potential to support interpretation, coordination, planning, and 
+controlled action across grid subsystems [15,16,30,33]. The reviewed 
+literature suggests that the primary value of LLMs in smart grids lies not 
+in their linguistic capabilities per se, but in their capacity to serve as 
+coordination layers linking data streams, domain-specific models, 
+external tools, agents, and human operators. The six-layer architecture 
+proposed in this paper represents an evidence-informed conceptual 
+synthesis of these emerging patterns, not a claim that the literature has 
+already produced a unified, empirically validated end-to-end system. 
+The thematic synthesis in Tables 3–9 provides the empirical basis for this 
+integration, while Tables 1 and 2 document the methodological rigor of 
+the PRISMA-guided review.
+A central insight from the evidence base is the functional progression 
+of LLM roles in smart grids from interface, to reasoner, to agent. At the 
+interface level, LLMs enhance usability through natural language 
+interaction with grid data and operator queries [38,10]. At the reasoning 
+level, they support contextual synthesis, scenario analysis, and solver 
+integration [49]. At the agent level, they contribute to planning, 
+multi-agent coordination, and tool-mediated execution [55,30,51]. 
+Nevertheless, these roles exhibit clear maturity differences. Interface 
+applications are already practical and low-risk, while reasoning-level 
+hybrid systems are advancing rapidly. Fully agentic implementations, 
+by contrast, remain emergent, with only limited evidence of robust 
+performance under real-time, high-stakes, and safety-critical conditions. 
+This asymmetry underscores that the field is currently in a transitional 
+phase favoring bounded agency, supervised execution, and structured 
+validation over unrestricted autonomy.
+The thematic synthesis further reveals persistent fragmentation 
+across technically interdependent layers. Studies on data acquisition 
+focus on sensing and privacy-preserving flows [2,26], 
+reasoning-oriented works emphasize dispatch and solver interaction 
+[15,16,30,33], multi-agent research addresses coordination among 
+DERs and prosumers [55,29,51], execution papers highlight tool invo-
+cation [60,33,58], digital twin studies explore closed-loop validation [5,
+37,38,79], and governance research examines explainability, compli-
+ance, and cybersecurity [66,78,67,76]. While each cluster advances 
+meaningful progress, few studies achieve full integration into a unified 
+perception–reasoning–action pipeline. The primary conceptual contri-
+bution of this review is therefore the synthesis of these dispersed ele-
+ments into a coherent six-layer design logic that organizes existing 
+capabilities and highlights necessary future developments for trust-
+worthy system-level intelligence.
+One of the strongest conclusions emerging from the corpus is that the 
+most effective current applications of LLMs in smart grids are hybrid 
+rather than standalone. Across multiple studies, LLMs demonstrate 
+greatest utility when embedded within workflows that incorporate 
+deterministic solvers, simulation environments, optimization engines, 
+and human oversight [16,30,33,58]. In such configurations, LLMs 
+function as semantic and procedural orchestrators that improve task 
+decomposition, accessibility, and multi-step reasoning while relying on 
+established engineering tools for numerical rigor and constraint satis-
+faction. This pattern implies that future advances are more likely to arise 
+from modular, hybrid architectures than from end-to-end black-box 
+autonomy.
+Semantic grounding emerges as another critical prerequisite. The 
+quality of LLM-based reasoning depends heavily on transforming raw, 
+heterogeneous sensor data, operational logs, policy rules, and engi-
+neering constraints into structured, domain-grounded context [65,50]. 
+Without dedicated context abstraction mechanisms such as ontologies, 
+knowledge graphs, or retrieval-augmented generation LLMs risk pro-
+ducing poorly grounded outputs that could lead to unsafe or 
+non-compliant decisions. The proposed context abstraction layer is thus 
+not merely theoretical but directly supported by the reviewed evidence 
+as an essential mediator between physical infrastructure and cognitive 
+processes.
+Multi-agent coordination is increasingly relevant as smart grids 
+become more decentralized with growing penetration of DERs, EVs, 
+Table 15 
+Governance, Trust, Explainability, and Safe Deployment.
+Author/Year Proposed Method Key Results Research Gap Architectural 
+Placement
+[70] Governance analysis of autonomous agents 
+and LLMs in energy operations
+Showed time savings but significant 
+governance liabilities, traceability failures, 
+and compliance risk
+Formal validation, escalation rules, and 
+legal attribution remain unresolved
+Cross-Layer 
+Intelligence, Feedback, 
+and Governance 
+Framework
+(Diaz- 
+Gonzalez 
+and Data)
+Deterministic semantic core with 
+auditability/compliance by design
+Reframes energy intelligence around 
+explicit rules and verifiable data
+Integration and scalability in 
+heterogeneous energy settings remain 
+open
+Governance/Trust 
+Framework
+[11] Generative agent architecture enabling 
+memory-driven reasoning, planning, and 
+multi-agent interaction through structured 
+memory streams and reflection mechanisms
+Demonstrated coherent long-term agent 
+behavior, contextual decision-making, and 
+emergent coordination through memory- 
+grounded reasoning and iterative planning
+Lacks domain-specific constraints, 
+formal safety guarantees, and 
+adaptation to real-time cyber-physical 
+infrastructures such as smart grids
+Cross-Layer 
+Intelligence, Feedback, 
+and Governance 
+Framework
+[75] Agentic AI for explainable cyberthreat 
+mitigation and state analytics in EV 
+ecosystems
+Relevant evidence for explainable, 
+specialized agents in safety-critical energy- 
+adjacent infrastructure
+Direct grid-level integration and 
+broader architectural generalization 
+remain limited
+Governance/Trust 
+Framework + Multi- 
+Agent Layer
+[69] RCoT-enhanced explanation layer for policy 
+transparency
+Increased user trust and comprehension Real-world robustness and 
+standardization still open
+Governance/Trust 
+Framework
+[76] Early LLM-based cybersecurity framework 
+for IEC 61850 digital substations using HIL- 
+generated communication datasets and HITL- 
+aware anomaly analysis.
+One of the earliest smart-grid-specific works 
+linking LLMs to substation cybersecurity and 
+anomaly detection.
+Needs stronger formal validation, 
+operational hardening, and broader 
+adversarial evaluation.
+Governance/Trust 
+Framework +
+Physical/Data Layer
+[77] Task-oriented dialogue system for anomaly 
+detection on GOOSE and SV data, showing 
+scalability and adaptability advantages over 
+human-in-the-loop approaches.
+Demonstrates promising anomaly-detection 
+support for evolving cyber threats in digital 
+substations.
+Real-time deployment under high- 
+throughput substation conditions and 
+standardized evaluation remain open.
+Governance/Trust 
+Framework + Cross- 
+Layer Feedback
+[78] Explainable LLM-based framework for 
+identifying attack target, magnitude, and 
+onset in AGC systems with interpretable 
+outputs.
+Reported 93% target-identification accuracy 
+and low estimation error, showing the value 
+of explainable cyber-defense pipelines.
+Broader attack taxonomy coverage, 
+cross-system transferability, and field 
+deployment remain unresolved.
+Governance/Trust 
+Framework + LLM 
+Cognitive Layer
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+22 
+
+=== PDF PAGE 23 ===
+storage, and prosumers. LLM-enhanced agents show promise in 
+improving adaptability, negotiation, and context-aware coordination in 
+demand response, peer-to-peer trading, and resource management [55,
+29,51,54]. However, significant challenges remain, including protocol 
+standardization, alignment of local and system-level objectives, 
+robustness under adversarial conditions, and scalability. Agentic coor-
+dination should therefore be regarded as a promising but still emerging 
+paradigm.
+Digital twins and closed-loop feedback constitute one of the most 
+strategically important yet underdeveloped areas. They offer mecha-
+nisms for simulation-based validation and risk reduction prior to phys-
+ical deployment [74,71,72]. While early evidence is encouraging, most 
+studies remain building-scale or conceptual, highlighting the need for 
+large-scale, real-time synchronized digital twins as a priority for future 
+research.
+Governance, trust, and safety are foundational rather than periph-
+eral. As LLMs move deeper into reasoning, tool invocation, and agent 
+coordination, requirements for traceability, explainability, compliance, 
+cyber-resilience, and accountability become central design elements 
+[75,78,77]. The proposed architecture therefore embeds governance as 
+a cross-layer function rather than an external overlay.
+6.2. Challenges, risks, and deployment considerations
+While the integration of LLMs into smart grid architectures offers 
+promising capabilities for reasoning, coordination, and orchestration, 
+several critical operational challenges must be addressed before wide-
+spread deployment. The reviewed literature consistently highlights 
+cybersecurity vulnerabilities, latency constraints, scalability limitations, 
+and broader operational issues as key barriers to realizing bounded 
+agentic intelligence in mission-critical energy systems.
+Cybersecurity emerges as one of the most pressing concerns. Smart 
+grids, as cyber-physical systems, are attractive targets for sophisticated 
+attacks, including false data injection, denial-of-service, and adversarial 
+manipulation of AI-driven control loops. Studies such as Zaboli et al. 
+[77,76] demonstrate early applications of LLMs for anomaly detection in 
+IEC 61850 digital substations and GOOSE/SV traffic analysis, showing 
+improved adaptability compared to traditional methods. Sharshar et al. 
+[78] reported 93% accuracy in identifying attack targets in Automatic 
+Generation Control (AGC) systems using explainable LLM-based 
+frameworks. However, LLMs themselves introduce new attack sur-
+faces, including prompt injection, data poisoning, and 
+hallucination-induced unsafe recommendations. Ibrahim and Kashef 
+[80] emphasize that the “black-box” nature and resource-intensive 
+operation of LLMs limit explainability and increase susceptibility to 
+adversarial attacks in smart grid cybersecurity. Without robust verifi-
+cation layers, RAG, knowledge graphs, or hybrid human-AI oversight, 
+LLM-augmented systems risk amplifying rather than mitigating threats.
+Latency presents a fundamental barrier for real-time grid operations. 
+Power system applications such as voltage control, frequency regula-
+tion, and protective relaying often require sub-second (or even milli-
+second) response times. Several studies note that current LLM inference, 
+even with optimization techniques, struggles to meet these re-
+quirements. For instance, Jin et al. [16] highlighted performance con-
+sistency across models but identified scalability and latency as open 
+challenges in multi-agent power system analysis. Xiang and other [56] 
+works on secure operation assistants similarly stress that real-time 
+dispatch support remains constrained by inference delays. Edge 
+deployment of smaller models or hybrid architectures (LLM + light-
+weight surrogate models) is frequently proposed as a mitigation strat-
+egy, yet quantitative evidence from large-scale utility environments 
+remains limited.
+Scalability challenges arise from the growing complexity and volume 
+of data in modern grids with high DER penetration, EVs, and IoT devices. 
+Many LLM-based frameworks tested on IEEE benchmark systems (e.g., 
+118-bus) show promising results in controlled settings but face 
+significant hurdles when extrapolated to utility-scale networks. Jung 
+et al. [30] and Cheng et al. [15] acknowledge limitations in scaling to 
+large grids, extreme-weather robustness, and cross-jurisdictional coor-
+dination. Computational demands for training, fine-tuning, and infer-
+ence further exacerbate scalability issues, particularly when integrating 
+with existing SCADA/EMS infrastructures that were not designed for AI 
+workloads.
+Additional operational constraints include numerical reliability, 
+interoperability with legacy systems, regulatory compliance, and energy 
+consumption of AI infrastructure. Hybrid designs where LLMs orches-
+trate rather than replace deterministic solvers and physics-based simu-
+lators have proven most effective in addressing numerical stability 
+concerns. Nevertheless, the literature underscores that full end-to-end 
+autonomy remains premature. Bounded, supervised, and progressively 
+validated implementations are necessary to align technological capa-
+bilities with the stringent reliability, safety, and regulatory standards of 
+power systems.
+Addressing these challenges requires interdisciplinary efforts 
+combining advances in efficient LLM inference (e.g., quantization, 
+distillation, edge computing), domain-specific fine-tuning, formal veri-
+fication methods, and integrated governance frameworks. Future 
+research should prioritize large-scale pilot deployments, standardized 
+benchmarks for latency and robustness, and co-design of cyber-resilient 
+architectures that embed security, explainability, and constraint 
+enforcement as first-class architectural principles.
+From a deployment perspective, the literature supports a progres-
+sive, staged pathway rather than abrupt transitions. The first phase 
+operator assistance and natural-language interfaces is already observ-
+able. The second phase reasoning systems integrated with solvers and 
+simulators is emerging. The third phase bounded agentic coordination 
+supported by digital twin validation, tool-mediated execution, and 
+governance constraints remains early-stage and requires substantial 
+further validation. Full autonomy in mission-critical grid operations is 
+not a near-term objective. This phased perspective aligns technological 
+maturity with operational risk management and helps avoid both 
+excessive optimism and unwarranted skepticism.
+Because the reviewed studies originate from multiple regions 
+including North America, Europe, China, and the Middle East, the pro-
+posed architecture is intended as a technology-neutral conceptual 
+framework rather than a country-specific solution.
+Overall, the future of intelligent smart grids will depend less on 
+whether LLMs outperform specialized algorithms on isolated tasks and 
+more on whether they can be effectively embedded within architectures 
+that unify data, semantics, tools, agents, feedback, and governance into 
+reliable, governable systems. The core contribution of this review is 
+architectural: moving from model-centric toward system-level intelli-
+gence while emphasizing safety, validation, and trustworthiness. The 
+central question is no longer whether LLMs have a role in energy sys-
+tems, but how to engineer bounded, trustworthy, and operationally 
+meaningful implementations grounded in rigorous empirical validation.
+6.3. Practical implications
+Beyond its conceptual contribution, the proposed evidence-informed 
+six-layer architecture provides a practical foundation for the next gen-
+eration of intelligent energy management systems. By integrating se-
+mantic reasoning, multi-agent coordination, engineering tool 
+orchestration, digital twin validation, and governance mechanisms 
+within a unified decision-support framework, the architecture offers a 
+structured pathway for incorporating large language models into oper-
+ational smart grid environments while maintaining safety, transparency, 
+and human oversight.
+One important application is the coordination of distributed 
+renewable energy resources. As renewable penetration increases, power 
+system operators must continuously balance intermittent generation, 
+demand variability, storage assets, and network constraints. The 
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+23 
+
+=== PDF PAGE 24 ===
+proposed architecture enables contextual interpretation of heteroge-
+neous operational data, supports coordinated reasoning across multiple 
+stakeholders, and facilitates explainable operational recommendations 
+before engineering validation and deployment. Such capabilities are 
+particularly valuable for renewable integration, distributed energy 
+resource management, and real-time operational planning.
+The proposed framework is also applicable to microgrids, virtual 
+power plants, and distributed energy management systems, where 
+autonomous coordination among geographically distributed assets is 
+increasingly required. The combination of large language model 
+reasoning, multi-agent collaboration, and digital twin simulation pro-
+vides a scalable decision-support mechanism capable of assisting oper-
+ators in scheduling distributed resources, coordinating flexibility 
+services, optimizing energy dispatch, and evaluating alternative oper-
+ating strategies under uncertainty.
+From an operational perspective, the architecture can support a 
+broad range of utility applications, including operator decision support, 
+predictive maintenance, outage management, contingency analysis, grid 
+restoration planning, and electricity market participation. Rather than 
+replacing existing optimization engines or supervisory control systems, 
+the framework functions as a cognitive orchestration layer that co-
+ordinates heterogeneous analytical tools, interprets their outputs, and 
+generates transparent recommendations for human operators.
+The governance and validation mechanisms incorporated within the 
+architecture further enhance its applicability to safety-critical environ-
+ments. By combining engineering verification, digital twin simulation, 
+policy enforcement, cybersecurity safeguards, and human-in-the-loop 
+supervision, the framework supports trustworthy deployment while 
+reducing the risks associated with purely autonomous decision-making. 
+Consequently, the proposed architecture is particularly suitable for 
+utilities and transmission system operators seeking to gradually inte-
+grate large language models into existing operational workflows without 
+compromising reliability, regulatory compliance, or operational safety.
+Overall, the proposed framework should be viewed as a roadmap for 
+the progressive adoption of cognitive intelligence in future smart grids. 
+While further experimental validation and field deployment remain 
+important directions for future research, the architecture provides a 
+practically grounded reference model that can guide the design of 
+intelligent energy management platforms, advanced control centers, 
+and next-generation decision-support systems for renewable-rich and 
+cyber–physical power systems.
+7. Limitations
+This study has several limitations. First, although inter-rater reli-
+ability was assessed on a subset of records (Cohen’s kappa = 0.82), the 
+primary screening and data extraction were conducted by a single 
+researcher, which may introduce some selection bias. Second, the final 
+corpus of 61 studies reflects a deliberate focus on methodological depth 
+and architectural relevance, potentially excluding broader but less 
+directly relevant contributions. Third, the heterogeneity of methods and 
+metrics across studies precluded quantitative meta-analysis. Finally, the 
+proposed architecture constitutes a conceptual synthesis derived from 
+thematic patterns in the literature rather than an empirically validated 
+end-to-end system and therefore requires rigorous real-world testing, 
+formal verification, and iterative refinement in operational smart grid 
+environments.
+8. Conclusion
+This study provides a PRISMA-guided systematic review and 
+evidence-informed architectural synthesis of the emerging role of large 
+language models in smart grids. By analyzing 61 selected studies, the 
+review documents a shift in smart grid intelligence from isolated, model- 
+centric approaches toward more integrated, orchestration-driven 
+systems.
+A core contribution is the domain-specific taxonomy of LLM roles 
+interface, reasoner, and agent that formalizes the progressive evolution 
+of intelligence in energy systems. Building upon this taxonomy, the 
+proposed six-layer architecture integrates physical data acquisition, se-
+mantic context abstraction, LLM-based cognitive reasoning, multi-agent 
+coordination, tool-augmented execution, and cross-layer digital twin 
+validation with governance. This framework is presented as a concep-
+tual synthesis grounded in the reviewed evidence, intended to organize 
+fragmented research findings and guide future development toward 
+bounded, validated, and trustworthy autonomy in cyber-physical energy 
+systems.
+The findings underscore that the near-term value of LLMs lies in 
+hybrid orchestration rather than standalone decision-making. Critical 
+gaps remain in scalability, latency, numerical reliability, semantic 
+grounding, and standardized evaluation frameworks. Governance, trust, 
+and safety mechanisms must be embedded as core architectural com-
+ponents rather than added post hoc. Key future research directions 
+include domain-specific efficient LLMs, federated reasoning architec-
+tures, robust multi-agent protocols, large-scale digital twin integration, 
+and unified governance frameworks.The proposed framework is 
+particularly relevant for renewable-rich smart grids, distributed energy 
+resource coordination, microgrid operation, and next-generation energy 
+management systems.
+In summary, the transition from model-centric AI to system-level 
+agentic intelligence in smart grids represents a significant paradigm 
+shift. This work offers a structured, evidence-based foundation for that 
+transition and highlights the importance of rigorous validation, 
+constraint enforcement, and institutional alignment to realize safe and 
+effective deployment in critical energy infrastructure.
+Ethical approval
+This article does not contain any studies with human participants or 
+animals performed by any of the authors.
+Consent for publication
+All authors have read and approved the final version of the manu-
+script and consent to its submission for publication.
+CRediT authorship contribution statement
+Zahra Rezaei: Writing – original draft, Software, Formal analysis, 
+Conceptualization. Mohammad Amin Amini: Writing – original draft, 
+Software, Data curation. Yaser Mike Banad: Writing – review & editing, 
+Supervision, Investigation.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Data availability
+No data was used for the research described in the article.
+References
+[1] Banad YM, Sharif SS, Rezaei Z. Artificial intelligence and machine learning for 
+smart grids: from foundational paradigms to emerging technologies with digital 
+twin and large language model-driven intelligence. Energy Convers Manag: X 
+2025;28:101329.
+[2] Habbak H, Mahmoud M, Metwally K, Fouda MM, Ibrahem MI. Load forecasting 
+techniques and their applications in smart grids. Energies 2023;16:1480.
+[3] Kazanskiy N, Khabibullin R, Nikonorov A, Khonina S. A comprehensive review of 
+remote sensing and artificial intelligence integration: advances, applications, and 
+challenges. Sensors 2025;25:5965.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+24 
+
+=== PDF PAGE 25 ===
+[4] Madika B, Saha A, Kang C, Buyantogtokh B, Agar J, Wolverton CM, Voorhees P, 
+Littlewood P, Kalinin S, Hong S. Artificial intelligence for materials discovery, 
+development, and optimization. ACS Nano 2025;19:27116–58.
+[5] Fuller A, Fan Z, Day C, Barlow C. Digital twin: enabling technologies, challenges 
+and open research. IEEE Access 2020;8:108952–71.
+[6] McMahan B, Moore E, Ramage D, Hampson S, Aguera y Arcas B. Communication- 
+efficient learning of deep networks from decentralized data. Artif Intell Stat 2017: 
+1273–82. Pmlr.
+[7] Quizhpe K, Ar´evalo P, Ochoa-Correa D, Villa-´Avila E. Optimizing microgrid 
+planning for renewable integration in power systems: a comprehensive review. 
+Electronics 2024;13:3620.
+[8] Vaswani A, Shazeer N, Parmar N, Uszkoreit J, Jones L, Gomez AN, Kaiser Ł, 
+Polosukhin I. Attention is all you need. Adv Neural Inf Process Syst 2017:30.
+[9] Brown T, Mann B, Ryder N, Subbiah M, Kaplan JD, Dhariwal P, Neelakantan A, 
+Shyam P, Sastry G, Askell A. Language models are few-shot learners. Adv Neural Inf 
+Process Syst 2020;33:1877–901.
+[10] Madani S, Tavasoli A, Khoshtarash Astaneh Z, Pineau PO. Large language models 
+integration in smart grids. Energy Rep 2025;14:1562–77.
+[11] Park JS, O'Brien J, Cai CJ, Morris MR, Liang P, Bernstein MS. Generative agents: 
+interactive simulacra of human behavior. In: Proceedings of the 36th Annual ACM 
+symposium on user interface software and technology; 2023. p. 1–22.
+[12] Yao S, Zhao J, Yu D, Du N, Shafran I, Narasimhan KR, Cao Y. React: synergizing 
+reasoning and acting in language models. In: Proceedings of the eleventh 
+international conference on learning representations; 2022.
+[13] Lewis P, Perez E, Piktus A, Petroni F, Karpukhin V, Goyal N, Küttler H, Lewis M, 
+Yih W, Rockt¨aschel T. Retrieval-augmented generation for knowledge-intensive nlp 
+tasks. Adv Neural Inf Process Syst 2020;33:9459–74.
+[14] Wei J, Wang X, Schuurmans D, Bosma M, Xia F, Chi ED, Le QV, Zhou D. Chain-of- 
+thought prompting elicits reasoning in large language models. Adv Neural Inf 
+Process Syst 2022;35:24824–37.
+[15] Cheng Y, Zhao H, Zhou X, Zhao J, Cao Y, Yang C, Cai X. A large language model for 
+advanced power dispatch. Sci Rep 2025;15:8925.
+[16] Jin H, Kim K, Kwon J. GridMind: LLMs-powered agents for power system analysis 
+and operations. In: Proceedings of the SC'25 workshops of the international 
+conference for high performance computing, networking, storage and analysis; 
+2025. p. 560–8.
+[17] Doshi-Velez, F., and B. Kim. 2017. 'Towards a rigorous science of interpretable 
+machine learning', arXiv preprint arXiv:1702.08608.
+[18] Wooldridge M. An introduction to multiagent systems. John Wiley & Sons; 2009.
+[19] Amodei, D., C. Olah, J. Steinhardt, P. Christiano, J. Schulman, and D. Man´e. 2016. 
+'Concrete problems in AI safety', arXiv preprint arXiv:1606.06565.
+[20] Mahela OP, Khosravy M, Gupta N, Khan B, Alhelou HH, Mahla R, Patel N, Siano P. 
+Comprehensive overview of multi-agent systems for controlling smart grids. CSEE J 
+Power Energy Syst 2020;8:115–31.
+[21] Kiasari M, Aly H. Agentic artificial intelligence for smart grids: a comprehensive 
+review of autonomous, safe, and explainable control frameworks. Energies 2026; 
+19:617.
+[22] ISO. 2021. ISO 23247-1: 2021–Automation systems and integration–Digital twin 
+framework for manufacturing–Part 1: overview and general principles 
+(International Organisation for Standardization).
+[23] Shirbazo A, Li B, Ata S, Lamei Ramandi H, Saydam S. A guideline for the 
+standardisation of smart manufacturing and the role of RAMI 4.0 in digitising the 
+industrial sector. IEEE Internet Things Journal 2025;12:19090–118.
+[24] Hern´andez L, Baladron C, Aguiar JM, Carro B, Sanchez-Esguevillas A, Lloret J, 
+Chinarro D, Gomez-Sanz JJ, Cook D. A multi-agent system architecture for smart 
+grid management and forecasting of energy demand in virtual power plants. IEEE 
+Commun Mag 2013;51:106–13.
+[25] Aghazadeh Ardebili A, Marco Z, Amro Issam Hamed Attia R, Antonella L, 
+Antonio F. Digital Twins of smart energy systems: a systematic literature review on 
+enablers, design, management and computational challenges. Energy Inform 2024; 
+7:94.
+[26] Zhang, Y., A.M. Saber, A. Youssef, and D. Kundur. 2025. 'Grid-agent: an LLM- 
+powered multi-agent system for power grid control', arXiv preprint arXiv: 
+2508.05702.
+[27] Chen, X. 2025. 'X-GridAgent: an LLM-powered agentic AI system for assisting 
+power grid analysis', arXiv preprint arXiv:2512.20789.
+[28] Liu G, Tang Y, Guo W, Dang J. Redesigning power grid dispatching automation 
+systems by integrating LLMs, KGs, and AI agents. CSEE J Power Energy Syst 2025; 
+11:2610–22.
+[29] Hu, Y., T. Zhao, and M. Yue. 2025. 'From natural language to solver-ready power 
+system optimization: an LLM-assisted, validation-in-the-loop framework', arXiv 
+preprint arXiv:2508.08147.
+[30] Jung, W. 2026. 'Multi-agent home energy management assistant', arXiv preprint 
+arXiv:2602.15219.
+[31] Li Z, Yang H, Liu Y, Xiang Y, Gao H, Liu J, Liu J. OptDisPro: LLM-based multi-agent 
+framework for flexibly adapting heuristic optimal DisFlow. IEEE Trans Smart Grid 
+2025.
+[32] Lou, C., Z. Jin, W. Tang, G. Geng, J. Yang, and L. Zhang. 2025. 'LLM-enhanced 
+multi-agent reinforcement learning with expert workflow for real-time P2P energy 
+trading', arXiv preprint arXiv:2507.14995.
+[33] Rashed GI, Bahageel AOM, Gony HAI, Badjan A, Shaheen HI. AI-driven multi-agent 
+demand response framework for residential load optimization using CrewAi. In: 
+Proceedings of the 2025 IEEE 20th conference on industrial electronics and 
+applications (ICIEA). IEEE; 2025. p. 1–10.
+[34] Bernier F, Cao J, Cordy M, Ghamizi S. PowerGraph-LLM: novel power grid graph 
+embedding and optimization with large language models. IEEE Trans Power Syst 
+2025;40:5483–6.
+[35] Forootani, A., M. Sadr, D.E Aliabadi, and D. Thraen. 2025. 'RE-LLM: integrating 
+large language models into renewable energy systems', arXiv preprint arXiv: 
+2512.01392.
+[36] Jiang G, Ma Z, Zhang L, Chen J. EPlus-LLM: a large language model-based 
+computing platform for automated building energy modeling. Appl Energy 2024; 
+367:123431.
+[37] Liu, X., and I. David. 2026. 'Introduction to digital twins for the smart grid', arXiv 
+preprint arXiv:2602.14256.
+[38] Ly, R., and A. Shojaei. 2024. 'Autonomous building cyber-physical systems using 
+decentralized autonomous organizations, digital twins, and large language model', 
+arXiv preprint arXiv:2410.19262.
+[39] Zhang, B., N. Mahdavi, S. Sethuvenkatraman, S. Ao, and F. Salim. 2026. 'AutoB2G: 
+a large language model-driven agentic framework for automated building-grid Co- 
+simulation', arXiv preprint arXiv:2603.26005.
+[40] Anh-Hoang D, Tran V, Nguyen LM. Survey and analysis of hallucinations in large 
+language models: attribution to prompting strategies or model behavior. Front 
+Artif Intell 2025;8:1622292.
+[41] Bernier, F., S. Ghamizi, P. Dogoulis, and M. Cordy. 2026. 'Can large language 
+models reason and optimize under constraints?', arXiv preprint arXiv:2603.23004.
+[42] Jia M, Cui Z, Hug G. Enhancing LLMs for power system simulations: a feedback- 
+driven multi-agent framework. IEEE Trans Smart Grid 2025;16:5556–72.
+[43] Schick T, Dwivedi-Yu J, Dessì R, Raileanu R, Lomeli M, Hambro E, Zettlemoyer L, 
+Cancedda N, Scialom T. Toolformer: language models can teach themselves to use 
+tools. Adv Neural Inf Process Syst 2023;36:68539–51.
+[44] Bidram A, Davoudi A. Hierarchical structure of microgrids control system. IEEE 
+Trans Smart Grid 2012;3:1963–76.
+[45] AI, NIST 2023. 'Artificial intelligence risk management framework (AI RMF 1.0)', 
+URL: https://nvlpubs.nist.gov/nistpubs/ai/nist.ai:100-1.
+[46] Tanveer, R. 2026. 'Prompt injection and jailbreak attacks in large language model- 
+based agents', Available at SSRN 6740060.
+[47] Bai, Y., S. Kadavath, S. Kundu, A. Askell, J. Kernion, A. Jones, A. Chen, A. Goldie, 
+A. Mirhoseini, and C. McKinnon. 2022. 'Constitutional AI: harmlessness from ai 
+feedback', arXiv preprint arXiv:2212.08073.
+[48] Rizwan A, Ahmad R, Khan AN, Xu R, Kim DH. Intelligent digital twin for federated 
+learning in AIoT networks. Internet Things 2023;22:100698.
+[49] Kravari K, Roussi M, Ladomenou K, Thysiadou A, Chalaris M. Intelligent agent 
+orchestration for climate-resilient energy systems: autonomous management of 
+renewable integration and distributed resources. In: Proceedings of the E3S web of 
+conferences, 02009. EDP Sciences; 2025.
+[50] Yang, X., C. Lin, H. Liu, Q.I. Wang, and W. Wu. 2025. 'Large language model as an 
+operator: an experience-driven solution for distribution network voltage control', 
+arXiv preprint arXiv:2507.14800.
+[51] Liu YX, Jia M, Zhang YX, Wang J, He G, Zhong SL, Dang ZM. RePower: an LLM- 
+driven autonomous platform for power system data-guided research. Patterns 
+2025:6.
+[52] Jin M, Sel B, Hardeep F, Yin W. Democratizing energy management with llm- 
+assisted optimization autoformalism. In: Proceedings of the 2024 IEEE 
+international conference on communications, control, and computing technologies 
+for smart grids (SmartGridComm). IEEE; 2024. p. 258–63.
+[53] Ren, X., C.S. Lai, G. Taylor, and Z. Guo. 2025. 'Can large language model agents 
+balance energy systems?', arXiv preprint arXiv:2502.10557.
+[54] Lv, J., C. Cui, S. Zhang, H. Chen, C. Gong, and J. Liu. 2025. 'Automated heuristic 
+design for unit commitment using large language models', arXiv preprint arXiv: 
+2506.12495.
+[55] Christou P, Islam MZ, Lin Y, Xiong J. Llm4distreconfig: a fine-tuned large language 
+model for power distribution network reconfiguration. In: Proceedings of the 2025 
+conference of the nations of the Americas Chapter of the Association for 
+computational linguistics: human language technologies (Volume 1: Long papers); 
+2025. p. 4136–55.
+[56] Xiang Y, Tan L, Qiu G, Tang Z, Liu J. Large language model for secure operation of 
+power systems. Smart Energy Syst Res 2025;1:10005.
+[57] Mohammadi S, Hassan A, Haghighi R, Bui VH, Su W. Large language models for 
+solving economic dispatch problem. In: Proceedings of the 2025 IEEE energy 
+conversion conference congress and exposition (ECCE). IEEE; 2025. p. 1–5.
+[58] Yan Z, Xu Y. Real-time optimal power flow with linguistic stipulations: integrating 
+GPT-agent and deep reinforcement learning. IEEE Trans Power Syst 2023;39: 
+4747–50.
+[59] Li J, Platt G, James G. Demand management of distributed energy loads based on 
+genetic algorithm optimization. J Dyn Syst Meas Control 2014;136:021014.
+[60] Nakayama K, Benson KE, Bic LF, Dillencourt MB. Complete automation of future 
+grid for optimal real-time distribution of renewables. In: Proceedings of the 2012 
+IEEE third international conference on smart grid communications 
+(SmartGridComm). IEEE; 2012. p. 418–23.
+[61] Jadhav S, Sevak B, Das S, Hussain A, Su W, Bui VH. Scalable fairness shaping with 
+LLM-guided multi-agent reinforcement learning for peer-to-peer electricity 
+markets. Util Policy 2026;100:102168.
+[62] El Makroum R, Zwickl-Bernhard S, Kranzl L. Agentic AI home energy management 
+system: a large language model framework for residential load scheduling. Results 
+Eng 2026:109857.
+[63] Li, S., J.S. Kim, and C. Chen. 2026. 'Behavioral generative agents for power 
+dispatch and auction', arXiv preprint arXiv:2603.08477.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+25 
+
+=== PDF PAGE 26 ===
+[64] Badmus, E.O., P. Sang, D. Stamoulis, and A. Pandey. 2025. 'Powerchain: 
+automating distribution grid analysis with agentic AI workflows', arXiv e-prints: 
+arXiv: 2508.17094.
+[65] Badmus, E.O, and A. Pandey. 2026. 'PowerDAG: reliable agentic AI system for 
+automating distribution grid analysis', arXiv preprint arXiv:2603.17418.
+[66] Mongaillard T, Lasaulce S, Hicheur O, Zhang C, Bariah L, Varma VS, Zou H, 
+Zhao Q, Debbah M. Large language models for power scheduling: a user-centric 
+approach. In: Proceedings of the 2024 22nd international symposium on modeling 
+and optimization in mobile, ad hoc, and wireless networks (WiOpt). IEEE; 2024. 
+p. 321–8.
+[67] Shi, J., Y. Cheng, F. Zhang, M. Jiang, J. Lin, and Y. Shen. 2025. 'GridCodex: a RAG- 
+driven AI framework for power grid code reasoning and compliance', arXiv 
+preprint arXiv:2508.12682.
+[68] Pan, Z., A. Monti, and V. Hagenmeyer. 2025. Large language model based semantic 
+interoperability enhancement for energy data management (E. ON Energy Research 
+Center).
+[69] Zhang S, Wei J, Xiang D, Cheng Y, Zhao H, Xie Y, Cai X, Zhao J. Building energy 
+management systems with LLM Agent enhanced natural language policy 
+explanation. In: Proceedings of the 2025 5th power system and green energy 
+conference (PSGEC). IEEE; 2025. p. 409–14.
+[70] Faccia A. Prompting autonomous agents and LLMs in energy operations, efficiency 
+gains or hidden liabilities?. In: Proceedings of the Abu Dhabi international 
+petroleum exhibition and conference, D021S81R06. SPE; 2025.
+[71] Jiang H, Zeng F, Qu B, Lin X, Zhong W. Helios: a foundational language model for 
+smart energy knowledge reasoning and application. In: Proceedings of the 19th 
+conference of the European Chapter of the Association for computational 
+linguistics (Volume 1: Long papers); 2026. p. 3208–20.
+[72] Michelon Fç, Zhou Y, Morstyn T. Large language model interface for home energy 
+management systems. In: Proceedings of the 16th ACM international conference on 
+future and sustainable energy systems; 2025. p. 590–602.
+[73] Biagini V, Subasic M, Oudalov A, Kreusel J. The autonomous grid: automation, 
+intelligence and the future of power systems. Energy Res Soc Sci 2020;65:101460.
+[74] He, T., and F. Jazizadeh. 2025. 'Context-aware LLM-based AI agents for human- 
+centered energy management systems in Smart buildings', arXiv preprint arXiv: 
+2512.25055.
+[75] Dif MM, Bouchiha MA, Korba AA, Ghamri-Doudane Y. Towards trustworthy 
+agentic IoEV: AI agents for explainable cyberthreat mitigation and state analytics. 
+In: Proceedings of the 2025 IEEE 50th conference on local computer networks 
+(LCN). IEEE; 2025. p. 1–10.
+[76] Zaboli A, Choi SL, Song TJ, Hong J. Chatgpt and other large language models for 
+cybersecurity of smart grid applications. In: Proceedings of the 2024 IEEE power & 
+energy society general meeting (PESGM). IEEE; 2024. p. 1–5.
+[77] Zaboli A, Choi SL, Hong J. Leveraging conversational generative AI for anomaly 
+detection in digital substations. In: Proceedings of the 2025 IEEE power & energy 
+society general meeting (PESGM). IEEE; 2025. p. 1–5.
+[78] Sharshar M, Saber AM, Svetinovic D, Youssef AM, Kundur D, El-Saadany EF. Large 
+language model-based framework for explainable cyberattack detection in 
+automatic generation control systems. In: Proceedings of the 2025 IEEE electrical 
+power and energy conference (EPEC). IEEE; 2025. p. 424–9.
+[79] Sahraoui Y, Mohammed Hadjkouider A, Abdelaziz Kerrache C, Calafate CT. 
+TwinFedPot: honeypot intelligence distillation into digital twin for persistent smart 
+traffic security. Sensors 2025;25:4725.
+[80] Ibrahim N, Kashef R. Exploring the emerging role of large language models in 
+smart grid cybersecurity: a survey of attacks, detection mechanisms, and 
+mitigation strategies. Front Energy Res 2025;13:1531655.
+Further reading
+[81] Aggarwal A, Maryam I. Edge AI for smart cities, healthcare, and industry: 
+balancing autonomy, efficiency, and ethics. Next-Gen Machine Learning: 
+Algorithms for Adaptive Intelligence 2026:73.
+[82] CEN-CENELEC-ETSI, Smart Grid Coordination. 2012. 'CEN-CENELEC-ETSI smart 
+grid coordination group, smart grid reference architecture', Available: ec.europa. 
+eu/energy/gas_electricity/smartgrids/doc/xpert_groupl_reference_architecture. 
+pdf.
+[83] Diaz-Gonzalez AA, Energy Green Data. Towards a deterministic vertical AGI for 
+energy systems. 2026.
+[84] Yang X, Lin C, Yang Y, Wang QI, Liu H, Hua H, Wu W. Large language model 
+powered automated modeling and optimization of active distribution network 
+dispatch problems. IEEE Trans Smart Grid 2025.
+Z. Rezaei et al.                                                                                                                                                                                                                                  Energy and AI 25 (2026) 100853 
+26 

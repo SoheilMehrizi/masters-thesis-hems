@@ -1,0 +1,420 @@
+{
+  "id": "article-09",
+  "title": {
+    "en": "A Digital-Twin-Aided Safe Multi-Agent Reinforcement Learning Framework for Renewable-Integrated Residential Energy Management",
+    "fa": "MASAC ایمن با کمک دوقلوی دیجیتال"
+  },
+  "short_title": "Safe Twin-aided MASAC",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Problem and research scope",
+        "fa": "مسئله و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Ren, You, Rivera, Fang, Energies 19 (2026),3098. Residential PV/BESS/EV coordination under uncertain generation/load and physical constraints is addressed using synchronized Twin forecasts, MASAC and deterministic action projection. The agents are reinforcement-learning actors for battery/EV, not LLM reasoning agents. No numbered empirical hypothesis set is explicit.",
+          "fa": "Ren و همکاران،۲۰۲۶. هماهنگیPV/باتری/EV با تولید/بار نامطمئن و قیود فیزیکی از طریقTwin همگام،MASAC و تصویرسازی قطعی کنش انجام می‌شود. عامل‌ها کنش‌گرRL باتری/EV هستند، نه عامل استدلال زبانی. فرضیه شماره‌گذاری‌شده ندارد.",
+          "pages": [
+            1,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Twin synchronization, MASAC and safety projection",
+        "fa": "همگام‌سازیTwin،MASAC و تصویرسازی ایمنی"
+      },
+      "paragraphs": [
+        {
+          "en": "Five Twin layers cover acquisition, virtual model, adaptive calibration, forecasts and decision interaction. Measurements correct virtual states and degradation-sensitive parameters. MASAC has two Gaussian-policy actors and centralized twin-Q critics; projected feasible actions, not raw commands, enter replay and critic evaluation.",
+          "fa": "پنج لایهTwin شامل دریافت،مدل،کالیبراسیون،پیش‌بینی و تعامل تصمیم است. اندازه‌گیری حالت و پارامتر حساس به فرسودگی را اصلاح می‌کند. MASAC دو کنش‌گرگاوسی و منتقدمتمرکزدوگانه دارد؛کنش مجاز تصویرشده،نه فرمان خام،درحافظه و ارزیابی منتقد ذخیره می‌شود.",
+          "pages": [
+            12,
+            13,
+            15,
+            16
+          ]
+        },
+        {
+          "en": "Projection clips signed device powers, derives SOC-feasible charge/discharge bounds, forces unavailable EV power to zero, and coordinates grid limits. Signed commands eliminate simultaneous charge/discharge by construction. BESS 13.5 kWh/7 kW, EV 40 kWh/7 kW, grid±10 kW; efficiencies.95/.95. Training:γ.99,τ.005, batch 256, replay 10⁶, actor/critic lr 3×10⁻⁴, three 256-unit layers,10⁵environment steps and 5000 warm-up.",
+          "fa": "تصویرسازی توان علامت‌دار را محدود،حدSOC را محاسبه،توانEV غایب راصفر و حدشبکه راهماهنگ می‌کند. فرمان علامت‌دار شارژ/تخلیه هم‌زمان راحذف می‌کند. باتری۱۳٫۵کیلووات‌ساعت/۷کیلووات،EV۴۰/۷،شبکه±۱۰و بازده۰٫۹۵است. آموزشγ۰٫۹۹،τ۰٫۰۰۵،دسته۲۵۶،حافظه10⁶،نرخ3×10⁻⁴،سه‌لایه۲۵۶و10⁵گام دارد.",
+          "pages": [
+            16,
+            17,
+            18,
+            21,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Simulation protocol and com para tors",
+        "fa": "پروتکل شبیه‌سازی و مقایسه"
+      },
+      "paragraphs": [
+        {
+          "en": "A 35-day test horizon evaluates simulated household profiles, TOU prices, EV travel/departures and storage operation. §4.3 describes price-greedy and fixed-night rule heuristics, whereas main results compare proposed MASAC, TD 3 and one rule-based row. A single-agent SAC ablation controls joint battery/EV actions. Forecast sensitivity adds 0/5/10/20/30% observation-side forecast noise, with five seeds per level; physical dynamics remain unchanged.",
+          "fa": "آزمون۳۵روزه پروفایل شبیه‌سازی،تعرفه،سفرEV و ذخیره را می‌سنجد. بخش۴٫۳دو قاعده قیمت‌حریص و شارژشب توصیف می‌کند؛اما نتیجه اصلیMASAC،TD3ویک ردیف قاعده‌ای است. حذف مؤلفهSAC تک‌عامل و حساسیت نویز۰/۵/۱۰/۲۰/۳۰٪باپنج بذر دارد؛دینامیک فیزیکی ثابت می‌ماند.",
+          "pages": [
+            21,
+            24,
+            25,
+            30,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Economic, feasibility and forecast results",
+        "fa": "نتایج اقتصادی،مجازبودن و پیش‌بینی"
+      },
+      "paragraphs": [
+        {
+          "en": "Total 35-day cost:MASAC 365.8245, TD 3391.4694, rule 374.6889; reductions 6.55% and 2.37%. All three have 100% EV departure success,100% battery terminal success and 0% grid violations across 35 events. MASAC imports 1608.48 kWh, self-consumption 86.03%, self-sufficiency 41.61%; peak import 10 kW versus rule 5.71 kW. Thus lowest energy cost does not mean lowest peak.",
+          "fa": "هزینه۳۵روز:MASAC۳۶۵٫۸۲۴۵،TD3۳۹۱٫۴۶۹۴،قاعده۳۷۴٫۶۸۸۹؛کاهش۶٫۵۵٪و۲٫۳۷٪. هر سه در۳۵رویداد موفقیتEVوSOCنهایی۱۰۰٪ونقض شبکه صفر دارند. وارداتMASAC۱۶۰۸٫۴۸کیلووات‌ساعت،خودمصرفی۸۶٫۰۳٪وخودکفایی۴۱٫۶۱٪است؛اوج واردات۱۰درمقابل قاعده۵٫۷۱کیلووات.کمینه هزینه معادل کمینه اوج نیست.",
+          "pages": [
+            25,
+            26,
+            28,
+            29
+          ]
+        },
+        {
+          "en": "Single-agent SAC costs 372.0309 versus 365.8245(1.67% reduction). Forecast noise 30% increases total cost 5.17% to 384.7290±.5962 while the reported feasibility indicators remain 100%/100%/0%. The sensitivity concerns forecast observations, not physical fault realism.",
+          "fa": "SAC تک‌عامل۳۷۲٫۰۳۰۹درمقابل۳۶۵٫۸۲۴۵هزینه دارد(۱٫۶۷٪کاهش).نویز۳۰٪هزینه را۵٫۱۷٪به۳۸۴٫۷۲۹۰±۰٫۵۹۶۲می‌رساندو شاخص مجازبودن۱۰۰/۱۰۰/۰می‌ماند.این حساسیت پیش‌بینی است،نه واقع‌گرایی خرابی فیزیکی.",
+          "pages": [
+            30,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author future work and evidence boundary",
+        "fa": "کارآینده و مرز شواهد"
+      },
+      "paragraphs": [
+        {
+          "en": "Authors propose realistic forecasting, real residential datasets and battery-health/SOH/RUL models for practical uncertainty and long-term degradation. Data are available on request. The present evidence is simulation-based 35-day control, not real-house deployment or causal diagnosis of competing degradation mechanisms.",
+          "fa": "پیش‌بینی واقعی‌تر،داده مسکونی واقعی و مدلSOH/RULبرای عدم‌قطعیت عملی و فرسودگی بلندمدت پیشنهاد می‌شود.داده با درخواست عرضه می‌شود.شواهد فعلی کنترل۳۵روزه شبیه‌سازی است،نه استقرار واقعی یا تشخیص علل رقیب.",
+          "pages": [
+            32,
+            33
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Relevant to hard device safety and evidence-aware Twin synchronization; also establishes DT-plus-multi-agent energy control as prior art.",
+      "fa": "برای ایمنی سخت دستگاه و همگام‌سازیTwin مرتبط است و پیشینه کنترل انرژیTwin+چندعامل را نشان می‌دهد.",
+      "pages": [
+        12,
+        16
+      ]
+    },
+    "contribution": {
+      "en": "Explicit signed-power/SOC projection and consistency between executed actions, replay and evaluation; forecast-noise sensitivity protocol.",
+      "fa": "تصویرسازی توان/SOCو سازگاری کنش اجراشده،حافظه و ارزیابی و پروتکل نویزپیش‌بینی می‌دهد.",
+      "pages": [
+        16,
+        17,
+        31
+      ]
+    },
+    "employment": {
+      "en": "Reuse justified physical bounds in an independent safety gateway and record requested/safe/delivered/effective actions separately. Our Twin calibration must additionally require diagnosis and sandbox validation, not un conditional residual matching.",
+      "fa": "قیود موجه در دروازه ایمنی مستقل اقتباس و کنش درخواستی/ایمن/تحویلی/مؤثرجدا ثبت شود.کالیبراسیونTwin ما علاوه‌بر باقیمانده نیازمند تشخیص و اعتبارسنجی است.",
+      "pages": [
+        12,
+        16
+      ]
+    },
+    "baseline": {
+      "en": "Supplementary adapted safe-RL control baseline only if resources permit; not required as the core architecture or an LLM-topology baseline. Prioritize rule-based and MPC controls plus diagnosis/planning ablations.",
+      "fa": "خط‌مبنای تکمیلیRLایمن اقتباسی درصورت منابع است؛هسته معماری یا مقایسه توپولوژیLLM نیست.قاعده‌ای،MPCو حذف تشخیص/برنامه‌ریزی اولویت دارند.",
+      "pages": [
+        24,
+        30
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Table 2 lists .5 h decision interval and 24-step daily horizon, which does not equal 24 h; preserve this inconsistency for author clarification. Main result baseline labels differ from§4.3. Do not silently reconcile them or claim exact reproduction before resolving both.",
+      "fa": "جدول۲فاصله۰٫۵ساعت و افق روزانه۲۴گام داردکه۲۴ساعت نیست؛ابهام باید روشن شود.نام خط‌مبنای نتیجه با بخش۴٫۳تفاوت دارد.بدون رفع این دو بازتولید دقیق ادعا نشود.",
+      "pages": [
+        21,
+        24,
+        25
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "MASAC total cost 365.8245; all controllers 100%/100%/0% feasibility;30% forecast noise+5.17% cost.",
+      "fa": "هزینهMASAC۳۶۵٫۸۲۴۵؛مجازبودن همه۱۰۰/۱۰۰/۰؛نویز۳۰٪هزینه را۵٫۱۷٪بالامی‌برد.",
+      "pages": [
+        25,
+        26,
+        31
+      ]
+    }
+  ],
+  "bibliography_start_page": 34,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 11,
+      "caption": {
+        "en": "Figure 1. Architecture of the proposed digital-twin-aided safe MASAC framework for residential energy management. Based on the observed system state and predictive information, the reinforcement",
+        "fa": "همگام‌سازیTwinوپیش‌بینی،MASACراپیشازتصویرسازیمجازتغذیه می‌کند."
+      },
+      "explanation": {
+        "en": "Twin synchronization and forecasts feed MASAC actors before independent feasible-action projection.",
+        "fa": "همگام‌سازیTwinوپیش‌بینی،MASACراپیشازتصویرسازیمجازتغذیه می‌کند."
+      },
+      "data": {
+        "en": "Battery and EV actors are reinforcement-learning agents; simulated observations feed the Twin layers.",
+        "fa": "عامل باتری/EVازنوعRLاست؛مشاهدهشبیه‌سازورودیTwinاست."
+      }
+    },
+    {
+      "id": "2",
+      "page": 20,
+      "caption": {
+        "en": "Figure 2. Simulation environment configuration for the residential energy management case study. The photovoltaic generation system is a rooftop solar installation that is typically found in residential buildings. The PV generation profile follows a normalised daily",
+        "fa": "اجزایPV،باتری،EVوشبکهجریانانرژیآزمایشراتعریفمی‌کنند."
+      },
+      "explanation": {
+        "en": "Residential PV, BESS, EV and grid components define the experimental energy flows.",
+        "fa": "اجزایPV،باتری،EVوشبکهجریانانرژیآزمایشراتعریفمی‌کنند."
+      },
+      "data": {
+        "en": "BESS capacity is 13.5 kWh, EV capacity 40 kWh and grid limit ±10 kW. The horizon inconsistency in Table 2 is flagged in the critical analysis.",
+        "fa": "باتری۱۳٫۵کیلووات‌ساعت،EV۴۰وشبکه±۱۰کیلووات؛ابهامافقجدول۲مشخصشده."
+      }
+    },
+    {
+      "id": "3",
+      "page": 22,
+      "caption": {
+        "en": "Figure 3. Training procedure of the proposed safe MASAC controller. https://doi.org/10.3390/en 19133098",
+        "fa": "خطآموزشگذارکنش‌تصویرشدهرابرایمنتقدمتمرکزوکنش‌گرجدامی‌گیرد."
+      },
+      "explanation": {
+        "en": "The training pipeline collects projected-action transitions for centralized critics and decentralized actors.",
+        "fa": "خطآموزشگذارکنش‌تصویرشدهرابرایمنتقدمتمرکزوکنش‌گرجدامی‌گیرد."
+      },
+      "data": {
+        "en": "Training uses 100,000 environment steps and 5,000 warm-up steps. Replay stores the feasible actions actually executed.",
+        "fa": "10⁵گام،۵۰۰۰گرم‌کردن؛حافظهکنشواقعاًاجراشدهمجازراذخیرهمی‌کند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 26,
+      "caption": {
+        "en": "Figure 4. Total energy cost comparison over the 35-day testing horizon. 5.3. Constraint Satisfaction and Charging Reliability Table 5 presents the constraint satisfaction results. All three methods achieve 100%",
+        "fa": "هزینهکل۳۵روزهسهکنترل‌گرراپیشقیودآزمونمقایسهمی‌کند."
+      },
+      "explanation": {
+        "en": "The 35-day total cost comparison evaluates three controllers under the test constraints.",
+        "fa": "هزینهکل۳۵روزهسهکنترل‌گرراپیشقیودآزمونمقایسهمی‌کند."
+      },
+      "data": {
+        "en": "Costs are 365.8245 for MASAC, 391.4694 for TD 3 and 374.6889 for the rule-based method; reported feasibility indicators are shared.",
+        "fa": "MASAC۳۶۵٫۸۲۴۵،TD3۳۹۱٫۴۶۹۴،قاعده۳۷۴٫۶۸۸۹؛شاخصمجازبودنمشترکاست."
+      }
+    },
+    {
+      "id": "5",
+      "page": 27,
+      "caption": {
+        "en": "Figure 5. Battery SOC comparison during the first seven days. https://doi.org/10.3390/en 19133098",
+        "fa": "پروفایلSOCباتریهفتروزنخستراهبردمصرفذخیره رامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "First-week BESS SOC profiles compare storage utilization strategies.",
+        "fa": "پروفایلSOCباتریهفتروزنخستراهبردمصرفذخیره رامقایسه می‌کند."
+      },
+      "data": {
+        "en": "No curve values are digitized. Table 6 reports MASAC mean SOC 0.5516, minimum 0.1100 and final 0.5785.",
+        "fa": "منحنیحدسزده‌نشده؛جدول۶میانگین۰٫۵۵۱۶،کمینه۰٫۱۱۰۰،پایان۰٫۵۷۸۵رادارد."
+      }
+    },
+    {
+      "id": "6",
+      "page": 28,
+      "caption": {
+        "en": "Figure 6. EV charging power comparison during the first seven days. 5.5. Grid Energy Exchange and Renewable Energy Utilisation Table 7 compares the grid import, grid export, import cost, export revenue, and battery",
+        "fa": "توانشارژEVدرهفتروزنخستهماهنگیاتصالوعزیمت رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "First-week EV charging profiles illustrate availability and departure coordination.",
+        "fa": "توانشارژEVدرهفتروزنخستهماهنگیاتصالوعزیمت رانشان می‌دهد."
+      },
+      "data": {
+        "en": "All three controllers report 100% departure success over 35 events (Table 5).",
+        "fa": "هردرکنترل‌گرموفقیت۱۰۰٪در۳۵عزیمتدارند(جدول۵)."
+      }
+    },
+    {
+      "id": "7",
+      "page": 29,
+      "caption": {
+        "en": "Figure 7. Grid power exchange comparison during the first seven days. 5.6. Peak Power Behaviour Table 8 reports the peak import and peak export values. The proposed safe MASAC",
+        "fa": "پروفایلشبکهوارداتوصادراتراهفتهنخستجدامی‌کند."
+      },
+      "explanation": {
+        "en": "Grid-exchange profiles separate import and export over the first week.",
+        "fa": "پروفایلشبکهوارداتوصادراتراهفتهنخستجدامی‌کند."
+      },
+      "data": {
+        "en": "MASAC imports 1,608.48 kWh and has 86.03% self-consumption; its 10 kW peak import is not the lowest.",
+        "fa": "وارداتMASAC۱۶۰۸٫۴۸کیلووات‌ساعت،خودمصرفی۸۶٫۰۳٪؛اوج۱۰کیلوواتکمینه نیست."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 8,
+      "title": {
+        "en": "Economic objective and penalty parameters",
+        "fa": "پارامتر اقتصادی وجریمه"
+      },
+      "summary": {
+        "en": "The original economic objective and penalty parameters are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "پارامتر اقتصادی وجریمهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "2",
+      "page": 21,
+      "title": {
+        "en": "Residential system simulation parameters",
+        "fa": "پارامترشبیه‌سازی مسکونی"
+      },
+      "summary": {
+        "en": "The original residential system simulation parameters are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "پارامترشبیه‌سازی مسکونیبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 23,
+      "title": {
+        "en": "MASAC training parameters",
+        "fa": "پارامترآموزشMASAC"
+      },
+      "summary": {
+        "en": "The original masac training parameters are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "پارامترآموزشMASACبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "4",
+      "page": 25,
+      "title": {
+        "en": "35-day cost comparison",
+        "fa": "هزینه۳۵روز"
+      },
+      "summary": {
+        "en": "The original 35-day cost comparison are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "هزینه۳۵روزبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "5",
+      "page": 26,
+      "title": {
+        "en": "Constraint satisfaction and EV reliability",
+        "fa": "مجازبودن وقابلیت اتکاEV"
+      },
+      "summary": {
+        "en": "The original constraint satisfaction and ev reliability are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "مجازبودن وقابلیت اتکاEVبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "6",
+      "page": 27,
+      "title": {
+        "en": "BESS and EV SOC statistics",
+        "fa": "آمارSOC"
+      },
+      "summary": {
+        "en": "The original bess and ev soc statistics are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "آمارSOCبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "7",
+      "page": 28,
+      "title": {
+        "en": "Grid exchange and storage throughput",
+        "fa": "تبادل شبکه وگذردهی ذخیره"
+      },
+      "summary": {
+        "en": "The original grid exchange and storage throughput are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "تبادل شبکه وگذردهی ذخیرهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "8",
+      "page": 29,
+      "title": {
+        "en": "Peak import and export",
+        "fa": "اوج واردات/صادرات"
+      },
+      "summary": {
+        "en": "The original peak import and export are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "اوج واردات/صادراتبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "9",
+      "page": 30,
+      "title": {
+        "en": "MASAC versus single-agent SAC",
+        "fa": "مقایسهMASAC/SAC"
+      },
+      "summary": {
+        "en": "The original masac versus single-agent sac are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "مقایسهMASAC/SACبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "10",
+      "page": 31,
+      "title": {
+        "en": "Forecast error sensitivity",
+        "fa": "حساسیت خطای پیش‌بینی"
+      },
+      "summary": {
+        "en": "The original forecast error sensitivity are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "حساسیت خطای پیش‌بینیبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    }
+  ]
+}

@@ -1,0 +1,764 @@
+{
+  "id": "article-04",
+  "title": {
+    "en": "A data-driven iterative digital twin framework for dynamic building energy performance: Integrating virtual sensing and anomaly diagnosis",
+    "fa": "چارچوب دوقلوی دیجیتال تطبیقی STAR"
+  },
+  "short_title": "STAR adaptive digital twin",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Problem, objectives and scope",
+        "fa": "مسئله، اهداف و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Jia et al., Energy & Buildings 367 (2026),117763. STAR links sparse whole-building sensing, anomaly root-cause tracing and adaptive retrofit-roadmap optimization for medium office buildings. The explicit research gap is insufficient integration of these three capabilities in next-generation energy performance certification. No numbered hypothesis list is stated.",
+          "fa": "Jia و همکاران، ۲۰۲۶. STAR ادراک کم‌حسگر، ریشه‌یابی ناهنجاری و بهینه‌سازی نقشه بازسازی را برای ساختمان اداری متوسط پیوند می‌دهد. شکاف صریح، ادغام ناکافی این سه قابلیت در گواهی عملکرد انرژی است؛ فرضیه شماره‌گذاری‌شده ندارد.",
+          "pages": [
+            1,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Graph sensing, tracing and optimization",
+        "fa": "ادراک گرافی، ریشه‌یابی و بهینه‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "The heterogeneous graph has room/equipment/wall/sensor nodes and thermal/airflow/equipment/occupancy edges. The sensing engine combines explicit physics-informed graph attention and an implicit DTW-similarity graph, adaptive gating and Bi-LSTM. Similarity≥.7 creates implicit edges; weights update hourly and structure every 24 h using 30-day history. MSE plus physical loss uses λ=.3.",
+          "fa": "گراف ناهمگن دارای گره اتاق/تجهیز/دیوار/حسگر و یال حرارتی/هوا/تجهیز/حضور است. توجه گرافی فیزیکی و گراف ضمنی DTW با دروازه تطبیقی و Bi-LSTM ترکیب می‌شوند. شباهت≥۰٫۷ یال می‌سازد؛ وزن ساعتی و ساختار روزانه با سابقه۳۰روزه به‌روز می‌شود. ضریب زیان فیزیکی۰٫۳ است.",
+          "pages": [
+            5,
+            7
+          ]
+        },
+        {
+          "en": "Reverse random walks propagate from anomalous sensors upstream. Contribution Ci mixes visit probability with edge-weighted anomaly intensity (α=.6); top 3 nodes form a structured diagnosis. Retrofit exploration uses PPO and add/replace/remove actions on a measure compatibility/conflict graph; a lightweight Twin validates schemes. Thresholds include saving≥10%, ROI≥5%, compliance 1 and at least medium feasibility, followed by top 30% selection. These agents are an RL explorer and simulator validator, not demonstrated LLM agents.",
+          "fa": "راه‌پیمایی معکوس از حسگر ناهنجار به بالادست می‌رود. سهم گره با α=۰٫۶ از احتمال بازدید و شدت ناهنجاری ساخته و سه گره برتر گزارش می‌شوند. عامل اکتشاف PPO روی گراف سازگاری بازسازی عمل می‌کند؛ Twin سبک اعتبارسنج است. آستانه صرفه‌جویی۱۰٪، ROI پنج٪ و انتخاب۳۰٪ برتر به کار می‌رود. این عامل‌ها مدل زبانی نیستند.",
+          "pages": [
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Datasets, masks and validation tasks",
+        "fa": "داده‌ها، ماسک‌ها و اعتبارسنجی"
+      },
+      "paragraphs": [
+        {
+          "en": "Experiments combine three ASHRAE GEP III office cases (8000/10000/12000 m²) and a 12000 m² real office with sparse temperature/humidity and meter coverage. Random masking uses 20/40/60/80% missingness. Inputs include BIM, weather, occupancy and measurements aggregated hourly. Ten independent runs assess 60% missingness. Further tests cover seven anomaly types, severity/composite/gradual faults, transferred scenarios, RP-1043 device fault data and simulator agreement with EnergyPlus.",
+          "fa": "سه مورد اداری ASHRAE GEP III و یک دفتر واقعی۱۲۰۰۰مترمربعی، با ماسک تصادفی۲۰/۴۰/۶۰/۸۰٪ بررسی می‌شوند. BIM، آب‌وهوا، حضور و داده ساعتی ورودی‌اند. ده اجرای مستقل در۶۰٪ فقدان و آزمون نوع/شدت/ترکیب خطا، انتقال، RP-1043 و توافق شبیه‌ساز با EnergyPlus وجود دارد.",
+          "pages": [
+            11,
+            12,
+            14,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "en": "Com para tors include LSTM/CNN for sensing, STGCN/GAT/PINN for graph prediction/diagnosis, and NSGA-III/MOPSO/single-agent PPO for optimization. Seven update rounds are offline historical-data replay, not deployed retrofits or longitudinal post-intervention measurements.",
+          "fa": "مقایسه‌ها شامل LSTM/CNN در ادراک، STGCN/GAT/PINN در پیش‌بینی و تشخیص و NSGA-III/MOPSO/PPO تک‌عامل در بهینه‌سازی‌اند. هفت دور به‌روزرسانی، بازپخش آفلاین داده تاریخی است و بازسازی واقعی یا اندازه‌گیری بلندمدت پس از مداخله نیست.",
+          "pages": [
+            14,
+            18,
+            19,
+            20,
+            22,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Reported sensing, diagnosis and roadmap results",
+        "fa": "نتایج ادراک، تشخیص و نقشه بازسازی"
+      },
+      "paragraphs": [
+        {
+          "en": "Under 60% missingness STAR reports MAPE 6.5%, R².92; diagnosis F 1>.88 over seven anomaly types, hidden-anomaly recall 92% and mean diagnosis time.8 s. Optimization reports Pareto coverage.93, typical energy saving 22%, payback 3.2 years, and feasible solution ratio 92%. After seven replay rounds sensing MAPE reaches 5.2% and optimized ROI 10.2%.",
+          "fa": "در۶۰٪ فقدان، MAPE برابر۶٫۵٪ و R² برابر۰٫۹۲؛ F1 تشخیص بیش از۰٫۸۸، بازیابی ناهنجاری پنهان۹۲٪ و زمان میانگین۰٫۸ثانیه گزارش می‌شود. پوشش پارتو۰٫۹۳، صرفه‌جویی نمونه۲۲٪، بازگشت۳٫۲سال و نسبت راه‌حل مجاز۹۲٪ است. پس از هفت دور بازپخش MAPE به۵٫۲٪ و ROI به۱۰٫۲٪ می‌رسد.",
+          "pages": [
+            1,
+            16,
+            18,
+            19,
+            22,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations and extensions",
+        "fa": "محدودیت‌ها و توسعه‌های نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Limitations include dependence on weeks of historical data, O(N²F) campus scaling, incomplete electromechanical control logic, no physical retrofit deployment, and omission of execution delays, measurement noise and changing occupants from replay. RP-1043 uses a degenerate single-node graph and yields lower F 1 than building-level synthetic anomalies. Future work includes transfer/meta-learning, hierarchical optimization and mechanism libraries.",
+          "fa": "وابستگی به چند هفته تاریخچه، پیچیدگی O(N²F)، منطق کنترلی ناقص، نبود بازسازی فیزیکی و حذف تأخیر اجرا/نویز/تغییر رفتار از بازپخش محدودیت‌اند. RP-1043 گراف تک‌گرهی دارد و F1 آن از ناهنجاری مصنوعی کمتر است. انتقال، فرایادگیری و بهینه‌سازی سلسله‌مراتبی پیشنهاد می‌شوند.",
+          "pages": [
+            22,
+            23
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Closest architectural collision for a perception–diagnosis–optimization–update cycle; forces our novelty to be more specific than adaptive Twin plus diagnosis.",
+      "fa": "نزدیک‌ترین همپوشانی معماری چرخه ادراک–تشخیص–بهینه‌سازی–به‌روزرسانی است و ادعای نوآوری ما را دقیق‌تر می‌کند.",
+      "pages": [
+        5,
+        23
+      ]
+    },
+    "contribution": {
+      "en": "Provides concrete graph/Twin interfaces, sparse-evidence tests, graph-attribution alternative and an offline-replay evaluation pattern.",
+      "fa": "رابط گراف/Twin، آزمون شاهد ناقص، جایگزین انتساب گرافی و الگوی ارزیابی بازپخش فراهم می‌کند.",
+      "pages": [
+        5,
+        7,
+        8,
+        13
+      ]
+    },
+    "employment": {
+      "en": "Use as a design and validity comparator for versioned Twin updates; compare graph attribution with uncertainty-aware causal diagnosis on matched scenarios. Keep evaluator recovery distinct from Twin-predicted savings.",
+      "fa": "برای طراحی و اعتبار به‌روزرسانی نسخه‌دار Twin و مقایسه انتساب گرافی با تشخیص علّی نامطمئن استفاده شود؛ بازیابی محیط از صرفه‌جویی پیش‌بینی Twin جدا بماند.",
+      "pages": [
+        8,
+        22,
+        23
+      ]
+    },
+    "baseline": {
+      "en": "Conditional adapted diagnostic/Twin ablation, not a mandatory whole-system reproduction: its office graph and capital retrofit optimization do not match residential hourly operations. Prioritize core diagnosis/recovery ablations first.",
+      "fa": "خط‌مبنای اقتباسی تشخیص/Twin به‌صورت مشروط است، نه بازتولید اجباری کامل؛ گراف اداری و بازسازی سرمایه‌ای با عملیات ساعتی مسکونی متفاوت‌اند.",
+      "pages": [
+        9,
+        19,
+        23
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Ci is a contribution-ranking construction, not a calibrated joint-cause posterior. Do not import top 3 contributions as probabilities into our SCM. Offline replay improvements cannot establish observed recovery after real interventions.",
+      "fa": "Ci رتبه سهم است و پسین کالیبره علت‌های مشترک نیست؛ آن را احتمال SCM فرض نکنیم. بهبود بازپخش، بازیابی مشاهده‌شده پس از مداخله واقعی را ثابت نمی‌کند.",
+      "pages": [
+        9,
+        23
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Reported: MAPE 6.5% at 60% missingness; diagnosis.8 s; typical saving 22%; replay MAPE 5.2%.",
+      "fa": "گزارش‌شده: MAPE۶٫۵٪ در فقدان۶۰٪، تشخیص۰٫۸ثانیه، صرفه‌جویی نمونه۲۲٪ و MAPE بازپخش۵٫۲٪.",
+      "pages": [
+        1,
+        23
+      ]
+    }
+  ],
+  "bibliography_start_page": 26,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 1. Architecture of the physics-informed dual-channel graph attention network (PI-DC-GAT) for sparse-data virtual metering, showing spatiotemporal hetero- geneous graph construction, explicit and implicit graph learning, physics-constraint injection, and generation of the dynamic building energy performance profile. Fig. 2. Transformation of a multi-storey office building into a dynamic spatiotemporal heterogeneous graph, illustrating physical rooms, equipment, sensors, en-",
+        "fa": "معماری ادراک دوکاناله،ویژگی گراف فیزیکی و ضمنی راادغام می‌کند."
+      },
+      "explanation": {
+        "en": "The physics-informed dual-channel sensing architecture fuses explicit physical and implicit learned graph features.",
+        "fa": "معماری ادراک دوکاناله،ویژگی گراف فیزیکی و ضمنی راادغام می‌کند."
+      },
+      "data": {
+        "en": "Gating/Bi-LSTM architecture is a model diagram, not an ablation result.",
+        "fa": "دروازه/Bi-LSTMمعماری مدل است،نه نتیجه حذف مؤلفه."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 2. Transformation of a multi-storey office building into a dynamic spatiotemporal heterogeneous graph, illustrating physical rooms, equipment, sensors, en- velopes, occupancy movements, air-flow links, thermal-transfer paths, equipment associations, and environmental connections used for STAR virtual sensing. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "اتاق،تجهیز،دیواروحسگرگراف ناهمگن پویا باپیوندفیزیکی/ضمنی می‌سازند."
+      },
+      "explanation": {
+        "en": "Rooms, equipment, walls and sensors become a dynamic heterogeneous graph with physical and implicit links.",
+        "fa": "اتاق،تجهیز،دیواروحسگرگراف ناهمگن پویا باپیوندفیزیکی/ضمنی می‌سازند."
+      },
+      "data": {
+        "en": "Text specifies DTW edge threshold.7, hourly weights and daily reconstruction.",
+        "fa": "متن آستانهDTWبرابر۰٫۷،وزن ساعتی وبازسازی روزانه رادارد."
+      }
+    },
+    {
+      "id": "3",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 3. Workflow of the reverse-random-walk-based anomaly root-cause tracing mechanism, including anomaly signal identification and injection, reverse walk  initialization, transition-probability-guided tracing, contribution calculation, and diagnostic report generation. Fig. 4. Example of building anomaly root-cause tracing on a directed system graph, showing reverse-walk paths from anomalous sensor nodes to upstream",
+        "fa": "ریشه‌یابی معکوس ازشاهد حسگر ناهنجار به نامزد بالادست حرکت می‌کند."
+      },
+      "explanation": {
+        "en": "Reverse-walk anomaly tracing moves from anomalous sensor evidence toward upstream candidates.",
+        "fa": "ریشه‌یابی معکوس ازشاهد حسگر ناهنجار به نامزد بالادست حرکت می‌کند."
+      },
+      "data": {
+        "en": "Visit/edge/intensity contributions rank root candidates; no joint posterior is printed.",
+        "fa": "سهم بازدید/یال/شدت نامزدرا رتبه‌بندی می‌کند؛پسین مشترک چاپ نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 4. Example of building anomaly root-cause tracing on a directed system graph, showing reverse-walk paths from anomalous sensor nodes to upstream  equipment root-cause nodes and their contribution scores for interpretable diagnosis. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "مثال جهت‌دار مسیرمعکوس وسهم ریشه نامزد را برتوپولوژی نمایش می‌دهد."
+      },
+      "explanation": {
+        "en": "A directed example overlays reverse paths and candidate root contributions on system topology.",
+        "fa": "مثال جهت‌دار مسیرمعکوس وسهم ریشه نامزد را برتوپولوژی نمایش می‌دهد."
+      },
+      "data": {
+        "en": "Top 3 selection follows contribution ordering; illustrative path strengths are not our SCM probabilities.",
+        "fa": "سه‌برتر با رتبه سهم انتخاب می‌شوند؛قدرت مسیرنمونه احتمالSCMمانیست."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "caption": {
+        "en": "Fig. 5. Dual-agent collaborative evolutionary optimization workflow for dynamic retrofit roadmap generation, illustrating retrofit measure graph construction, PPO-  based exploration, lightweight digital-twin validation, shared-database feedback, and Pareto-front evolution. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "اکتشافPPOبرنامه بازسازی رابااعتبارسنجTwinسبک وحافظه مشترک مبادله می‌کند."
+      },
+      "explanation": {
+        "en": "PPO exploration exchanges candidate retrofit schemes with a lightweight Twin validator and shared archive.",
+        "fa": "اکتشافPPOبرنامه بازسازی رابااعتبارسنجTwinسبک وحافظه مشترک مبادله می‌کند."
+      },
+      "data": {
+        "en": "This is RL/simulator dual agency; not evidence for LLM-agent topology superiority.",
+        "fa": "این دو عاملRL/شبیه‌سازند؛برتری توپولوژیLLMرا نشان نمی‌دهد."
+      }
+    },
+    {
+      "id": "6",
+      "page": 11,
+      "caption": {
+        "en": "Fig. 6. Spatial layout of multi-source data collection points on a representative floor of the real office building, showing physical sensors, electricity meters, oc- cupancy collection points, BIM attribute extraction locations, and virtual-completion areas used to construct graph attributes. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "مکان حسگر،کنتور،آب‌وهواوحضورپوشش کم‌تراکم دفتررا مشخص می‌کند."
+      },
+      "explanation": {
+        "en": "Sensor, meter, weather and occupancy collection locations establish sparse real-office coverage.",
+        "fa": "مکان حسگر،کنتور،آب‌وهواوحضورپوشش کم‌تراکم دفتررا مشخص می‌کند."
+      },
+      "data": {
+        "en": "Real case 12000 m²with 24 temperature/humidity sensors and 12 submeters(Table 3).",
+        "fa": "موردواقعی۱۲۰۰۰مترمربع،۲۴حسگردما/رطوبت و۱۲زیرکنتور دارد."
+      }
+    },
+    {
+      "id": "7",
+      "page": 12,
+      "caption": {
+        "en": "Fig. 7. Construction of sparse-monitoring test scenarios by applying random masks to complete sensor matrices at 20%, 40%, 60%, and 80% missing rates for  evaluating the virtual sensing robustness of the STAR framework. Fig. 8. Multi-source data acquisition and fusion architecture for the real office building, showing how BIM, sensor, weather, and occupancy data are preprocessed,",
+        "fa": "ماسک تصادفی سناریوی بازسازی نظارت ناقص از ماتریس کامل می‌سازد."
+      },
+      "explanation": {
+        "en": "Random masks define sparse-monitoring reconstruction scenarios from complete matrices.",
+        "fa": "ماسک تصادفی سناریوی بازسازی نظارت ناقص از ماتریس کامل می‌سازد."
+      },
+      "data": {
+        "en": "Missing rates 20%,40%,60%,80%are experimental settings, not measured outage rates.",
+        "fa": "فقدان۲۰/۴۰/۶۰/۸۰٪تنظیم آزمایش است،نه نرخ قطعی واقعی."
+      }
+    },
+    {
+      "id": "8",
+      "page": 12,
+      "caption": {
+        "en": "Fig. 8. Multi-source data acquisition and fusion architecture for the real office building, showing how BIM, sensor, weather, and occupancy data are preprocessed,  stored, and transformed into node and edge attributes for the STAR spatiotemporal heterogeneous graph. Fig. 9. Quality-assurance workflow for multi-source building data, covering BIM consistency checks, sensor calibration, weather and occupancy validation, missing-",
+        "fa": "BIM،حسگر،هواوحضوردرخط پایگاه‌داده به ویژگی گراف هم‌تراز می‌شوند."
+      },
+      "explanation": {
+        "en": "BIM, sensor, weather and occupancy streams are aligned into graph attributes through a database pipeline.",
+        "fa": "BIM،حسگر،هواوحضوردرخط پایگاه‌داده به ویژگی گراف هم‌تراز می‌شوند."
+      },
+      "data": {
+        "en": "Hourly aggregation is described; diagram does not establish real-time field reliability.",
+        "fa": "تجمیع ساعتی توصیف شده؛نمودارپایداری میدانی بلادرنگ رااثبات نمی‌کند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 12,
+      "caption": {
+        "en": "Fig. 9. Quality-assurance workflow for multi-source building data, covering BIM consistency checks, sensor calibration, weather and occupancy validation, missing-  value imputation, outlier detection, normalization, and spatiotemporal feature matrix generation. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "کنترل کیفیت سازگاریBIM،کالیبراسیون،فقدان،داده پرت ونرمال‌سازی را بررسی می‌کند."
+      },
+      "explanation": {
+        "en": "Quality assurance checks BIM consistency, calibration, missingness, outliers and normalization.",
+        "fa": "کنترل کیفیت سازگاریBIM،کالیبراسیون،فقدان،داده پرت ونرمال‌سازی را بررسی می‌کند."
+      },
+      "data": {
+        "en": "Text reports annual calibration,3σ+domain outlier checks and Z-score normalization.",
+        "fa": "متن کالیبراسیون سالانه،کنترل پرت3σبا دانش دامنه وZ-scoreراگزارش می‌کند."
+      }
+    },
+    {
+      "id": "10",
+      "page": 13,
+      "caption": {
+        "en": "Fig. 10. Offline iterative data replay simulation for evaluating STAR perfor- mance evolution from 2021 to 2024, showing strategy generation, simulated  implementation, data modification, engine retraining, and per-round recording",
+        "fa": "بازپخش آفلاین دسته تاریخی می‌افزاید ومدل/راهبردرابه‌روزمی‌کند."
+      },
+      "explanation": {
+        "en": "Offline replay adds historical batches and repeats model/strategy updates.",
+        "fa": "بازپخش آفلاین دسته تاریخی می‌افزاید ومدل/راهبردرابه‌روزمی‌کند."
+      },
+      "data": {
+        "en": "Seven iterations are replay simulation, not seven installed retrofit interventions.",
+        "fa": "هفت تکرار شبیه‌سازی بازپخش است،نه هفت مداخله نصب‌شده."
+      }
+    },
+    {
+      "id": "11",
+      "page": 14,
+      "caption": {
+        "en": "Fig. 11. Distribution of MAPE values over ten independent runs under 60%  sensor missing rate, comparing STAR with PINN, GAT, STGCN, CNN-LSTM, and  EnergyPlus to evaluate virtual-metering accuracy and stability.",
+        "fa": "توزیعMAPEده‌اجراپایداری ادراک درفقدان۶۰٪رامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Ten-run MAPE distributions compare sensing stability under 60%missingness.",
+        "fa": "توزیعMAPEده‌اجراپایداری ادراک درفقدان۶۰٪رامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Reported STAR mean MAPE 6.5%; uncertainty must use printed values only.",
+        "fa": "میانگینMAPEگزارش‌شده۶٫۵٪است؛عدم‌قطعیت فقط ازعددچاپ‌شده."
+      }
+    },
+    {
+      "id": "12",
+      "page": 15,
+      "caption": {
+        "en": "Fig. 12. Virtual completion of sparse energy-consumption records using the STAR sensing engine and temporal validation against real full-scale sensor data under a  60% sensor missing rate. Table 6",
+        "fa": "بازسازی حسگر مجازی با رکوردواقعی کامل کنارگذاشته‌شده بررسی می‌شود."
+      },
+      "explanation": {
+        "en": "Virtual sensor reconstruction is checked against withheld full-scale real sensor records.",
+        "fa": "بازسازی حسگر مجازی با رکوردواقعی کامل کنارگذاشته‌شده بررسی می‌شود."
+      },
+      "data": {
+        "en": "Curves are retained as source evidence; no individual temporal samples are estimated.",
+        "fa": "منحنی به‌صورت منبعحفظ شده؛نمونه زمانی منفرد تخمین زده نشده."
+      }
+    },
+    {
+      "id": "13",
+      "page": 16,
+      "caption": {
+        "en": "Fig. 13. STAR-predicted temporal heatmap of whole-building energy consumption from 2021 to 2024, showing seasonal and weekly load patterns used to verify  temporal perception coverage. Fig. 14. STAR-predicted 3 D spatial heatmap of energy consumption across",
+        "fa": "نقشه پیش‌بینی۲۰۲۱–۲۰۲۴الگوی فصلی/هفتگی کل ساختمان رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "A predicted 2021–2024 whole-building heatmap displays seasonal/weekly patterns.",
+        "fa": "نقشه پیش‌بینی۲۰۲۱–۲۰۲۴الگوی فصلی/هفتگی کل ساختمان رانشان می‌دهد."
+      },
+      "data": {
+        "en": "This is model-predicted energy distribution, not observed causal intervention benefit.",
+        "fa": "این توزیع پیش‌بینی مدل است،نه منفعت مداخله علّی مشاهده‌شده."
+      }
+    },
+    {
+      "id": "14",
+      "page": 16,
+      "caption": {
+        "en": "Fig. 14. STAR-predicted 3 D spatial heatmap of energy consumption across  floors and functional areas, illustrating spatial distribution and gradient con- tinuity in monitored and unmonitored zones.",
+        "fa": "نقشه سه‌بعدی انرژی تغییرپیش‌بینی‌شده ناحیه/طبقه رانمایش می‌دهد."
+      },
+      "explanation": {
+        "en": "Spatial 3 Denergy mapping displays predicted variation across office zones/floors.",
+        "fa": "نقشه سه‌بعدی انرژی تغییرپیش‌بینی‌شده ناحیه/طبقه رانمایش می‌دهد."
+      },
+      "data": {
+        "en": "Color differences are not converted into unprinted per-zone energy estimates.",
+        "fa": "تفاوت رنگ به تخمین انرژی ناحیه‌ای چاپ‌نشده تبدیل نشده است."
+      }
+    },
+    {
+      "id": "15",
+      "page": 17,
+      "caption": {
+        "en": "Fig. 15. Diagnostic confusion matrices for STGCN, GAT, PINN, and STAR across seven building energy anomaly scenarios, showing the comparative accuracy of  anomaly type identification. Fig. 16. Sensitivity analysis of the STAR diagnostic engine under varying fault severities, composite faults, and gradual fault evolution, comparing precision, recall,",
+        "fa": "ماتریس درهم‌ریختگی STGCN،GAT،PINNوSTARراهفت سناریوناهنجاری مقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Confusion matrices compare STGCN, GAT, PINN and STAR across seven anomaly scenarios.",
+        "fa": "ماتریس درهم‌ریختگی STGCN،GAT،PINNوSTARراهفت سناریوناهنجاری مقایسه می‌کند."
+      },
+      "data": {
+        "en": "Text reports STAR F 1>.88 and hidden-anomaly recall 92%; source cells retained.",
+        "fa": "متنF1بیشاز۰٫۸۸وبازیابی ناهنجاری پنهان۹۲٪راگزارش می‌کند؛سلول اصلی حفظ شده."
+      }
+    },
+    {
+      "id": "16",
+      "page": 17,
+      "caption": {
+        "en": "Fig. 16. Sensitivity analysis of the STAR diagnostic engine under varying fault severities, composite faults, and gradual fault evolution, comparing precision, recall,  and F 1-score. C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763",
+        "fa": "حساسیت تشخیص شدت،ترکیب خطا وتکامل تدریجی راتغییرمی‌دهد."
+      },
+      "explanation": {
+        "en": "Diagnosis sensitivity varies severity, composite faults and gradual evolution.",
+        "fa": "حساسیت تشخیص شدت،ترکیب خطا وتکامل تدریجی راتغییرمی‌دهد."
+      },
+      "data": {
+        "en": "Precision/recall/F 1 curves remain original; no interpolation or digitization.",
+        "fa": "منحنی دقت/بازیابی/F1اصلی است؛درون‌یابی وتخمین نشده."
+      }
+    },
+    {
+      "id": "17",
+      "page": 18,
+      "caption": {
+        "en": "Fig. 17. Cumulative distribution function (CDF) comparison of diagnostic F 1-scores across transferred building scenarios and operating conditions, evaluating the  cross-scenario generalization of STAR against PINN, GAT, and STGCN. Fig. 18. Validation of the STAR diagnostic engine on the ASHRAE RP-1043 real",
+        "fa": "CDFامتیازF1انتقال میان ساختمان/شرایط رامی‌سنجد."
+      },
+      "explanation": {
+        "en": "F 1 CDFs assess transferred building/operating scenarios.",
+        "fa": "CDFامتیازF1انتقال میان ساختمان/شرایط رامی‌سنجد."
+      },
+      "data": {
+        "en": "Transfer-distribution curves are not calibration curves for cause posteriors.",
+        "fa": "منحنی توزیع انتقال،کالیبراسیون پسین علت نیست."
+      }
+    },
+    {
+      "id": "18",
+      "page": 18,
+      "caption": {
+        "en": "Fig. 18. Validation of the STAR diagnostic engine on the ASHRAE RP-1043 real  chiller fault dataset, comparing precision, recall, and F 1-score with PINN and  GAT for refrigerant leak and condenser fouling faults.",
+        "fa": "داده خطای واقعیRP-1043آزمون فراتر ازناهنجاری شبیه‌سازی ساختمان است."
+      },
+      "explanation": {
+        "en": "RP-1043 real device fault data tests beyond building-level simulated anomalies.",
+        "fa": "داده خطای واقعیRP-1043آزمون فراتر ازناهنجاری شبیه‌سازی ساختمان است."
+      },
+      "data": {
+        "en": "Authors report lower F 1 and a degenerate single-node graph for this device dataset.",
+        "fa": "نویسندگانF1کمتر وگراف تک‌گرهی برای این داده دستگاه گزارش می‌کنند."
+      }
+    },
+    {
+      "id": "19",
+      "page": 19,
+      "caption": {
+        "en": "Fig. 19. Agreement between lightweight simulator predictions and EnergyPlus  simulations for retrofit energy-saving estimation, supporting the validation-  agent approximation used in the dual-agent optimizer.",
+        "fa": "پیش‌بینیTwinسبک باارزیابیEnergyPlusمقایسه می‌شود."
+      },
+      "explanation": {
+        "en": "Lightweight Twin predictions are compared with EnergyPlus evaluation outcomes.",
+        "fa": "پیش‌بینیTwinسبک باارزیابیEnergyPlusمقایسه می‌شود."
+      },
+      "data": {
+        "en": "Agreement between two models does not independently verify physical retrofit recovery.",
+        "fa": "توافق دو مدل،بازیابی بازسازی فیزیکی را مستقلاًتأیید نمی‌کند."
+      }
+    },
+    {
+      "id": "20",
+      "page": 19,
+      "caption": {
+        "en": "Fig. 20. Sensitivity of retrofit optimization performance to reward-function  weights, showing changes in Pareto coverage and optimal energy saving  when energy-saving, cost, compliance, and conflict terms are perturbed.",
+        "fa": "حساسیت وزن پاداش،نتیجه بهینه‌سازی باتغییرهدف رامی‌سنجد."
+      },
+      "explanation": {
+        "en": "Reward-weight sensitivity examines optimization outcomes under changed objectives.",
+        "fa": "حساسیت وزن پاداش،نتیجه بهینه‌سازی باتغییرهدف رامی‌سنجد."
+      },
+      "data": {
+        "en": "Weights affect saving/cost/compliance tradeoffs; do not assume a universal weighting.",
+        "fa": "وزن مصالحه صرفه‌جویی/هزینه/انطباق را تغییرمی‌دهد؛وزن عمومی فرض نشود."
+      }
+    },
+    {
+      "id": "21",
+      "page": 20,
+      "caption": {
+        "en": "Fig. 21. Comparative optimization performance of STAR and baseline methods, showing Pareto-front curves, optimized solution distributions, and typical balanced-  scheme indicators for evaluating trade-offs among energy saving, thermal comfort, and payback period. Fig. 22. Coordinated 24-hour multi-energy power flow under the STAR dy-",
+        "fa": "جبهه پارتو وتوزیع راه‌حلSTARوNSGA-IIIوMOPSOوPPOرامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Pareto fronts and solution distributions compare STAR, NSGA-III, MOPSO and PPO.",
+        "fa": "جبهه پارتو وتوزیع راه‌حلSTARوNSGA-IIIوMOPSOوPPOرامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Reported Pareto coverage.93; typical 22%saving and 3.2-year payback.",
+        "fa": "پوشش پارتو۰٫۹۳،صرفه‌جویی نمونه۲۲٪وبازگشت۳٫۲سال گزارش شده."
+      }
+    },
+    {
+      "id": "22",
+      "page": 20,
+      "caption": {
+        "en": "Fig. 22. Coordinated 24-hour multi-energy power flow under the STAR dy- namic retrofit scheme, illustrating the temporal interaction among load de- mand, photovoltaic generation, battery storage, and power purchased from the",
+        "fa": "جریان۲۴ساعته چندانرژی هماهنگی راهبردپویا رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "A 24 hourmulti-energy flow illustrates coordination under the dynamic scheme.",
+        "fa": "جریان۲۴ساعته چندانرژی هماهنگی راهبردپویا رانشان می‌دهد."
+      },
+      "data": {
+        "en": "Modelled power trajectories have no new sample values inferred here.",
+        "fa": "مسیرتوان مدل‌شده است؛مقدار نمونه تازه حدس زده نشده."
+      }
+    },
+    {
+      "id": "23",
+      "page": 21,
+      "caption": {
+        "en": "Fig. 23. Temporal comparison of energy-saving performance under dynamic operating scenarios, showing the adaptability of the STAR dynamic scheme against the  NSGA-III static scheme under increased occupancy density, extreme high temperature, and energy-saving stability conditions. Table 10",
+        "fa": "مسیرصرفه‌جویی طرح پویا/ایستا انطباق درسناریوهارامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Dynamic/static scheme saving trajectories compare adaptation over operating scenarios.",
+        "fa": "مسیرصرفه‌جویی طرح پویا/ایستا انطباق درسناریوهارامقایسه می‌کند."
+      },
+      "data": {
+        "en": "The text reports 20–21%savings in dynamic scenarios; these are simulation outcomes.",
+        "fa": "متن۲۰تا۲۱٪صرفه‌جویی درسناریوپویاگزارش می‌کند؛نتیجه شبیه‌سازی است."
+      }
+    },
+    {
+      "id": "24",
+      "page": 22,
+      "caption": {
+        "en": "Fig. 24. Performance evolution over seven rounds of offline iterative data replay simulation, comparing STAR with staged baseline combinations in terms of  perception MAPE reduction, diagnostic F 1-score improvement, and optimized ROI growth. Table 12",
+        "fa": "هفت دوربازپخش تحول ادراک،تشخیص وROIرادنبال می‌کند."
+      },
+      "explanation": {
+        "en": "Seven replay rounds track sensing, diagnosis and optimized ROI evolution.",
+        "fa": "هفت دوربازپخش تحول ادراک،تشخیص وROIرادنبال می‌کند."
+      },
+      "data": {
+        "en": "MAPE 6.5→5.2%, diagnostic F 1 about+4.2%, ROI 10.2%as reported.",
+        "fa": "MAPEاز۶٫۵به۵٫۲٪،F1حدود۴٫۲٪افزایش وROI۱۰٫۲٪گزارش شده."
+      }
+    },
+    {
+      "id": "B1",
+      "page": 26,
+      "caption": {
+        "en": "Fig. B 1. Performance of full‑graph vs. hierarchical optimisation Fig. B.1 compares the performance of full‑graph and hierarchical optimisation across the three campus sizes. Hierarchical optimisation reduced  computation time by 45% to 68% across all graph sizes, incurring a relative loss in energy saving rate of less than 5%. For the 500‑node campus,",
+        "fa": "بهینه‌سازی سلسله‌مراتبی وگراف کامل اندازه محوطه رامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Hierarchical versus full-graph optimization tests campus graph sizes.",
+        "fa": "بهینه‌سازی سلسله‌مراتبی وگراف کامل اندازه محوطه رامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Authors report 45–68%time reduction,<5%relative saving loss;500 nodesabout 78→25 s.",
+        "fa": "کاهش زمان۴۵تا۶۸٪،افت نسبی صرفه‌جویی زیر۵٪و۵۰۰گره حدود۷۸به۲۵ثانیه گزارش شده."
+      }
+    },
+    {
+      "id": "B2",
+      "page": 26,
+      "caption": {
+        "en": "Fig. B 2. Impact of VAV flow bound constraint on performance To illustrate extensibility, a penalty term for VAV box air flow violations, covering minimum and maximum limits, was added to the loss function of  the spatiotemporal sensing engine. Three typical floors with different VAV densities were tested. The evaluation metrics were MAPE and the physical",
+        "fa": "افزودن قیدکران دبیVAVگسترش زیانفیزیکی رامی‌سنجد."
+      },
+      "explanation": {
+        "en": "Adding VAV minimum/maximum flow physics tests extension of loss constraints.",
+        "fa": "افزودن قیدکران دبیVAVگسترش زیانفیزیکی رامی‌سنجد."
+      },
+      "data": {
+        "en": "Text reports MAPE−.2–.4 percentage points and flow residual−50–60%.",
+        "fa": "متن کاهشMAPEبه‌اندازه۰٫۲تا۰٫۴واحددرصدوباقیمانده دبی۵۰تا۶۰٪رادارد."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 3,
+      "title": {
+        "en": "Main outcomes of EU-funded next-generation EPC sister projects and their  relevance to the STAR framework for sparse-data sensing, diagnosis, and  adaptive retrofit optimization.",
+        "fa": "جدول1:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 1 provides: Main outcomes of EU-funded next-generation EPC sister projects and their  relevance to the STAR framework for sparse-data sensing, diagnosis, and  adaptive retrofit optimization.. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول1داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 4,
+      "title": {
+        "en": "Regional comparison of EPC research trajectories and remaining technical gaps related to dynamic assessment, sparse-data virtual sensing, causal diagnosis, and  retrofit optimization. Region Core Research Focus Representative Works Relevance to Our Framework",
+        "fa": "جدول2:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 2 provides: Regional comparison of EPC research trajectories and remaining technical gaps related to dynamic assessment, sparse-data virtual sensing, causal diagnosis, and  retrofit optimization. Region Core Research Focus Representative Works Relevance to Our Framework. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول2داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 11,
+      "title": {
+        "en": "Multi-source data specifications of the ASHRAE GEP III public dataset and the real office building case used for sparse-monitoring validation of the STAR framework. Dimension Sub-item ASHRAE GEP III (public dataset) Real office building case Building information Type Office Office",
+        "fa": "جدول3:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 3 provides: Multi-source data specifications of the ASHRAE GEP III public dataset and the real office building case used for sparse-monitoring validation of the STAR framework. Dimension Sub-item ASHRAE GEP III (public dataset) Real office building case Building information Type Office Office. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول3داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 14,
+      "title": {
+        "en": "Comparative virtual-metering accuracy of STAR and baseline models under 20%–80% sensor missing rates, evaluated using RMSE, MAPE, CV(RMSE), and R 2. Evaluation Metric Sensor Missing Rate STAR EnergyPlus CNN-LSTM STGCN GAT PINN RMSE (kWh) 20% 0.52 ± 0.02 0.78 ± 0.05 0.69 ± 0.04 0.65 ± 0.04 0.63 ± 0.03 0.58 ± 0.03",
+        "fa": "جدول4:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 4 provides: Comparative virtual-metering accuracy of STAR and baseline models under 20%–80% sensor missing rates, evaluated using RMSE, MAPE, CV(RMSE), and R 2. Evaluation Metric Sensor Missing Rate STAR EnergyPlus CNN-LSTM STGCN GAT PINN RMSE (kWh) 20% 0.52 ± 0.02 0.78 ± 0.05 0.69 ± 0.04 0.65 ± 0.04 0.63 ± 0.03 0.58 ± 0.03. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول4داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 14,
+      "title": {
+        "en": "Cross-floor validation results for virtual metering in the real office building  under partial sensor masking, using MAPE, RMSE, and R 2 as evaluation metrics. Training",
+        "fa": "جدول5:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 5 provides: Cross-floor validation results for virtual metering in the real office building  under partial sensor masking, using MAPE, RMSE, and R 2 as evaluation metrics. Training. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول5داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 15,
+      "title": {
+        "en": "Ablation analysis of the STAR spatiotemporal sensing engine under 60% sensor missing rate, showing the contributions of explicit topology, implicit correlation,  physical constraints, and temporal modeling. Model Configuration RMSE (kWh) MAPE (%) CV(RMSE) (%) R 2 Physical Constraint Residual 24 h Short-Term Prediction MAPE (%)",
+        "fa": "جدول6:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 6 provides: Ablation analysis of the STAR spatiotemporal sensing engine under 60% sensor missing rate, showing the contributions of explicit topology, implicit correlation,  physical constraints, and temporal modeling. Model Configuration RMSE (kWh) MAPE (%) CV(RMSE) (%) R 2 Physical Constraint Residual 24 h Short-Term Prediction MAPE (%). Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول6داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "8",
+      "page": 18,
+      "title": {
+        "en": "Average diagnostic time per anomaly scenario",
+        "fa": "زمان میانگین تشخیص"
+      },
+      "summary": {
+        "en": "The original average diagnostic time per anomaly scenario are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "زمان میانگین تشخیصبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "7",
+      "page": 16,
+      "title": {
+        "en": "Prediction uncertainty comparison of STAR and baseline models under different  sensor missing rates, quantified by 95% confidence interval coverage and pre- diction variance.",
+        "fa": "جدول7:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 7 provides: Prediction uncertainty comparison of STAR and baseline models under different  sensor missing rates, quantified by 95% confidence interval coverage and pre- diction variance.. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول7داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 19,
+      "title": {
+        "en": "Multi-objective retrofit optimization performance of STAR and baseline opti- mizers, comparing Pareto-front quality and typical balanced schemes in terms of  energy saving, ROI, payback period, and comfort compliance.",
+        "fa": "جدول9:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 9 provides: Multi-objective retrofit optimization performance of STAR and baseline opti- mizers, comparing Pareto-front quality and typical balanced schemes in terms of  energy saving, ROI, payback period, and comfort compliance.. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول9داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "10",
+      "page": 21,
+      "title": {
+        "en": "Effect of the dual-agent exploration-validation mechanism on retrofit optimization performance, comparing STAR with a single-agent configuration in terms of Pareto  quality, feasibility, convergence, and energy saving. Agent Configuration Coverage Spacing Feasible Solution Ratio",
+        "fa": "جدول10:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 10 provides: Effect of the dual-agent exploration-validation mechanism on retrofit optimization performance, comparing STAR with a single-agent configuration in terms of Pareto  quality, feasibility, convergence, and energy saving. Agent Configuration Coverage Spacing Feasible Solution Ratio. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول10داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "11",
+      "page": 21,
+      "title": {
+        "en": "Influence of the interlock and dead-zone module on optimization deployability,  showing its effect on Pareto coverage, average energy saving, and filtered  strategy updates.",
+        "fa": "جدول11:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 11 provides: Influence of the interlock and dead-zone module on optimization deployability,  showing its effect on Pareto coverage, average energy saving, and filtered  strategy updates.. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول11داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "12",
+      "page": 22,
+      "title": {
+        "en": "Adaptive virtual-metering improvement of STAR and PINN with increasing real-time data volumes under 60% sensor missing rate, measured by MAPE reduction over  iterative data updates. Additional Real-Time",
+        "fa": "جدول12:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 12 provides: Adaptive virtual-metering improvement of STAR and PINN with increasing real-time data volumes under 60% sensor missing rate, measured by MAPE reduction over  iterative data updates. Additional Real-Time. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول12داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "B1",
+      "page": 25,
+      "title": {
+        "en": "Transfer fine-tuning data volume versus MAPE",
+        "fa": "داده تنظیم انتقالی وMAPE"
+      },
+      "summary": {
+        "en": "The original transfer fine-tuning data volume versus mape are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "داده تنظیم انتقالی وMAPEبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    }
+  ]
+}

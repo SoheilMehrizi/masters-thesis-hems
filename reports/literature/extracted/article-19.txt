@@ -1,0 +1,3016 @@
+
+=== PAGE 1 ===
+A systematic review of transformers and large language models in the 
+energy sector: towards agentic digital twins
+Gabriel Antonesi a, Tudor Cioara a,*, Ionut Anghel a, Vasilis Michalakopoulos b,  
+Elissaios Sarmas b, Liana Toderean a
+a Distributed Systems Research Laboratory, Computer Science Department, Technical University of Cluj-Napoca, G. Barițiu 26-28, 400027 Cluj-Napoca, Romania
+b Decision Support Systems Laboratory, School of Electrical & Computer Engineering, National Technical University of Athens, Ir. Politechniou 9, 157 73 Athens, Greece
+HIGHLIGHTS
+• Systematic literature review of recent advances in AI applications in the energy domain focusing on transformers & LLMs.
+• Synthesis of transformer applications across multiple energy forecasting tasks.
+• Review of LLMs applications in energy prediction, efficiency optimization, and smart grid management.
+• Introducing the concept of Agentic Digital Twin as promising solution for smart grids.
+ARTICLE INFO
+Keywords:
+Artificial intelligence
+Transformers
+Large language models
+Foundation models
+GenAI
+Generative AI
+Agentic digital twins
+Energy sector
+Smart grid
+ABSTRACT
+Artificial intelligence (AI) has long promised to improve energy management in smart grids by enhancing 
+situational awareness and supporting more effective decision-making. While traditional machine learning has 
+demonstrated notable results in forecasting and optimization, it often struggles with generalization, situational 
+awareness, and heterogeneous data integration. Recent advances in Transformer architecture, including Large 
+Language Models (LLMs) and Foundation Models (FMs) can significantly improve the ability to model complex 
+temporal and contextual relationships, as well as in multi-modal data fusion which is valuable for most AI ap-
+plications in the energy sector. In this review, we synthesize the rapidly expanding field of AI applications in the 
+energy domain, with a focus on Transformer Models (TMs) and LLMs, which have shown growing relevance. We 
+examine the architectural foundations, domain-specific adaptations and practical implementations of TMs across 
+various forecasting and grid management tasks. We then explore the emerging role of LLMs in the field: adap-
+tation and fine tuning for the energy sector, the type of tasks they are suited for, and the new challenges they 
+introduce. Along the way, we highlight practical implementations, innovations, and areas where the research 
+frontier is rapidly expanding. These recent developments reviewed underscore a broader trend: Generative AI 
+(GenAI) is beginning to augment decision-making not only in high-level planning but also in day-to-day oper-
+ations, from forecasting and grid balancing to workforce training and asset onboarding. While FMs hold 
+promises, we found limited evidence of their concrete application in energy domain to date. Therefore we 
+introduce the concept of the Agentic Digital Twin, a next-generation model that integrates FMs to bring multi- 
+modal situational awareness, autonomy, proactivity, and social interaction into digital twin-based energy 
+management systems. We present the transformational impact of FMs to each phase of a digital twin and identify 
+the open challenges that need to be addressed for their efficient and effective integration.
+1. Introduction
+In recent years, the energy sector has found itself at the intersection 
+of rapid technological change (advances in grid digitization, smart 
+metering infrastructure, edge computing, and real-time monitoring 
+systems) [1–3] and rising environmental and operational challenges 
+* Corresponding authors.
+E-mail addresses: gabriel.antonesi@cs.utcluj.ro (G. Antonesi), tudor.cioara@cs.utcluj.ro (T. Cioara), ionut.anghel@cs.utcluj.ro (I. Anghel), vmichalakopoulos@ 
+epu.ntua.gr (V. Michalakopoulos), esarmas@epu.ntua.gr (E. Sarmas), liana.toderean@cs.utcluj.ro (L. Toderean). 
+Contents lists available at ScienceDirect
+Applied Energy
+journal homepage: www.elsevier.com/locate/apenergy
+https://doi.org/10.1016/j.apenergy.2025.126670
+Received 13 May 2025; Received in revised form 5 August 2025; Accepted 20 August 2025  
+Applied Energy 401 (2025) 126670 
+Available online 23 August 2025 
+0306-2619/© 2025 The Authors. Published by Elsevier Ltd. This is an open access article under the CC BY-NC-ND license ( http://creativecommons.org/licenses/by- 
+nc-nd/4.0/ ). 
+
+=== PAGE 2 ===
+(including the variability introduced by large-scale integration of 
+renewable energy sources, the need to reduce greenhouse gas emissions, 
+and the pressures of decarbonization deadlines) [4,5]. As renewable 
+generation, distributed energy resources, and real-time grid operations 
+become the norm, energy systems are generating vast amounts of 
+complex, multi-scale data [6]. Extracting meaningful, timely insights 
+from this data, whether for forecasting day-ahead solar output or man-
+aging demand spikes across a smart grid is not just a technical challenge 
+but a prerequisite for maintaining stability, reliability, and efficiency in 
+an increasingly complex and dynamic energy landscape.
+Artificial intelligence (AI) has long promised to enhance decision- 
+making across the energy value chain [7] and for a time, traditional 
+machine learning models delivered on that promise in many areas: 
+forecasting electricity demand, predicting equipment failures, opti-
+mizing grid operations, and more [8,9]. However, as the complexity and 
+dynamism of modern energy systems continue to grow, so too do the 
+limits of these conventional models. Many struggle to scale, generalize 
+across conditions, or integrate heterogeneous sources like weather data, 
+satellite imagery, and market reports. Recent breakthroughs in Trans-
+former architectures [136] led to the creation of larger models that have 
+demonstrated improved generalization capabilities to address above 
+challenges offering unprecedented opportunity for creating more intel-
+ligent applications in the energy sector. They introduce innovations such 
+as self-attention mechanisms and parallel sequence processing, which 
+allow them to model complex dependencies in data more efficiently than 
+traditional neural architectures like RNNs or CNNs [10]. In doing so, 
+TMs have offered a more flexible, scalable, and accurate approach to 
+time-series modeling, making them a natural fit for energy forecasting 
+tasks with seasonal, periodic, or highly non-linear patterns. Researchers 
+quickly adapted them to handle load prediction, renewable generation, 
+and even spatial-temporal grid data with impressive results [11–14].
+The Transformer Model (TM) is what makes modern large-scale AI 
+models possible, as they constitute the main building blocks (see Fig. 1). 
+Large Language Models (LLMs) such as GPT-3, GPT-4 [15], PaLM [16], 
+Claude 3 [137], LLaMA 3 [138] are built on Transformer architectures, 
+leveraging their main innovations to learn complex language patterns 
+from vast text datasets, providing advanced capabilities in tasks related 
+to natural language understanding and generation. Foundation Models 
+(FMs) [139] such as GPT-4o [140], Gemini 1.5 Pro [141], DALL-E 3 
+[142], TimeGPT [17] or PatchPST [18] on the other hand, go beyond 
+text processing to support multi-modal inputs such as images, time se-
+ries, audio, video, and structured data being are able perform not only 
+language related tasks but also tasks like image classification, code 
+generation, speech recognition, etc. FMs ability to generalize allow for 
+fine-tuning to new tasks with minimal supervision even with few-shot 
+learning.
+Therefore, large-scale AI models adoption in the energy sector holds 
+substantial promise, but also introduces a range of new questions and 
+challenges that must be carefully addressed. What are the real advan-
+tages of these models in the context of several energy problems like 
+energy forecasting, grid optimization, strategic bidding in different en-
+ergy markets, and grid/storage/ Renewable Energy Systems (RES) in-
+vestment planning among others? How do they compare to traditional 
+or even transformer-based methods in terms of performance, interpret-
+ability, and operational readiness? Can large-scale AI models be fine- 
+tuned effectively for energy problems, given the domain’s unique con-
+straints such as data sparsity, regulatory risk, and real-time demands?
+This review takes a close look and synthesizes recent advances in 
+large-scale AI models in the energy domain focusing on Transformers, 
+and LLMs which have shown growing relevance. We begin by showing 
+transformer architecture, domain-specific adaptations, and real-world 
+applications. We then explore how LLMs are entering the field, the 
+kinds of tasks they are suited for, and the new challenges they introduce. 
+Along the way, we highlight practical implementations, innovations, 
+and areas where the research frontier is rapidly expanding. These recent 
+developments reviewed underscore a broader trend: GenAI is beginning 
+to augment decision-making not only in high-level planning but also in 
+day-to-day operations, from fault detection and grid balancing to 
+workforce training and asset onboarding. As these tools move from 
+proof-of-concept to production, it becomes critical to assess their real- 
+world performance, scalability, and integration challenges within 
+complex energy ecosystems.
+Significantly, despite their promising features of multi modal pro-
+cessing and broader tasks adaptation we found limited evidence of FMs 
+concrete application in energy domain literature reviewed to date. 
+However FMs hold promise energy domain, as they open the door to 
+richer, more adaptable and contextualized execution of tasks: fusion of 
+structured and text-based data for improved situational awareness, 
+seamless integration of eternal data sources and conversational capa-
+bilities, code generation and energy management actions planning and 
+validation. Moreover, energy management solutions in smart grid are 
+aiming towards system-level reusable and configurable Digital Twins 
+(DTs) which intelligently combine and merge physical and data-based 
+modeling of individual energy assets components within the energy 
+system.
+Therefore, in the discussion section we introduce the concept of 
+Agentic Digital Twins (ADTs) as the next evolution in energy manage-
+ment presenting the potential transformational value brought by FMs 
+and the open challenges that need to be addressed for their efficient and 
+effective integration. They will combine data-driven mirroring and real- 
+time simulation of energy system models, with the autonomy, proac-
+tivity, and social capabilities of an Intelligent Agent. So, instead of a 
+passive twin that just reflects the energy asset or system characteristics, 
+agentic DT will act on fuse data, make decisions, communicate, and even 
+negotiate with other DTs. By integrating FMs, ADTs can move beyond 
+traditional energy asset management by interacting and cooperating 
+with other digital twins in a cohesive structure. This will bridge the gap 
+between theoretical AI research and practical energy grid management 
+and will enable system-level coordination and decision-making across 
+the energy grid.
+The paper is structured as follows: Section 2 outlines the main ele-
+ments of transformer architectures for predictive tasks, as well as LLMs 
+integration for energy management tasks. Section 3 presents methodo-
+logical details of the systematic literature review process, including 
+search strategy, inclusion/exclusion criteria, and data sources. Section 4
+offers an in-depth synthesis of transformer applications across multiple 
+energy forecasting tasks such as household and building-level demand, 
+renewable energy, integrated energy systems, and specialized decision 
+Fig. 1. Hierarchical taxonomy of types of models described in this work.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+2 
+
+=== PAGE 3 ===
+support tasks like EV charging. Section 5 transitions to LLMs, reviewing 
+their recent applications in energy prediction, efficiency optimization, 
+and smart grid management, including examples of domain-specific 
+adaptations, transfer learning, and generative scenario modeling. Sec-
+tion 6 discusses challenges of LLM integration in nowadays energy 
+management processes such as operational security, hallucinations and 
+scalability. Section 7 presents the future perspectives and introduces a 
+new concept the ADTs as promising management solution in smart grid, 
+supported by the integration of FMs.
+2. Transformers and LLMs overview
+At the core of each TM lies the self-attention mechanism, that is used 
+to compute weighted relationships between all pairs of input time steps. 
+By converting inputs into queries, keys, and values, the model calculates 
+attention scores that allow it to dynamically determine which past 
+monitored values are most relevant to forecasting the future, rather than 
+relying solely on fixed-length memory. By design, self-attention proves 
+efficient in capturing long-range temporal dependencies, a very impor-
+tant advantage in prediction applications with seasonal patterns or long 
+memory such as yearly renewable energy patterns or monthly load de-
+mand cycles. Instead of using a single attention mechanism, TMs use 
+multi-head attention, where multiple attention heads learn different 
+representations of the inputs and their inter-dependences. Parallel 
+attention leads to a better representation of consumption or generation 
+profiles than single-headed models. Because self-attention alone is 
+permutation-invariant (i.e. insensitive to sequence order), TMs use po-
+sitional encoding to inject chronological information, to preserve the in- 
+place sequential nature of the data. In practice, common methods such 
+as adding fixed sinusoidal position vectors to the inputs to indicate their 
+time index or learned positional embeddings are used. This makes sure 
+that a transformer recognizes, for instance, which input corresponds to 
+peak vs. off-peak times, preserving the temporal structure needed for 
+forecasting. Improved encoding methods such computing differences in 
+positions between queries and keys, lead to better learning of local in-
+formation and long-range dependencies. Spatial-temporal encodings 
+also involve the combination of information from different sources, such 
+as geographic coordinates or sensor placements combined with time-of- 
+day, seasonal cycles, or other time-specific markers. Together, these core 
+concepts – self-attention, multi-head parallelism, and positional encod-
+ings – allow traditional, vanilla TMs to capture temporal dynamics in 
+energy time series that earlier architectures struggled with. Addition-
+ally, TMs are, at base, typically organized into an encoder–decoder ar-
+chitecture. The encoder processes the input sequence into a high- 
+dimensional representation that preserves its temporal dependencies. 
+The decoder then uses this contextualized representation to generate 
+point or probabilistic forecasts. Fig. 2 shows the vanilla TMs which 
+integrate the above concepts while addressing the computational limi-
+tations and improve the accuracy of the prediction tasks for energy- 
+specific use cases.
+Nowadays literature reviewed in Section 4 has been built upon these 
+building blocks by introducing various architectural modifications to 
+better address the challenges of energy forecasting and of vanilla TMs 
+[19,20]. Researchers have modified the attention mechanisms by 
+implementing sparse or convolutional attention to efficiently handle 
+long sequences or focus on important local changes [12,21]. Energy 
+systems often present spatial correlations, particularly in renewable 
+energy generation patterns and in load consumption behaviors. Inte-
+grating graph attention mechanisms with TMs allows effective modeling 
+of interdependencies among geographically distributed smart meters or 
+generation units, boosting the forecasting precision at scale [22,23]. 
+Other models introduced sparse and local attention mechanisms that 
+were brought up to improve computational efficiency for long sequences 
+[13,21]. In this way, the tweaks that were added to the attention 
+modules can enable the models to prioritize the more important in-
+tervals, such as peak load periods or sudden changes, achieving a lower 
+computational overhead. Finally, output layers have been extended to 
+produce not only point forecasts, but also probabilistic and multi-scale 
+predictions, to offer a more reliable decision-making context in energy 
+management [24–27].
+TMs laid the foundation for LLMs, which are typically pretrained on 
+vast amounts of heterogeneous text data and can then be fine-tuned for 
+specific tasks (e.g., question answering, summarization). They represent 
+a major paradigm shift in smart grid management having applications 
+well beyond prediction tasks [28,29]. These models have better gener-
+alization capacity than their predecessors, confirming that scaling up 
+data volumes and model dimensions can lead to improved results 
+[30,31]. Moreover, LLMs became effective even with small amounts of 
+data due to their few-shot and zero-shot learning features and can be 
+finetuned using energy domain heterogenous text data. This holistic 
+approach of fusing structured and unstructured text data such as time 
+series, weather dynamics, text documents and human behavior allows 
+for better modeling of energy systems and decision-making support 
+[32,33]. Therefore, LLMs are adaptable to a wide array of different 
+smart grid management tasks. As depicted in Fig. 3, the development of 
+smart grid adapted LLMs involves a process composed from an initial 
+pre-training step on heterogenous text data, followed by fine-tuning on 
+energy domain-specific data. This process facilitates the translation of 
+general language understanding into specialized smart grid manage-
+ment intelligence. Fine-tuning does not mean retraining the model from 
+scratch and can be done using smart grid logs, time-series from smart 
+meters, reports, documents etc. Instead, it modifies only a subset of 
+model parameters employing techniques such as Low-Rank Adaptation 
+or prompt-based tuning to avoid overfitting.
+The literature reviewed in this paper shows that LLMs have been 
+applied for tasks related to industrial carbon emissions prediction, 
+electrical safety incident detection, wind power and load forecasting and 
+grid management by leveraging their pattern recognition, reasoning 
+capabilities and generating decision-relevant information over complex 
+multi-dimensional datasets. But more importantly, most of the studies 
+Fig. 2. Vanilla transformer for predictive tasks in smart grids.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+3 
+
+=== PAGE 4 ===
+focus on buildings and particularly on Building Energy Modeling. They 
+are utilized to automate simulation tasks from data extraction to 
+debugging, enabling accurate, scalable solutions for urban energy 
+analysis. Furthermore, emerging workflows employ multi-agent 
+(agentic) LLMs workflows to fully automate complex tasks such as 
+building energy modeling pipelines and retrofit recommendation sys-
+tems. These developments not only streamline energy modeling pro-
+cesses but also pave the way for broader deployment of agent-based DT 
+architecture for the energy sector, as highlighted in the perspectives and 
+challenges section of the paper.
+3. Methodology
+The current systematic review aims to offer a comprehensive over-
+view for the domain of applying transformer and large-scale AI models 
+in the energy field focusing on identifying challenges and future di-
+rections. Therefore, we have used the Preferred Reporting Items for 
+Systematic Reviews and Meta-analyzes (PRISMA) methodology that 
+offers clear guidelines for conducting a systematic review and is widely 
+accepted and recommended in literature for review articles [34]. The 
+updated version of the PRISMA methodology from 2020 consists of a set 
+of items to be included in systematic reviews and a flow diagram that 
+sketches the process [35].
+The first step in the PRISMA methodology is to provide an explicit 
+statement of the research objectives the review addresses. In our study 
+we have defined the following main objectives: 
+• Identify energy efficiency use cases and scenarios that are based on 
+transformer models integration in smart energy grids
+• Analyze the application of large-scale AI models in energy systems 
+management and optimization processes
+• Investigate the challenges and determine the future research 
+directions
+The next step dealt with defining the main key phrases to be used in 
+the literature search to cover the techniques, models and technologies to 
+be analyzed in conjunction with the above three main research objec-
+tives. We have defined two main categories for the search key phrases: 
+transformer models in smart grid and large-scale AI models (Large 
+Language Model, Generative AI and Foundation Model) in energy sys-
+tems management and optimization. Thus, we carried out separate 
+searches combining the following keywords: 
+• Transformer / Large Language Model / Generative AI / Foundation 
+Model smart grid
+• Transformer / Large Language Model / Generative AI / Foundation 
+Model energy / electricity grid
+• Transformer / Large Language Model / Generative AI / Foundation 
+Model energy prediction / forecasting
+• Transformer / Large Language Model / Generative AI / Foundation 
+Model energy efficiency / optimization
+• Transformer / Large Language Model / Generative AI / Foundation 
+Model energy management
+For our study, we selected Web of Science (WoS) [36] as the primary 
+scientific database for conducting the search together with the Clarivate 
+platform to perform WoS searches, applying the “Topic” criteria to 
+identify relevant papers. The search and results processing activities 
+have been done in February–April 2025.
+Following the PRISMA 2000 sequential items, using the above ob-
+jectives we have defined a set of inclusion and exclusion criteria for the 
+review (see Table 1).
+Fig. 4 presents the PRISMA 2020 flow diagram used in our study. It 
+begins with the Identification phase, which includes compiling all re-
+sults retrieved from the WoS database totaling 8550 papers. After 
+removing duplicates, 7270 unique articles remained. In the screening 
+phase we apply sequentially the inclusion and exclusion criteria, nar-
+rowing the number of articles to 1492 and finally to 99 included ones. A 
+major complexity for the search was given by the meaning of the 
+transformer word that refers mainly to the component that transfers 
+electrical energy from one electrical circuit to another one and it is also 
+used as term for the deep learning architecture. This issue spawned 
+multiple results and implied difficult manual work in the screening 
+phase. We have also tried to overcome this problem by combining TMs 
+with models but still many results from the raw search referred to the 
+transformer electrical component. At the same time LLM combination 
+with energy efficiency key phrase gave as output many papers related to 
+investigating the energy efficiency of LLMs execution, not with their 
+application in the smart grid domain. Like the transformer search, these 
+papers have been filtered manually. Finally, FM and energy 
+Fig. 3. Finetuning process for LLMs adaptation to smart grid management tasks.
+Table 1 
+Defined inclusion and exclusion criteria.
+Inclusion 
+Criteria
+• Type of publication: article or proceeding
+• Article Language: English
+• Publication interval (last 5 years): 2021–2025
+• Top 4 publishers from WoS in the targeted research areas: 
+Elsevier, IEEE, ACM and Wiley.
+• Included in computer science related categories
+Exclusion 
+Criteria
+• Duplicate (obtained as a result in different searches)
+• ≥ 10 citations for 2021 & 2022; ≥ 5 citations for 2023; ≥ 3 
+citations for 2024; no citation constraint for 2025.
+• Review articles incorrectly marked as Article or Proceedings in 
+WoS
+• Not properly covering the main research topic of transformer / 
+large models for smart energy grids
+• Duplicates (obtained as a result in different searches, kept only 
+in one keyword category result)
+• Articles that could not be accessed as full text through the 
+available institutional access
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+4 
+
+=== PAGE 5 ===
+management key phrases have resulted in only a few relevant articles 
+satisfying the inclusion / exclusion criteria and that were already 
+included in the previous searches thus adding nothing new to the 
+selected papers.
+The selected papers are grouped in Table 2 using defined search 
+phrases and keywords. As can be noticed for some of the search phrases 
+there were no articles included in the review. This is justified by 
+removing duplicates or not complying with exclusion criteria such as not 
+properly covering the main research topic of TMs/LLMs for smart energy 
+grids, number of citations, etc.
+Fig. 5 details the mapping of the selected articles on publication year 
+and their distribution per publisher. Most of the papers are published in 
+the 2023–2025 timeframe, while as publisher Elsevier counts for 77 % of 
+the main four selected top publishers.
+As for the accessing rights for the articles, Fig. 6 shows the distri-
+bution of papers per access type highlighting that subscription-based 
+access articles are more than double as the ones published under gold 
+open access rights, but they can be still accessed through institutional 
+subscription. Most of the included articles are published in journals, only 
+five belonging to conference proceedings. Judging after the quartile of 
+the included journals, 80 articles are indexed under quartile Q1 while 13 
+are Q2.
+Considering the journals that published these articles, it can be 
+noticed that there are four Elsevier journals that published more than 
+five articles included in the study (see Fig. 7): Applied Energy, Energy 
+and Buildings, Renewable Energy and Energy. It seems that these jour-
+nals tackle a lot the subjects investigated in our study. For IEEE most of 
+the works are published in IEEE Access and IEEE Transactions on 
+Instrumentation and Measurement.
+The mean number of citations per paper is 16, showing a good 
+impact on the included articles. However, more than half of these papers 
+are published in 2024 and 2025 and some of their citations are not 
+indexed. This also highlights the novelty of the targeted research 
+domains. Considering distribution by author location, the Fig. 8 shows 
+that more than 20 authors that tackle research problems related to TMs 
+and LLMs in the energy field are from Europe, more than 10 are from the 
+US while this statistic is dominated by authors from Asia with more than 
+70 authors. However, there are papers where co-authors come from 
+different countries show that the research activity is a common objective 
+for researchers from different parts of the world.
+4. Transformers models in smart grids
+In the context of smart grids, accurate forecasting of electricity and 
+thermal demand and renewable generation is important for data driven 
+decision-making to ensure efficient energy management, and grid reli-
+ability. TMs in smart grids are mostly designed to tackle energy fore-
+casting tasks therefore we have organized the review to reflect the 
+applications and challenges related to relevant components of a smart 
+grid’s energy flow.
+4.1. Electricity demand prediction
+TMs are largely used for household-level electricity predictions 
+aimed at control strategies for home batteries, and appliances. Yuan 
+et al. [56] proposed a kernel-based real-time adaptive programing 
+(ADP) framework for energy management systems, using a gated 
+recurrent unit-bidirectional encoder representations from the trans-
+former GRU-BERT. It fine-tunes BERT on time-series data and classifies 
+the input loads by their type so that it can improve short-term household 
+energy forecasting. This integration brought improved results over other 
+baseline controllers. However, its complexity and extensive hyper-
+parameter tuning phase are the downsides. Zhao et al. [37] developed 
+the STformer, a variation of the transformer architecture with spatial 
+and temporal attention modules. This is used to yield better results on 
+short-term household consumption forecasting tasks by learning the 
+Fig. 4. PRISMA 2000 flow diagram for the current study.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+5 
+
+=== PAGE 6 ===
+inter-residential correlations. Monte Carlo dropout enables probabilistic 
+forecasting by quantifying uncertainty without requiring prior 
+geographic information. Iqbal et al. [71] introduced an edge computing 
+and transfer learning framework using an inverted transformer for real- 
+time load forecasting. By inverting the transformer embedding, the 
+model independently processes each variable, and it outputs forecasts 
+with minimal historical data. While effective for new buildings, the 
+model’s success depends heavily on the quality of pre-training data and 
+fine-tuning. For community-level energy forecasting spatial relation-
+ships between households, feeders, or neighborhoods are important. 
+Zhao et al. [22] introduced a spatio-temporal graph attention trans-
+former for multi-step residential load forecasting. The smart meter 
+monitoring from multiple houses is modeled as graph data, with edges 
+representing physical or functional similarities. They design spatio- 
+temporal graph attention blocks within a transformer encoder-decoder 
+architecture to capture inter-household correlations like voltage drop 
+effects or synchronized usage patterns, and temporal self-attention for 
+each house’s time series. This model significantly improved prediction 
+accuracy but faces challenges with keeping graph topology updated and 
+demands higher computational resources. Dong et al. [73] developed a 
+deep transformer seq2seq model to forecast household-level reactive 
+power demand in short-term, as an extension to active power fore-
+casting. The model’s capacity to integrate multiple inputs like voltage 
+and temperature improved the forecast accuracy. Also, Shan et al. [85] 
+introduces a Multiscale Self-Attention Network (MSANet) for nonin-
+trusive load monitoring (NILM), aiming to disaggregate total household 
+energy consumption into appliance-level loads. A dilated window self- 
+attention mechanism and a multibranch structure are employed to 
+capture both global temporal correlations and local sequential features, 
+while also addressing data imbalance issues through specialized subtask 
+networks. The self-attention-based model outperforms baselines, 
+achieving superior MAE and F1 scores in energy disaggregation tasks.
+Common open challenges include TM complexity and interpret-
+ability. Xu and Chen [12] introduced an interpretable TM for probabi-
+listic residential net load forecasting, which employs a sparse self- 
+attention mechanism and an embedded feature selection network to 
+highlight the most influential inputs. Similarly, Santos et al. [24] 
+demonstrated that transfer learning can mitigate data scarcity in 
+building load prediction by pre-training a temporal fusion transformer 
+on data-rich buildings and fine-tuning it for new buildings with low data 
+volumes. The method achieved lower errors in local energy commu-
+nities. These approaches aim to reduce the black-box nature of common 
+AI models and high data requirements of TMs in the residential context. 
+Wang et al. [26] propose PDFformer, for customer electricity demand 
+forecasting. They integrate a probabilistic decoder and an adaptive on-
+line probabilistic forecasting mechanism (AOPF), so that the model can 
+dynamically update only the probabilistic decoder based on real-time 
+loss evaluation, improving computational efficiency while maintaining 
+high forecasting accuracy. Semmelmann et al. [68] addresses fore-
+casting in communities with rising heat pump presence showing that 
+Transformer-based models outperform tree-based and traditional 
+recurrent methods, particularly when forecasting aggregated loads 
+directly. In addition, while the proposed ensemble empirical mode 
+decomposition with adaptive noise improves the performance of 
+Transformer and LSTM, it negatively impacts tree-based methods. A 
+sparse attention-based transformer for short-term load forecasting is 
+proposed to address inefficiencies in LSTMs based predictions [21]. 
+Their encoder-decoder model reduces computational cost while main-
+taining accuracy. Furthermore, Abdel-Basset et al. [78], introduced 
+Energy-Net a deep learning model for short-term energy consumption 
+forecasting in IoT-enabled smart grids. The model stacks multiple 
+spatiotemporal modules, each comprising a Temporal Transformer (TT) 
+for capturing temporal load patterns and a Spatial Transformer (ST) with 
+improved self-attention and convolutional layers to extract spatial fea-
+tures. Notably, the model maintained low computational complexity 
+suitable for resource-constrained IoT devices connected to smart grids. 
+Table 2 
+The selected articles distribution per search process.
+Keyword Raw 
+search 
+result
+Initial result 
+based on 
+inclusion
+Result based 
+on the 
+exclusion 
+criteria
+ID
+Transformer 
+model energy 
+prediction
+850 107 21 [19,20], 
+[27], 
+[37–55]
+Transformer 
+model energy 
+forecasting
+520 133 31 [11–13], 
+[21–26], 
+[56–76]
+Transformer 
+model smart 
+grid
+698 182 9 [77–85]
+Transformer 
+model energy 
+grid
+1381 149 9 [86–94]
+Transformer 
+model 
+electricity grid
+357 40 2 [95,96]
+Transformer 
+model energy 
+efficiency
+1403 216 2 [97,98]
+Transformer 
+model energy 
+optimization
+1078 145 – –
+Transformer 
+model energy 
+management
+791 110 1 [99]
+Large Language 
+Model energy 
+prediction
+204 41 4 [100–103]
+Large Language 
+Model energy 
+forecasting
+86 11 4 [28,29], 
+[32,104]
+Large Language 
+Model smart 
+grid
+53 16 1 [105]
+Large Language 
+Model energy 
+grid
+97 24 2 [30,31]
+Large Language 
+Model 
+electricity grid
+17 5 0 –
+Large Language 
+Model energy 
+efficiency
+322 75 2 [106,107]
+Large Language 
+Model energy 
+optimization
+179 69 3 [15], 
+[108,109]
+Large Language 
+Model energy 
+management
+169 50 4 [110–113]
+Generative AI 
+energy 
+prediction
+55 12 1 [114]
+Generative AI 
+energy 
+forecasting
+20 8 0 –
+Generative AI 
+smart grid
+16 3 2 [115,116]
+Generative AI 
+energy grid
+24 8 1 [117]
+Generative AI 
+electricity grid
+7 3 0 –
+Generative AI 
+energy 
+efficiency
+88 34 0 –
+Generative AI 
+energy 
+optimization
+70 26 0 –
+Generative AI 
+energy 
+management
+65 25 0 –
+TOTALS 8550 1492 99 –
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+6 
+
+=== PAGE 7 ===
+Giacomazzi et al. [65] used household-level data but focused forecasting 
+at the substation and grid levels. They showed that training TFT models 
+on substations and then aggregating the forecasts yielded better accu-
+racy than direct grid-level prediction. This hierarchical approach 
+allowed the model to learn load patterns and improve aggregate fore-
+casting accuracy. To achieve a balance between speed and accuracy 
+MEAformer architecture is proposed [19]. The self-attention is replaced 
+with a linear external attention mechanism using an all-MLP decoder. 
+Fig. 5. Paper distribution per publishing year and publisher.
+Fig. 6. Access type, medium and quartile statistics.
+Fig. 7. Number of articles per journal.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+7 
+
+=== PAGE 8 ===
+This lightweight design helps in reducing the computational demands 
+while maintaining strong forecasting accuracy, particularly for 
+household-level electricity consumption. Also, Nazir et al. [79], pre-
+sented a daily, weekly, and monthly load energy consumption predic-
+tion model using the TFT. By leveraging both primary and auxiliary data 
+sources and using batch training techniques, the TFT model outperforms 
+traditional deep learning models. Rong et al. [45] introduced a transfer 
+learning-enhanced transformer for improved accuracy of household 
+appliance identification. The transformer is pre-trained on one set of 
+houses and fine-tuning on another to address data scarcity and gener-
+alization issues. The transformer’s multi-head attention was better at 
+isolating the patterns of each appliance from the aggregated data, 
+especially after fine-tuning to a new home’s specifics. This model out-
+performed baseline models in both single-load and multi-load scenarios, 
+obtaining lower errors on multiple datasets.
+Several studies address the limitations of traditional TMs for long- 
+term energy forecasting. Wang et al. [20] propose PWDformer, which 
+improves temporal learning by integrating deformable-local aggrega-
+tion, position weights, and a frequency selection module, leading to 
+accuracy gains across benchmark datasets. Similarly, Su et al. [48] 
+introduced MDCNet, that improves long-term forecasting at household 
+level by transforming 1D time series into 2D feature spaces using mode 
+decomposition and 2D convolutions. The model first applies variational 
+mode decomposition to split input series into a trend and multiple 
+intrinsic mode functions across frequency bands, then processes them 
+with specialized prediction blocks and convolutional modules to better 
+learn the correlations between intramodal and intermodal features. 
+Hierarchical TMs that generate initial probabilistic forecasts and then 
+refine them via a conditional generative model are proposed in [27]. The 
+time series decomposition into trend and seasonal components and 
+correction of the transformer’s outputs effectively reduces errors over 
+long forecasting horizons. Huang et al. [43] propose CrossWaveNet, a 
+dual-channel network for household-level electricity forecasting. The 
+model decomposes the input signal into seasonal and trend-cyclical 
+components, processing them separately through LSTM/GRU-based 
+modules before merging for the final prediction. They additionally 
+propose FL-Net [46] for household-level electricity consumption fore-
+casting, combining reversible instance normalization, multi-scale 
+decomposition, and frequency external attention. Their model sepa-
+rates trend and seasonal components and then refines them through 
+cross-decomposition, achieving strong long-horizon forecasting perfor-
+mance at a lower computational cost. Similarly, Saeed et al. [23] pro-
+pose the SmartFormer, a graph-based transformer household and 
+regional smart grid electricity load forecasting. The model improves 
+forecast accuracy across multiple datasets, addressing challenges of 
+inter-series dependencies in multivariate smart grid data. Yu et al. [53] 
+developed Robformer, which embeds a second-order differencing 
+decomposition and a specialized trend forecasting block into the trans-
+former to better handle abrupt load shifts and irregular seasonal fluc-
+tuations. This improves the model’s stability and reduces errors when 
+system behavior changes suddenly. Nonetheless, fully addressing regime 
+changes may require techniques like continual online learning or peri-
+odic fine-tuning to keep models updated. An interesting approach for 
+secure load management in smart cities is proposed by Wang et al. [98]. 
+An AI-driven Multi-Stage Learning-to-Learning (MSLL), leveraging 
+MMStransformer which is tailored for multivariate data and long-rage 
+dependency capture in load forecasting. Computational efficiency is 
+optimized while high prediction accuracy is maintained, while it in-
+tegrates environmental and operational variables to handle the 
+complexity in smart city data.
+Forecasting aggregated loads supports long-term decisions on grid 
+upgrades and substation expansions. Huy et al. [64] applied the Tem-
+poral Fusion Transformer to city-level load forecasting in Hanoi, Viet-
+nam, obtaining superior performance over traditional statistical models 
+and RNNs. TFT’s architecture combines LSTM-based local processing 
+with self-attention, with the model learning both short and long-term 
+load patterns helped by the integration of weather and calendar fea-
+tures. In the Hanoi case, TFT reduced day-ahead forecast errors 
+compared to LSTM and ARIMA models. Cao et al. [91] proposes a 
+Shifted Window Attention TM for power distribution prediction, 
+Fig. 8. Country distribution of included articles.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+8 
+
+=== PAGE 9 ===
+designed to effectively integrate both global trends and local variations 
+in time series data. Self-attention within varying window sizes and the 
+application of patch relative position encoding makes the model capture 
+spatiotemporal patterns more accurately and operate in a bottom-up 
+fashion to progressively extract features from local to global levels. 
+Cui et al. [61] address provincial-level electricity load forecasting by 
+augmenting the Informer model with a Season-aware Block designed to 
+learn the low-frequency seasonal patterns and temporal covariates. 
+Their dual-path architecture models both high-frequency variations and 
+long-term seasonal trends, improving long-horizon forecasting accuracy 
+for large-scale power systems. Similarly, Du et al. [67] propose 
+MOWOA-Transformer for regional electricity load forecasting from New 
+South Wales, Australia, by combining a multi-objective whale optimi-
+zation algorithm (MOWOA) with a TM to automate hyperparameter 
+tuning. Their optimized model achieves up to 35 % MAPE reduction 
+compared to unoptimized baselines and provides accurate probabilistic 
+forecasts, addressing the dual needs for precise load prediction and 
+uncertainty estimation in large-scale power systems. Gao et al. [58] 
+propose Adaptive-TgDLF, a transformer-based model for district-level 
+electricity load forecasting that integrates domain knowledge into the 
+training process. By decomposing load into a smooth trend and local 
+fluctuations, and using physics-guided methods for the trend, the model 
+performs well even when anomalies and noise are present. Additionally, 
+Ferreira et al. [63] showed that interpretable TMs can achieve high 
+accuracy in substation-level load forecasting. They used the temporal 
+fusion transformer with built-in variable selection and attention mech-
+anisms, to forecast aggregated substation loads up to 48 h ahead with a 
+MAPE below 1.5 %. Qingyong Zhang et al. [54] also address the 
+national-level net load forecasting task aiming to improve grid stability 
+by learning multi-scale temporal patterns and inter-variable de-
+pendencies. The TM is augmented with temporal-channel attention 
+block, combining temporal and channel attention within a hierarchical 
+encoder–decoder using multi-scale patch-based embeddings. Tested on 
+country-wide datasets from Austria, Belgium, and France, it consistently 
+outperforms state-of-the-art models, though its computational demands 
+and hyperparameter sensitivity may limit deployment in real-time sce-
+narios. Similarly, Zhang et al. [69] propose TransformGraph, a hybrid 
+model for national-level electricity net load forecasting that combines a 
+transformer with a graph convolutional network (GCN). The model 
+performs well, learning feature correlations via LSTM-derived graphs 
+and the temporal dynamics within the data. It results in improving short- 
+term forecasting accuracy on OPSD datasets from Austria, Belgium, and 
+Slovenia, outperforming ARIMA, RNN, LSTM, and vanilla TMs. Finally, 
+Zheng et al. [72] introduced a framework that integrates spectral 
+clustering-based decomposition with temporal fusion TMs to forecast 
+aggregated building energy use from different building zones (offices, 
+dormitories). Unlike conventional deep learning methods that rely on 
+raw energy data, their proposed approach first applies spectral clus-
+tering to decompose building energy consumption into multiple inter-
+pretable subsequences, which are then encoded as vector 
+representations and used as static covariates in a temporal fusion TM. 
+Despite its advantages, the reliance on high-resolution sensor and 
+weather data, along with the complexity of spectral clustering, may limit 
+its adaptability across different building types.
+Finally, TMs have also been applied to specialized forecasts like EV 
+charging demand. Gao et al. [76] used a multi-attention fusion trans-
+former to predict aggregate residential load under coordinated EV 
+charging. They use a pre-trained temporal fusion transformer with 
+minimal EV-specific data improving the forecast accuracy compared to 
+baseline models like MLP and LSTM, showing that pre-trained TMs can 
+perform well in data-scarce environments. Dong et al. [41] applied TMs 
+to improve the prediction of energy consumption for electric buses. 
+Their approach uses a transformer encoder to extract implicit features 
+from driving behavior and vehicle dynamics data, which are then fed 
+into a decoder for energy consumption forecasting. By learning the re-
+lationships between driver behavior and real-time bus driving, the 
+transformer achieved more accurate consumption estimates across 
+varying driving distances. Furthermore, Jiang et al. [96] developed a 
+V2X (vehicle-to-everything) value-stacking framework that coordinates 
+vehicle-to-building (V2B), vehicle-to-grid (V2G), and energy trading to 
+maximize economic benefits for residential communities while main-
+taining grid stability. It employs a dynamic rolling-horizon optimization 
+(RHO) method and introduces a Transformer-based forecasting mod-
+el—GRU-EN-TFD (Gated Recurrent Units-Encoder-Temporal Fusion 
+Decoder)—to handle uncertainties in building loads, solar generation, 
+and EV arrivals. Simulation results demonstrated that the Transformer- 
+based model outperformed all benchmarks.
+In [81], Ma et al. propose a muti-branch cross-Transformer inte-
+grated into a prior-guided state-reused network that aims to non- 
+intrusively perform load disaggregation. The Transformer block is the 
+central component and handles the feature fusion from multiple sources, 
+including an appliance operating power pattern to perform the disag-
+gregation. As seen, many electricity demand prediction TMs involve 
+elaborate architectures that may be difficult to deploy at scale. There is 
+ongoing work to simplify these or apply transfer learning so that one TM 
+may address multiple energy assets of different energy scales with 
+minimal retraining or computational resources and in scarce data sce-
+narios. Despite these challenges, TMs have clearly demonstrated supe-
+rior accuracy in electricity demand forecasting, achieving lower errors 
+and enabling better control decisions than previously possible. Howev-
+er, LLMs offer promising solutions to these challenges due to their 
+relevant features of transfer learning and time series energy data 
+augmentation. Table 3 presents a comparative view of the research done 
+for electricity demand prediction using TMs.
+4.2. Thermal energy demand prediction
+TMs have been also used to forecast multi-energy demands (see 
+Table 4). Wang et al. [57] developed a multi-energy transformer for a 
+campus energy system that integrates electricity, cooling, and heating 
+loads. Their model, MultiDeT (Multi-decoder Transformer), uses a single 
+transformer encoder to process the historical profiles of all energy loads 
+together, and then uses separate transformer decoders for each load 
+type’s forecast. The encoder’s self-attention effectively learns the shared 
+patterns and correlations between the different energy datasets. Mean-
+while, each decoder can focus on the particularities of one load. This 
+architecture obtained better results than forecasting each load with an 
+independent model. The model obtained lower errors, alongside faster 
+training convergence since the shared encoder learns a common repre-
+sentation for all tasks. Zhang et al. [25] introduced a probabilistic Patch 
+Time-Series Transformer for integrated load forecasting. This model 
+segments each energy load time series into patches or subsequences and 
+feeds them into a transformer, like how vision TMs handle image 
+patches. It then applies quantile regression at the output to estimate 
+prediction intervals for each energy type, achieving more accurate 
+forecasts for building electricity, cooling, and heating loads. Yan et al. 
+[59] proposed an improved feature-time transformer with a Bi-LSTM 
+decoder (FTTrans-E-BL) for user-level integrated energy forecasts. The 
+most important result was that the model outperformed multiple 
+benchmarks across multiple load types simultaneously. By visualizing 
+attention patterns, they showed that the transformer learned meaningful 
+correlations. Similarly, Cen et al. [62] developed a model for short-term 
+multi-load energy forecasting in buildings that uses a channel- 
+independent forecasting strategy combined with a patching mecha-
+nism and a temporal convolutional network followed by a stacked 
+transformer encoder. However, while the model performs good in in-
+dependent load forecasting (air conditioning load forecasting), it does 
+not explicitly account for inter-channel dependencies.
+Recent studies show that transformer architecture can improve 
+building load predictions by learning complex occupancy and thermal 
+patterns from data. Li et al. [40] proposed a transformer-based enco-
+der–decoder model for short-term cooling load forecasting in large 
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+9 
+
+=== PAGE 10 ===
+commercial buildings. Their model encodes past cooling load and 
+influencing factors such as weather data into latent features via multi- 
+head attention, then decodes the output to predict future cooling de-
+mand. After training, they computed attention-based importance scores 
+for each input feature to rank their influence on the cooling load fore-
+cast. This provided valuable interpretability, confirming for instance 
+that outdoor temperature and solar irradiance were the top prediction 
+influences. Faiz et al. [75] compares a Transformer-based model and a 
+CNN-LSTM hybrid model across multiple forecasting horizons showing 
+that the TM consistently outperforms the CNN-LSTM. Also, they provide 
+an analysis of how forecasting aggregated indoor temperatures can 
+impact energy optimization and occupant comfort. Wang et al. [47] 
+introduced a transformer variant that decomposes a building’s energy 
+(heating and cooling stations, lighting, elevator, etc.) data into distinct 
+trend and periodic components and applies a specialized spectral-patch 
+attention mechanism. In evaluations on a large office building, SPA-
+former achieved 12 % lower error than vanilla TMs, demonstrating the 
+benefit of explicitly attending to multiple different patterns in the data. 
+In another study, Die Yu et al. [55] developed a hybrid approach for a 
+hub airport’s cooling load that integrates clustering with transformer 
+prediction. They first grouped daily cooling load profiles by using an 
+improved weighted-DTW K-means algorithm, then fed cluster features 
+and labels into a temporal fusion transformer. This approach effectively 
+learned the influence of an airport’s operational schedule and thermal 
+energy storage on cooling demand.
+Forecasting short-term natural gas demand is an important piece for 
+operational planning yet challenging due to irregular patterns and 
+Table 3 
+Analysis of the TMs for electricity demand prediction.
+Encoder-Decoder Attention 
+Mechanism
+Architectural 
+Extensions
+Work
+Household/Residential Load +/  Weather data
+BERT encoder; GRU 
+decoder
+Standard scaled dot- 
+product
+Kernel-based ADP [56]
+LSTM-based 
+Transformer
+Multi-task learning, 
+variable selection 
+module
+[73]
+iTx blocks with self- 
+attention, FFN, layer 
+norm
+N/A [71]
+TFT architecture [79]
+2 encoder layers with 
+autocorrelation, 
+spatial attention, 
+and decomposition
+Autocorrelation- 
+based multi-head 
+mechanism
+MC Dropout for 
+probabilistic 
+forecasting
+[37]
+STGA encoder and 
+decoder
+Spatial, temporal, 
+and transform 
+attention
+Gated fusion for 
+combining spatial/ 
+temporal patterns; 
+graph-based Seq2Seq 
+for inter-household 
+modeling
+[22]
+No encoder-decoder, 
+direct generative 
+Transformer
+Sparse multi-head 
+self-attention
+Local variable selection 
+module
+[12]
+Static encoder for 
+building context +
+LSTM for local 
+patterns
+Temporal self- 
+attention
+Variable selection; 
+gating mechanisms
+[24]
+MLP encoder with 
+temporal external 
+attention + MLP 
+decoder
+Temporal external 
+attention across 
+sequences
+All-MLP structure, 
+shared external 
+memory, reversible 
+normalization
+[19]
+Multibranch cross- 
+Transformer
+Cross Attention 
+mechanism
+Convolutional Fusion 
+Block and Multi-head 
+Self attention
+[81]
+Aggregated residential load (building level) +/  weather data
+Probabilistic decoder Standard scaled dot- 
+product
+Conv1D input layer; 
+AOPF module
+[26]
+TFT architecture DECPR spectral 
+decomposition
+[72]
+CNN + pooling for 
+local patterns
+N/A [45]
+Standard CEEMDAN 
+decomposition per IMF
+[68]
+Standard scaled dot- 
+product +
+deformable local 
+aggregation
+[20]
+Event-based +
+ProbSparse attention
+CSPBlock for 
+lightweight training, 
+TSDBlock for seasonal/ 
+trend decomposition
+[76]
+LSTM encoder Temporal self- 
+attention
+Hierarchical 
+aggregation from 
+substations
+[65]
+Household/Residential & Aggregated Load +/  Weather data
+Encoder with GNN ProbSparse attention 
+for long-sequence 
+efficiency
+Graph structure 
+learning
+[23]
+Conditional generative 
+decoder for 
+hierarchical 
+forecasting
+Standard scaled dot- 
+product
+Hierarchical 
+probabilistic 
+forecasting
+[27]
+Dual LSTM/GRU- 
+based channels for 
+seasonal and trend 
+features
+Cross-channel dot- 
+product
+Dual-channel 
+architecture
+[43]
+Encoder only Frequency external 
+attention
+Multi-scale trend- 
+season decomposition, 
+external memory
+[46]
+Trend and modal 
+streams via MLP and 
+2D CNNs
+No attention module Variational Mode 
+Decomposition (VMD)
+[48]
+Table 3 (continued)
+Encoder-Decoder Attention 
+Mechanism 
+Architectural 
+Extensions 
+Work
+Standard Auto-correlation 
+mechanism with 
+lower complexity
+Trend forecasting 
+block, decomposition 
+block
+[53]
+Dilated window 
+transformer blocks 
+and distilling layers
+Multi-scale self- 
+attention mechanism
+N/A [85]
+Aggregated district/city/grid Load +/  Weather data
+Standard Standard scaled dot- 
+product
+MOWOA for 
+hyperparameter tuning, 
+longitudinal data 
+selection
+[67]
+Domain-informed 
+decomposition, transfer 
+learning
+[58]
+Deep feature extraction 
+module from dynamic 
+bus states
+[41]
+GCN-based feature 
+aggregation, LSTM- 
+derived graph structure
+[69]
+TFT architecture
+Value stacking rolling 
+horizon optimization 
+problem
+[96]
+Variable selection 
+networks, gated 
+residual layers
+[63]
+Multi-scale standard 
+encoder-decoder 
+structure
+Temporal-channel 
+attention
+Multi-scale patch 
+embedding
+[54]
+Informer encoder- 
+decoder
+ProbSparse self- 
+attention
+Parallel seasonality 
+MLP block for artificial 
+covariates
+[61]
+LSTM encoder Temporal self- 
+attention
+Linear regression pre- 
+trend removal, gated 
+residual blocks
+[64]
+TT and ST 
+architectures
+Spatial attention 
+mechanism
+Stacked spatiotemporal 
+modules
+[78]
+Vanilla transformer Multi-head window 
+attention
+Shifted window 
+attention blocks
+[91]
+Input embedding and 
+transformer blocks.
+Multi-head self- 
+attention mechanism
+Multi-mask learning-to- 
+learning strategy
+[98]
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+10 
+
+=== PAGE 11 ===
+weather sensitivity. Han et al. [50] proposes a production prediction 
+model for liquefied petroleum gas (LPG) plants that integrates the Bor-
+uta algorithm with a CNN-based TM. The model uses CNN for adaptive 
+feature extraction and a transformer layer to learn the temporal de-
+pendencies across different representation spaces. This integrated 
+approach outperforms traditional models in terms of prediction accu-
+racy, offering practical operational guidance. Lin et al. [70] introduced 
+time-enhanced perception TM employs a standard transformer encoder 
+augmented with convolutional self-attention and enriched positional 
+encodings for gas demand prediction. It is paired with a two-stage 
+feature extraction step that decomposes the gas load time series into 
+trend, seasonal, and residual components and generates informative 
+lags. Using sequence modeling with domain-specific feature engineer-
+ing, the model achieved high accuracy. Extensive tuning of the convo-
+lution kernel sizes, and feature lags were required for peak performance, 
+therefore model’s complexity could pose problems for real-time 
+deployment in resource-constrained settings.
+Finally, it’s worth mentioning that TMs are enabling cross-domain 
+energy forecasts that account for interactions between systems. For 
+instance, recent research has demonstrated the effectiveness of 
+transformer-based approaches in simultaneously forecasting multiple 
+variables, such as energy demand and market prices. Traditional fore-
+casting models typically treat these variables in isolation, thereby 
+overlooking the interdependencies that may or may not exist between 
+them. In contrast, TMs integrate information from multiple domains, 
+thereby offering a more holistic view of the energy landscape. By using 
+the concept of attention, TMs can assign appropriate weights to different 
+features and quantify the impact of one variable on another.
+4.3. Renewable generation prediction
+Wind and solar power generation can be quite challenging to forecast 
+due to the inherent variability of renewable energy sources and high 
+dependence on accurate weather forecasts.
+TMs have shown promise for wind power forecasting by learning 
+short-term gust patterns and long-term seasonal effects (see Table 5). 
+Early applications of TMs showed improvements over recurrent net-
+works, and recent innovations target the wind’s unique challenges such 
+as extreme fluctuations and spatial correlations among turbines. Nasci-
+mento et al. [11] proposed a transformer-based model with integrated 
+wavelet transforms to separate high- and low-frequency components of 
+wind speed series. Their model, using cyclical positional encoding for 
+daily periodicity, achieved better prediction accuracy than LSTM, GRU, 
+and vanilla TMs, especially in extreme wind speed conditions. Liu and 
+Fu [13] introduced the Graph Patch Informer (GPI), a self-supervised 
+learning-enhanced TM designed for forecasting multiple renewable en-
+ergy sources, including photovoltaic and wind power. The innovation 
+consists in the integration of patch-based self-attention, graph attention 
+networks, and a self-supervised pre-training strategy. GPI segments the 
+time series into patches to preserve local continuity, then the graph 
+attention network is employed with a self-adaptive adjacency matrix. 
+Experimental results demonstrate significant improvements, compared 
+to models like Autoformer across different renewable energy forecasting 
+tasks.
+Table 4 
+Transformer based approaches for thermal energy demand prediction.
+Input 
+Representation
+Encoder- 
+Decoder
+Attention 
+Mechanism
+Architectural 
+Extensions
+Article
+City-level gas 
+load; 
+temperature 
+data
+FFN 
+decoder
+Convolutional- 
+based 
+attention
+STL & TLAC 
+two-stage 
+decomposition
+[70]
+Campus-level 
+heating and 
+cooling 
+loads; 
+weather data
+One shared 
+encoder and 
+3 load- 
+specific 
+decoders. 
+PatchTST 
+encoder
+Standard 
+scaled dot- 
+product
+Uncertainty 
+estimation; 
+patch-based 
+time-series 
+segmentation
+[25,57]
+Building-level 
+electricity, 
+heating and 
+cooling 
+loads; 
+weather data
+TFT encoder 
+& Bi-LSTM 
+decoder. 
+MLP block 
+for long- 
+term trends
+Feature and 
+timewise dual 
+multi-head 
+attention. 
+Spectra-Patch 
+Attention
+WTLCC-based 
+input lag 
+selection. 
+Trend-period 
+decomposition
+[40,47,59]
+Floor-level air 
+conditioning 
+data; indoor 
+conditions
+PatchTCN 
+encoder 
+(encoder- 
+only 
+approach)
+Standard 
+scaled dot- 
+product on 
+sub-series
+TCN for 
+temporal 
+embedding, 
+patch 
+segmentation 
+for short-time 
+patterns
+[62]
+Room-level 
+HVAC 
+temperature; 
+indoor 
+comfort 
+survey
+Encoder- 
+only 
+approach
+Standard 
+scaled dot- 
+product
+– [75]
+Airport-level 
+cooling load 
+and 
+passenger 
+flow; 
+weather data
+TFT 
+architecture
+Standard 
+scaled dot- 
+product
+k-means 
+clustering 
+module of 
+daily load 
+patterns
+[55]
+LPG 
+production 
+thermal data
+Standard 
+with CNN 
+layer before 
+the encoder
+Standard 
+scaled dot- 
+product
+Boruta for 
+feature 
+selection
+[50]
+Table 5 
+Comparison of Transformer-Based Models for Wind Power Forecasting.
+Input 
+Representation
+Encoder- 
+Decoder
+Attention 
+Mechanism
+Architectural 
+Extensions
+Work
+Wind speed +
+aggregated 
+wind farm 
+data + weather 
+data
+Informer 
+encoder +
+linear 
+decoder
+Probabilistic 
+attention with 
+patch 
+segmentation
+Segment-wise 
+patching; GAT for 
+supervised 
+learning
+[13]
+Aggregated wind 
+farm data +/ 
+weather data
+Pre-trained 
+BERT 
+encoder (4- 
+layer 
+truncated)
+Bidirectional 
+self-attention
+Spatio-temporal 
+patch encoding;
+[29]
+Swin 
+encoder
+Standard 
+scaled dot- 
+product with 
+windowing
+Siamese 
+Transformer
+[92]
+Standard 
+encoder- 
+decoder
+Self- 
+differential 
+attention
+N/A [44]
+LSTM-based 
+encoder
+Sparse self- 
+attention
+[51]
+3 encoder 
+layers
+Standard 
+scaled dot- 
+product
+Anomaly 
+detection; multi- 
+feature 
+imputation
+[88]
+Encoder- 
+only 
+approach
+Wavelet 
+decomposition 
+module
+[11]
+Aggregated wind 
+speed data 
++/  weather 
+data
+Standard 
+encoder- 
+decoder
+Wind- 
+Transformer at 
+each node; GNN 
+for spatial 
+correlations
+[52]
+CNN-based 
+encoder, no 
+decoder
+Wavelet soft 
+threshold 
+denoising, feature 
+selection module
+[38]
+Encoder- 
+decoder 
+with gated 
+residual 
+networks
+Quantile 
+transformation 
+module
+[93]
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+11 
+
+=== PAGE 12 ===
+Efficient handling of spatio-temporal relationships in wind farms can 
+significantly improve TMs’ predictions. Wind speeds at neighboring 
+turbines or locations are correlated therefore using spatial data can 
+improve predictions. Therefore, TM variants incorporate graph atten-
+tion, like the residential load case, or encoder-decoder models that use 
+numerical weather predictions as additional sequences. Zefeng et al. 
+[29] had fine-tuned a BERT model specifically for wind power fore-
+casting (BERT4ST) and included spatial features like wind speed from 
+adjacent sites. It is one of first approaches that aimed to adapt a language 
+model to wind forecasting and consistently outperformed all analyzed 
+baseline models, including variants like Informer and Autoformer, on 
+multiple wind farm datasets. Its architecture successfully learned spatial 
+correlations by treating them as another sentence in the input, and the 
+self-attention layers then picked up on both temporal patterns and cross- 
+site dependencies. The model was pre-trained on sequence data and fine- 
+tuned on wind data with minimal architecture changes, beating 
+specialized models, indicating the potential power of transfer learning in 
+use cases wind farms. Similarly, a pre-trained language model with 
+spatial prompts and trend/seasonal decomposition are combined to 
+forecast wind speeds [28]. STELLM decomposed wind time series into 
+trend/seasonal components via multi-scale pooling, tokenized the series 
+into patch sequences, and then added spatio-temporal prompts to these 
+token sequences before feeding into a large pre-trained model. These 
+types of approaches address multiple challenges at once, such as data 
+heterogeneity, long-sequence modeling, and extreme event forecasting, 
+at the cost of a very complex and expensive computational model. Zhou 
+et al. [44] focused mainly on wind’s volatility defining a TM named 
+Diformer that modifies the attention mechanism to better focus on 
+changes in the energy time series, rather than on the absolute values. It 
+computes bidirectional differences in the input sequence and applies 
+self-attention to these difference series, making the model highly sen-
+sitive to sudden trend reversals, spikes or drops in the dataset. Addi-
+tionally, Diformer uses a dynamic trade-off loss function that penalizes 
+large errors more heavily outperforming other transformer-based 
+models, in both short-term (15-min ahead) and ultra-short-term (5- 
+min ahead) wind forecasting tasks.
+One remaining challenge is the model scaling to longer horizons. 
+Difference-focused attention performs well at very short horizons but 
+might need additional components for day-ahead horizons. Conversely, 
+Mo et al. [51] developed Powerformer, a transformer for wind power 
+forecasting that integrates an LSTM-based embedding layer, sparse self- 
+attention, and temporal pooling. They filter out temporal noise and 
+improve feature extraction for wind data with the LSTM embeddings 
+significantly reducing the errors compared to a basic transformer and to 
+LSTM/GRU models, while also using less computation, thanks to the 
+sparse attention. Wind power forecasting is closely linked to 
+transformer-based methods for predicting wind speed, an exogenous 
+variable that is a driver of power production. Wu et al. [52] uses 
+transformer and graph neural network techniques for wind prediction. A 
+transformer-based wind predictor is deployed at each production site 
+and a multi-dimensional spatial-temporal GNN (MST-GNN) aggregates 
+the information across neighboring sites. This combined approach 
+improved multi-step wind speed forecasting accuracy by roughly 9 % 
+compared to models without spatial coupling. Wang et al. [38] propose a 
+convolutional transformer-based truncated gaussian density network 
+(TGDN) with a probabilistic forecasting approach. The model in-
+corporates wavelet soft threshold denoising to filter noise from wind 
+speed data, followed by maximal information coefficient-based feature 
+selection to improve the quality of input representation. The hybrid 
+architecture integrates convolutions for multi-scale spatial feature 
+extraction and multi-head self-attention TMs for long-term temporal 
+dependencies. Experimental results across three real-world datasets 
+prove that this model achieves superior forecasting accuracy compared 
+to LSTM, GRU, and standard TMs. Notably, the integration of wavelet 
+denoising leads to a marked improvement over raw-data-based models, 
+and the truncated Gaussian approach provides better uncertainty 
+quantification compared to traditional quantile regression.
+In addition to the purely data-driven approaches, we have identified 
+a direction that explores hybrid TMs with physical-informed compo-
+nents. For example, some works merge transformer forecasts with nu-
+merical weather prediction outputs or use physics-guided augmentation 
+to inform the attention mechanism [58]. This hybridization can improve 
+performance in scenarios where historical data may not contain suffi-
+cient information for future wind changes. Liang et al. [88], ARFEAT, a 
+robust short-term wind power forecasting framework is presented. The 
+model architecture contained anomaly repair, feature enhancement, 
+asymmetric loss optimization, and a transformer-based model. It uses 
+self-attention to model temporal dependencies and an asymmetric loss 
+to penalize overestimations, addressing energy trading risks. One of 
+their biggest contributions is the inclusion of a semi-supervised anomaly 
+detection (KNN-LightGBM) module and Fisher score-based feature se-
+lection. ARFEAT achieves good accuracy and cost reduction on datasets 
+from inland and coastal wind farms. The work by Thiyagarajan et al. 
+[92] introduces MST-Net, a modified twin TM for one-hour-ahead wind 
+power forecasting. It combines GoogleNet feature extraction with Swin 
+transformer blocks shifted window attention to learn local and global 
+temporal patterns. It achieves good accuracy on real-time wind data 
+from Tamil Nadu, outperforming baselines. Mirza et al. [93] present QT- 
+MARF, a quantile-transformed multi-attention residual framework for 
+medium-term wind and PV power forecasting. Their model is built on a 
+transformer encoder-decoder architecture and being a quantile trans-
+former, it normalizes inputs for improved accuracy and generalization. 
+Trained on datasets from Brazil and China, QT-MARF outperforms 
+models like CNN-GRU and CNN-LSTM, achieving higher R2 scores.
+Transformer architectures have been applied to solar power fore-
+casting to address similar challenges as in wind case, such as temporal 
+variability, multivariate inputs and long-term dependencies (see 
+Table 6). Zhang et al. [42] developed a multimodal model that combines 
+ground-based fisheye sky images with meteorological data, using a gate- 
+enabled transformer mechanism. In this approach, CNNs first extract 
+visual features from sky images, while a transformer processes the time- 
+series of recent irradiance and weather measurements. A gating network 
+then combines the two outputs by weighing the CNN and transformer 
+features, effectively deciding how much the current cloud cover should 
+influence the forecast and how much the historical irradiance trend 
+should influence it. The results highlight the strength of TMs in multi- 
+modal data integration, by attending to different inputs (here, numeri-
+cal and image data) through gating. Liu et al. [74] combines historical 
+solar irradiance data with ground-based sky image features. An Informer 
+model encodes historical and clear-sky global horizontal irradiance, and 
+a vision transformer processes optical flow maps derived from sky im-
+ages. A cross-modality attention mechanism fuses these features before a 
+generative decoder produces multi-step forecasts. However, complexity 
+and computational cost represent a challenge real-time deployment. 
+Zhang et al. [39] proposes a hybrid Transformer-based framework for 
+solar irradiance forecasting that is specifically designed to address the 
+challenges posed by incomplete data and complex irradiance patterns. 
+The framework integrates a mask-transformer data imputation module 
+with a prediction module to accurately impute missing values by 
+capturing contextual information to reduce noise in the input data. 
+Concurrently, it makes use of series decomposition and feature fusion to 
+extract and integrate patterns from the irradiance time series. Alorf et al. 
+[66] proposes an N-hour-ahead forecasting model that first applies 
+variational mode decomposition to decompose irradiance signals into 
+mode functions, eliminating noise and handling non-stationarity. These 
+components are then processed by a modified temporal fusion trans-
+former that is coupled with a variable screening network and a GRU- 
+based encoder–decoder. Yuan et al. [49] proposed a model with a 
+multi-timescale fluctuation aggregation (MFA) attention mechanism, 
+which segments PV power sequences into sub-series of varying lengths 
+to separately learn short-term and long-term patterns. They also employ 
+contrastive learning to identify similar historical days as additional 
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+12 
+
+=== PAGE 13 ===
+context for the current time step. Zhang et al. address in [83] the 
+problem of capturing the patterns in cross-batch time-series data for 
+solar irradiance forecasting. The proposed TM (CRAformer) uses Dual 
+Cross Residual Attention mechanism and a dual output for the encoder. 
+An additional Convolutional Weighted Fusion Module is integrated to 
+improve feature extraction. The performance of CRAformer was evalu-
+ated on different prediction time steps and compared with the iTrans-
+former model it performed better. Yin et al. propose in [84] a 
+Transformer deep learning model for multi-feature timeseries predic-
+tion, as the data-driven component of a four-area integrated energy 
+system. The performance of the Transformer was demonstrated on a PV 
+dataset where it performed better than a Bi-LSTM model. In this case, the 
+forecasted time series are fed into the reinforcement learning component 
+to help the policy selection mechanism.
+Despite the recent improvements in RES energy prediction brought 
+by TMs, the open challenges of addressing multivariate inputs and long- 
+term dependencies remain open, one promising solution being the 
+integration of LLMs in broader pipelines augmenting the time series 
+energy prediction. Lee et al. [80] propose an ultra-short term PV gen-
+eration forecasting hybrid architecture consisting of a linear sub-model, 
+a Transformer and a LSTM model. The data is decomposed using average 
+pooling, and a linear model is used for the trend component whilst the 
+Transformer and LSTM are used for the residual component of the data. 
+The model is evaluated over short intra-hourly time horizons, and the 
+results show improvement of the PV generation prediction compared to 
+other single (RNN) and hybrid models. PVTransNet is proposed in [99] 
+by Kim et al. for multi-step day-ahead PV generation forecasting. They 
+use different variants of the transformer networks with multiple times-
+eries input features including historical power generation and weather 
+data. The best performance was achieved by PVTransNet-EDR, a 
+Transformer-based model integrated with a pretrained LSTM that gen-
+erates weather inputs. The integration of Transformer and LSTM models 
+is highlighted in [82] by Bao et al. to improve the accuracy of the State of 
+Charge estimation in lithium batteries. The TM processes the entire set 
+of inputs for long term forecasting. The LSTM model process shorter 
+sequences that are reconstructed based on the Transformer output and 
+the input features. The results show that leveraging both the LSTM and 
+TMs leads to improved prediction accuracy. In [90], Wang and Huang 
+propose ConvLTT, a hybrid deep learning model combining ConvLSTM 
+and TCN for short-term PV power forecasting at 5-min intervals. It learns 
+local and global temporal patterns, enhanced by a novel cross-day data 
+stacking technique that aligns identical time slots across days to improve 
+temporal feature learning. Lara-Benítez et al. [89], short-term solar 
+irradiance forecasting in real-time streaming conditions is explored, by 
+using the ADLStream asynchronous learning framework. Four classic 
+deep learning models are compared using data from a Canadian PV 
+plant. While the Transformer struggled with fast adaptation, MLP and 
+CNN performed better on 30-s forecasts using 3-min input windows. 
+Song et al. [87] proposes a hybrid RNN–Vanilla Transformer–LSTM 
+model for 1-day ahead solar power forecasting. A concatenated input 
+structure helps with the interpretation of weather variability, while the 
+model shows strong performance across varying weather conditions 
+using data from a 5 MW plant in Pakistan, achieving good results. A 
+transformer-based model for multi-step solar irradiance forecasting up 
+to 10 h ahead is introduced by Mo et al. [95]. It features a distillation 
+encoder and generative decoder, reducing the computational cost. MSSP 
+demonstrates strong performance using real-world measurements, in 
+diverse weather and real-time conditions, obtaining important cost re-
+ductions and profit increases in day-ahead electricity market applica-
+tions. Bashir et al. [86] propose two hybrid models, the CNN-ABiLSTM 
+and CNN-Transformer-MLP, for photovoltaic and wind power fore-
+casting using quarter-hourly data from Germany and Luxembourg. The 
+CNN-Transformer-MLP model integrates CNN, Transformer encoder 
+with positional encoding, and MLP for short-term prediction. Both 
+proposed models outperform standard baselines, such as CNN or BiLSTM 
+across various metrics. Jiang et al. [96] proposes a dynamic V2X value- 
+stacking framework for EVs in a residential scenario and it integrates 
+V2B, V2G, and energy trading under network constraints and uncer-
+tainty. It employs a hybrid TM to forecast building load, PV generation, 
+and EV arrivals. The model outperforms LSTM and quantifies with good 
+accuracy the potential impact of uncorrected forecasting errors. Liao 
+et al. [97] also proposes a dual-gate temporal fusion TM for large-scale 
+Table 6 
+Comparison of Transformer-Based Models for Solar Irradiance Forecasting.
+Input Representation Encoder-Decoder Attention Mechanism Architectural Extensions Work
+Sky images; weather data ViT-based encoder; no decoder Standard scaled dot-product Image/numeric data gating module [42]
+Satellite and ground-based sky images; 
+aggregated irradiance
+ViT-based encoder; generative 
+transformer decoder
+[74]
+Aggregated PV power data +/  weather data TCN decoder [90]
+Decoder-only Teacher forcing multi-step decoding [89]
+RNN and classic encoders; LSTM 
+decoder
+[87]
+Standard encoder-decoder Multi-timescale fluctuation 
+aggregation (MFA) attention
+Contrastive learning module based on similar 
+day selection
+[49]
+Aggregated solar irradiance data +/  weather 
+data
+Encoder with distilling; 
+generative decoder
+Standard scaled dot-product Convolutional distillation module [95]
+Encoder-only CNN and MLP modules [86]
+GRU encoder–decoder [66]
+Informer architecture ProbSparse attention Wavelet decomposition module [39]
+LSTM temporal encoder & static 
+encoder; TFT decoder
+Dual-gate multi-head cross 
+attention
+Dual gate Gated Residual Network [97]
+LSTM encoder Predefined weighted 
+aggregation attention
+[94]
+PV Power generation, solar irradiance, 
+temperature, humidity, dust concentration, 
+wind
+Standard Encoder-decoder Multi-head attention Linear sub-model for trend component and 
+complementary 
+LSTM sub-model for residual component
+[80]
+Weather observation Pre-trained LSTM network [99]
+Meteorological (irradiance, temperature, 
+humidity)
+Cross-residual attention Convolutional Weighted Fusion Model [83]
+Meteorological Self-attention mechanism Combined 
+proportion-integral-derivative and deep 
+reinforcement learning for smart generation 
+control
+[84]
+Residential building load, rooftop PV 
+generation, EV arrivals
+GRU and standard encoder; TFT 
+decoder
+ProbSparse Self-Attention; 
+Temporal Attention
+[96]
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+13 
+
+=== PAGE 14 ===
+land surface solar irradiation forecasting. Built on TFT, the approach 
+introduces dual-gate residual and attention blocks. Trained on meteo-
+rological and satellite data from Australia, China, and Japan, the model 
+learns well the spatio-temporal patterns across regions, and it out-
+performs other baseline models. Zhu et al. [94] introduce the U-LSTM- 
+AFT model for hourly solar irradiance forecasting that integrates U-Net- 
+inspired multi-scale feature extraction, LSTM for learning temporal de-
+pendencies, and an attention-free transformer (AFT) large scale 
+modeling. The model uses clear-sky index normalization to address 
+irradiance variability, and it achieves better results than benchmark 
+approaches.
+5. LLMs for energy management
+The integration of LLMs into energy systems management represents 
+a significant advancement in addressing the complex challenges of 
+modern energy landscapes [118]. As power grids become increasingly 
+decentralized, intermittent renewable sources proliferate, and demand 
+patterns grow more dynamic, traditional analytical approaches are often 
+insufficient to capture the multi-dimensional complexities involved 
+[119]. LLMs have already been applied in smart energy management, 
+including areas such as energy security and carbon emission prediction 
+(see Table 7). Feng et al. [100] proposed a methodology for predicting 
+daily industrial carbon emissions on a province level by fine-tuning pre- 
+trained language models, specifically the T5 model [120]. Unlike 
+traditional approaches that rely on numerical time-series models, this 
+method leverages the capabilities of natural language processing to 
+generate predictions in textual format. Also, in [101] the potential of 
+LLMs in identifying imminent electrical safety incidents has been 
+demonstrated. Events such as overloads or short circuits are determined 
+by converting numerical electricity usage data into text-based formats 
+suitable for language model input. By training on large-scale datasets 
+from residential households, these models have shown an improved 
+ability to detect early warning signs of hazardous electrical conditions, 
+offering a proactive and scalable approach to risk mitigation. This 
+growing body of work underscores the versatility of LLMs not only in 
+environmental modeling but also in real-time anomaly detection, 
+further establishing their relevance across multiple domains of critical 
+infrastructure monitoring. However, applying LLMs to modern power 
+systems may also incur potential security threats, which have not been 
+fully recognized so far. To this end, Ruan et al. [121] analyzes potential 
+threats incurred by applying LLMs to power systems, emphasizing the 
+need for urgent research and development of countermeasures. Wu et al. 
+[28] have developed a spatio-temporal enhanced pre-trained LLM to 
+overcome the challenges in wind power forecasting. The model applies 
+the reasoning capabilities of LLMs to overcome limitations of traditional 
+forecasting methods by processing decomposed wind series data, 
+incorporating spatial-temporal prompts, and utilizing autoregressive 
+fine-tuning to capture complex patterns in wind speed data across 
+multiple turbines. Similarly, in [29] a spatio-temporal forecasting model 
+based on Bidirectional Encoder Representations from Transformers 
+(BERT) [122] is showcased. This approach leverages BERT’s bidirec-
+tional attention capabilities to capture intricate spatial and temporal 
+dependencies within wind power data. The model implements special-
+ized encoding designed specifically for the unique characteristics of 
+wind power generation patterns by employing a multi-stage fine-tuning 
+approach that first aligns the language model with spatio-temporal data 
+before optimizing downstream forecasting tasks.
+Researchers in the domain of sustainable urban development have 
+also begun to explore the integration of LLMs into complex modeling 
+tasks, such as BEM. A recent study introduces GPT-Urban BEM, a GPT- 
+4o-powered framework designed to tackle traditional challenges in 
+urban BEM by leveraging natural language understanding for advanced 
+data interpretation and optimization [102]. Across four case studies 
+involving over 2000 buildings in Seoul and 31 in Gangwon-do, the 
+model demonstrated proficiency in tasks such as urban data analytics, 
+energy prediction, feature engineering, and energy signature analysis. 
+The results reveal GPT-UBEM’s strength in synthesizing heterogeneous 
+datasets and improving the accuracy and interpretability of energy 
+models, all while offering actionable insights for urban planners and 
+Table 7 
+Overview of LLM Applications in the Energy Sector.
+Work Domain LLM Fine tuning 
+method
+Tasks per LLM 
+agent
+Non-Agentic
+[100] Industrial carbon emissions T5 Partial autocorrelation
+[101]
+Electrical safety 
+incidents in 
+residential 
+meters
+Custom- 
+made
+Chain-of- 
+thought
+[28] Wind speed 
+forecasting
+BERT, T5, 
+GPT-2
+Positional 
+embeddings
+[29] BERT Low-rank adaptation
+[105] Load Forecasting TimeGPT
+Zero shot 
+learning; Few- 
+shot learning
+[102]
+BEM
+GPT-4o Feature engineering
+[123] T5 Byte-pair encoding
+[32] Building load forecasting GPT-3.5 Optimal prompts
+[113] Building management GPT-4 Occupant interaction
+[31]
+Intrusion 
+Detection for 
+Communication 
+protocols
+ChatGPT 
+4.0, Claude 
+2, Bard, 
+PaLM
+Prompt 
+Engineering 
+and human in 
+the loop 
+training
+[115]
+Testing Intrusion 
+Detection System 
+against 
+cyberattacks
+Conditional 
+Tabular 
+Generative 
+Adversarial 
+Network
+Trained using a 
+generated 
+adversarial 
+attack dataset
+[116]
+Sky images 
+prediction for PV 
+generation 
+forecasting
+SkyGPT 
+(Physics- 
+constrained 
+VideoGPT)
+Training on 
+image datasets 
+and 
+incorporated 
+physics 
+informed
+[117]
+Wind power 
+forecasting for 
+net-zero carbon 
+emissions
+XAI-driven 
+generative 
+model
+Probabilistic 
+Inference, t- 
+SNE and 
+DBSCAN for 
+interpretability
+Agentic
+[33] BIM/Retrofit recommendation GPT 4- Turbo
+Supervised 
+fine-tuning / 
+Prompt 
+engineering
+Information 
+extraction & 
+processing, 
+Performance 
+diagnosis, 
+Retrofit 
+recommendation
+[108]
+BEM
+GPT-4
+EnergyPlus 
+engineering 
+reference
+Information 
+extraction, IDF 
+Generation, 
+Debugging
+[106] GPT-4, Gemini Single IDF object
+Pre-processing & 
+information 
+extraction, IDF 
+Generation, 
+Debugging
+[109] EV manufacturing GPT-4o Prompt engineering
+Information 
+extraction & 
+processing, 
+Decision support
+[30] Energy Grid Management BERT
+Token 
+classification 
+using LEAP- 
+based dataset
+Provides 
+information 
+needed by 
+human operators
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+14 
+
+=== PAGE 15 ===
+policymakers. In this context, multiple studies have introduced fusion 
+techniques of LLMs and EnergyPlus [108,123], one of the most well- 
+known BEM simulation tools. In [108] the emphasizes is on how LLMs 
+can assist in a range of simulation-related tasks such as input generation 
+and output analysis to error detection, co-simulation, and optimization. 
+Through three case studies, the authors illustrate the model’s capacity to 
+automate complex modeling workflows, reduce manual engineering 
+effort, and improve simulation outcomes. The research highlights that 
+effective deployment of LLMs in such technical domains depends heavily 
+on selecting the appropriate modeling techniques and aligning them 
+with engineering needs. Jiang et al. [123], introduces Eplus-LLM, a fine- 
+tuned T5-based platform designed to automate the translation of natural 
+language building descriptions into EnergyPlus models. By tailoring the 
+LLM to interpret user prompts, regardless of tone, misspellings, or 
+incomplete information, the platform enables users without deep 
+expertise in building science or simulation tools to generate accurate, 
+simulation-ready BEM files. The system not only automates model 
+generation but also leverages the EnergyPlus API to run simulations and 
+return performance metrics.
+Following the trend to explore agentic workflows to fully automate 
+procedures [124], Zhang et al. [106] present a planning-based LLM 
+workflow that transforms natural language building descriptions into 
+accurate, error-free EnergyPlus models. This framework is structured 
+around four core agents: preprocessing, object extraction, object gen-
+eration, and debugging. Each agent is designed to break down the 
+complex BEM process into modular, manageable subtasks. Through a 
+case study on the iUnit modular building at the National Renewable 
+Energy Laboratory, the approach outperformed manual methods, naive 
+prompting, and alternative LLM-based workflows in terms of accuracy, 
+reliability, and time efficiency. Furthermore, in [33] a pipeline is pro-
+posed consisting of building information processing, performance 
+diagnosis, and retrofit recommendation. Domain-informed LLM agents 
+fulfill the roles of planner, researcher, and advisor. By incorporating 
+external knowledge databases and using retrieval tools for contextual 
+grounding, the framework effectively extracts actionable insights from 
+diverse, unstructured inputs. Those approaches underscore the growing 
+role of LLM-based multi-agent systems as generalizable, trustworthy 
+task solvers capable of significantly reducing human labor in the 
+building sector, while accelerating sustainable energy practices. Liu 
+et al. [109] propose a blockchain-based, LLM-driven scheduling 
+framework tailored to the multi-agent manufacturing of new energy 
+vehicles, aligning with circular economy principles. The manufacturing 
+resources across geographically dispersed factory nodes are virtualized 
+into intelligent agents, and energy-efficient scheduling is optimized 
+using an LLM trained on diverse production data. Unlike traditional 
+methods prone to local optima and long training cycles, the LLM le-
+verages its pre-trained knowledge for self-adaptive decision-making that 
+reduces energy usage and production delays. To address the issue of 
+untrusted or inconsistent production data, a credit evaluation-based 
+consensus mechanism is introduced via blockchain, enhancing data 
+reliability, transparency, and traceability. Zhang et al. [32] proposes a 
+GPT-based automated data-driven building energy load forecasting 
+method that streamlines the process of generating predictive code by 
+addressing key usability and accuracy challenges. Recognizing the dif-
+ficulty inexperienced users face in crafting effective prompts, the au-
+thors introduce automated prompting functions, enhanced through 
+Bayesian optimization, to fine-tune prompt generation for improved 
+prediction performance. Additionally, they incorporate external 
+knowledge bases to enhance code correctness and a self-correction 
+strategy that allows GPT-3.5 to iteratively fix its own errors. Following 
+the development of automated prompt engineering for building energy 
+load forecasting, [113] expands the application of GPT-based systems by 
+integrating them into holistic smart building management platforms. A 
+real-time, IoT-driven framework that simultaneously monitors and 
+manages health, energy consumption, and thermal comfort, incorpo-
+rating a GPT-powered conversational suggestion system is introduced. 
+By combining IoT-based BIM, cloud simulation, and real-time data 
+streams, the platform facilitates continuous assessment and dynamic 
+adjustment of indoor conditions.
+LLMs can be used to improve grid management and optimization 
+either by generating relevant information needed in the management 
+and optimization process, or by generating synthetic and various sce-
+narios to better understand and evaluate the technologies involved. 
+Gamage et al. [30] address the complexities of autonomous energy 
+management considering the dynamic data spaces involved in the 
+decision-making process. They used rule-based language processing 
+together with LLM to enable a conversational agent (chatbot) that also 
+considers providing the information needed by human operators in the 
+decision-making process. Thus, the process of inference over dynamic 
+and various data spaces and selecting relevant information is simplified. 
+Generative AI has been used in smart grids management for generating 
+and simulating different testing scenarios, involving costly technologies 
+or situations with insufficient data. Asimopoulos et al. [115] use Fast 
+Gradient Sign Method to generate an initial adversarial dataset. This 
+data is used to train a Conditional Tabular Generative Adversarial 
+Network to generate adversarial attacks against AI models that detect 
+intrusion. Using the generated attacks scenarios, the resilience of 
+different AI models against intrusion attacks can be evaluated more 
+extensively. Also, it can be used to assess the impact of different tech-
+nologies on the smart grid. A generative model is used in [117] to 
+simulate different scenarios for wind power forecasts to show how 
+offshore wind power can help the petrochemical industry achieve net- 
+zero carbon emissions. LLMs can be leveraged as an intrusion detec-
+tion system for enhancing the cybersecurity of smart grid applications. 
+Zaboli et al. [31] propose to fine-tune LLMs through human interaction 
+and informed by cybersecurity guidelines to detect anomalies in 
+communication protocols. Intrusion detection algorithms are converted 
+to text, enabling more effective LLM training. Multiple LLMs were 
+compared for detecting the anomalies, and ChatGPT 4.0 outperformed 
+the others. Nie et al. [116] propose SkyGPT, an LLM that generates 
+future images of clouds to improve the PV generation prediction. The 
+generation model is physics-constrained, and the evaluation results 
+show that it can generate accurate future images of the sky. Also, using 
+the generated images as input for a U-Net prediction model the power 
+generation predictions accuracy was significantly improved. Finally, in 
+[105] an LLM-based solution for load time series prediction where the 
+generative transformer is pre-trained on large time series datasets from 
+various fields. Then, the TimeGPT model can be fine-tuned using load 
+dataset, especially in cases where the available historical load data is 
+limited. The evaluation results show that the TimeGPT can outperform 
+benchmark neural network-based prediction models over most datasets 
+for short time predictions. However, a specific dataset can have partic-
+ularities, different distributions of the time series and in these cases the 
+performance can be affected.
+6. Security, hallucinations and scalability challenges in LLMs for 
+smart grid
+As the LLMs are beginning to have a more significant role in the 
+management of smart grids, several challenges must be addressed to 
+ensure safe, reliable, and efficient deployment.
+LLMs can introduce security vulnerabilities in the management of 
+smart grids that can have serious consequences such as grid failures, 
+blackouts, or unauthorized control over energy distribution. The inte-
+gration of LLMs into modern systems introduces some security and 
+privacy threats that must be addressed. These threats are either inheri-
+ted from the AI model architecture (data poisoning, backdoor attacks, 
+prompt injection, and inference attacks) or from more general system- 
+level vulnerabilities (remote code execution, side-channel attacks, and 
+supply chain vulnerabilities) [147]. Security threats can be classified as 
+prompt hacking and adversarial attacks based on the type of input 
+manipulation and the specific components of the model they target 
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+15 
+
+=== PAGE 16 ===
+[148]. Prompt hacking attacks involve manipulating the input to exploit 
+the model to get unintended behavior without modifying the model it-
+self. In addition to prompt injections, jailbreaking attacks aim to bypass 
+the predefined constraints of the model enabling privileged or unethical 
+tasks. Adversarial attacks require a deeper understanding of model ar-
+chitecture and how it processes data to design inputs that specifically 
+target their vulnerabilities. LLMs are also vulnerable to privacy attacks 
+such as gradient leakage, membership inference, and PII leakage, which 
+can expose sensitive training data. Much of the current research focuses 
+on exposing the vulnerabilities of LLMs and identifying the types of 
+threats and the specific weaknesses they target [149]. Some studies 
+address mitigation strategies including masking-difference projections 
+to defend against backdoor attacks, and more advanced techniques such 
+as adversarial training or input validation and safety filters to detect 
+malicious prompts [150]. Regarding privacy risks, mitigation strategies 
+include data unlearning, deduplication, differential privacy and input 
+validation. From the smart grid perspective, there is limited research on 
+how LLM vulnerabilities could impact energy systems. Recent work has 
+started to identify specific threats in this context, focusing on bad data 
+injections by external adversaries and the extraction of domain-specific 
+knowledge [151].
+LLMs are exposed to hallucinations, both factuality and faithful-
+ness types, that may lead to a hallucinated control recommendation or 
+misinterpretation of grid data with consequences such as inefficient 
+energy distribution or equipment damage. Therefore, they may generate 
+plausible but irrelevant or infeasible management actions [143] in case 
+are used constructing a meaningful and bound set of actionable energy 
+management operations that reflect smart grid constraints brings sig-
+nificant challenges. For energy management processes this can be as 
+simple as misinterpreting statistics or behavior associated with energy 
+assets, thus leading to logical and context inconsistencies. Since smart 
+grids follow strict procedures related to their state of function and safety, 
+hallucinating LLMs might suggest wrong actions or imprecisely follow 
+regulations. Another risk is associated with a subtype of faithfulness 
+hallucinations, namely instruction inconsistencies, where the model 
+does not follow concise directives [144,152]. Additionally, when used in 
+forecasting tasks, LLMs can be confidently wrong, misleading operators 
+and users. For example, it may project trends and analysis based on 
+totally fabricated reasoning. These types of factuality hallucinations can 
+also lead to asset misallocations; unforeseen last-minute power pur-
+chases or false optimization claims due to overestimation or underesti-
+mation of energy trends by the forecasting agent.
+To safely integrate LLMs in decision making processes strategies can 
+be employed to diminish the harmful effects of hallucinations, even 
+though they do not eliminate them [145]. However, such strategies can 
+carry with them potential limitations that need to be taken into 
+consideration when deploying in energy decision settings. RAG can base 
+the LLMs output in tangible external data [153]. Such information, like 
+domain knowledge, relevant historical data or real policies, can prevent 
+the model from filling knowledge gaps with guesses. Nonetheless, RAG 
+can be hindered by inconsistencies, irrelevant retrievals or data latency 
+in real-time decision-making [154]. Additionally, post-generation veri-
+fication can be employed to curb the model’s tendency to hallucinate 
+facts or disobey instructions. Critique agents [155] or trusted source 
+data can be used to review the outputs of the model to filter out illogical 
+responses or improper facts, thus increasing reliability and trust within 
+the system. Yet, they can add computational overhead [156] and over-
+reliance on second models may make their judgment quality excessively 
+important. Training data may be also at fault when dealing with hallu-
+cinations, adding noise, improper information or even biases to the 
+model [143]. Filtering and careful curation of data is necessary when 
+using fine-tuning methods to avoid specialized but heavily biased 
+agents. However, excessive filtering can be also detrimental by 
+removing rare but important information, reducing the knowledge base 
+of the model [157]. Checking plausibility and factual accuracy of the 
+LLMs with outputs with neuro-symbolic reasoning [146] is promising 
+method to detect and reduce the impact of hallucinations but they add 
+another layer of complexity into the system. Knowledge graphs [158], 
+programmatic constraints [159] or symbolic translations are approaches 
+used not only in boosting the reasoning capabilities of models but also to 
+reduce hallucination severity and occurrence. They enable the valida-
+tion of LLMs output with energy asset knowledge and energy domain 
+simulation engines [134]. Moreover, LLMs can help validate whether 
+actions are safe, or feasible by simulating its impact or checking against 
+smart grid or energy resources constraints [135].
+Finally, as there is no method that can guarantee the eradication of 
+hallucinations, the experts must stay in the loop and treat LLMs response 
+as probabilistic support, not absolute truths [160]. Until the LLMs can 
+truly behave inside the borders of their own knowledge and not base 
+their generations on guesses, there is a significant risk that carefully 
+generated convincing hallucinations can sneak into the grid decision- 
+making. Moreover, LLMs cannot execute or enforce actions directly in 
+the smart grid therefore they cannot be used for direct real-time control 
+of energy systems. Their role should remain to advise and support de-
+cision making [161], relying on human or connected devices to carry out 
+action enforcement. Therefore, humans will remain a key in the 
+decision-making loop for energy management, even though this can 
+make the system less scalable.
+Scalability of LLMs is a significant challenge. They need to process 
+and interpret massive amounts of smart grid data efficiently while 
+maintaining low latency and high reliability. Also deploying LLMs at the 
+edge (e.g., on local substations or smart meters) can be limited by 
+computational and energy constraints. LLMs require a vast amount of 
+computational demand during inference or fine tuning. Such models 
+often require GPU or TPU resources, along with gigabytes of memory, 
+making them unsuitable for running on embedded devices or consumer- 
+level hardware [162,173]. For a distribution system operator this im-
+plies significant investments in computational power, even potentially 
+requiring dedicated data centers to host and run large models. Addi-
+tionally, operational costs could surge to maintain real-time respon-
+siveness, to manage energy consumption, especially in settings in which 
+the models must perform with high-frequency and under latency con-
+straints. These demands also come with an increased time at inference 
+making the deployment of large models a trade-off between accuracy 
+and feasibility. These limitations are more severe in scenarios that 
+require real-time processing at the edge, because edge devices often lack 
+resources suitable for operating these models [163]. Real-time appli-
+cations, such as grid management or frequent short-term forecasting 
+tasks, require models to perform well with low latency, thus making the 
+models infeasible without quantization [165,170] or architectural 
+changes [166,168]. Quantization is often used to address these chal-
+lenges, by reducing numerical precision that leads to significant im-
+provements in memory management and inference time. Knowledge 
+distillation [167] trains smaller models to mimic larger ones, or Mixture- 
+of-Experts [169] where massive models can be used by activating only a 
+small batch of the network per token, are other approaches used in 
+addressing scalability. Other research directions suggest that a hybrid 
+deployment approach is viable by processing unstructured data with the 
+large models in the cloud and then feeding numerical data to smaller 
+models at the edge [171,172]. At inference time, pruning strategies 
+[164] can also be employed by removing less relevant weights to reduce 
+latency. For example, pruning can be applied in smart grid settings to 
+reduce the complexity of models used for tasks like real-time load 
+forecasting or anomaly detection at the edge. Thus, inference time will 
+be reduced allowing models to be used in low-power settings, without 
+significant accuracy penalties.
+Furthermore, it is evident that benchmark datasets and evaluation 
+metrics in the energy domain are highly task-specific, rather than being 
+standardized across LLM applications. This reflects the heterogeneity of 
+subfields such as load forecasting, wind power prediction, and building 
+energy modeling (BEM/BIM), each of which relies on its own established 
+datasets and performance indicators. For example, forecasting tasks are 
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+16 
+
+=== PAGE 17 ===
+commonly evaluated using metrics such as RMSE, MAE, MAPE, or 
+symmetric MAPE, depending on the temporal resolution and nature of 
+the data involved. In load and RES forecasting, these metrics are used to 
+assess predictive accuracy over short-, medium-, or long-term horizons. 
+In BEM and BIM contexts, LLM-generated models are typically bench-
+marked against simulation outputs from tools like EnergyPlus, where 
+evaluation emphasizes the syntactic and semantic correctness of IDF 
+files, simulation stability, and alignment with engineering specifica-
+tions. Consequently, while LLMs serve as the modeling core, their per-
+formance is assessed using domain-native benchmarks rather than 
+generic NLP or language model metrics. Moreover, generalizability 
+across datasets or task domains remains an open challenge. Most studies 
+fine-tune LLMs or utilize prompt engineering techniques for specific 
+scenarios, with limited evidence of robust cross-domain transfer or zero- 
+shot capabilities.
+7. Perspectives and emerging trends
+Large-scale AI models continue to evolve, from LLMs towards FMs 
+bringing advanced capabilities in handling temporal dependencies, 
+multimodal inputs, fine-tuning to diverse tasks and complex reasoning 
+to within the energy sector. However, realizing their full potential in the 
+context of smart grids and DT systems requires not only technical ad-
+vancements but also a rethink of how intelligence is embedded in energy 
+management frameworks. Emerging trends include zero-shot and few- 
+shot learning capabilities, allowing FMs to be integrated and perform 
+effectively with energy management tasks with minimal adaptations 
+[125]. Advancements in computational efficiency through model 
+compression, and energy-aware model designs will likely streamline 
+smart grid deployments enabling their orchestration across the entire 
+edge-fog-cloud computational continuum [126]. Moreover, pruning and 
+distillation techniques will make it possible to deploy these models on 
+edge devices (e.g. substations) as closer to the energy prosumption site.
+Therefore, the integration of FMs in smart grid management will 
+bring significant opportunities and the prospect of Agentic DTs. Agentic 
+models have already been coined in the state-of-the-art, as autonomous, 
+goal-driven modules that are capable of monitoring, adapting and 
+coordinating the tasks execution being relevant for smart grid man-
+agement [128]. At the same time DTs are seen as the technological en-
+ablers of the next-generation smart grid management solutions being 
+driven by a control loop featuring four types of processes [129]. Moni-
+toring collects data from the energy grid or internal energy asset state, 
+analysis assesses the monitored data to detect problems, trends, or 
+optimization opportunities being followed by planning to achieve a goal 
+or responding to a detected issue and execution of the planned actions. 
+All processes are centered around models and policies of the energy 
+assets or systems the DTs are managing. The DTs hybrid approach of 
+integrating physical realities and components model simulations 
+manage to capture finer-grained details and provide more precise pre-
+dictions and enhanced decision making for efficient development, 
+integration and operation of expensive energy assets. In this context, we 
+consider that the integration of FMs and GenAI in all phases of the 
+control loop has the potential of transforming DTs into agentic models 
+with autonomy, proactivity, and conversational capabilities able to 
+interact and cooperate with other DTs in the management of the energy 
+grid (see Fig. 9). FMs will potentially bring desirable features for DTs 
+making them interactive, adaptive, and situationally aware of real-time 
+stimuli [127].
+The monitoring processes due to FMs integration will transition 
+towards perception aiming to multi modal understanding the 
+contextual situation of operation. As result a meaningful model of 
+energy assets or system will be created, enabling energy awareness and 
+situational understanding. This process is accelerated by FMs integra-
+tion to enhance monitored data towards multimodal sources and fusing 
+Fig. 9. Architecture of a Agentic DTs showing the FMs support the energy management phases.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+17 
+
+=== PAGE 18 ===
+it into dynamic situational knowledge while integrating in a various 
+data retrieval mechanism [108]. FMs may transform raw sensory data 
+into meaningful knowledge representations of the energy assets and 
+systems supporting future energy management scenario simulation. 
+They can process and understand textual description of the energy asset 
+operation and they may be used to better understand the energy time 
+series data [106]. For example, FMs can parse text manuals, specifica-
+tions, and reports as well as video or sound data sources to extract key 
+attributes like capacity, operating thresholds and generate structured 
+metadata on assets capabilities. Moreover, this may offer possible 
+operational explanations for some time series energy data anomalies by 
+fusing them with multi-modal sources such as for example sky pictures 
+for PV energy prediction. Due to FMs integration ADTs will access and 
+integrate information from vast external sources, enabling autonomous 
+information retrieval either through RAG or prompts facilitating better 
+perception of energy asset changes or real-time context-awareness 
+[130]. However, improved attention mechanisms need to be defined to 
+ensure relevance and focus on the data used. For example, FMs equipped 
+with APIs calling functions may enable ADTs to identify external tools or 
+new databases (e.g. energy policies, statistics, etc.) that need to be 
+queried while maintaining the awareness of the energy management 
+process. Additionally, FMs can support the generation of missing data by 
+retrieving relevant information using semantic search via embeddings 
+that offer contextualized multimodal feeds leading to better-grounded 
+energy management decision making. For example, leveraging appli-
+ance manuals for online and residents’ habits extracted from smart 
+home log files the LLMs can describe data patterns that are missing or 
+may generate synthetic time series data. The perception related chal-
+lenges involve the updating or re-training the FMs with the new multi-
+modal data streams, which is a rather difficult and computational costly 
+process [128]. Therefore, in time FMs may provide outdated or obsolete 
+responses limiting their usefulness for smart grid energy management 
+applications that are rather in time sensitive.
+The data analysis process will benefit on the generalization and 
+transfer learning features of FMs. The few-shot finetuning can 
+significantly improve the adaptability of ADTs to various processing 
+tasks enabling them to analyze diverse and heterogenous data without 
+extensive task-specific training [131]. This will enable the construction 
+of more generic smart grid ADTs automatizing the adaptation to 
+different energy management tasks. This level of adaptability could be 
+highly beneficial in data-scarce energy management scenarios with 
+multiple coordinated distributed energy resources. FMs offer native 
+support for multimodal inputs and multitask learning, enabling the 
+combination of diverse datasets such as numerical energy readings, 
+weather forecasts specified in text, satellite images, or news and market 
+reports [132]. Therefore, it will enhance the data analytics processes of 
+ADTs, improving contextual understanding and uncovering hidden in-
+sights. The integration of large AI-based models have the potential of 
+significantly improving decision support for energy stakeholders, play-
+ing an essential role in the current operational scenarios characterized 
+by high shares of renewable energy generation. AI-based forecasting 
+models may increase the effectiveness of energy bidding strategies under 
+uncertainty, reducing the microgrid operational risks. FMs will further 
+improve this by extracting relevant features from textual logs or meta-
+data that can be incorporated into machine learning algorithms, and 
+predictive analytics, to facilitate better and more accurate forecasting 
+processes [133]. Moreover, FMs can bridge the gap between structured 
+time series data and unstructured text information. For example, in case 
+of a voltage dip, FMs can correlate the event with a weather report 
+saying strong winds and thunderstorms in the area by reading event logs 
+and matching them to patterns in structured data. FMs may augment and 
+improve the non-intrusive load monitoring processes [33] behind the 
+meter energy assets by enabling the correlation between the sensor 
+reading (i.e. power spikes at specific hours) with device logs saying that 
+certain appliances had been stared, while leveraging on the RAG to read 
+appliances manuals for accurate missing data generation. The analytics’ 
+related challenges are driven by data quality and biases in data that may 
+lead to analytics biases. The models are trained on energy domain 
+datasets that may be non-representative, with anomalies or incorrectly 
+labelled generating additional performance challenges on new, unseen 
+data or unseen energy assets of system configurations, where unpre-
+dictable conditions may arise.
+The decision-making process will evolve towards cognitive- 
+oriented reasoning as the integration of FMs will enable delibera-
+tive planning, multi-step reasoning, and natural language inter-
+action. Decision processes usually involves building an action space, 
+selecting relevant actions and constructing an action plan which is then 
+optimized based on feedback or learning policies. FMs have good ca-
+pabilities in interpreting objectives and generating plausible actions, 
+therefore, they can contribute in each of these phases supporting the 
+implementation of ADTs [109]. FMs can generate a wide variety of 
+possible energy management actions from natural language descriptions 
+related to energy systems considering domain specific knowledge. For 
+example, they may support ADTs in planning the ramping down of non- 
+essential loads for off-peak hours while suggesting demand-response 
+signals to reduce peak electricity load in a region due to the low avail-
+ability of renewables. FMs can provide detailed and coherent energy 
+management action plans by interpreting the objectives or desired 
+outcomes while analyzing context and extracting key information [127]. 
+For example, they can support ADTs in planning of fast-ramping energy 
+units as spinning reserve and optimizing energy storage system to 
+dispatch profiles while considering the weather forecast new in specific 
+region. FMs can help in dividing complex tasks into manageable steps, 
+organizing them sequentially or hierarchically based on logical de-
+pendencies. Moreover, integrating symbolic reasoning can force the DTS 
+to be compliant with physical laws and safety regulations, whilst also 
+making it more interpretable and reliable. Neuro-symbolic frameworks 
+can combine pattern-recognition modules, reinforcement learning 
+modules and symbolic inference modules to propose candidate action 
+plans which are then filtered through a set of rules, assuring for instance, 
+that the plans abide by Kirchhoff’s laws. The ADTs will iteratively refine 
+their proposals until all hard constraints are satisfied. Techniques like 
+Symbolic Chain-of-Thought [174,179] can be used to translate natural 
+language into formal expressions that are subsequently verified against 
+logical rules and feedback from other actors in the system, achieving a 
+higher degree of interpretability. As result, grounds inter-ADTs di-
+alogues are grounded into a shared knowledge representation with 
+embedded hard constraints creating an auditable path of the reasons 
+behind the obtained consensus. Additionally, because ADTs of similar 
+energy assets can plug into the same knowledge, new roles constraints 
+can be transferred by updating just the symbolic substrate, with no 
+retraining especially required. ADTs will feature specialized roles such 
+as forecasting, optimization, scheduling, and forward its observations, 
+rationale, or action plans to other ADTs. Techniques such as cooperative 
+self-play [175] and negotiation or debating frameworks [176,180] can 
+help these agents resolve conflicts, converge towards agreed plans and 
+debate potential trade-offs in the system. At the same time, ensuring 
+semantic grounding and alignment across different knowledge bases 
+[177], avoiding hallucinations and managing communication overhead 
+between agents [178], are important points that need to be carefully 
+addressed from both an architectural and protocol standpoint. There-
+fore, the structured inter-agent dialogues become important in cooper-
+ative decision making transitioning the management process from 
+energy assets components to energy system holistic level management.
+8. Conclusions
+This review analyzed 99 publications from 2021 to 2025 on the use 
+of TMs and LLMs in the energy sector. Transformer-based architectur-
+es—especially Temporal Fusion Transformer, Informer, and their vari-
+ants have proven to be effective in short and long-term forecasting of 
+electricity demand, thermal loads, and renewable generation, 
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+18 
+
+=== PAGE 19 ===
+consistently reducing error metrics compared to LSTM, GRU, and CNN 
+baselines. Important architectural improvements identified include 
+spatial-temporal attention, patch-based decomposition, and hybrid 
+physics-informed models. LLMs, though newer in the domain, are 
+rapidly extending their impact. Fine-tuned models like GPT-3.5, GPT-4o, 
+and domain-specific variants (e.g., TimeGPT, BERT4ST) have been 
+applied in building energy modeling, scenario generation, anomaly 
+detection, and decision support. Their strength lies in integrating 
+structured time series data with unstructured text (e.g., manuals, logs, 
+weather reports) and enabling reasoning across modalities. Thus, the 
+main findings are summarized as the following: (a) TMs now dominate 
+energy forecasting tasks due to their adaptability and accuracy; (b) LLMs 
+extend capabilities beyond prediction enabling integration of knowl-
+edge, user interaction, and scenario synthesis; (c) Early examples show 
+potential for multi-agent LLM workflows automating complex energy 
+modeling tasks and (d) security, hallucinations and scalability (i.e., 
+time, resources, costs, etc.) are stringent challenges to be addressed 
+considered the energy infrastructure critical operational features.
+In terms of research perspectives, the central insight of this paper is 
+the emerging role of FMs in transforming DTs into Agentic DTs: auton-
+omous, proactive, and communicative models capable of not only mir-
+roring physical assets but featuring situational awareness and reasoning 
+capabilities for planning and recommending energy management ac-
+tions. The challenges ahead were summarized to the following points: 
+(a) the high cost of domain adaptation and continuous fine-tuning; (b) 
+the risk of hallucinations and lack of action validation in operational 
+contexts; (c) the need for real-time, on-device inference in edge or 
+substation environments; and finally (d) the current lack of standards for 
+integrating FMs in safety-critical decision loops. The path forward in-
+volves building domain-adapted, computationally efficient, and inter-
+pretable FM models that complement robust forecasting models and 
+support actionable, human-supervised decision-making in smart grids. 
+Finally, ADTs will not replace operators but enhance their capability to 
+manage increasingly complex energy systems.
+CRediT authorship contribution statement
+Gabriel Antonesi: Writing – original draft, Visualization, Investi-
+gation, Data curation. Tudor Cioara: Writing – original draft, Supervi-
+sion, Project administration, Methodology, Conceptualization. Ionut 
+Anghel: Writing – review & editing, Writing – original draft, Method-
+ology, Investigation. Vasilis Michalakopoulos: Writing – review & 
+editing, Writing – original draft, Visualization, Investigation. Elissaios 
+Sarmas: Writing – review & editing, Writing – original draft, Investi-
+gation, Conceptualization. Liana Toderean: Writing – review & editing, 
+Writing – original draft, Visualization, Investigation.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgement
+This work was supported by the project “Romanian Hub for Artificial 
+Intelligence-HRIA”, Smart Growth, Digitization and Financial In-
+struments Program, MySMIS no. 334906. The research has been 
+partially supported by the European Union’s Horizon Europe research 
+and innovation programme under Grant Agreements number 
+101136216 (Hedge-IoT) and 101103998 (DEDALUS). Views and opin-
+ions expressed are, however, those of the author(s) only and do not 
+necessarily reflect those of the European Union or the European Climate, 
+Infrastructure, and Environment Executive Agency. Neither the Euro-
+pean Union nor the granting authority can be held responsible for them.
+Data availability
+No data was used for the research described in the article.
+References
+[1] Baidya S, Potdar V, Ray PP, Nandi C. Reviewing the opportunities, challenges, 
+and future directions for the digitalization of energy. Energy Res Soc Sci 2021;81: 
+102243.
+[2] Xie L, Zheng X, Sun Y, Huang T, Bruton T. Massively digitized power grid: 
+opportunities and challenges of use-inspired AI. Proc IEEE 2022;111(7):762–87.
+[3] Monaco R, Bergaentzl´e C, Vilaplana JAL, Ackom E, Nielsen PS. Digitalization of 
+power distribution grids: barrier analysis, ranking and policy recommendations. 
+Energy Policy 2024;188:114083.
+[4] Filonchyk M, Peterson MP, Yan H, Gusev A, Zhang L, He Y, et al. Greenhouse gas 
+emissions and reduction strategies for the world’s largest greenhouse gas 
+emitters. Sci Total Environ 2024;944:173895.
+[5] Bataille C, Åhman M, Neuhoff K, Nilsson LJ, Fischedick M, Lechtenb¨ohmer S, 
+et al. A review of technology and policy deep decarbonization pathway options 
+for making energy-intensive industry production consistent with the Paris 
+agreement. J Clean Prod 2018;187:960–73.
+[6] Li J, Herdem MS, Nathwani J, Wen JZ. Methods and applications for artificial 
+intelligence, big data, internet of things, and Blockchain in smart energy 
+management. Energy and AI 2023;11:100208.
+[7] Sarmas E, Marinakis V, Doukas H. The Role of Artificial Intelligence in 
+Transforming the Energy Sector: A Comprehensive Review. In: Artificial 
+Intelligence for Energy Systems. Learning and Analytics in Intelligent Systems, 
+46. Cham: Springer; 2025.
+[8] Entezari A, Aslani A, Zahedi R, Noorollahi Y. Artificial intelligence and machine 
+learning in energy systems: a bibliographic perspective. Energ Strat Rev 2023;45: 
+101017.
+[9] Liu Z, Sun Y, Xing C, Liu J, He Y, Zhou Y, et al. Artificial intelligence powered 
+large-scale renewable integrations in multi-energy systems for carbon neutrality 
+transition: challenges and future perspectives. Energy and AI 2022;10:100195.
+[10] Han K, Xiao A, Wu E, Guo J, Xu C, Wang Y. Transformer in transformer. Adv 
+Neural Inf Proces Syst 2021;34:15908–19.
+[11] Nascimento EGS, de Melo TA, Moreira DM. A transformer-based deep neural 
+network with wavelet transform for forecasting wind speed and wind energy. 
+Energy 2023;278:127678.
+[12] Xu C, Chen G. Interpretable transformer-based model for probabilistic short-term 
+forecasting of residential net load. Int J Electr Power Energy Syst 2024;155: 
+109515.
+[13] Liu J, Fu Y. Renewable energy forecasting: a self-supervised learning-based 
+transformer variant. Energy 2023;284:128730.
+[14] Antonesi G, Cioara T, Anghel I, Papias I, Michalakopoulos V, Sarmas E. Hybrid 
+transformer model with liquid neural networks and learnable encodings for 
+buildings’ energy forecasting. Energy and AI 2025;20:100489.
+[15] Achiam J, Adler S, Agarwal S, Ahmad L, Akkaya I, Aleman FL, et al. Gpt-4 
+technical report; 2023. arXiv preprint; 2023. arXiv:2303.08774.
+[16] Chowdhery A, Narang S, Devlin J, Bosma M, Mishra G, Roberts A, et al. Palm: 
+scaling language modeling with pathways. J Mach Learn Res 2023;24(240): 
+1–113.
+[17] Garza A, Challu C, Mergenthaler-Canseco M. TimeGPT-1. arXiv preprint. arXiv:2 
+310.03589; 2023.
+[18] Yi H, Zhang S, An D, Liu Z. PatchesNet: PatchTST-based multi-scale network 
+security situation prediction. Knowl-Based Syst 2024;299:112037.
+[19] Huang Siyuan, Liu Yepeng, Cui Haoyi, Zhang Fan, Li Jinjiang, Zhang Xiaofeng, 
+et al. MEAformer: An all-MLP transformer with temporal external attention for 
+long-term time series forecasting. Inf Sci 2024;669:120605. ISSN 0020-0255, htt 
+ps://doi.org/10.1016/j.ins.2024.120605.
+[20] Wang Zheng, Ran Haowei, Ren Jinchang, Sun Meijun. PWDformer: Deformable 
+transformer for long-term series forecasting, Pattern Recognition 2024;147: 
+110118. ISSN 0031-3203, https://doi.org/10.1016/j.patcog.2023.110118.
+[21] Chan Jun Wei, Yeo Chai Kiat. A transformer based approach to electricity load 
+forecasting. Electr J 2024;37(2):107370. ISSN 1040-6190,, https://doi. 
+org/10.1016/j.tej.2024.107370.
+[22] Zhao Pengfei, Hu Weihao, Di Cao Zhenyuan Zhang, Liao Wenlong, Chen Zhe, 
+Huang Qi. Enhancing multivariate, multi-step residential load forecasting with 
+spatiotemporal graph attention-enabled transformer. Int J Electr Power Energy 
+Syst 2024;160:110074. ISSN 0142-0615, https://doi.org/10.1016/j.ijepes.20 
+24.110074.
+[23] Saeed Faisal, Rehman Abdul, Shah Hasnain Ali, Diyan Muhammad, Chen Jie, 
+Kang Jae-Mo. SmartFormer: Graph-based transformer model for energy load 
+forecasting. Sustain Energy Technol Assess 2025;73:104133. ISSN 2213-1388, htt 
+ps://doi.org/10.1016/j.seta.2024.104133.
+[24] Santos Miguel L´opez, García Saúl Díaz, García-Santiago Xela, Ogando- 
+Martínez Ana, Camarero Fernando Echevarría, Gil Gonzalo Bl´azquez, et al. Deep 
+learning and transfer learning techniques applied to short-term load forecasting 
+of data-poor buildings in local energy communities. Energy and Buildings 2023; 
+292:113164. ISSN 0378-7788, https://doi.org/10.1016/j.enbuild.2023.113164.
+[25] Zhang Wei, Zhan Hongyi, Sun Hang, Yang Mao. Probabilistic load forecasting for 
+integrated energy systems based on quantile regression patch time series 
+transformer. Energy Rep 2025;13:303–17. ISSN 2352-4847,, https://doi.org/10 
+.1016/j.egyr.2024.11.057.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+19 
+
+=== PAGE 20 ===
+[26] Wang Jingfei, Xu Danya, Li Yuanzheng, Shahidehpour Mohammad, Yang Tao. 
+Transformer-based probabilistic demand forecasting with adaptive online 
+learning. Electr Power Syst Res 2025;240:111255. ISSN 0378-7796, https://doi. 
+org/10.1016/j.epsr.2024.111255.
+[27] Tong Junlong, Xie Liping, Yang Wankou, Zhang Kanjian, Zhao Junsheng. 
+Enhancing time series forecasting: A hierarchical transformer with probabilistic 
+decomposition representation. Inf Sci 2023;647:119410. ISSN 0020-0255, htt 
+ps://doi.org/10.1016/j.ins.2023.119410.
+[28] Tangjie Wu, Ling Qiang. STELLM: Spatio-temporal enhanced pre-trained large 
+language model for wind speed forecasting. Appl Energy 2024;375:124034. ISSN 
+0306-2619, https://doi.org/10.1016/j.apenergy.2024.124034.
+[29] Lai Zefeng, Tangjie Wu, Fei Xihong, Ling Qiang. BERT4ST:: Fine-tuning pre- 
+trained large language model for wind power forecasting. Energy Convers Manag 
+2024;307:118331. ISSN 0196-8904, https://doi.org/10.1016/j.enconman.20 
+24.118331.
+[30] Gamage G, Mills N, Rathnayaka P, Jennings A, Alahakoon D. Cooee: An Artificial 
+Intelligence Chatbot for Complex Energy Environments. In: 2022 15th 
+International conference on human system interaction (HSI). Australia: 
+Melbourne; 2022. p. 1–5. https://doi.org/10.1109/HSI55341.2022.9869464.
+[31] Zaboli A, Choi SL, Song T-J, Hong J. ChatGPT and Other Large Language Models 
+for Cybersecurity of Smart Grid Applications. In: 2024 IEEE Power & Energy 
+Society General Meeting (PESGM). WA, USA: Seattle; 2024. p. 1–5. https://doi. 
+org/10.1109/PESGM51994.2024.10688863.
+[32] Zhang Chaobo, Zhang Jian, Zhao Yang, Jie Lu. Automated data-driven building 
+energy load prediction method based on generative pre-trained transformers 
+(GPT). Energy 2025;318:134824. ISSN 0360-5442, https://doi.org/10.1016/j. 
+energy.2025.134824.
+[33] Xiao Tong, Peng Xu. Exploring automated energy optimization with unstructured 
+building data: A multi-agent based framework leveraging large language models. 
+Energy and Buildings 2024;322:114691. ISSN 0378-7788, https://doi.org/10.10 
+16/j.enbuild.2024.114691.
+[34] Page MJ, McKenzie JE, Bossuyt PM, et al. The PRISMA 2020 statement: an 
+updated guideline for reporting systematic reviews. Syst Rev 2021;10:89. https:// 
+doi.org/10.1186/s13643-021-01626-4.
+[35] Page MJ, Moher D, Bossuyt PM, Boutron I, Hoffmann TC, Mulrow CD, et al. 
+PRISMA 2020 explanation and elaboration: updated guidance and exemplars for 
+reporting systematic reviews. BMJ 2021;372:n160. https://doi.org/10.1136/bmj. 
+n160.
+[36] Li K, Rollins J, Yan E. Web of science use in published research and review papers 
+1997–2017: a selective, dynamic, cross-domain, content-based analysis. 
+Scientometrics 2018;115:1–20. https://doi.org/10.1007/s11192-017-2622-5.
+[37] Zhao H, Wu Y, Ma L, Pan S. Spatial and Temporal Attention-Enabled Transformer 
+Network for Multivariate Short-Term Residential Load Forecasting. In: IEEE 
+Transactions on Instrumentation and Measurement. 72; 2023. p. 1–11. https:// 
+doi.org/10.1109/TIM.2023.3305655. Art no 2524611.
+[38] Wang Yun, Xu Houhua, Song Mengmeng, Zhang Fan, Li Yifen, Zhou Shengchao, 
+et al. A convolutional transformer-based truncated Gaussian density network with 
+data denoising for wind speed forecasting. Appl Energy 2023;333(1):120601.
+[39] Hanjin Zhang, Bin Li, Shun-Feng Su, Wankou Yang, Liping Xie. A Novel Hybrid 
+Transformer-Based Framework for Solar Irradiance Forecasting Under Incomplete 
+Data Scenarios. IEEE TRANSACTIONS ON INDUSTRIAL INFORMATICS; 2024.
+[40] Li Long, Su Xingyu, Bi Xianting, Lu Yueliang, Sun Xuetao. A novel Transformer- 
+based network forecasting method for building cooling loads. ENERGY AND 
+BUILDINGS; 2023.
+[41] Dong Changyin, Xiong Zhuozhi, Zhang Chu, Li Ni, Li Ye, Xie Ning, et al. 
+A transformer-based approach for deep feature extraction and energy 
+consumption prediction of electric buses based on driving distances. Appl Energy 
+2025;380:123941.
+[42] Zhang Liwenbo, Wilson Robin, Sumner Mark, Wu Yupeng. Advanced multimodal 
+fusion method for very short-term solar irradiance forecasting using sky images 
+and meteorological data: a gate and transformer mechanism approach. Renew 
+Energy 2023;216:118952.
+[43] Huang Siyuan, Liu Yepeng, Zhang Fan, Li Yue, Li Jinjiang, Zhang Caiming. 
+CrossWaveNet: A dual-channel network with deep cross-decomposition for Long- 
+term Time Series Forecasting. EXPERT SYSTEMS WITH APPLICATIONS; 2024.
+[44] Zhou Chengjie, Che Chao, Wang Pengfei, Zhang Qiang. Diformer: A dynamic self- 
+differential transformer for new energy power autoregressive prediction. 
+KNOWLEDGE-BASED SYSTEMS; 2023.
+[45] Rong Jing, Wang Cong, Zhou Qiuzhan, He Yunxue, Wu Huinan. Enhancing non- 
+intrusive load monitoring through transfer learning with transformer models. 
+ENERGY AND BUILDINGS; 2025.
+[46] Huang Siyuan, Liu Yepeng. FL-net: A multi-scale cross-decomposition network 
+with frequency external attention for long-term time series forecasting. 
+KNOWLEDGE-BASED SYSTEMS; 2024.
+[47] Wang Chao-fan, Liu Kui-xing, Peng Jieyang, Li Xiang, Li Xiu-feng, Zhang Jia-wan, 
+et al. High-precision energy consumption forecasting for large office building 
+using a signal decomposition-based deep learning approach. ENERGY 2025;314: 
+133964.
+[48] Su Jing, Xie Dirui, Duan Yuanzhi, Zhou Yue, Hu Xiaofang, Duan Shukai. MDCNet: 
+Long-term time series forecasting with mode decomposition and 2D convolution. 
+KNOWLEDGE-BASED SYSTEMS; 2024.
+[49] Yuan Liang, Wang Xiangting, Sun Yao, Liu Xubin, Yang Dong Zhao. Multistep 
+photovoltaic power forecasting based on multi-timescale fluctuation aggregation 
+attention mechanism and contrastive learning. INTERNATIONAL JOURNAL OF 
+ELECTRICAL POWER & ENERGY SYSTEMS; 2025.
+[50] Han Yongming, Han Longkun, Shi Xinwei, Li Jun, Huang Xiaoyi, Hu Xuan, et al. 
+Novel CNN-based transformer integrating Boruta algorithm for production 
+prediction modeling and energy saving of industrial processes. EXPERT SYSTEMS 
+WITH APPLICATIONS; 2024.
+[51] Mo Site, Wang Haoxin, Li Bixiong, Xue Zhe, Fan Songhai, Liu Xianggen. 
+Powerformer: A temporal-based transformer model for wind power forecasting. 
+ENERGY REPORTS; 2024.
+[52] Wu Qiang, Zheng Hongling, Guo Xiaozhu, Guangqiang Liu. Promoting wind 
+energy for sustainable development by precise wind speed prediction based on 
+graph neural networks. Renew Energy 2022;199:977–92.
+[53] Yu Yang, Ma Ruizhe, Ma Zongmin. Robformer: A robust decomposition 
+transformer for long-term time series forecasting. PATTERN RECOGNITION; 
+2024.
+[54] Zhang Qingyong, Zhou Shiyang, Xu Bingrong, Li Xinran. TCAMS-Trans: Efficient 
+temporal-channel attention multi-scale transformer for net load forecasting. 
+COMPUTERS & ELECTRICAL ENGINEERING; 2024.
+[55] Yu Die, Liu Tong, Wang Kai, Li Kang, Mercangoz Mehmet, Zhao Jian, et al. 
+Transformer based day-ahead cooling load forecasting of hub airport air- 
+conditioning systems with thermal energy storage. ENERGY AND BUILDINGS; 
+2024.
+[56] Yuan Jun, Chen Si-Zhe, Yu Samson S, Zhang Guidong, Chen Zhe, Zhang Yun. 
+A Kernel-Based Real-Time Adaptive Dynamic Programming Method for Economic 
+Household Energy Systems, IEEE TRANSACTIONS ON INDUSTRIAL 
+INFORMATICS; 2023.
+[57] Wang Chen, Wang Ying, Ding Zhetong, Zheng Tao, Hu Jiangyi, Zhang Kaifeng. 
+A Transformer-based method of multienergy load forecasting in integrated energy 
+system, IEEE TRANSACTIONS ON SMART GRID. 2022.
+[58] Gao Jiaxin, Chen Yuntian, Hu Wenbo, Zhang Dongxiao. An adaptive deep- 
+learning load forecasting framework by integrating transformer and domain 
+knowledge, ADVANCES IN APPLIED ENERGY; 2023.
+[59] Yan Qin, Lu Zhiying, Liu Hong, He Xingtang, Zhang Xihai, Guo Jianlin. An 
+improved feature-time transformer encoder-Bi-LSTM for short-term forecasting of 
+user-level integrated energy loads. ENERGY AND BUILDINGS; 2023.
+[60] Ozen Serkan, Yazici Adnan. Atalay Volkan Hybrid deep learning models with data 
+fusion approach for electricity load forecasting. Expert Syst 2025;42(2): 
+e137412025.
+[61] Cui Yunlong, Li Zhao, Wang Yusong, Dong Danhuang, Gu Chenlin, Lou Xiaowei, 
+et al. Informer model with season-aware block for efficient long-term power time 
+series forecasting. COMPUTERS & ELECTRICAL ENGINEERING; 2024.
+[62] Cen Senfeng, Lim Chang Gyoon. Multi-task learning of the PatchTCN-TST model 
+for short-term multi-load energy forecasting considering indoor environments in 
+a smart building. IEEE ACCESS 2024;12:19553–68.
+[63] Ferreira Andr´eia BA, Leite Jonatas B, Salvadeo Denis HP. Power substation load 
+forecasting using interpretable transformer-based temporal fusion neural 
+networks. Electr Power Syst Res 2025;238:111169. ISSN 0378-7796, https://doi. 
+org/10.1016/j.epsr.2024.111169.
+[64] Huy Pham Canh, Minh Nguyen Quoc, Tien Nguyen Dang. Tao Thi Quynh Anh, 
+Short-term electricity load forecasting based on temporal fusion transformer 
+model. IEEE ACCESS 2022;10:106296–304.
+[65] Giacomazzi Elena, Haag Felix, Hopf Konstantin. Short-Term Electricity Load 
+Forecasting Using the Temporal Fusion Transformer: Effect of Grid Hierarchies 
+and Data Sources. In: PROCEEDINGS OF THE 2023 The 14TH ACM 
+INTERNATIONAL conference on future energy systems, E-ENERGY 2023; 2023.
+[66] Alorf Abdulaziz, Khan Muhammad Usman Ghani. Solar Irradiance Forecasting 
+Using Temporal Fusion Transformers. INTERNATIONAL JOURNAL OF ENERGY 
+RESEARCH; 2025.
+[67] Du Pei, Ye Yuxin, Wu Han, Wang Jianzhou. Study on deterministic and interval 
+forecasting of electricity load based on multi-objective whale optimization 
+algorithm and transformer model. Expert Syst Appl 2025;268:126361.
+[68] Semmelmann Leo, Hertel Matthias, Kircher Kevin J, Mikut Ralf, 
+Hagenmeyer Veit, Weinhardt Christof. The impact of heat pumps on day-ahead 
+energy community load forecasting. Appl Energy 2024;368:123364.
+[69] Zhang Qingyong, Chen Jiahua, Xiao Gang, He Shangyang, Deng Kunxiang. 
+TransformGraph: A novel short-term electricity net load forecasting model. 
+ENERGY REPORTS; 2023.
+[70] Lin Zijie, Xie Linbo, Zhang Siyuan. A compound framework for short-term gas 
+load forecasting combining time-enhanced perception transformer and two-stage 
+feature extraction. ENERGY 2024;298:131365.
+[71] Iqbal Muhammad Sajid, Adnan Muhammad. Edge computing and transfer 
+learning-based short-term load forecasting for residential and commercial 
+buildings. ENERGY AND BUILDINGS; 2025.
+[72] Zheng Peijun, Zhou Heng, Liu Jiang, Nakanishi Yosuke. Interpretable building 
+energy consumption forecasting using spectral clustering algorithm and temporal 
+fusion transformers architecture. Appl Energy 2023;349:121607.
+[73] Dong Hanjiang, Zhu Jizhong, Li Shenglin, Wu Wanli, Zhu Haohao, Fan Junwei. 
+Short-term residential household reactive power forecasting considering active 
+power demand via deep transformer sequence-to-sequence networks. Appl 
+Energy 2023;329:120281.
+[74] Liu Jingxuan, Zang Haixiang, Cheng Lilin, Ding Tao, Wei Zhinong, Guoqiang Sun. 
+A transformer-based multimodal-learning framework using sky images for ultra- 
+short-term solar irradiance forecasting. Appl Energy 2023;342:121160.
+[75] Faiz Muhammad Faizan, Sajid Muhammad, Ali Sara, Javed Kashif, Ayaz Yasar. 
+Energy modeling and predictive control of environmental quality for building 
+energy management using machine learning. Energy Sustain Dev 2023;74: 
+381–95.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+20 
+
+=== PAGE 21 ===
+[76] Gao Shuhua, Liu Yuanbin, Jing Wang, Wang Zhengfang, Xu Wenjun, 
+Yue Renfeng, et al. Short-term residential load forecasting via transfer learning 
+and multi-attention fusion for EVs’ coordinated charging. INTERNATIONAL 
+JOURNAL OF ELECTRICAL POWER & ENERGY SYSTEMS; 2025.
+[77] Tiwari Shamik, Jain Anurag, Ahmed Nada Mohamed Osman Sid, Charu, Alkwai 
+Lulwah M, Dafhalla Alaa Kamal Yousif, et al. Machine learning-based model for 
+prediction of power consumption in smart grid- smart way towards smart city. 
+Expert Systems 2022;39(5):e12832.
+[78] Abdel-Basset Mohamed, Hawash Hossam, Chakrabortty Ripon K, Ryan Michael. 
+Energy-Net: A Deep Learning Approach for Smart Energy Management in IoT- 
+Based Smart Cities. 2025.
+[79] Nazir Amril, Shaikh Abdul Khalique, Shah Abdul Salam, Khalil Ashraf. 
+Forecasting energy consumption demand of customers in smart grid using 
+Temporal Fusion Transformer (TFT). 2025.
+[80] Lee Jooseung, Kang Jimyung, Lee Soonwoo, Oh Hui-Myoung. Ultra-Short Term 
+Photovoltaic generation Forecasting Based on Data Decomposition and 
+Customized Hybrid Model Architecture. 2025.
+[81] Ma Qing, Zhang Deyuan, Wu Hao, Zhang Yusen, Yang Qingrong, Yang Ning. 
+Shape-Aware Nonintrusive Load Disaggregation via Prior-Guided State-Reused 
+Multibranch Cross-Transformer. 2025.
+[82] Bao Gengyi, Liu Xinhua, Zou Bosong, Yang Kaiyi, Zhao Junwei, Zhang Lisheng, 
+et al. Collaborative framework of Transformer and LSTM for enhanced state-of- 
+charge estimation in lithium-ion batteries. 2025.
+[83] Zhang Zongbin, Huang Xiaoqiao, Li Chengli, Cheng Feiyan, Tai Yonghang. 
+CRAformer: A cross-residual attention transformer for solar irradiation multistep 
+forecasting. 2025.
+[84] Yin Linfei, Zheng Da. Hybrid modeling with data enhanced driven learning 
+algorithm for smart generation control in multi-area integrated energy systems 
+with high proportion renewable energy. 2025.
+[85] Shan Zihan, Si Gangquan, Qu Kai, Wang Qianyue, Kong Xiangguang, Tang Yu, 
+et al. Multiscale Self-Attention Architecture in Temporal Neural Network for 
+Nonintrusive Load Monitoring. 2025.
+[86] Bashir Tasarruf, Wang Huifang, Tahir Mustafa, Zhang Yixiang. Wind and solar 
+power forecasting based on hybrid CNN-ABiLSTM, CNN-transformer-MLP 
+models. 2025.
+[87] Song Dongran, Rehman Muhammad Shams Ur, Deng Xiaofei, Xiao Zhao, 
+Noor Javeria, Yang Jian, et al. Accurate solar power prediction with advanced 
+hybrid deep learning approach. 2025.
+[88] Liang Xuefeng, Hu Zetian, Zhang Jun, Chen Han, Gu Qingshui, You Xiaochuan. 
+Developing a robust wind power forecasting method: Integrating data repair, 
+feature screening, and economic impact analysis for practical applications. 2025.
+[89] Lara-Benitez Pedro, Carranza-Garcia Manuel, Luna-Romera Jose Maria, 
+Riquelme Jose C. Short-term solar irradiance forecasting in streaming with deep 
+learning. 2025.
+[90] Wang Sicheng, Huang Yan. Spatio-temporal photovoltaic prediction via a 
+convolutional based hybrid network. 2025.
+[91] Cao Yizhi, Liao Yilin, Liu Zhaoran, Ma Xiang, Liu Xinggao. SWAformer: A novel 
+shifted window attention Transformer model for accurate power distribution 
+prediction. 2025.
+[92] Thiyagarajan Anushalini, Revathi B Sri, Suresh Vishnu. A Deep Learning Model 
+Using Transformer Network and Expert Optimizer for an Hour Ahead Wind Power 
+Forecasting. 2025.
+[93] Mirza Adeel Feroz, Shu Zhaokun, Usman Muhammad, Mansoor Majad, 
+Ling Qiang. Quantile-transformed multi-attention residual framework (QT- 
+MARF) for medium-term PV and wind power prediction. 2025.
+[94] Zhu Leyang, Huang Xiaoqiao, Zhang Zongbin, Li Chengli, Tai Yonghang. A novel 
+U-LSTM-AFT model for hourly solar irradiance forecasting. 2025.
+[95] Mo Fan, Jiao Xuan, Li Xingshuo, Du Yang, Yao Yunting, Meng Yuxiang, et al. 
+A novel multi-step ahead solar power prediction scheme by deep learning on 
+transformer structure. 2025.
+[96] Jiang Canchen, Liebman Ariel, Jie Bo, Wang Hao. Dynamic rolling horizon 
+optimization for network-constrained V2X value stacking of electric vehicles 
+under uncertainties. 2025.
+[97] Liao Xuan, Wong Man Sing, Zhu Rui. Dual-gate Temporal Fusion Transformer for 
+estimating large-scale land surface solar irradiation. 2025.
+[98] Wang Boyu, Dabbaghjamanesh Morteza, Kavousi-Fard Abdollah, Yue Yuntao. AI- 
+enhanced multi-stage learning-to-learning approach for secure smart cities load 
+management in IoT networks. 2025.
+[99] Kim Jimin, Obregon Josue, Park Hoonseok, Jung Jae-Yoon. Multi-step 
+photovoltaic power forecasting using transformer and recurrent neural networks. 
+2025.
+[100] Feng Zhengyuan, Sun Yuheng, Ning Jun, Tang Shoujuan, Liu Guangxin, 
+Liu Fangtao, et al. Implementing a provincial-level universal daily industrial 
+carbon emissions prediction by fine-tuning the large language model. Appl 
+Energy 2025;383:125372.
+[101] Wang Ru-Guan, Chuang Mei-Ling, Ke Chi-Yun, Chien Yi-Fan, Ho Wen-Jen, 
+Chiang Kuei-Chun, et al. Predicting imminent electrical safety incidents Using 
+smart meter big data with large language models. IEEE ACCESS 2024;12: 
+184940–52.
+[102] Choi Sebin, Yoon Sungmin. GPT-based data-driven urban building energy 
+modeling (GPT-UBEM): Concept, methodology, and case studies. ENERGY AND 
+BUILDINGS; 2024.
+[103] Parizad A, Hatziadoniu CJ. Using prophet algorithm for pattern recognition and 
+short term forecasting of load demand based on seasonality and exogenous 
+features, 2020 52ND NORTH AMERICAN POWER SYMPOSIUM (NAPS). 2021.
+[104] Shahin Matin, Simjoo Mohammad. Potential applications of innovative AI-based 
+tools in hydrogen energy development: Leveraging large language model 
+technologies. Int J Hydrog Energy 2025;102:918–36.
+[105] Liao Wenlong, Wang Shouxiang, Yang Dechang, Yang Zhe, Fang Jiannong, 
+Rehtanz Christian, et al. TimeGPT in load forecasting: a large time series model 
+perspective. Appl Energy 2025;379:124973.
+[106] Zhang Liang, Ford Vitaly, Chen Zhelun, Chen Jianli. Automatic building energy 
+model development and debugging using large language models agentic 
+workflow. ENERGY AND BUILDINGS; 2025.
+[107] Qaisar Irfan, Liang Wei, Sun Kailai, Xing Tian, Zhao Qianchuan. An experimental 
+comparative study of energy saving based on occupancy-centric control in smart 
+buildings. BUILDING AND ENVIRONMENT; 2025.
+[108] Zhang Liang, Chen Zhelun. Ford, Vitaly, Advancing building energy modeling 
+with large language models: Exploration and case studies. ENERGY AND 
+BUILDINGS 2024;323:114788.
+[109] Liu Changchun, Nie Qingwei. A blockchain-based LLM-driven energy-efficient 
+scheduling system towards distributed multi-agent manufacturing scenario of 
+new energy vehicles within the circular economy. Comput Ind Eng 2025;201: 
+110889.
+[110] Zhao Tianqiao, Yogarathnam Amirthagunaraj, Yue Meng. A Large Language 
+Model for Determining Partial Tripping of Distributed Energy Resources. IEEE 
+TRANSACTIONS ON SMART GRID; 2025.
+[111] Buster Grant, Pinchuk Pavlo, Barrons Jacob, McKeever Ryan, Levine Aaron, 
+Lopez Anthony. Supporting energy policy research with large language models: A 
+case study in wind energy siting ordinances. ENERGY AND AI 2024;18:100431.
+[112] Liu Qiang, Mu Junsheng, Chen Da, Zhang Ronghui, Liu Yijian, Hong Tao. LLM 
+enhanced reconfigurable intelligent surface for energy-efficient and reliable 6G 
+IoV, IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY. 2025.
+[113] Xu Yifang, Zhu Siyao, Cai Jiannan, Chen Jianli, Shuai Li. A large language model- 
+based platform for real-time building monitoring and occupant interaction. 
+JOURNAL OF BUILDING ENGINEERING 2025;100:111488.
+[114] Ma Yichuan X, Yeung Lawrence K. BEForeGAN: An image-based deep generative 
+approach for day-ahead forecasting of building HVAC energy consumption. Appl 
+Energy 2024;376(Part A):124196.
+[115] Asimopoulos Dimitrios Christos, Radoglou-Grammatikis Panagiotis, 
+Makris Ioannis, Mladenov Valeri, Psannis Konstantinos E, Goudos Sotirios, et al. 
+Breaching the Defense: Investigating FGSM and CTGAN Adversarial Attacks on 
+IEC 60870-5-104 AI-enabled Intrusion Detection Systems. In: 18TH 
+INTERNATIONAL conference on availability, RELIABILITY & SECURITY, ARES; 
+2023. p. 2023.
+[116] Nie Yuhao, Zelikman Eric, Scott Andea, Paletta Quentin, Brandt Adam. SkyGPT: 
+Probabilistic ultra-short-term solar forecasting using synthetic sky images from 
+physics-constrained VideoGPT. ADVANCES IN APPLIED ENERGY 2024;14: 
+100172.
+[117] Heo SungKu, Ko Jaerak, Kim SangYoun, Jeong Chanhyeok, Hwangbo Soonho, 
+Yoo ChangKyoo. Explainable AI-driven net-zero carbon roadmap for 
+petrochemical industry considering stochastic scenarios of remotely sensed 
+offshore wind energy. J Clean Prod 2022;379(Part 2):134793.
+[118] Zhang L, Chen Z. Opportunities of applying large language models in building 
+energy sector. Renew Sust Energ Rev 2025;214:115558.
+[119] Ullah A, Qi G, Hussain S, Ullah I, Ali Z. The role of llms in sustainable smart cities: 
+applications, challenges, and future directions. arXiv preprint arXiv:2402.14596. 
+2024.
+[120] Raffel C, Shazeer N, Roberts A, Lee K, Narang S, Matena M, et al. Exploring the 
+limits of transfer learning with a unified text-to-text transformer. J Mach Learn 
+Res 2020;21(140):1–67.
+[121] Ruan J, Liang G, Zhao H, Liu G, Sun X, Qiu J, et al. Applying large language 
+models to power systems: potential security threats. IEEE transactions on smart 
+grid 2024;15(3):3333–6.
+[122] Devlin J, Chang MW, Lee K, Toutanova K. Bert: pre-training of deep bidirectional 
+transformers for language understanding. In proceedings of the 2019 conference 
+of the North American chapter of the association for computational linguistics: 
+human language technologies, volume 1 (long and short papers) (pp. 4171-4186). 
+2019.
+[123] Jiang G, Ma Z, Zhang L, Chen J. EPlus-LLM: a large language model-based 
+computing platform for automated building energy modeling. Appl Energy 2024; 
+367:123431.
+[124] Acharya DB, Kuppan K, Divya B. Agentic AI: Autonomous intelligence for 
+complex goals–a comprehensive survey. IEEE Access; 2025.
+[125] Qiu Zihang, Li Chaojie, Wang Zhongyang, Mo Huadong, Xie Renyou, Guo Chen, 
+et al. FPE-LLM: Highly Intelligent Time-Series Forecasting and Language 
+Interaction LLM in Energy Systems, arXiv:2411.00852v1 [cs.LG]. 2024.
+[126] Arcas GI, Cioara T, Anghel I, Lazea D, Hangan A. Edge offloading in smart grid. 
+Smart Cities 2024;7:680–711.
+[127] Madani Seyyedreza, Tavasoli Ahmadreza. Zahra Khoshtarash Astaneh, Pierre- 
+Olivier Pineau, Large Language Models integration in Smart Grids, arXiv: 
+2504.09059v1 [cs.CY]. 2025.
+[128] Gao C, Lan X, Li N, et al. Large language models empowered agent-based 
+modeling and simulation: a survey and perspectives. Humanit Soc Sci Commun 
+2024;11:1259. https://doi.org/10.1057/s41599-024-03611-3.
+[129] Das Opy, Zafar Muhammad Hamza, Sanfilippo Filippo, Rudra Souman, 
+Kolhe Mohan Lal. Advancements in digital twin technology and machine learning 
+for energy systems: A comprehensive review of applications in smart grids, 
+renewable energy, and electric vehicle optimisation. Energy Conversion and 
+Management: X 2024;24:100715. ISSN 2590-1745, https://doi.org/10.1016/j. 
+ecmx.2024.100715.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+21 
+
+=== PAGE 22 ===
+[130] Arslan Muhammad, Mahdjoubi Lamine, Munawar Saba. Driving sustainable 
+energy transitions with a multi-source RAG-LLM system. Energy and Buildings 
+2024;324:114827. ISSN 0378-7788, https://doi.org/10.1016/j.enbuild.2024. 
+114827.
+[131] Plaat Aske, van Duijn Max, van Stein Niki, Preuss Mike, van der Putten Peter. Kees 
+Joost Batenburg, Agentic Large Language Models, a survey, arXiv:2503.23037v2 
+[cs.AI]. 2025.
+[132] Matarazzo Andrea, Torlone Riccardo. A Survey on Large Language Models with 
+some Insights on their Capabilities and Limitations, arXiv:2501.04040v1 [cs.CL]. 
+2025.
+[133] Thapa S, Shiwakoti S, Shah SB, et al. Large language models (LLM) in 
+computational social science: prospects, current state, and challenges. Soc Netw 
+Anal Min 2025;15:4. https://doi.org/10.1007/s13278-025-01428-9.
+[134] Liu M, Zhang L, Chen J, et al. Large language models for building energy 
+applications: opportunities and challenges. Build Simul 2025;18:225–34.
+[135] Yang Linyao, Luo Shi, Cheng Xi, Yu Lei. Leveraging Large Language Models for 
+Enhanced Digital Twin Modeling: Trends, Methods, and Challenges, arXiv: 
+2503.02167v1 [cs.ET]. 2025.
+[136] Vaswani Ashish, Shazeer Noam, Parmar Niki, Uszkoreit Jakob, Jones Llion, 
+Gomez Aidan N, et al. Attention is all you need. In: In proceedings of the 31st 
+International conference on neural information processing systems (NIPS’17). 
+Curran associates Inc., red hook, NY, USA; 2017. p. 6000–10.
+[137] The Claude 3 Model Family: Opus, Sonnet, Haiku. Available online, https://assets 
+.anthropic.com/m/61e7d27f8c8f5919/original/Claude-3-Model-Card.pdf; 2025.
+[138] Llama team, The Llama 3 Herd of Models. Available online, https://ai.meta.com/ 
+research/publications/the-llama-3-herd-of-models/; 2024.
+[139] On the Opportunities and Risks of Foundation Models, Stanford Report. Available 
+online, https://crfm.stanford.edu/report.html; 2021.
+[140] GPT-4o System Card. Available online, https://openai.com/index/gpt-4o-sys 
+tem-card/; 2024.
+[141] Gemini Team Google, Gemini 1.5: Unlocking multimodal understanding across 
+millions of tokens of context. Available online, https://arxiv.org/abs/2 
+403.05530; 2025.
+[142] DALL-E 3 AI Image Generator. Available online, https://dalle3.ai/; 2025.
+[143] Huang Lei, Yu Weijiang, Ma Weitao, Zhong Weihong, Feng Zhangyin, 
+Wang Haotian, et al. A survey on hallucination in large language models: 
+principles, taxonomy, challenges, and open questions. ACM trans. Inf. Syst. 43, 2, 
+article 42 (march 2025). 55 pages. 2025. https://doi.org/10.1145/3703155.
+[144] Xu Ziwei, Jain Sanjay, Kankanhalli Mohan. Hallucination is inevitable: An innate 
+limitation of large language models; 2024. arXiv preprint; 2024. 
+arXiv:2401.11817.
+[145] Tonmoy SM, Zaman SM, Jain V, Rani A, Rawte V, Chadha A, et al. 
+A comprehensive survey of hallucination mitigation techniques in large language 
+models. arXiv preprint arXiv:2401.01313, 6. 2024.
+[146] Cheng F, Li H, Liu F, van Rooij R, Zhang K, Lin Z. Empowering llms with logical 
+reasoning: a comprehensive survey. arXiv preprint arXiv:2502.15652. 2025.
+[147] Yao Y, Duan J, Xu K, Cai Y, Sun Z, Zhang Y. A survey on large language model 
+(llm) security and privacy: the good, the bad, and the ugly. High-Confidence 
+Computing 2024;4(2):100211.
+[148] Das BC, Amini MH, Wu Y. Security and privacy challenges of large language 
+models: a survey. ACM Comput Surv 2025;57(6):1–39.
+[149] Debar H, Dietrich S, Laskov P, Lupu EC, Ntoutsi E. Emerging security challenges 
+of large language models. arXiv preprint arXiv:2412.17614. 2024.
+[150] Zhang R, Li HW, Qian XY, Jiang WB, Chen HX. On large language models safety, 
+security, and privacy: a survey. Journal of Electronic Science and Technology 
+2025;23(1):100301.
+[151] Li J, Yang Y, Sun J. Risks of practicing large language models in smart grid: threat 
+modeling and validation. arXiv preprint arXiv:2405.06237. 2024.
+[152] Adlakha V, BehnamGhader P, Lu XH, Meade N, Reddy S. Evaluating correctness 
+and faithfulness of instruction-following models for question answering. 
+Transactions of the Association for Computational Linguistics 2024;12:681–99.
+[153] Singh A, Ehtesham A, Kumar S, Khoei TT. Agentic retrieval-augmented 
+generation: a survey on agentic rag. arXiv preprint arXiv:2501.09136. 2025.
+[154] Barnett S, Kurniawan S, Thudumu S, Brannelly Z, Abdelrazek M. Seven failure 
+points when engineering a retrieval augmented generation system. In proceedings 
+of the IEEE/ACM 3rd International conference on AI engineering-software 
+engineering for AI (pp. 194-199). 2024.
+[155] Shinn N, Cassano F, Gopinath A, Narasimhan K, Yao S. Reflexion: language agents 
+with verbal reinforcement learning. Adv Neural Inf Proces Syst 2023;36:8634–52.
+[156] Zhuge M, Zhao C, Ashley D, Wang W, Khizbullin D, Xiong Y, et al. Agent-as-a- 
+judge: Evaluate agents with agents. arXiv preprint arXiv:2410.10934. 2024.
+[157] Bigoulaeva I, Madabushi HT, Gurevych I. The inherent limits of pretrained LLMs: 
+the unexpected convergence of instruction tuning and in-context learning 
+capabilities. arXiv preprint arXiv:2501.08716. 2025.
+[158] Yu HQ, McQuade F. Rag-kg-il: a multi-agent hybrid framework for reducing 
+hallucinations and enhancing llm reasoning through rag and incremental 
+knowledge graph learning integration. arXiv preprint arXiv:2503.13514. 2025.
+[159] Luo L, Zhao Z, Haffari G, Li YF, Gong C, Pan S. Graph-constrained reasoning: 
+faithful reasoning on knowledge graphs with large language models. arXiv 
+preprint arXiv:2410.13080. 2024.
+[160] Amirizaniani M, Yao J, Lavergne A, Okada ES, Chadha A, Roosta T, et al. 
+LLMAuditor: a framework for auditing large language models Using human-in- 
+the-loop. arXiv preprint arXiv:2402.09346. 2024.
+[161] Sun Z, Shen S, Cao S, Liu H, Li C, Shen Y, et al. Aligning large multimodal models 
+with factually augmented rlhf. arXiv preprint. arXiv:2309.14525; 2023.
+[162] Brown Tom B, Mann Benjamin, Ryder Nick, Subbiah Melanie, Kaplan Jared, 
+Dhariwal Prafulla, et al. Language models are few-shot learners. In: In 
+proceedings of the 34th International conference on neural information 
+processing systems (NIPS ’20). Curran associates Inc., red hook, NY, USA, article 
+159; 2020. p. 1877–901.
+[163] Zheng Yue, Chen Yuhao, Qian Bin, Shi Xiufang, Shu Yuanchao, Chen Jiming. 
+A review on edge large language models: design, execution, and applications. 
+ACM Comput. Surv. 57, 8, article 209 (august 2025). 35 pages. 2025. https://doi. 
+org/10.1145/3719664.
+[164] Sanh Victor, Wolf Thomas, Rush Alexander M. Movement pruning: Adaptive 
+sparsity by fine-tuning. In: In proceedings of the 34th International conference on 
+neural information processing systems (NIPS ’20). Curran associates Inc., red 
+hook, NY, USA, article 1711; 2020. p. 20378–89.
+[165] Dettmers T, Lewis M, Belkada Y, Zettlemoyer L. Gpt3. int8: 8-bit matrix 
+multiplication for transformers at scale. Adv Neural Inf Proces Syst 2022;35: 
+30318–32.
+[166] Tay Yi, Dehghani Mostafa, Bahri Dara, Metzler Donald. Efficient transformers: a 
+survey. ACM Comput. Surv. 55, 6, article 109 (June 2023). 28 pages. 2022. 
+https://doi.org/10.1145/3530811.
+[167] Gu Y, Dong L, Wei F, Huang M. Minillm: knowledge distillation of large language 
+models. arXiv preprint 2023. arXiv:2306.08543.
+[168] Lou C, Jia Z, Zheng Z, Tu K. Sparser is faster and less is more: efficient sparse 
+attention for long-range transformers. arXiv preprint 2024. arXiv:2406.16747.
+[169] Cai W, Jiang J, Wang F, Tang J, Kim S, Huang J. A survey on mixture of experts in 
+large language models. IEEE Trans Knowl Data Eng 2025;37(7):3896–915.
+[170] Xiao G, Lin J, Seznec M, Wu H, Demouth J, Han S. Smoothquant: Accurate and 
+efficient post-training quantization for large language models. In: International 
+conference on machine learning. PMLR; 2023, July. p. 38087–99.
+[171] Qu G, Chen Q, Wei W, Lin Z, Chen X, Huang K. Mobile edge intelligence for large 
+language models: A contemporary survey. IEEE Communications Surveys & 
+Tutorials; 2025.
+[172] Rjoub G, Elmekki H, Islam S, Bentahar J, Dssouli R. A hybrid swarm intelligence 
+approach for optimizing multimodal large language models deployment in edge- 
+cloud-based federated learning environments. Comput Commun 2025;237: 
+108152.
+[173] Xu J, Li Z, Chen W, Wang Q, Gao X, Cai Q, et al. On-device language models: a 
+comprehensive review. arXiv preprint 2024. arXiv:2409.00088.
+[174] Xu Jundong, Fei Hao, Pan Liangming, Liu Qian, Lee Mong-Li, Hsu Wynne. 
+Faithful logical reasoning via symbolic chain-of-thought. In: In proceedings of the 
+62nd annual meeting of the Association for Computational Linguistics (volume 1: 
+Long papers), pages 13326–13365. Bangkok: Thailand. Association for 
+Computational Linguistics; 2024.
+[175] Chen Z, Deng Y, Yuan H, Ji K, Gu Q. Self-play fine-tuning converts weak language 
+models to strong language models. arXiv preprint arXiv:2401.01335. 2024.
+[176] Bianchi F, Chia PJ, Yuksekgonul M, Tagliabue J, Jurafsky D, Zou J. How well can 
+llms negotiate? Negotiationarena platform and analysis. arXiv preprint arXiv: 
+2402.05863. 2024.
+[177] Hu J, Dong Y, Ao S, Li Z, Wang B, Singh L, et al. Position: Towards a responsible 
+llm-empowered multi-agent systems. arXiv preprint arXiv:2502.01714. 2025.
+[178] Li H, Nourkhiz Mahjoub H, Chalaki B, Tadiparthi V, Lee K, Moradi Pari E, et al. 
+Language grounded multi-agent reinforcement learning with human- 
+interpretable communication. Adv Neural Inf Proces Syst 2024;37:87908–33.
+[179] Li LH, Hessel J, Yu Y, Ren X, Chang KW, Choi Y. Symbolic chain-of-thought 
+distillation: small models can also“ think” step-by-step. arXiv preprint arXiv: 
+2306.14050. 2023.
+[180] Estornell Andrew, Yang Liu. Multi-LLM debate: Framework, principals, and 
+interventions. In: In proceedings of the 38th International conference on neural 
+information processing systems (NIPS ’24), Vol. 37. Curran associates Inc., red 
+hook, NY, USA, article 911; 2025. p. 28938–64.
+G. Antonesi et al.                                                                                                                                                                                                                               Applied Energy 401 (2025) 126670 
+22 

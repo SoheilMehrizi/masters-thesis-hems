@@ -1,0 +1,1778 @@
+
+=== PDF PAGE 1 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+                                                                         Applied Energy 415 (2026) 127976
+
+
+                                                                     Contents lists available at ScienceDirect
+
+                                                                             Applied Energy
+
+
+                                                         journal homepage: www.elsevier.com/locate/apen
+
+
+
+Adaptive home energy management to self-motivated user preferences via
+iterative LLM-augmented reinforcement learning☆
+Xiao Dua, Fengji Luo                b, Juntao Hua, Wei Zhoua, Junhao Wena,∗
+
+
+aSchool of Big Data & Software Engineering, Chongqing University, Shapingba, Chongqing, 401331, Chongqing, China
+bSchool of Civil Engineering, University of Sydney, Camperdown, Sydney, 2050, NSW, Australia
+
+
+
+H I G H L I G H T S
+
+• LLM-augmented framework adapts HEMS to natural-language user preferences.
+• Three-agent loop reshapes DRL rewards and states via offline refinement.
+• Deployed real-time policy operates independently without LLM inference.
+• Reduces failure rate from 34.3% to 5.4% and ensures high rule compliance.
+• Robust across multiple DRL algorithms, LLM backbones, and languages.
+
+
+A R T I C L E   I N F O                                     A B S T R A C T
+
+Keywords:                                                   Home energy management systems (HEMS) must balance competing objectives—electricity cost, thermal com­
+User preferences                                            fort, and carbon emissions—according to user preferences that are personalized, evolving, and often expressed
+Home energy management                                      in natural language. Conventional deep reinforcement learning (DRL) methods cannot directly interpret such
+Reinforcement learning                                      preferences, while existing reinforcement learning (RL)+LLM integrations either invoke large language models
+Large language model                                        (LLMs) at every control timestep or rely on one-shot preference parsing without feedback. This paper proposes LA-
+Multi-agent system                                          UPAHEM, an iterative LLM-augmented framework in which three specialized agents collaborate in a closed loop:
+
+                                                            a Code Generation Agent translates preferences into reward and state modification functions, a Result Analysis
+                                                            Agent diagnoses policy–preference misalignment from evaluation metrics, and an Optimal Performance Search
+                                                            Agent identifies the best-performing policy as the warm-start for the next iteration. LLMs are invoked only during
+                                                            this offline refinement phase; the deployed policy operates independently without LLM inference. Experiments
+                                                            on real residential energy datasets show that LA-UPAHEM outperforms classical DRL and existing RL+LLM base­
+                                                            lines in both macro-level key performance indicator (KPI) alignment (cost, comfort, emissions) and micro-level
+                                                            rule compliance, achieving a Weighted Improvement Ratio (WIR) of 0.13 and a Rule Compliance Rate (RCR) of
+                                                            0.84, while reducing the failure rate from 34.3% (static parsing) to 5.4%. The framework is robust to environ­
+                                                            mental noise, evaluation weight perturbation, and preference paraphrasing, and generalizes across multiple DRL
+                                                            algorithms, LLM backbones, and preference languages.
+
+
+
+
+1 . Introduction                                                                                 the largest energy-consuming sector in the United States [2]. The pro­
+1.1 . Background                                                                                 liferation  of  air  conditioners  (ACs),  battery  energy  storage  systems
+                                                                                                 (BESS), and rooftop photovoltaic (PV) systems creates opportunities for
+    Residential energy consumption is growing in both scale and com­                             efficiency but also introduces operational challenges: intermittent re­
+plexity,  with  household  energy  use  rising  by  over  17%  in  several                       newable generation, volatile electricity prices, and comfort needs that
+developed  countries  by  2021  [1]  and  residential  buildings  becoming                       vary by time and lifestyle. Home energy management has consequently
+
+
+
+
+
+ ☆  This work was supported by the Coal-Major Project (Grant No. 2025ZD1700800) and the Australian Research Council (Grant No. DP220103881).
+  ∗ Corresponding author.
+      Email addresses: duxiao@cqu.edu.cn (X. Du), fengji.luo@sydney.edu.au (F. Luo), hujuntao@stu.cqu.edu.cn (J. Hu), zhouwei@cqu.edu.cn (W. Zhou),
+jhwen@cqu.edu.cn (J. Wen).
+
+https://doi.org/10.1016/j.apenergy.2026.127976
+Received 9 December 2025; Received in revised form 21 March 2026; Accepted 21 April 2026
+Available online 24 April 2026
+0306-2619/© 2026 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies.
+
+=== PDF PAGE 2 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                          Applied Energy 415 (2026) 127976
+
+evolved into dynamic, multi-objective optimization balancing cost, com­                                through closed-loop feedback while decoupling LLM reasoning
+fort, and environmental impact.                                                                        from real-time control—the deployed policy operates indepen­
+    Central  to  this  optimization  is  understanding  user  preferences.  A                          dently without LLM inference.
+resident’s notion of “optimal” energy usage reflects personal trade-offs                           3.  We conduct comprehensive empirical validation using real res­
+among cost, comfort, and emissions—trade-offs that are subjective, dy­                                 idential  energy  and  weather  datasets  across  eight  preferences
+namic, and shift with weather, routines, and personal circumstances.                                   covering three categories and a preference-agnostic baseline. LA-
+A  Home  Energy  Management  System  (HEMS)  that  cannot  adapt  to                                   UPAHEM achieves a WIR of 0.13 averaged over macro-level pref­
+these evolving preferences risks reduced user satisfaction and missed                                  erences and an RCR of 0.84 under behavioral-rule preferences,
+optimization opportunities.                                                                            reduces  the  failure  rate  from  34.3%  to  5.4%,  and  generalizes
+                                                                                                       across multiple DRL algorithms, LLM backbones, and languages.
+1.2 . Motivation
+    Traditional  HEMS  based  on  Rule-Based  Control  (RBC)  or  Model                       2 . Related work
+Predictive Control (MPC) struggle with the uncertainties in weather and                       2.1 . DRL in HEMS
+user demands. Deep Reinforcement Learning (DRL) offers a promising
+alternative, combining adaptive decision-making with nonlinear mod­                                DRL has emerged as a powerful paradigm for HEMS, offering data-
+eling to learn control strategies directly from interaction data without                      driven  solutions  under  uncertain  and  dynamic  environments  [3].  At
+explicit dynamic models. However, conventional DRL-based HEMS face                            the household level, DRL frameworks adapt to time-of-use tariffs and
+two fundamental gaps:                                                                         real-time  battery  operation  [4],  while  robust  approaches  incorporate
+                                                                                              uncertainties  in  photovoltaic  generation  and  user  behavior  [5].  At
+    1.  Most  DRL-HEMS  are  designed  around  static  reward  functions                      the community scale, multi-agent DRL enables large-scale coordination
+        and fixed state spaces, defined by engineers before deployment.                       among  residences  [6],  with  extensions  for  safety  constraints  [7],  ex­
+        Translating a statement like “Only run the AC when I’m home                           plainability [8], and privacy [9]. Despite this maturity, most DRL-based
+        and during the night” into precise DRL objectives requires domain                     HEMS  assume  static  objectives.  The  challenge  of  modeling  evolving
+        knowledge and coding effort, making it inaccessible to everyday                       user preferences and integrating language models into decision-making
+        users.  Even  when  preferences  are  known,  encoding  them  into                    remains largely unexplored.
+        mathematical form is challenging because they are qualitative,                        2.2 . Modeling user preferences in HEMS
+        context-dependent,  and  high-dimensional.  Manual  translation
+        from natural language to DRL objectives is slow and error-prone,                           Modeling user preferences in HEMS remains challenging. Traditional
+        leaving systems unable to respond quickly to preference changes.                      approaches encode comfort as static penalty weights [10], which over­
+    2.  Existing  “user-aware”  HEMS  approaches  often  rely  on  long-                      look  the  dynamic  nature  of  household  priorities  and  risk  user  dis­
+        term statistical models, behavior tracking, or manual tuning to                       engagement  when  once-tuned  strategies  become  suboptimal  [11,12                   ].
+        adjust  control  strategies.  These  methods  suffer  from  delayed                   Multi-objective  reinforcement  learning  (MORL)  addresses  this  par­
+        adaptation—they  require  significant  data  accumulation  before                     tially by maintaining separate value estimates per objective, enabling
+        adjusting—and cannot instantly respond to new or spontaneous                          faster  re-customization  [13].  Similarly,  satisfaction-based  multi-agent
+        user requests. Moreover, while Large Language Models (LLMs)                           approaches [14] and hierarchical control schemes [15] balance cost and
+        excel  at  interpreting  nuanced  natural  language  and  linking  it                 comfort more flexibly. Recent work also introduces fuzzy logic to dy­
+        to  structured  actions,  their  potential  to  serve  as  a  continuous,             namically adjust comfort set-points [16]. Yet these methods still assume
+        adaptive bridge between user expression and DRL control logic                         structured, bounded preferences and struggle with abrupt changes in
+        remains underexplored in the HEMS context.                                            occupant priorities.
+                                                                                                   An alternative direction infers preferences from historical behavior.
+1.3 . Contribution and scope                                                                  [17]  proposed  an  uncertainty-aware  HEMS  that  learns  appliance  us­
+    To close these gaps, we propose LA-UPAHEM (LLM-Augmented User-                            age patterns via non-intrusive load monitoring (NILM) with Bayesian
+Preference-Adaptive HEMS), a framework that leverages LLM agents to                           neural  networks.  However,  such  models  adapt  gradually  and  break
+interpret evolving user preferences expressed in natural language, trans­                     under sudden deviations from routine (e.g., new work-from-home sched­
+late them into modifications of DRL’s state representation and reward                         ules). More broadly, rare events are usually missing from training data
+structure, and iteratively refine control strategies while decoupling LLM                     and  “not  feasible  to  capture”  [18],  leaving  data-driven  HEMS  brittle
+reasoning from real-time device control to preserve system efficiency.                        against rapid preference shifts [19]. In summary, most preference-aware
+By embedding natural language interpretation into the control optimiza­                       HEMS remain insufficiently adaptive: static parameters or history-based
+tion loop, LA-UPAHEM enables HEMS to maintain alignment with user                             models fail to capture real-time variability when preferences change.
+priorities—even as those priorities change—without requiring residents                        2.3 . Integrating LLM with DRL
+to engage with the technical details of DRL. Our main contributions are:
+                                                                                                   LLMs exhibit strong few-shot generalization [20] and can interpret
+    1.  We formulate the problem of natural language preference-driven                        natural language preferences [21], while DRL learns through interac­
+        HEMS,  for  the  first  time  mapping  user  instructions  expressed                  tion but suffers from high sample complexity [22]. This suggests natural
+        in natural language into DRL objectives via adaptive state aug­                       complementarity, yet LLMs are costly and unsuited for real-time control.
+        mentation and reward reshaping. Unlike prior user-aware HEMS                          Existing RL+LLM integrations can be grouped by their involvement in
+        that  rely  on  predefined  weight  vectors  or  historical  behav­                   real-time control [23]: (i) directly employing LLMs to output control ac­
+        ior inference, this formulation enables the direct translation of                     tions [24–27]; (ii) using LLMs to provide auxiliary decision information
+        qualitative, context-dependent preferences into executable DRL                        such as skill priors or action filters [28–30]; and (iii) leveraging LLMs
+        components without manual reward engineering.                                         to generate static training guidance, such as reward functions [31,32                  ],
+    2.  We design LA-UPAHEM, a multi-agent iterative LLM framework                            regularization functions [33], intrinsic motivation signals [34], or state
+        with three specialized agents (generation, analysis, and search).                     representations [35]. Table 1 summarizes these paradigms.
+        Unlike existing RL+LLM integrations that either invoke LLMs at                             However, the first two categories face practical challenges: LLM in­
+        every control timestep or rely on static one-shot preference pars­                    ference is computationally expensive for real-time coupling [36], and
+        ing, LA-UPAHEM progressively refines reward and state functions                       LLMs remain prone to hallucinations in planning tasks [23,37                 ].
+
+                                                                                           2
+
+=== PDF PAGE 3 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                             Applied Energy 415 (2026) 127976
+
+Table 1                                                                                              The HEMS operates in discrete time steps 𝑡 ∈ {1, 2, … , 𝜏} with inter­
+Methodological comparison of RL+LLM integration paradigms in the literature.                    val Δ𝑡 (h), observing household states through the Advanced Metering
+  Paradigm             Representative    LLM role            When invoked      Iterative        Infrastructure (AMI) and issuing control decisions for the CEDs. The core
+                       works                                                                    task of residential energy management is to balance three user-centric
+  I. Action gen.       [24–27]           Policy / actor      Every timestep    ✘                performance dimensions: minimizing electricity expenditure Lc, main­
+  II. Auxiliary info.  [28–30]           Filter / prior      Per episode /     ✘                taining indoor thermal comfort Lt, and reducing carbon emissions Le.
+                                                             timestep                           These objectives are formalized through the following Key Performance
+  III. Static guidance [31–35]           Guidance            Once              ✘                Indicators (KPIs):
+                                         designer
+  LA-UPAHEM            This work         Reward + state      Per iteration     ✓                           𝜏∑
+                                         designer                                               Lc =  1𝜏      𝜅𝑡𝑃 G𝑡  Δ𝑡,    (Electricity Cost)                                       (1a)
+                                                                                                          𝑡=1
+                                                                                                           𝜏∑
+                                                                                                 Lt =  1𝜏     𝟙(|𝑇 in𝑡   − 𝑇 set𝑡  | > 𝑇 band) ,    (Thermal Discomfort)              (1b)
+                                                                                                          𝑡=1
+                                                                                                           𝜏∑
+                                                                                                Le =  1𝜏      𝜇𝑡𝑃 G𝑡  Δ𝑡,    (Carbon Emissions)                                       (1c)
+                                                                                                          𝑡=1
+
+                                                                                                Here, 𝜅𝑡 ($/kWh) and 𝜇𝑡 (kg CO2/kWh) denote the time-varying elec­
+                                                                                                tricity price and grid carbon intensity, 𝑃 G𝑡         (kW) is the power exchanged
+                                                                                                with the grid (positive for import), 𝑇 in𝑡        (◦C) and 𝑇 set (◦C) are the actual
+                                                                                                                                                         ◦      𝑡
+                                                                                                and target indoor temperatures, and 𝑇 band (              C) is the acceptable devi­
+                                                                                                ation band. While these KPIs capture essential trade-offs in residential
+                                                                                                energy management, real users often express preferences that go be­
+                                                                                                yond simple KPI weighting, such as conditional device usage rules or
+                                                                                                context-dependent priorities.
+
+                                                                                                3.2 . MDP formulation
+
+                                                                                                     We  formalize  the  HEMS  control  problem  as  a  Markov  Decision
+                                                                                                Process (MDP), defined by the tuple ⟨S,A,P,R, 𝛾⟩. The state space S
+                                                                                                comprises environmental variables (e.g., outdoor temperature 𝑇 out𝑡                   , so­
+                                                                                                lar irradiance 𝐼𝑡), device states (e.g., indoor temperature 𝑇 in𝑡           , BESS state
+                                                                                                of charge     soc𝑡), contextual information (e.g., hour-of-day hour𝑡, occu­
+                                                                                                pancy indicator occ𝑡), and market signals (electricity price 𝜅𝑡, carbon
+                                                                                                intensity 𝜇𝑡). The action space A specifies operating modes and power
+                                                                                                levels for CEDs (e.g., BESS charging/discharging power 𝑃 b𝑡                 , AC operat­
+                                                                                                ing mode 𝑀a𝑡      ). The transition dynamics P(𝑠𝑡+1|𝑠𝑡, 𝑎𝑡) are governed by
+          Fig. 1. System architecture of the considered HEMS scenario.                          physical models and stochastic processes, as detailed in Section 4. The
+                                                                                                discount factor is set to 𝛾 = 0.99 to encourage long-horizon planning.
+                                                                                                     The  reward  function       R(𝑠𝑡, 𝑎𝑡)  quantifies  the  desirability  of  state-
+                                                                                                action  pairs.  In  traditional  DRL-based  HEMS,  rewards  are  manually
+    This work builds upon the third category but introduces two key                             designed based on the KPIs in Eq. (1), and the overall reward is com­
+innovations. First, rather than static reward generation without verifi­                        puted  as  a  weighted  sum         𝑟𝑡   =   𝛼cRc  +  𝛼tRt  +  𝛼eRe  with  manually
+cation, we propose an iterative closed-loop mechanism where the Result                          tuned weights. The objective is to learn an optimal policy 𝜋⋆(𝑎𝑡|𝑠𝑡) that
+Analysis  Agent  evaluates  policy  performance  and  provides  corrective                      maximizes the expected cumulative reward:
+feedback, enabling progressive refinement of reward functions and state                                      [  𝜏∑      ]
+modification functions. Second, we systematically apply this paradigm                           𝐽(𝜋) = E𝜋          𝛾𝑡𝑟𝑡   .                                                                        (2)
+to residential energy management, where natural language preferences                                            𝑡=1
+are  common  yet  unaddressed  by  existing  LLM+DRL  approaches.  By
+decoupling LLM reasoning from real-time control, the proposed frame­                                 However,  this  reward  structure  is  restricted  to  linear  combina­
+work avoids the computational and robustness issues of the first two                            tions of predefined components and cannot capture natural language
+categories while achieving adaptive preference alignment.                                       preferences such as conditional device usage rules.
+
+3 . Problem formulation                                                                         3.3 . Preference-driven MDP
+
+3.1 . HEMS objectives and scenario                                                                   To  overcome  these  limitations,  we  extend  the  standard  MDP  to
+                                                                                                accommodate natural language user preferences 𝐏. Importantly, the re­
+    We consider a modern residential environment with high renewable                            sulting problem remains a conventional numerical RL problem, not a
+energy  penetration  that  can  accommodate  diverse  and  evolving  user                       multi-modal one: natural language is not processed jointly with numeri­
+preferences. As illustrated in Fig. 1, the household is supplied by both                        cal states during policy execution. Rather, LLM agents serve as an offline
+the main power grid and rooftop photovoltaic (PV) generation, while                             preprocessor that translates natural language preferences into numerical
+the  HEMS  actively  controls  two  Controllable  Energy  Devices  (CEDs):                      reward  functions  and  state  modification  functions  before  DRL  train­
+a Battery Energy Storage System (BESS) and an Air Conditioner (AC).                             ing begins. Once these components are generated, the MDP is purely
+Other  household  appliances  (e.g.,  televisions,  microwave  ovens)  are                      numerical—the agent observes numerical states, takes continuous ac­
+treated as uncontrollable baseline load 𝑃 BL𝑡            (kW). The system is mod­               tions, and receives scalar rewards without any language modality. LLMs
+eled in a modular manner, allowing devices to be added or removed                               are invoked only during the iterative refinement phase and are entirely
+without compromising the generality of the control framework.                                   absent from the deployed real-time control loop.
+
+                                                                                            3
+
+=== PDF PAGE 4 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                           Applied Energy 415 (2026) 127976
+
+    Specifically, given a preference statement 𝐏, task-specific context   𝐂,                                Table 2
+and prompt templates 𝐓, we seek a mapping:                                                                  Categories of user preferences with illustrative examples. 𝐏1–𝐏   8 are used in
+                                                                                                            the main experiments.
+Φ ∶ (𝐏,   𝐂,    𝐓)  → (M  𝐏,R𝐏),                                                                  (3)         Symbol       Category             Natural language preference
+
+where M𝐏  ∶ S →   ̃S is a state modification function that augments the                                       𝐏1           Macro                “I am willing to sacrifice some room temperature
+state space with preference-relevant features, and R𝐏  ∶   ̃S × A → R is                                                                        comfort for electricity costs.”
+a preference-driven reward function defined over the augmented state                                          𝐏2           Macro                “I am an environmentalist, and I hope the carbon
+                                                                                                                                                emissions of my home can be as low as possible.”
+space. The task-specific context 𝐂 encapsulates household-specific in­                                        𝐏3           Macro                “Please prioritize the comfort of my home.”
+formation (device configuration, environment parameters) and must be                                          𝐏4           Micro                “For safety reasons, I do not want the battery to be
+customized per scenario, whereas the prompt templates 𝐓 are standard­                                                                           charged while I’m at home.”
+ized instructions that remain fixed across deployments. Since 𝐂 and    𝐓                                      𝐏5           Micro                “I prefer to turn on the air conditioner only when
+                                                                                                                                                I’m at home and during the night.”
+rarely change once established, users only need to update 𝐏 to express                                        𝐏6           Micro                “I want the home battery to discharge only during
+new preferences. The construction of 𝐂 and 𝐓 is detailed in Section 5.                                                                          peak electricity price hours to take advantage of
+    Note that (M  𝐏,R𝐏) are generated as a coordinated pair: the state                                                                          time-of-use tariffs.”
+modification function M𝐏 provides the features that R𝐏 depends on. The                                        𝐏7           Compositional        “I can adapt to a colder room temperature, so there
+extended MDP becomes ⟨ ̃S,A,   P,R𝐏, 𝛾⟩, and the policy is optimized as:                                                                        is no need to turn on the air conditioner when the
+                                                                                                                                                room temperature is below the set temperature to
+                       [  𝜏∑                 ]                                                                                                  save on electricity costs.”
+                                                                                                              𝐏8           Baseline             “I have no particular preference.”
+𝜋⋆𝐏  = arg max𝜋𝜃  E𝜋𝜃         𝛾𝑡R𝐏(̃𝑠𝑡, 𝑎𝑡)    ,    where  ̃𝑠𝑡 = M𝐏(𝑠  𝑡).                    (4)
+                         𝑡=1
+
+    Unlike traditional formulations, R𝐏 is not restricted to linear combi­                                  𝑃 b𝑡  ∈ [0, 𝑃 bsup],                                                                       (5c)
+nations of predefined reward components. It can be any differentiable                                              ⎧⎪⎪⎨⎪⎪⎩
+function tailored to the preference, including nonlinear terms, condi­                                               min{𝑃 brat,  𝐸rat−𝐸   𝑡𝜂bΔ𝑡  },    𝑀   b𝑡  = 1,
+tional  penalties,  or  entirely  new  reward  structures.  For  instance,  the                           𝑃 b                                                                                         (5d)
+preference “do not charge the battery when I am at home” requires M𝐏                                        sup =    min{𝑃           brat,  𝜂b𝐸𝑡Δ𝑡  },        𝑀   b𝑡  = −1,
+to augment the state with occupancy indicators, which R𝐏 then uses                                                   0,                                𝑀b𝑡  = 0,
+to  impose  conditional  penalties  on  charging  actions  during  occupied
+periods.                                                                                                 where 𝑀b𝑡   ∈  {−1, 0,  1} denotes the operating mode (1: charging,     −1:
+3.4 . Preference categories                                                                              discharging, 0: standby), 𝑃 b𝑡  (kW) and 𝑃 brat (kW) are the actual and rated
+                                                                                                         power, SD (h      -1) is the self-discharge rate, and 𝜂b is the charge/discharge
+    We classify user preferences into three categories, reflecting the pri­                              efficiency.
+mary trade-off dimensions identified in the HEMS literature: electricity                                 4.1.2 . Air conditioner (AC)
+cost versus thermal comfort [13,14,17] and carbon emissions awareness                                         The AC is modeled thermodynamically with heating/cooling power
+[18]. Macro-level preferences specify high-level KPI trade-offs (e.g.,       𝐏1:                         𝑃 heat
+“sacrifice comfort for cost  ”), typically implemented by adjusting reward                               indoor temperature 𝑇                                              in𝑡   (◦C) and outdoor temperature 𝑇 out𝑡      (kW)  and  coefficient  of  performance  (COP)  cop𝑡  dependent  on
+weights or functional forms. Micro-level preferences impose fine-grained                                                                                                               𝑡    (◦C):
+device operation rules (e.g., 𝐏4: “no battery charging at home  ”), requiring                            𝑃 heat𝑡      = cop𝑡𝑃 a𝑡 𝑀a𝑡 ,     𝑃 a𝑡  ∈ [𝑃 asta, 𝑃 arat],                                   (6a)
+state  augmentation  and  conditional  penalties.  Compositional  prefer­                                           {
+ences  combine  both  (e.g.,  𝐏6:  “tolerate  cold  to  save  cost,  no  AC  below                        cop𝑡 =       cop𝑡,      0 <   cop𝑡 < coprat,                                                (6b)
+setpoint”). These three categories are not exhaustive but cover the most                                               coprat,    otherwise,
+common  preference  types  reported  in  residential  energy  surveys;  the                                         ⎧⎪⎪⎨⎪⎪⎩𝜂a(𝑇 in𝑡  )K
+framework’s code-generation mechanism can accommodate preferences                                                     𝑇 in𝑡  −𝑇 out
+                                                                                                                            𝑡    ,    𝑀a𝑡  = 1,
+beyond these categories as long as they can be expressed in natural lan­                                  cop𝑡 =      𝜂a(𝑇  in𝑡  )K                                                                    (6c)
+guage. Table 2 summarizes the eight preferences used throughout this                                                  𝑇 out
+                                                                                                                       𝑡    −𝑇 in𝑡  ,    𝑀a𝑡  = −1,
+study.                                                                                                                0,               𝑀   a𝑡  = 0,
+
+4 . System modeling                                                                                      where 𝑀a𝑡  ∈  {−1,       0,  1} is the operating mode (1: heating,     −1: cooling,
+    To  capture  the  physical  and  stochastic  characteristics  of  the  res­                          0: standby), 𝑃 a𝑡  (kW) is the electrical power consumption bounded by
+idential  environment,  we  develop  models  for  the  CEDs,  rooftop  PV                                minimum 𝑃 asta (kW) and rated 𝑃 arat (kW) values, (⋅)   K denotes tempera­
+generation,  and  the  building’s  thermal  dynamics.  These  components                                 ture conversion to Kelvin, coprat is the upper COP limit, and 𝜂a is the
+collectively define the environmental dynamics that govern the HEMS                                      thermodynamic efficiency factor.
+optimization and control process.                                                                        4.1.3 . Photovoltaic (PV) system
+4.1 . Energy device models                                                                                    Energy generation 𝑃 PV𝑡    (kW) depends on solar irradiance 𝐼𝑡 (kW/m2),
+                                                                                                         panel area 𝐴pan (m2), conversion efficiency 𝜂PV, and rated output per
+4.1.1 . Battery energy storage system (BESS)                                                             unit area 𝑃                      PVrat  (kW/m2):
+    The BESS follows standard charge/discharge dynamics with stored                                                {0,                                     𝐼𝑡 < 𝐼min,
+energy 𝐸𝑡 (kWh), rated capacity 𝐸rat (kWh), and state of charge (SOC)                                    𝑃 PV𝑡    =
+soc𝑡 = 𝐸𝑡∕𝐸   rat:                                                                                                    min(𝜂          PV𝐼𝑡, 𝑃 PVrat )𝐴  pan,    otherwise,                                          (7)
+
+𝐸𝑡+1  =   𝐸𝑡+1(1 − SD ⋅ Δ𝑡),                                                                 (5a)        where 𝐼min (kW/m2) is the minimum irradiance threshold for generation.
+
+          ⎧⎪⎨⎪⎩𝐸𝑡 + 𝜂b𝑃 b𝑡 Δ𝑡,    𝑀    b𝑡  = 1,                                                          4.2 . Building thermal model
+𝐸𝑡+1 =      𝐸𝑡 −  𝑃 b𝑡 Δ𝑡𝜂b   ,        𝑀b𝑡  = −1,                                            (5b)             The indoor temperature 𝑇 in𝑡   (◦C) evolves according to heat transfer
+            𝐸𝑡,                    𝑀b𝑡  = 0,                                                             from conduction 𝑄con𝑡    (kWh), ventilation 𝑄ven𝑡    (kWh), and solar radiation
+
+                                                                                                      4
+
+=== PDF PAGE 5 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                   Applied Energy 415 (2026) 127976
+
+𝑄solar𝑡 (kWh):                                                                                       the task-specific context 𝐂 without architectural changes. Second, we
+                                                                                                     consider  a  single  household  with  two  controllable  devices  (AC  and
+                    𝑡    +𝑄   ven𝑡    +𝑄   solar𝑡      +𝑃    heat𝑡     Δ𝑡                            BESS). Third, occupancy is modeled as a binary indicator (home/away)
+ 𝑇 in𝑡+1  =𝑇    in𝑡   + 𝑄con  𝑐air𝜌air𝑉 hou                ,                            (8a)         without multi-occupant disaggregation. Extending to multi-household
+ 𝑄con                                                                                   (8b)         coordination and richer occupancy models is left for future work.
+   𝑡    =𝜆𝐴   suf(𝑇  out𝑡    −𝑇    in𝑡  )Δ𝑡,                                                             Because  exogenous  variables  are  drawn  from  real-world  traces
+ 𝑄ven𝑡    =ACH⋅𝑐            air𝜌air𝑉 hou(𝑇  out𝑡    −𝑇    in𝑡  )Δ𝑡,                     (8c)         rather  than  synthetic  distributions,  the  simulation  partially  mitigates
+𝑄solar𝑡      =SHGC⋅𝐼                   𝑡𝐴fenΔ𝑡,                                         (8d)         the  gap  between  simulated  and  physical  environments.  Remaining
+                                                                                                     discrepancies—such as simplified thermal dynamics or unmodeled dis­
+where 𝑐air (kWh/(kg⋅        ◦C)) is the specific heat of air, 𝜌air (kg/m3) is air                    turbances (e.g., door openings, appliance heat gains)—can be further
+density, 𝑉 hou (m3) is house volume, 𝜆 (kW/(m2⋅                ◦C)) is thermal conduc­               addressed through domain randomization over building parameters, pe­
+tivity, 𝐴suf (m2) is the envelope surface area, 𝐴fen (m2) is the window                              riodic online policy fine-tuning with real operational data, or digital twin
+area, ACH (h-1) is the air change rate, and SHGC is the solar heat gain                              integration.
+coefficient.                                                                                         5 . Methodology
+
+4.3 . Power balancing constraint                                                                         To operationalize the preference-driven MDP formulation, we pro­
+    To satisfy household energy demand, the total power demand 𝑃 D𝑡                                  pose the LA-UPAHEM framework. LA-UPAHEM automatically translates
+and the power drawn from the main grid 𝑃 G𝑡                 are defined as:                          natural language preferences into executable RL components and itera­
+                                                                                                     tively refines them based on training feedback. The overall architecture
+𝑃 D𝑡   =𝑃    a𝑡  +𝑃    b𝑡  +𝑃    BL𝑡    −𝑃    PV𝑡    ,                                  (9a)         is illustrated in Fig. 2.
+       {𝑃 D𝑡      if𝑃    D𝑡  ≥0                                                                          The  framework  comprises  three  stages  detailed  in  the  following
+𝑃 G𝑡   =                                                                                (9b)         subsections: task-specific context preparation (Section 5.1), LLM agent
+          0     otherwise   ,                                                                        interaction  via  prompt  templates  (Section  5.2),  and  an  adaptive  it­
+                                                                                                     erative  loop  that  couples  DRL  training  with  LLM-driven  refinement
+where 𝑃 BL𝑡    represents the uncontrollable baseline load from other house­                         (Section 5.4).
+hold  appliances.  We  assume  no  feed-in  to  the  grid  (i.e.,  excess  PV
+generation is curtailed), which reflects regulatory constraints in certain                           5.1 . Task-specific context
+residential markets.                                                                                     The  task-specific  context 𝐂  provides  LLM  agents  with  the  neces­
+
+4.4 . Stochastic occupancy model                                                                     sary  information  to  understand  the  HEMS  deployment  and  generate
+                                                                                                     appropriate (M  𝐏,R 𝐏) pairs. It consists of three elements:
+    We consider distinct occupancy patterns for working days (work) and                                  Environment Description 𝐜des: An overview of the deployment envi­
+rest days (rest), each characterized by different probabilities of being                             ronment, including the HEMS architecture, the set of CEDs, and natural
+away from home (𝑝out) and separate distribution parameters (𝜇, 𝜎) for                                language explanations of the action space A and state space S. Each
+departure (𝑡dep) and arrival (𝑡arr) times. The occupancy indicator occ𝑑,𝑡                            state variable is annotated with its physical meaning, data type, and
+for day 𝑑 is modeled as follows:                                                                     valid range to facilitate accurate code generation.
+                                     ),                                                                  General KPIs Description 𝐜kpi: High-level performance metrics cor­
+  occ𝑑,𝑡 = 1 −𝟙  (𝑡dep𝑑   ≤𝑡 < 𝑡   arr𝑑                                                (10a)         responding to the minimization objectives Lc,L t,L e in Eq. (1). These
+             {        ,arr}          ,arr}      2),   if out        𝑑 = 1,                           provide semantic grounding for LLM agents to understand the quantita­
+𝑡{dep,arr}      N(𝜇      {dep{work,rest}     ,(𝜎   {dep{work,rest}    )                (10b)         tive meanings of “cost”, “comfort”, and “emissions”.
+𝑑          ∼    {0,24},                                    otherwise,
+                                                                                                         Code  Reference  Templates               (𝐜  rref,𝐜 mref):  Executable  Python  code
+    out𝑑 ∼Bernoulli(𝑝                          out                                     (10c)         demonstrating  the  expected  interface  and  design  patterns  for  reward
+                           {work,rest}    ).                                                         and state modification functions. The state modification template 𝐜mref
+                                                                                                     augments the base state 𝑠𝑡 with derived features:
+4.5 . Exogenous variables from data                                                                  Mc(𝑠  𝑡) = −|𝑃      D                                                                  (11a)
+                                                                                                                      𝑡  |⋅𝜅   𝑡,
+    Modeling solar radiation density (𝐼𝑡), baseline load (𝑃 BL𝑡                 ), and out­          Mt(𝑠  𝑡) = min{0,  𝑇              band −|𝑇      in𝑡   −𝑇    set                        (11b)
+door temperature (𝑇 out𝑡      ) is challenging due to their inherent uncertainty                                                               𝑡  |},
+and  variability.  Therefore,  we  leverage  real-world  historical  datasets                        Me(𝑠  𝑡) = −|𝑃      D𝑡  |⋅𝜇   𝑡,                                                       (11c)
+[38,39  ] to simulate their dynamics. The real-time electricity price (𝜅𝑡)
+and carbon emission intensity (𝜇𝑡) are obtained from the CityLearn v2                                where all symbols follow their definitions in Sections 3 and 4. Mc(𝑠  𝑡),
+dataset [40]. All variables in the state vector 𝐬𝑡—including the above                               Mt(𝑠  𝑡), and Me(𝑠  𝑡) capture the electricity cost intensity, thermal dis­
+exogenous  signals,  device  operating  states,  and  calendar  features—                            comfort degree, and carbon emission intensity, respectively. The reward
+are assumed directly measurable via Advanced Metering Infrastructure                                 function template 𝐜rref then applies bounded transformations to these
+(AMI) or local sensors. Latent quantities such as the instantaneous AC                               derived features:
+coefficient of performance (COP), battery self-discharge losses, and heat
+transfer through the building envelope are computed internally by the                                Rc(𝑠  𝑡, 𝑎𝑡) = exp(M       c(𝑠  𝑡)),                                                   (12a)
+simulation but are not included in           𝐬𝑡.                                                     Rt(𝑠  𝑡, 𝑎𝑡) =occ    𝑡 ⋅exp(M        t(𝑠  𝑡)),                                         (12b)
+
+4.6 . Modeling assumptions                                                                           Re(𝑠  𝑡, 𝑎𝑡) = exp(M       e(𝑠  𝑡)),                                                   (12c)
+
+    The models above operate under three key assumptions. First, excess                              The  exponential  form  ensures  bounded  rewards  in                     (0,1]   and  pro­
+PV generation is curtailed with no feed-in to the grid (Eq. 9), reflect­                             vides  smooth  gradients,  which  stabilize  DRL  training.  The  complete
+ing markets without net-metering. In jurisdictions that permit feed-in,                              Python implementations of these reference templates are provided in
+the BESS would gain an export revenue stream, likely shifting learned                                Appendix D. These templates serve as reference examples that illustrate
+strategies  toward  more  aggressive  battery  cycling;  the  LA-UPAHEM                              expected interfaces, design patterns, and how to incorporate conditional
+framework  can  accommodate  this  by  including  export  tariff  data  in                           indicators and temporal encodings; the generated M𝐏 and R𝐏 (Eq. 3)
+
+                                                                                                5
+
+=== PDF PAGE 6 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                               Applied Energy 415 (2026) 127976
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      Fig. 2. Overall architecture of the proposed LA-UPAHEM framework.
+
+
+
+are not restricted to the template structure and may introduce entirely                           of this agent as feedback 𝐟𝑖: structured natural language that combines
+new features or reward terms tailored to user preferences 𝐏 (a concrete                           quantitative KPI analysis with specific code modification suggestions.
+example is presented in the case study of Section 6.4).                                           For instance, a representative feedback excerpt might read: “Sample 0
+    Since 𝐂 is determined by the household configuration and remains                              achieves the lowest electrical cost ($6.8) but has a high discomfort propor­
+stable once established, users only need to provide 𝐏 in natural language                         tion (0.38). The reward function over-penalizes AC usage. Suggestion: reduce
+to express their preferences, significantly simplifying human-machine                             the cost weight from 0.5 to 0.3 and add an occupancy-conditional comfort
+interaction.                                                                                      term.” This structured format provides actionable guidance that the Code
+                                                                                                  Generation Agent can directly incorporate in the next iteration.
+5.2 . LLM agents and prompt templates                                                                 The Optimal Performance Search Agent, driven by 𝐭search, identifies
+    The prompt templates 𝐓 = (𝐭code, 𝐭analysis, 𝐭search) are standardized in­                     the best-performing strategy based on preference alignment:
+structions that guide LLM agents to realize the mapping Φ in Eq. (3).                                         {Fsearch(𝐏, 𝐂, 𝐭search, 𝐞𝑖),            𝑖 < 𝜄,
+Each  template  defines  a  distinct  functional  role,  and  the  differentia­                   (𝑖⋆, 𝑗⋆) =
+tion among these templates gives rise to three specialized agents. The                                           Fsearch(𝐏, 𝐂, 𝐭search, {𝐞𝑖}𝜄𝑖=1),    𝑖 = 𝜄,                                  (15)
+complete prompt templates are provided in Appendix C.
+    The Code Generation Agent, driven by 𝐭code, translates user pref­                             where 𝜄 is the total number of outer iterations. For 𝑖 < 𝜄, the agent selects
+erences into executable (R𝐏,M𝐏) pairs. Given the task-specific context                            the current best strategy 𝑗⋆ as the warm-start model for the next iter­
+𝐂, user preferences 𝐏, and historical records from the memory pool, the                           ation, accelerating convergence by initializing from a well-performing
+agent generates 𝑛 diverse candidate implementations:                                              policy. At 𝑖 = 𝜄, it selects the globally optimal strategy (𝑖⋆, 𝑗⋆) across all
+                                                                                                  iterations for final deployment.
+{(R𝑗𝐏,M𝑗𝐏)}𝑛𝑗=1 = Fcode(𝐏, 𝐂, 𝐭code,D𝑖−𝑚∶𝑖−1),                                      (13)              Since  the  Code  Generation  Agent  produces  executable  code  that
+                                                                                                  directly interfaces with the simulation environment, a multi-layer val­
+where 𝑖 denotes the outer iteration index and D𝑖−𝑚∶𝑖−1 is a sliding win­                          idation  pipeline  (interface  constraints,  syntactic  validation,  runtime
+dow over the memory pool containing the most recent 𝑚 iterations of                               testing, retry mechanism, and state space documentation) ensures the
+generated code, evaluation results, and feedback (with D𝑖−𝑚∶𝑖−1  = ∅ at                           safety and correctness of all generated code. The complete description
+𝑖  =  1). The agent parses 𝐏 to identify preference types and key con­                            of these safety measures is provided in Appendix E.
+straints, uses the code templates as structural references while modifying
+components based on preferences, and generates 𝑛 diverse implemen­                                5.3 . DRL algorithm
+tations exploring different reward structures. Generating multiple can­                               LA-UPAHEM requires a DRL algorithm that can robustly optimize
+didates enables both exploration of diverse strategies and exploitation                           policies under dynamically evolving reward functions generated by LLM
+through iterative refinement.                                                                     agents.  We  adopt  the  Soft  Actor-Critic  (SAC)  algorithm  [41],  which
+    The Result Analysis Agent, driven by 𝐭analysis, evaluates training out­                       incorporates entropy regularization into the objective function:
+comes and generates targeted improvement feedback. After the inner
+loop trains and evaluates all 𝑛 candidate strategies, this agent receives                                                [  𝜏∑
+the evaluation results 𝐞𝑖 and analyzes performance:                                               max                          𝛾𝑡 (𝑟𝑡 + 𝛼H(𝜋𝜃(⋅|𝑠𝑡)))],                                (16)
+                                                                                                  𝜋𝜃∈Π 𝐽(𝜋𝜃) = E𝜉∼𝜋𝜃       𝑡=1
+𝐟𝑖 = Fanalysis(𝐏, 𝐂, 𝐭analysis, 𝐞𝑖, {(R𝑗𝐏,M𝑗𝐏)}𝑛𝑗=1),                                     (14)
+                                                                                                  where H(𝜋𝜃(⋅|𝑠𝑡)) = −E[log 𝜋𝜃(𝑎𝑡|𝑠𝑡)] is the policy entropy and 𝛼  > 0 is
+where 𝐞𝑖  =  {𝐤𝑖, 𝐮𝑖} contains the final KPI values 𝐤𝑖  =  {L𝑗c,L𝑗t ,L𝑗e}𝑛𝑗=1                     the temperature parameter. SAC is particularly suitable for LA-UPAHEM
+and  downsampled  control  trajectories 𝐮𝑖  from  the  test  environment.                         for two reasons. First, the entropy regularization with automatic tem­
+The agent compares KPI values across candidates, analyzes control tra­                            perature  adjustment  encourages  the  policy  to  maintain  appropriate
+jectories  to  detect  preference  violations,  and  identifies  discrepancies                    stochasticity.  This  is  important  because  LLM-generated  reward  func­
+between intended and actual behavior. We refer to the complete output                             tions may differ substantially across iterations, and exploratory behavior
+
+                                                                                              6
+
+=== PDF PAGE 7 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                 Applied Energy 415 (2026) 127976
+
+LA-UPAHEM.Algorithm 1                                                                              incurring minimal computational overhead suitable for household envi­
+Input: User preferences        𝐏, task-specific context 𝐂= (𝐜     des,𝐜 kpi,𝐜 rref,𝐜 mref),        ronments. When preferences do change, the LLM agents can be accessed
+prompt templates 𝐓=  (𝐭     code,𝐭 analysis,𝐭 search), pre-trained policy parame­                  through  cloud  APIs  without  requiring  local  computational  resources.
+ters 𝜃0.                                                                                           Furthermore,  since  the  framework  outputs  explicit  reward  and  state
+Parameters: Outer iteration count            𝜄, candidate count per iteration 𝑛.                   modification functions (R  ⋆𝐏,M ⋆𝐏), these can be reused for policy trans­
+Output:  Optimal  preference-aligned  policy                 𝜋⋆  with  corresponding               fer or retraining without invoking LLM agents again, enabling efficient
+                                                              𝐏                                    adaptation to new environments or device configurations.
+(R  ⋆𝐏,M ⋆𝐏).                                                                                          Compared with conventional DRL-based HEMS that rely on fixed,
+ 1: Initialize memory pool D←∅             , policy parameters 𝜃←𝜃       0                         manually  designed  reward  functions,  LA-UPAHEM  provides  two  dis­
+ 2: for 𝑖= 1    to 𝜄 do                                                                            tinguishing  properties:  (i)  the  nested  iterative  loop  gradually  refines
+ 3:    {(R    𝑗𝐏,M 𝑗𝐏)}𝑛𝑗=1  ←F     code(𝐏,𝐂,𝐭           code,D 𝑖−𝑚∶𝑖−1       ) {D𝑖−𝑚∶𝑖−1         =  ∅ when LLM-generated  optimization  signals,  balancing  exploration  across  di­
+       𝑖= 1  }                                                                                     verse candidates with exploitation through warm-start fine-tuning; and
+ 4:    D←D∪ {(R                 𝑗𝐏,M 𝑗𝐏)}𝑛𝑗=1                                                      (ii)  all  generated  components—reward  functions                   (R  𝐏),  state  modi­
+ 5:    for 𝑗= 1     to 𝑛 do                                                                        fiers (M  𝐏), and iterative feedback 𝐟𝑖—are human-readable, facilitating
+ 6:       Create environments envtrain𝑗        , envtest𝑗 using (R  𝑗𝐏,M 𝑗𝐏)                       inspection, debugging, and user trust.
+ 7:       𝜋⋆𝑗 ←SAC(𝜋          𝜃,env train𝑗    )
+ 8:       (𝐤  𝑗,𝐮 𝑗)←Evaluate(𝜋                     ⋆𝑗 ,env test𝑗   )                              5.5 . Privacy considerations
+ 9:    end for
+10:     𝐞𝑖 ←{(𝐤         𝑗,𝐮 𝑗)}𝑛𝑗=1; D←D∪𝐞                𝑖                                            Since LA-UPAHEM transmits user context to cloud-based LLM APIs
+11:     𝐟𝑖 ←F     analysis(𝐏,𝐂,𝐭           analysis,𝐞 𝑖,{(R     𝑗                                  during the iterative loop, privacy implications deserve explicit consider­
+                                                𝐏,M 𝑗𝐏)}𝑛𝑗=1 )                                     ation. Three categories of data leave the household: (i) user preference
+12:     D←D∪𝐟                𝑖                                                                     statements     𝐏,  which  may  reveal  lifestyle  habits  (e.g.,  “I  work  night
+13:     𝑗⋆ ←F     search(𝐏,𝐂,𝐭           search,𝐞 𝑖)                                               shifts”); (ii) household context 𝐂, containing device specifications and
+14:     𝜃←𝜃(𝜋            ⋆𝑗⋆)                                                                      occupancy patterns; and (iii) memory-pool records D𝑖−𝑚∶𝑖−1                     , which in­
+15:  end for                                                                                       clude  KPI  trajectories  that  can  expose  energy  consumption  profiles.
+16:  (𝑖  ⋆, 𝑗⋆)←F      search(𝐏,𝐂,𝐭           search,{𝐞    𝑖}𝜄𝑖=1 )                                Importantly, data transmission is confined to the outer-loop iterations
+17:  return 𝜋⋆𝐏 ←𝜋     (𝑖  ⋆)𝑗⋆, R⋆𝐏 ←R     𝑖⋆,𝑗⋆𝐏, M⋆𝐏 ←M     𝑖⋆,𝑗⋆𝐏                              and  is  entirely  absent  during  real-time  policy  execution,  where  the
+                                                                                                   trained DRL policy runs locally. For a typical household that updates
+                                                                                                   preferences a few times per year, the exposure window is limited to a
+                                                                                                   small number of API calls (e.g., 15 calls per preference update with 𝜄= 5
+helps  the  policy  adapt  to  new  reward  landscapes  without  collapsing                        iterations).
+into suboptimal local minima. Second, as an off-policy algorithm, SAC                                  Several practical mitigations can be adopted without modifying the
+can reuse experiences from a replay buffer, enabling efficient warm-                               core  framework.  First,  data  minimization  can  strip  personally  identi­
+start from previous iterations and reducing sample complexity during                               fiable  information  from 𝐂  (e.g.,  replacing  absolute  timestamps  with
+iterative refinement.                                                                              relative offsets); the current implementation already excludes raw tra­
+                                                                                                   jectories from Code Generation Agent prompts to reduce information
+                                                                                                   leakage (Section 5.4). Second, retention limits can purge memory-pool
+5.4 . Adaptive iterative loop                                                                      records beyond the sliding window 𝑚, and zero-retention policies can be
+    LA-UPAHEM integrates the LLM agents with DRL training through a                                requested from LLM API providers. Third, deploying open-source LLMs
+nested iterative loop, progressively refining the preference-aware policy                          (e.g., LLaMA-3 70B) on-premises eliminates cloud transmission entirely,
+with minimal human intervention. The outer loop (iterations 𝑖= 1,…, 𝜄                      )       with 70B-class models already achieving acceptable preference compli­
+manages LLM-agent interactions, code generation, result analysis, and                              ance in English (Section 6.7). Fourth, query anonymization can replace
+feedback  exchange,  while  each  outer  iteration  generates 𝑛  candidate                         real device names and locations with generic identifiers before API calls.
+(R  𝐏,M 𝐏) pairs. The inner loop (candidates 𝑗= 1,…, 𝑛                 ) instantiates an
+MDP environment for each candidate, trains a policy using SAC, and                                 6 . Experiments
+evaluates performance in the test environment.                                                         We empirically evaluate LA-UPAHEM on real-world residential en­
+    The  memory  pool D  accumulates  structured  records  across  all  it­                        ergy data. The experiments assess four aspects: (1) preference alignment
+erations:   D=    ⋃𝜄𝑖=1 {{(R       𝑖,𝑗𝐏 ,M 𝑖,𝑗𝐏 )}𝑛𝑗=1 ,𝐞 𝑖,𝐟 𝑖}.  As  described  in Eq.  (13),    quality relative to baselines across all eight preference scenarios; (2) the
+the Code Generation Agent retrieves the most recent 𝑚 iterations (de­                              necessity of iterative refinement and the contribution of each LLM agent
+fault 𝑚=  3     )  via  a  deterministic  sliding  window D𝑖−𝑚∶𝑖−1           .  To  reduce         module; (3) robustness to environmental noise, cross-environment vari­
+token consumption, trajectory data within 𝐞𝑖 is excluded from the Code                             ation, evaluation weight perturbations, and linguistic paraphrasing; and
+Generation Agent’s retrieval and is provided only to the Result Analysis                           (4) generality across DRL algorithms, LLM backbones, and preference
+Agent. Algorithm 1 formalizes the complete procedure.                                              languages.
+    LA-UPAHEM employs two complementary evaluation mechanisms.
+The  inner  loop  evaluates  policies  on  fixed  KPIs,  providing  objective                      6.1 . Experimental settings
+performance  metrics.  The  outer  loop  leverages  LLM  agents  to  assess
+preference alignment holistically via Fanalysis and Fsearch, accounting for                            We  instantiate  the  HEMS  simulation  using  real-world  traces  from
+qualitative aspects that raw KPIs may not capture, such as whether con­                            Pecan  Street  [38],  NOAA  [39],  and  CityLearn  [40].  Detailed  data
+ditional rules are satisfied. At each outer iteration, the best policy from                        sources, fields, and preprocessing steps are summarized in Appendix B
+the  previous  iteration  initializes  training  for  all 𝑛  candidates  (warm-                    (Table   13);   household   environment   parameters   are   provided   in
+start), accelerating convergence and improving stability compared to                               Appendix A (Table 12).
+training from scratch.                                                                                 As illustrated in Fig. 2, the framework naturally separates training,
+    In practical deployment, the outer loop involving LLM agents is in­                            evaluation, and deployment environments. In a physical deployment,
+voked only when user preferences change, which occurs infrequently in                              the iterative optimization phase would use a real building as the train­
+typical residential settings. During normal operation, only the trained                            ing environment, making data leakage inapplicable. Since we validate
+DRL policy from the inner loop is executed for real-time HEMS control,                             the method in simulation, we ensure equivalent isolation by randomly
+
+                                                                                               7
+
+=== PDF PAGE 8 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                  Applied Energy 415 (2026) 127976
+
+Table 3                                                                                           Table 4
+Baseline  comparison.  “Macro”  and  “Micro”  indicate  access  to  macro-level                   Canonical evaluation targets for each preference: macro weights 𝜶⋆  = (𝛼  c, 𝛼t, 𝛼e)
+weights 𝜶⋆ or micro-level rules G⋆ (defined in Section 6.3); 𝐏 means derived                      (sum to 1) and micro-level rules G⋆. “—” indicates no micro-level rule applies.
+from  natural-language  preferences.  “Iterative”  denotes  whether  the  method                                                𝛼c       𝛼t       𝛼e       Rule 𝑔𝑗(𝑠  𝑡, 𝑎𝑡)
+refines  outputs  across  rounds.  “State  aug.”  indicates  whether  the  method
+augments the state space S.                                                                         𝐏1 (Cost-prio.)             0.62     0.18     0.20     –
+                                                                                                    𝐏2 (Emis.-prio.)            0.10     0.15     0.75     –
+  Method                     Macro      Micro     Iterative    State aug.    LLM Usage              𝐏3 (Comfort-prio.)          0.15     0.70     0.15     –
+  D1: Fixed-Reward           ✘          ✘         ✘            ✘             None                   𝐏4 (No home-chg.)           0.34     0.33     0.33     occ𝑡=1⟹𝑃                b𝑡  ≤0
+  DRL                                                                                               𝐏5 (AC home & night)        0.34     0.33     0.33     ¬(occ     𝑡=1 ∧hr   𝑡∈[22,7])⟹𝑀                            a𝑡 =0
+  D2: Oracle-Macro           𝜶⋆         ✘         ✘            ✘             None                   𝐏6 (Peak disch.)            0.34     0.33     0.33     𝜅𝑡 < 𝜅peak ⟹𝑃         b𝑡  ≥0
+  DRL                                                                                               𝐏7 (Tolerate cold)          0.52     0.23     0.25     𝑇 in𝑡   < 𝑇 set𝑡  ⟹𝑀         a𝑡 =0
+  D3: Oracle-Full DRL        𝜶⋆         G⋆        ✘            ✘             None                   𝐏8 (No pref.)               0.34     0.33     0.33     –
+  H1: Static RL+LLM          𝐏          𝐏         ✘            𝐏             Once before
+                                                                             training
+  H2: LLM-Reward [31]        𝐏          ✘         ✘            ✘             Per episode
+  H3: LLM-Action             ✘          𝐏         online       ✘             Per timestep          violating language-expressed rules. This provides online feedback but
+  Filter [29]                                                                                      couples LLM availability to real-time operation.
+  LA-UPAHEM (ours)           𝐏          𝐏         ✓            𝐏             Per                        In contrast, LA-UPAHEM queries the LLM only at the start of each
+                                                                             iteration             outer iteration to generate and refine (R  𝐏,M 𝐏) pairs. It combines: (i)
+
+                                                                                                   iterative refinement based on policy evaluation feedback 𝐞𝑖, (ii) joint
+                                                                                                   generation of reward functions and state modification functions, and
+partitioning the available days into three disjoint subsets, each instan­                          (iii)  complete  decoupling  of  LLM  inference  from  real-time  control—
+tiating an independent simulation environment: (i) training days drive                             a  combination  not  found  in  existing  RL+LLM  methods  for  energy
+the inner-loop DRL policy optimization; (ii) validation days are used                              management.
+
+exclusively by the outer-loop LLM agents—the KPI values and control                                6.3 . Evaluation specification
+trajectories stored in the memory pool D and analyzed by the Result
+Analysis Agent all come from validation episodes; (iii) test days simulate                              To fairly assess preference alignment, we define evaluation targets
+real-world deployment and are never accessed by either the LLM agents                              that  are  independent  of  the  training  process.  Each  method  is  scored
+or the DRL training process. All results are averaged over 10 independent                          against canonical macro weights 𝜶⋆ and micro-level rules G⋆ derived
+random seeds per preference.                                                                       from natural-language preferences 𝐏.
+    The control MDP operates with Δ𝑡 =  5                min timesteps and one-day                      Canonical   targets. Following   the   “LLM-as-a-Judge”   paradigm
+episodes (𝜏= 288        steps). We define eight prototypical preferences 𝐏1∶8                      widely adopted in natural language processing evaluation [43], we use
+covering  macro-level  trade-offs  (𝐏1∶3),  micro-level  rules  (𝐏4∶6),  com­                      a deterministic evaluation parser Φeval to simulate consistent user inter­
+positional constraints (𝐏7), and a preference-agnostic baseline (𝐏8), as                           pretation of preferences. Specifically, Φeval is an LLM-based parser with
+detailed in Table 2.                                                                               the temperature fixed at 0, representing an idealized user who interprets
+    LA-UPAHEM generates 𝑛= 5               candidate (R  𝐏,M 𝐏) pairs per outer it­                natural-language preferences 𝐏 into quantifiable targets:
+eration for 𝜄= 5     iterations, with each candidate trained for 90 episodes.
+Unless otherwise specified, we use SAC [41] as the DRL backend with:                               (𝜶  ⋆,G ⋆)  =  Φeval(𝐏,𝐂,𝐭           eval),                                                           (17)
+actor-critic MLPs of hidden dimensions [256,512,64,512,256]                    , ReLU ac­
+tivations,  Adam  optimizer  (lr=  3 × 10   −4),  discount  factor 𝛾 =  0.99                ,      where     𝐭eval  is  a  prompt  template  that  guides  the  LLM  to  interpret ∑          𝐏
+Polyak coefficient 𝜏polyak  = 0.005       , automatic entropy tuning, batch size                   within the HEMS context and output normalized weights (                          𝑘 𝛼⋆𝑘  =  1)
+256, and replay buffer capacity 106. The LLM backbone is DeepSeek V3                               and  logical  predicates.  The  resulting ∑        𝜶⋆  =  (𝛼  ⋆c , 𝛼⋆t  , 𝛼⋆e )  are  nonnega­
+(671B) [42] with temperature 0.7 for code generation and 0 for eval­                               tive weights satisfying           𝑘 𝛼⋆𝑘   =  1, and   G⋆  =  {𝑔  𝑗} is a set of logical
+uation parsing. Experiments run on Ubuntu 20.04 with Python 3.10,                                  predicates encoding constraints such as occupancy gating or time-of-
+PyTorch 2.0, an Intel i7-14600K CPU, and an NVIDIA RTX 4090 GPU.                                   use restrictions (Table 4). The deterministic temperature ensures that
+                                                                                                   canonical targets are fully reproducible given the same prompt and LLM
+6.2 . Baselines                                                                                    version. Importantly, Φeval is used only for test-time scoring and never
+                                                                                                   constrains reward construction during training. We emphasize that Φeval
+    We compare LA-UPAHEM against classical DRL methods and repre­                                  serves as a “simulated user” to provide ground-truth interpretation of
+sentative RL+LLM integration paradigms (Table 3).                                                  preferences, which is fundamentally different from LA-UPAHEM’s code
+    Classical  baselines. D1  (Fixed-Reward  DRL)  trains  a  standard                             generation  agents:  (i) Φeval  uses  a  distinct  prompt  template               𝐭eval  that
+DRL agent with fixed, preference-agnostic reward weights. D2 (Oracle-                              outputs structured weights and rules, whereas LA-UPAHEM agents use
+Macro  DRL)  and  D3  (Oracle-Full  DRL)  use  the  linear  reward  for­                           𝐓=  (𝐭     code,𝐭 analysis,𝐭 search) to generate executable code; (ii) Φeval-derived
+mulation     𝑟𝑡   =  ∑𝑘∈{c,t,e}           𝛼𝑘R𝑘  from Eq.  (12),  where  D2  substitutes            targets are applied equally to evaluate all methods, including non-LLM
+oracle-specified macro weights 𝜶⋆ matching the evaluation target, and                              baselines D1–D3, ensuring fair comparison; (iii) Oracle baselines D2/D3
+D3 further incorporates handcrafted micro-level rules G⋆ as additional                             directly receive these targets as privileged input, giving them an advan­
+reward penalties (Table 4). For purely macro-level preferences (𝐏1∶3), D2                          tage over LA-UPAHEM, which must infer appropriate reward structures
+and D3 are equivalent since no micro-level rules apply. These baselines                            from scratch.
+require no LLM but demand manual specification for each preference.                                     Weighted  Improvement  Ratio  (WIR). To  evaluate  macro-level
+    RL+LLM baselines. H1 (Static RL+LLM) parses                       𝐏 into structured            preference alignment independently of the comparison set, we define
+parameters via a single LLM call before training, without subsequent                               WIR  relative  to  a  fixed  reference  baseline            Lref𝑘.  Specifically,    Lref𝑘  is
+verification. H2 (LLM-Reward [            31]) generates executable reward code                    the mean KPI of D1 (Fixed-Reward DRL, which is entirely preference-
+from 𝐏  and  queries  the  LLM  after  each  training  episode  to  regener­                       agnostic) across all eight preferences 𝐏1∶8:
+ate reward variants, but lacks a dedicated analysis agent to leverage
+performance feedback. H3 (LLM-Action Filter [                   29]) bypasses reward                                              Lref                               8∑
+design  entirely:  it  uses  a  preference-agnostic  DRL  policy  (equivalent                      WIR(𝑚)   (𝐏)  =       ∑    𝛼⋆    𝑘   −L   (𝑚)𝑘,     L ref            L(D1,𝐏        𝑝)
+                                                                                                                                𝑘      Lref              𝑘    =   18      𝑘         .        (18)
+to D1) and queries the LLM at every control timestep to filter actions                                               𝑘∈{c,t,e}           𝑘                          𝑝=1
+
+
+                                                                                                8
+
+=== PDF PAGE 9 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                                 Applied Energy 415 (2026) 127976
+
+Table 5
+Raw KPI values (mean ± std over random seeds; lower is better). Lc: electricity cost ($); Lt: thermal discomfort (h); Le: carbon emissions (kg CO2, scaled ×10). Bold
+= best per KPI–preference pair. Under 𝐏1–3    and 𝐏8, D2≡ D3 (no micro-level rules); under 𝐏8 both further reduce to D1 (identical balanced weights). Derived WIR
+and RCR metrics are visualized in Figs. 3 and 4.
+
+   Method                        𝐏1 (Cost-prio.)                             𝐏2 (Emission-prio.)                          𝐏3 (Comfort-prio.)                           𝐏4 (No home-charging)
+                                 Lc             Lt             10L     e     Lc             Lt             10L     e      Lc             Lt             10L     e      Lc              Lt            10L     e
+
+   D2: Oracle-Macro DRL          7.  21±0.10    4.  45±0.08    1.  18±0.04   8.  39±0.12    3.  75±0.07    1.  12±0.03    9.  38±0.13    1.  82±0.03    𝟏.  𝟕𝟒±0.05    𝟗.  𝟏𝟓±0.13     2.  78±0.05   𝟏.  𝟔𝟐±0.05
+   D3: Oracle-Full DRL           ≡ D2 (no micro-level rules for 𝐏                                                                       1–  3)                         10.    95±0.16  2.  59±0.05   2.  06±0.07
+
+   H1: Static RL+LLM             8.  25±0.26    𝟑.  𝟗𝟖±0.16    1.  44±0.09   8.  42±0.27    𝟑.  𝟕𝟏±0.15    1.  22±0.07    𝟖.  𝟗𝟏±0.29    2.  24±0.09    1.  87±0.11    10.    31±0.33  2.  88±0.12   2.  13±0.13
+   H2: LLM-Reward                7.  15±0.20    4.  89±0.19    1.  18±0.06   7.  95±0.22    3.  95±0.15    1.  09±0.06    9.  41±0.26    2.  03±0.08    1.  78±0.10    10.    25±0.29  2.  81±0.11   2.  05±0.11
+   H3: LLM-Action Filter         7.  43±0.18    4.  55±0.15    1.  22±0.06   8.  52±0.20    3.  83±0.12    1.  28±0.06    9.  45±0.23    2.  12±0.07    1.  86±0.09    11.    17±0.27  𝟐.  𝟒𝟓±0.08   2.  15±0.10
+   LA-UPAHEM (Ours)              𝟔.  𝟔𝟓±0.12    4.  35±0.10    𝟏.  𝟎𝟏±0.04   𝟕.  𝟕𝟑±0.14    4.  32±0.10    𝟎.  𝟗𝟖±0.04    9.  71±0.17    𝟏.  𝟓𝟕±0.04    1.  82±0.07    10.    79±0.19  2.  55±0.06   2.  08±0.08
+
+   Method                        𝐏5 (AC home & night)                        𝐏6 (Peak discharge)                          𝐏7 (Tolerate cold)                           𝐏8 (No preference)
+
+                                 Lc             Lt             10L     e     Lc             Lt             10L     e      Lc             Lt             10L     e      Lc              Lt            10L     e
+
+   D2: Oracle-Macro DRL          8.  67±0.12    𝟐.  𝟓𝟖±0.05    1.  52±0.05   8.  35±0.12    2.  52±0.05    𝟏.  𝟒𝟓±0.04    7.  17±0.10    𝟓.  𝟎𝟓±0.09    1.  32±0.04    ≡ D1
+   D3: Oracle-Full DRL           6.  21±0.09    7.  48±0.15    1.  18±0.04   8.  72±0.13    𝟐.  𝟒𝟐±0.05    1.  58±0.05    6.  05±0.09    8.  29±0.17    𝟎.  𝟗𝟏±0.03    ≡ D1
+
+   H1: Static RL+LLM             7.  35±0.24    6.  47±0.26    1.  26±0.08   8.  65±0.28    2.  62±0.10    1.  65±0.10    6.  35±0.20    8.  21±0.33    1.  08±0.06    8.  68±0.28     2.  88±0.12   1.  75±0.10
+   H2: LLM-Reward                6.  65±0.19    8.  65±0.33    1.  14±0.06   8.  42±0.24    2.  55±0.10    1.  55±0.09    6.  25±0.18    8.  15±0.31    1.  15±0.06    8.  45±0.24     2.  70±0.10   1.  64±0.09
+   H3: LLM-Action Filter         𝟓.  𝟖𝟐±0.14    9.  38±0.30    𝟏.  𝟎𝟗±0.05   8.  78±0.21    2.  48±0.08    1.  70±0.08    6.  15±0.15    8.  05±0.26    1.  12±0.05    8.  55±0.20     2.  78±0.08   1.  70±0.08
+
+   LA-UPAHEM (Ours)              6.  12±0.11    8.  45±0.20    𝟏.  𝟎𝟗±0.04   𝟖.  𝟏𝟓±0.15    2.  45±0.06    1.  50±0.06    𝟓.  𝟕𝟓±0.10    8.  11±0.19    1.  01±0.04    8.  25±0.15     2.  55±0.06   1.  56±0.06
+
+ Preference-Agnostic Baseline
+   D1: Fixed-Reward DRL          (Avg. over 𝐏1∶8)                            Lc∶ 8.10 ± 0.16   Lt∶ 2.49 ± 0.21       10L     e∶ 1.49 ± 0 .15
+
+
+
+Because each KPI is normalized independently by its reference value,                                              For macro-level preferences (𝐏1–𝐏  3) that specify KPI trade-offs, LA-
+WIR captures relative (percentage) improvements: a 1% change in any                                          UPAHEM demonstrates clear adaptive behavior. Under cost-prioritized
+KPI 𝑘 contributes exactly   𝛼⋆𝑘 ×1% to WIR. Positive WIR indicates a net                                     𝐏1,  it  achieves  the  lowest  Lc   =   6.65;  under  comfort-prioritized         𝐏3,
+weighted improvement over the preference-agnostic baseline, while neg­                                       it  shifts  to  Lt   =   1.57—the  lowest  discomfort  among  all  methods.
+ative WIR reveals that relative deterioration in some KPIs outweighs                                         This  contrasts  with  D1,  which  produces  nearly  identical  outputs  re­
+relative  gains  in  others.  This  can  occur  even  when  𝜶⋆  are  set  cor­                               gardless  of  preference  (Lc   ≈   8.1,    Lt   ≈   2.5  across  all       𝐏).    Fig.  3
+rectly, because different KPIs exhibit different relative elasticities under                                 shows  WIR  across  methods:  LA-UPAHEM  consistently  achieves  the
+policy optimization (e.g., thermal discomfort can easily double under                                        highest  values  with  lower  variance  than  H1/H2,  as  our  iterative  re­
+cost-prioritized policies, whereas cost reductions remain modest). We                                        finement progressively corrects initial LLM misinterpretations through
+analyze the implications of this asymmetry in Section 6.4. We report                                         feedback  𝐟𝑖.  The  reduced  variance  is  particularly  important  for  prac­
+WIR averaged over macro-level preferences 𝐏1∶3 as the primary macro-                                         tical  deployment,  as  it  indicates  that  LA-UPAHEM  produces  reliable
+alignment  metric,  because  𝐏4∶7  impose  micro-level  behavioral  rules                                    preference alignment across different random seeds and environmental
+whose enforcement inherently worsens macro-level KPI balance—an ex­                                          configurations.
+pected and desirable trade-off captured by the Rule Compliance Rate                                               Notably, even Oracle baseline D2—which receives the ground-truth
+below.                                                                                                       preference weights 𝜶⋆—exhibits negative WIR under 𝐏1. This is not a
+    Rule  Compliance  Rate  (RCR).  The  micro-level  metric  measures                                       metric  artifact  but  reveals  a  fundamental  challenge:  reward-function
+compliance with behavioral rules, conditioned on the timesteps where                                         weights do not translate linearly into proportional KPI improvements.
+each rule is applicable:                                                                                     Although the exponential reward transforms (Section 5.1) rescale in­
+                                                                                                             dividual  reward  components  to  a  common  range,  the  mapping  from
+              ⎧⎪⎨⎪⎩         |G⋆|∑𝑉 (𝑚)𝑗                               𝜏∑   {                      }          reward weights to actual policy outcomes remains highly nonlinear, gov­
+RCR(𝑚 )  =      1 −    1|G  ⋆|   𝜏(𝑚 ) ,   |G  ⋆| > 0,    𝑉 (𝑚)          𝟙   𝑔𝑗(𝑠  (𝑚)              ,        erned by the environment dynamics (e.g., thermal inertia makes comfort
+                            𝑗=1   𝑗                         𝑗      =              𝑡   , 𝑎(𝑚)𝑡   ) = 0
+                1,                         |G  ⋆| = 0,               𝑡=1                                     far more elastic than cost in relative terms), the structure of the action
+                                                                                                (19)         space,  and  the  DRL  optimizer’s  convergence  behavior.  Consequently,
+                                                                                                             applying  the  same  𝜶⋆  to  both  the  reward  function  and  WIR  evalua­
+where 𝜏(𝑚 )                                                                                                  tion does not guarantee positive WIR. This finding underscores the core
+           𝑗    is the number of timesteps at which rule 𝑔𝑗’s precondition is                                motivation of LA-UPAHEM: rather than relying on a one-shot weight
+satisfied (e.g., the occupant is home for 𝐏4), and 𝑉 (𝑚)𝑗     is the number of                               specification, the iterative feedback loop (Section 5.4) enables the LLM
+violations among those timesteps. Preferences without explicit micro-                                        agents  to  observe  actual  control  outcomes  and  progressively  adjust
+level rules (|G    ⋆|  =  0, i.e., 𝐏1∶3 and 𝐏8) yield RCR  =  1 by definition.                               the  reward  structure  until  the  realized  KPI  balance  aligns  with  user
+Higher values indicate better compliance.                                                                    intent.
+    Additional  metrics.  We  also  report:  (i)  raw  KPI  values  (cost Lc,                                     Micro-level  and  compositional  preferences  (𝐏  4–𝐏  7)  impose  behav­
+discomfort Lt, emissions Le; mean±std across seeds); (ii) failure rate,                                      ioral constraints beyond KPI weights. Fig. 4 shows LA-UPAHEM achiev­
+the  fraction  of  runs  producing  invalid  policies  (e.g.,  violating  device                             ing  the  highest  RCR  with  fewest  rule  violations.  Notably,  enforcing
+constraints, degenerate behavior, or training divergence); and (iii) con­                                    micro-level rules inherently constrains the action space—for example,
+vergence speed measured by training steps to reach stable performance.                                       𝐏4’s no-charging-at-home rule limits BESS scheduling flexibility, result­
+6.4 . Preference alignment performance                                                                       ing in higher Lc for all compliant methods. This trade-off is expected:
+                                                                                                             the purpose of micro-level preferences is to enforce user-specified op­
+    Table 5 reports raw KPI values across all preference categories, while                                   erational  constraints,  even  at  the  expense  of  KPI  optimality.  Fig.  5
+Figs. 3 and 4 visualize the derived WIR and RCR metrics, and   Figs. 5 and                                   illustrates  how  LA-UPAHEM  dynamically  adapts  device  operation  to
+6 provide complementary perspectives on preference alignment.                                                satisfy  these  constraints:  under  𝐏4  (no  battery  charging  at  home),
+
+
+
+                                                                                                         9
+
+=== PDF PAGE 10 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                           Applied Energy 415 (2026) 127976
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 3. Weighted Improvement Ratio (WIR) under macro-level preferences 𝐏1∶3, derived from Table 5. Higher WIR indicates better preference alignment relative to
+D1 (whose WIR       = 0 by definition). Error bars show the standard deviation across random seeds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 4. Rule compliance rate (RCR) under behavioral rule preferences 𝐏4∶7. Higher RCR indicates fewer rule violations. Error bars indicate standard deviation across
+random seeds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               Fig. 5. Control trajectories of AC and BESS under micro-level preferences 𝐏4–6, compositional 𝐏7, and baseline 𝐏8.
+
+
+
+                                                                                                     10
+
+=== PDF PAGE 11 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                           Applied Energy 415 (2026) 127976
+
+LA-UPAHEM learns to suppress charging when occ𝑡 = 1, whereas D2 con­                            policy to anticipate and plan around constraints rather than reactively
+tinues charging regardless. H3 achieves competitive RCR for 𝐏5, but at                          comply.
+a cost: its reactive filtering yields Lt = 9.38      —higher than LA-UPAHEM’s                       To concretely illustrate how this internalization works, we present a
+8.45—because blocking actions without considering downstream con­                               representative (M  𝐏5,R 𝐏5) pair generated by the Code Generation Agent
+sequences  causes  cumulative  discomfort.  LA-UPAHEM  avoids  this  by                         for 𝐏5”): (“Only use AC at night when I’m home
+internalizing rules into the reward function during training, enabling the
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Three observations stand out. First, the LLM invented two state features                            For the compositional preference 𝐏7, which combines a cost-saving
+absent from the reference templates (M  c,M t,M e): is_night_home—a                             macro trade-off with conditional AC suppression, Fig. 5 provides visual
+compositional  binary  indicator  fusing  occupancy  with  time-of-day—                         evidence: LA-UPAHEM correctly suppresses AC whenever 𝑇 in𝑡   < 𝑇 set𝑡               , di­
+and comfort_urgency,  which  conditions  thermal  discomfort  on  this                          rectly implementing the rule at the policy level. In contrast, H3 enforces
+indicator, demonstrating genuine feature invention beyond template re-                          the same rule reactively via per-timestep action masking, which causes
+parameterization.  Second,  the  reward  uses  linear  weighted  penalties                      Lt  =  8.05 —substantially higher discomfort—because blocking individ­
+instead  of  the  templates’  exponential  transforms  (Rc= exp(M       c),  etc.),             ual actions without foresight prevents the policy from planning around
+reflecting the flexibility of LLM-based code generation. We note that                           the constraint.
+across  iterations,  exponential  transforms  gradually  become  dominant
+as  the  Result  Analysis  Agent  identifies  smoother  gradient  landscapes                    6.5 . Iterative mechanism and ablation
+as beneficial for training stability. Third, the generated code provides
+an interpretable bridge between natural language preferences and DRL                                A fundamental question for LLM-augmented RL is whether iterative
+objectives:  practitioners  can  directly  inspect  which  features  encode                     refinement justifies its complexity. We compare LA-UPAHEM against H1
+the  preference  semantics  and  how  the  reward  trades  off  competing                       (Static RL+LLM, which interprets preferences once without feedback)
+objectives.                                                                                     and two ablation variants: “w/o Feedback” removes the Result Analysis
+    Compared with Oracle baselines, LA-UPAHEM is competitive on raw                             Agent (no corrective feedback 𝐟𝑖), and “w/o Warm-start” removes the
+KPIs  despite  lacking  privileged  access  to  ground-truth  specifications.                   Optimal Performance Search Agent (each iteration trains from scratch).
+Under 𝐏7, it achieves Lc  = 5.75        versus D3’s 6.05, benefiting from state                     Iteration is essential because natural language preferences are in­
+augmentation: M𝐏 explicitly encodes preference-relevant features (e.g.,                         herently ambiguous and, as discussed in Section 6.4, the mapping from
+occupancy-conditioned indicators) into the augmented state ̃𝑠𝑡, reducing                        reward weights to policy outcomes is highly nonlinear. H1 illustrates
+the agent’s credit assignment burden compared with Oracle baselines                             this: its one-shot interpretation of 𝐏3 yields Lt  = 2.24           —far worse than
+that operate on the raw state space. In other scenarios Oracle baselines                        LA-UPAHEM’s 1.57—and its failure rate (34.3%,                   Fig. 8) is 6× higher
+achieve marginally better individual KPIs (e.g., D3’s Le = 0.091               under 𝐏7         than LA-UPAHEM’s (5.4%), because static approaches cannot recover
+vs. 0.101), but they require domain experts to manually specify weights                         from initial misinterpretations.
+and rules for each preference—a process that does not scale to diverse                              Fig. 7 validates the closed-loop design. In both panels, LA-UPAHEM
+real-world needs.                                                                               exhibits consistent upward trajectories: under 𝐏1, WIR increases steadily
+    The radar plots in Fig. 6 summarize normalized KPI scores across                            across  iterations  as  the  reward  function  is  progressively  refined;  the
+all eight preferences. LA-UPAHEM exhibits the most balanced profiles,                           micro-level  convergence  (Fig.  7)(b)  shows  a  similar  pattern  for               𝐏5
+demonstrating consistent adaptation without preference-specific train­                          as early reward functions progressively strengthen penalties based on
+ing data or manually crafted reward functions.                                                  observed  violation  rates.  In  contrast,  H1  produces  nearly  flat  curves
+
+
+
+
+
+                                                                                           11
+
+=== PDF PAGE 12 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                 Applied Energy 415 (2026) 127976
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 6. Radar plots of normalized KPI scores under each          𝐏. Each axis shows 1 −  ̄L𝑘 where       ̄L𝑘 = (L  𝑘 −L    min𝑘   )∕(L      max𝑘    −L    min𝑘   ) is the min-max normalization of KPI 𝑘 across
+all method–preference pairs; higher values indicate better performance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 7. Convergence of preference alignment during training. In the upper panels, each curve shows the training evaluation trajectory of the iteration-best policy
+selected by the Optimal Performance Search Agent (used as a warm-start for subsequent iterations), with shaded regions indicating 95% confidence intervals across
+random seeds. The lower panels show mean WIR (left) and RCR (right) per iteration.
+
+
+
+because it lacks iterative feedback—once the initial reward function is                            warm-start, failure rate rises to 8.1% with slower convergence, particu­
+generated, there is no mechanism to detect or correct misalignments.                               larly damaging for micro-level preferences where rule-satisfying regions
+The ablation “w/o Warm-start” shows improvement across iterations but                              are sparse.
+at a slower rate, because each iteration must re-explore the action space                              The two modules are complementary: Result Analysis provides “what
+from scratch.                                                                                      to  improve”  while  Optimal  Performance  Search  provides  “where  to
+    Fig. 8 quantifies each module’s contribution. Without feedback, the                            start.” Their combination yields a failure rate (5.4%) lower than either
+Code Generation Agent commits to initial interpretations without verifi­                           ablation alone (16.3% and 8.1%), confirming their synergy.
+cation, achieving a 16.3% failure rate—3× higher than the full model’s                                 Table 6 reveals the computational implications. H3’s per-timestep
+5.4%. This gap arises because LLM interpretations of ambiguous pref­                               inference  (5,486K  tokens  over  15  days)  is  prohibitively  expensive;
+erences often deviate from canonical targets, and the Result Analysis                              H2’s per-episode calls accumulate 296K tokens. LA-UPAHEM achieves
+Agent is essential for detecting and correcting such deviations. Without                           57.3K  tokens  total  by  invoking  LLMs  only  15  times  despite  training
+
+
+
+                                                                                               12
+
+=== PDF PAGE 13 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                            Applied Energy 415 (2026) 127976
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fig. 8. Module-wise ablation. Grouped bars show average WIR (𝐏1–3) and RCR                      Fig. 9. Effect of the candidate count 𝑛 on preference compliance (𝜄=5). Bars show
+(𝐏4–7) per variant. Error bars denote across-seed standard deviation. The line                  WIR (avg 𝐏1–3) and RCR (avg 𝐏4–7); the line reports failure rate (right axis).
+(right axis) reports failure rate.
+
+
+2250  episodes,  with  all  overhead  concentrated  in  training.  The  de­                     substantially lower variance than H1/H2—under 𝐏1, H1 varies by ±0.08
+ployed policy operates independently without LLM inference, enabling                            while LA-UPAHEM varies by less than ±0.03. This stability stems from
+reliable real-time control. Regarding wall-clock time, training a single                        two  factors:  (1)  iterative  refinement  explores  diverse  reward  struc­
+90-episode SAC run takes 6–8 minutes on our platform (Section 6.2);                             tures rather than committing to a single potentially brittle formulation,
+each outer iteration thus requires 30–40 minutes for 𝑛=5 candidates.                            and  (2)  successive  performance  feedback  enables  the  LLM  agent  to
+LLM call latency varies with the deployment mode: cloud API calls de­                           identify which reward configurations yield consistent behavior across
+pend on network conditions and provider queue times, whereas local                              environments.
+inference incurs a fixed per-call cost. Overall, a complete 𝜄=5 preference                          The canonical weights 𝜶⋆ used in our evaluation are produced by
+cycle finishes in approximately 2.5–3.5 hours end-to-end.                                       the LLM-based evaluator Φeval (Section 6.3). Because different users—or
+    Regarding  the  two  key  hyper-parameters,             Fig.  7  already  demon­            a  different  evaluator  configuration—may  assign  somewhat  different
+strates  that  iteration  count 𝜄  exhibits  diminishing  returns:  most  WIR                   weights to the same natural-language preference, we verify that WIR
+gains materialize within the first three iterations, and extending beyond                       rankings are robust to weight variation. For each of 𝐏1–𝐏3, we scale
+𝜄=5 yields negligible improvement. Fig. 9 examines the complementary                            the dominant weight by 𝛾  ∈  {0.8, 1.0, 1.2} (±20%), proportionally re­
+question of how the candidate count 𝑛 affects performance. Generating                           distribute the difference to the remaining weights, re-normalize, and
+a single candidate per iteration (𝑛=1) substantially degrades WIR/RCR                           recompute WIR from the existing KPI data (Table 5). Table 8 reports the
+and raises the failure rate to 18.3%, because the framework loses ex­                           results. At the canonical weighting (𝛾=1.0), method rankings are per­
+ploration diversity and commits to a single reward formulation without                          fectly preserved (𝜏=1.00) for all three preferences. When the dominant
+alternatives. Increasing from 𝑛=5 to 𝑛=7 or 𝑛=9 yields negligible further                       weight  is  perturbed  by      ±20%,  the  stronger  emphasis  settings  (𝛾=1.2)
+gain while linearly increasing computational cost.                                              remain highly stable (𝜏 ≥  0.87), while the reduced emphasis settings
+                                                                                                (𝛾=0.8) lower 𝜏 to 0.73 due to minor rank swaps among middle-tier
+6.6 . Robustness analysis                                                                       methods whose WIR values cluster near zero. Crucially, LA-UPAHEM
+                                                                                                retains the top position across all nine (𝐏, 𝛾) combinations. These re­
+    A  practical  HEMS  must  maintain  consistent  preference  alignment                       sults confirm that evaluation conclusions are robust to reasonable weight
+under various perturbations. We evaluate robustness along four dimen­                           variation.
+sions:  exogenous  noise,  cross-environment  generalization,  evaluation                           Finally, we test whether LA-UPAHEM’s performance depends on the
+weight sensitivity, and linguistic paraphrasing.                                                specific wording of user preferences. For one representative preference
+    Table 7 shows how methods respond to Gaussian perturbations (𝛽 ∈                            per category (macro 𝐏1, micro 𝐏4, compositional 𝐏7), we construct three
+{0.00, 0.05, 0.10, 0.15}) on exogenous signals. Under comfort-prioritized                       semantically equivalent paraphrases by varying register, sentence struc­
+𝐏3,  LA-UPAHEM  maintains Lt  ∈  [1.57, 2.01]  across  all  noise  levels—                      ture, and verbosity (Table 9). Across all twelve paraphrased inputs (𝜄=5,
+consistently the lowest. D2/D3 show Lt degrading by 52% (from 1.82                              𝑛=5, DeepSeek V3, 10 seeds), WIR and RCR exhibit standard deviations
+to 2.77), because they lack the state modification function M𝐏 which                            of at most 0.04, and failure vary by 1.5–2.2 percentage points. 𝐏1 re­
+helps LA-UPAHEM recognize preference-relevant conditions under noisy                            ports  no  RCR  because  it  contains  no  micro-level  rules.  The  negative
+inputs.                                                                                         WIR values for 𝐏4 and 𝐏7 reflect the inherent macro-level KPI cost of
+    Cross-environment  generalization  is  tested  through  random  seeds                       micro-rule compliance, consistent with our metric design (Section 6.3).
+that instantiate distinct residential configurations. Figs. 3 and 4 show                        This stability arises because the iterative feedback mechanism evalu­
+LA-UPAHEM achieving not only higher mean WIR and RCR but also                                   ates KPI outcomes rather than linguistic similarity: even when the initial
+
+
+
+                            Table 6
+                            Computational cost over a 15-day preference cycle (DeepSeek V3, SAC backend). Training occurs once per preference
+                            change; inference accumulates over 15 days (288 × 15 = 4320 timesteps).
+
+                                                        Training Phase                                  Inference Phase
+
+                              Method                    Episodes     LLM Calls     Tokens/Call (K)      LLM Calls     Tokens/Call (K)     Total Tokens (K)
+
+                              H1: Static RL+LLM         90           1             2.15                 0             –                   2.15
+                              H2: LLM-Reward            90           90            3.29                 0             –                   296.10
+                              H3: LLM-Action Filter     0            0             –                    4320          1.27                5,486.40
+                              LA-UPAHEM (Ours)          2250         15            3.82                 0             –                   57.30
+
+
+                                                                                           13
+
+=== PDF PAGE 14 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                         Applied Energy 415 (2026) 127976
+
+                          Table 7
+                          Raw KPI values under different noise intensities 𝛽                  for preference 𝐏                          3 (comfort-prioritized). D2/D3 are merged because 𝐏                    3
+                          contains no micro-level rules (cf. Table 5); values at              𝛽 > 0 are averaged. L                                      e values scaled ×10.
+
+                             Method                       𝛽 = 0.00                     𝛽 = 0.05                     𝛽 = 0.10                      𝛽 = 0.15
+                                                          Lc        Lt       10L     e Lc       Lt        10L     e Lc        Lt        10L     e Lc         Lt       10L     e
+
+                             D1: Fixed-Reward DRL         8.10      2.49     1.49      8.49     2.73      1.51      8.95      3.00      1.53      9.42       3.26     1.55
+                             D2/D3: Oracle DRL            9.38      1.82     1.74      9.84     2.13      1.77      10.34     2.47      1.80      10.81      2.77     1.83
+                             H1: Static RL+LLM            8.91      2.24     1.87      9.30     2.55      1.89      9.78      2.84      1.92      10.22      3.14     1.95
+                             H2: LLM-Reward               9.41      2.03     1.78      9.83     2.29      1.80      10.31     2.60      1.83      10.79      2.88     1.86
+                             H3: LLM-Action Filter        9.45      2.12     1.86      9.89     2.40      1.88      10.40     2.73      1.91      10.88      3.02     1.94
+
+                             LA-UPAHEM                    9.71      1.57     1.82      9.95     1.69      1.83      10.20     1.85      1.85      10.43      2.01     1.87
+
+
+
+
+  Table 8                                                                                               reward code differs between phrasings, the Result Analysis Agent iden­
+  Sensitivity of WIR rankings to canonical weight perturbation (𝛾: scaling fac­                         tifies the same behavioral deficiencies and guides convergence toward
+  tor on the dominant 𝛼⋆𝑘 ; remaining weights proportionally redistributed).                            similar final policies.
+  D2/D3  are  merged  because  𝐏1–𝐏   3  contain  no  micro-level  rules,  making
+  their policies identical (cf. Table 5).   𝜏: Kendall’s rank correlation with the                      6.7 . Generality across algorithms and LLMs
+  canonical ranking.
+    Pref.     𝛾       D1       D2/D3       H1          H2         H3         Ours      𝜏                    To verify whether LA-UPAHEM generalizes beyond the default con­
+    𝐏1        0.8     0.00     −0.08       −0.14       −0.12      −0.11      0.00      0.73             figuration, we evaluate its compatibility with alternative DRL algorithms
+              1.0     0.00     −0.03       −0.11       −0.06      −0.06      0.04      1.00             and LLM backbones.
+              1.2     0.00     0.01        −0.08       0.00       −0.01      0.09      0.87                 Table 10 examines DRL algorithm compatibility. Among single-agent
+    𝐏2        0.8     0.00     0.02        −0.02       0.02       −0.05      0.04      0.73             algorithms,  SAC  demonstrates  the  best  sample  efficiency,  benefiting
+              1.0     0.00     0.11        0.06        0.12       0.02       0.15      1.00             from entropy regularization and off-policy replay. PPO shows slower
+              1.2     0.00     0.19        0.13        0.21       0.09       0.27      1.00             initial  learning  but  strong  final  performance,  as  this  on-policy  algo­
+    𝐏3        0.8     0.00     0.08        −0.02       0.03       −0.01      0.11      0.73             rithm  requires  more  data  to  converge.  TD3  achieves  moderate  per­
+              1.0     0.00     0.14        0.02        0.08       0.04       0.20      1.00             formance  with  stable  training.  DDPG  fails  persistently,  with  failure
+              1.2     0.00     0.20        0.06        0.13       0.09       0.28      1.00             rates  exceeding  72%  even  at  270  episodes,  because  its  deterministic
+                                                                                                        policy  and  lack  of  entropy  regularization  make  it  prone  to  converg­
+Table 9                                                                                                 ing on degenerate solutions when the reward function changes across
+Paraphrase  robustness.  Each  preference  is  tested  with  the  original  phras­                      iterations.
+ing  and  three  semantically  equivalent  paraphrases  (informal,  restructured,                           For multi-agent DRL (MADRL), we adopt the Centralized Training
+terse/concise). All runs use DeepSeek V3 with 𝜄=5,      𝑛=5, averaged over 10 seeds.                    with Decentralized Execution (CTDE) paradigm with separate agents for
+                                                                                                        AC and BESS. MASAC achieves performance close to single-agent SAC,
+  Pref.   Phrasing                                 WIR             RCR           Failure Rate           demonstrating compatibility with CTDE frameworks. MADDPG substan­
+
+  𝐏1      Original                                 0.04            –             5.2%                   tially outperforms its single-agent counterpart DDPG, likely because the
+          Informal: “Keeping my bill               0.01            –             7.6%                   decomposed per-device action spaces reduce each agent’s decision com­
+          low matters more than perfect                                                                 plexity.  Overall,  entropy-regularized  algorithms  (SAC,  MASAC,  PPO)
+          temperature.”                                                                                 offer the best reliability.
+          Restructured: “I don’t mind dis­         0.06            –             5.4%
+          comfort, as long as I save on                                                                     Table  11  evaluates  LLM  backbone  compatibility  across  three  lan­
+          energy.”                                                                                      guages.  DeepSeek  V3  achieves  the  highest  English  performance  but
+          Terse: “Cut power costs even if less     0.08            –             4.0%                   shows slight degradation for Chinese/Spanish; the “Best Iter.” column
+          comfortable.”                                                                                 indicates  that additional  iterations  compensate  for  non-English  inter­
+
+          Mean ± Std                               0.05±0.03       –             5.6±1.5%               pretation  gaps.  Commercial  APIs  (GPT-4,  Claude)  provide  the  most
+  𝐏4      Original                                 −0.25           0.84          6.2%                   consistent cross-language results with minimal degradation and low fail­
+          Emotional: “When I’m home, don’t         −0.30           0.78          8.6%                   ure rates. LLaMA-3 70B performs acceptably in English but degrades
+          charge the battery—it feels unsafe.”                                                          significantly for Chinese, suggesting domain-specific fine-tuning may be
+          Restructured: “Only charge the           −0.23           0.87          4.4%
+          battery when nobody is home, for                                                              needed for multilingual support.
+          safety.”                                                                                          The performance gap between LLM backbones is driven primarily by
+          Indirect: “Avoid battery charging        −0.32           0.80          9.2%                   code generation quality rather than preference understanding. The per­
+          during occupied hours.”                                                                       centage of generated code passing the validation pipeline (Appendix E )
+
+          Mean ± Std                               −0.28±0.04      0.82±0.04     7.1±2.2%               before  retry  drops  from  93–96%  for  commercial  APIs  to  68–78%
+  𝐏7      Original                                 −0.29           0.81          5.8%                   for  LLaMA-3  70B,  directly  explaining  the  failure-rate  gap  (3–5%  vs.
+          Concise: “Don’t heat below               −0.35           0.75          8.8%                   15–24%):  the  retry  mechanism  (𝑁=50)  can  recover  from  occasional
+          setpoint—I’ll layer up. Save                                                                  malformed outputs but not from systematically low code quality.
+          electricity.”                                                                                     To assess the feasibility of fully on-premise deployment for privacy-
+          Formal: “If room temperature is          −0.27           0.83          4.6%
+          below target, leave AC off to cut                                                             sensitive  scenarios  (Section  5.5),  we  also  evaluate  LLaMA-3  8B.  Its
+          costs.”                                                                                       failure rates reach 48–68% across languages, confirming that current
+          Rephrased: “I’d rather tolerate          −0.36           0.76          8.0%                   8B-class models cannot reliably generate valid reward code under zero-
+          cold than run the AC below set                                                                shot prompting. The “Best Iter.” of 5.0 across all languages indicates
+          temperature.”
+          Mean ± Std                               −0.32±0.04      0.79±0.04     6.8±1.9%               that 8B models consistently exhaust the maximum iterations without
+                                                                                                        converging. For practitioners, commercial APIs offer the best reliability
+
+
+
+
+
+
+                                                                                                   14
+
+=== PDF PAGE 15 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                             Applied Energy 415 (2026) 127976
+
+                              Table 10
+                              Generality across DRL algorithms (WIR averaged over 𝐏1∶3, RCR averaged over 𝐏4∶7) with varying training
+                              budgets. Single-agent algorithms (top) are compared with multi-agent DRL (bottom).
+
+                                 Algorithm          30 Episodes                         90 Episodes                        270 Episodes
+
+                                                    WIR       RCR      Failure Rate     WIR       RCR      Failure Rate    WIR      RCR      Failure Rate
+
+                                 Single-agent DRL
+                                 SAC [41]           0.08      0.68     12.4%            0.13      0.84     5.4%            0.14     0.86     4.2%
+                                 TD3 [44]           0.05      0.61     18.3%            0.09      0.77     10.1%           0.11     0.80     7.8%
+                                 PPO [45]           0.02      0.51     22.5%            0.11      0.79     8.3%            0.14     0.85     5.2%
+                                 DDPG [46]          −0.05     0.28     91.7%            −0.01     0.38     85.4%           0.03     0.51     72.3%
+
+                                 Multi-agent DRL (MADRL)
+                                 MASAC              0.04      0.54     21.2%            0.10      0.78     8.7%            0.13     0.82     5.8%
+                                 MADDPG [47]        −0.01     0.38     35.4%            0.05      0.64     17.6%           0.08     0.71     12.8%
+
+
+
+
+Table 11                                                                                         finement mechanism reduces failure rates from 34.3% (static one-shot)
+Generality across LLM backbones and preference languages (WIR averaged over                      to 5.4%, while the decoupled architecture ensures that deployed policies
+𝐏1∶3,  RCR  averaged  over  𝐏4∶7).  Best  Iter.  =  iteration  at  which  the  optimal           operate independently without LLM inference overhead. Module-wise
+(R  𝐏,M𝐏) pair was found.                                                                        ablation confirms the complementary roles of the feedback and warm-
+
+  LLM Model                      Language     WIR      RCR     Failure Rate   Best Iter.         start mechanisms, and robustness experiments show stable performance
+  DeepSeek V3 (671B) [42]        English      0.13     0.84    5.4%           2.8                under environmental noise, evaluation weight perturbation, and linguis­
+                                 Chinese      0.11     0.80    7.8%           3.4                tic paraphrasing. Generalization experiments further validate compati­
+                                 Spanish      0.11     0.81    6.5%           3.2                bility across multiple DRL algorithms (SAC, PPO, TD3, MASAC), LLM
+  GPT-4 API [36]                 English      0.12     0.82    3.2%           2.5                backbones, and preference languages.
+                                 Chinese      0.11     0.80    4.4%           2.8                    A key limitation is that the current framework operates at episode
+                                 Spanish      0.11     0.81    3.8%           2.7                granularity: when a user’s preference changes, a new iterative optimiza­
+  Claude Sonnet 4.0 API [48]     English      0.11     0.81    3.4%           2.6                tion cycle is triggered (∼2.5–3.5 hours). Intra-episode adaptation—for
+                                 Chinese      0.10     0.79    5.2%           3.0                example, a user abruptly changing comfort priority mid-day—is outside
+                                 Spanish      0.11     0.80    4.6%           2.9                the current scope. Potential mitigations include maintaining a library
+  LLaMA-3 70B [49]               English      0.09     0.78    14.8%          3.5                of pre-optimized policies indexed by preference type for rapid switch­
+                                 Chinese      0.06     0.70    23.6%          4.5                ing, or developing online reward adaptation mechanisms that adjust the
+                                 Spanish      0.07     0.74    19.5%          4.1                deployed policy without full retraining.
+
+  LLaMA-3 8B [49]                English      0.04     0.53    48.2%          5.0                    Future work includes integrating multimodal preference cues (e.g.,
+                                 Chinese      −0.01    0.37    67.5%          5.0                occupant behavior patterns, wearable sensor data), enabling lightweight
+                                 Spanish      0.01     0.43    59.8%          5.0                local  deployment  through  few-shot  prompting  or  task-specific  fine-
+
+                                                                                                 tuning to improve small-model code generation quality (Section 5.5),
+                                                                                                 and extending to community-scale coordination across multiple house­
+when multilingual support is needed, while DeepSeek V3 is preferable                             holds.
+for English-only deployments where cost efficiency matters.
+    Overall, LA-UPAHEM generalizes well across DRL backends (SAC,                                CRediT authorship contribution statement
+PPO, TD3, MASAC) and LLM providers (DeepSeek, GPT-4, Claude), with                                   Xiao  Du:  Writing  –  review  &  editing,  Writing  –  original  draft,
+entropy-regularized algorithms and commercial LLMs offering the best                             Validation,  Software,  Methodology,  Formal  analysis,  Data  curation,
+reliability for practical deployment.                                                            Conceptualization. Fengji Luo: Writing – review & editing, Supervision,
+
+7 . Conclusion and future work                                                                   Resources,   Project   administration,   Methodology,   Data   curation,
+                                                                                                 Conceptualization. Juntao Hu: Writing – review & editing, Validation,
+    This  paper  presents  LA-UPAHEM,  an  iterative  LLM-augmented                              Methodology, Formal analysis, Data curation, Conceptualization. Wei
+framework that translates natural language preferences into DRL-based                            Zhou:  Writing  –  review  &  editing,  Supervision,  Software,  Resources,
+home energy control. By combining three specialized agents in a closed-                          Project administration, Investigation, Conceptualization. Junhao Wen:
+loop  refinement  process,  the  framework  enables  residential  control                        Writing – review & editing, Supervision, Software, Resources, Project
+strategies to continuously adapt to evolving user preferences without                            administration, Conceptualization.
+requiring manual reward engineering.
+    Experiments on real residential energy datasets demonstrate that LA-                         Declaration of competing interest
+UPAHEM  consistently  outperforms  classical  DRL,  oracle-assisted,  and                            The authors declare that they have no known competing financial
+existing  RL+LLM  baselines  in  both  macro-level  KPI  alignment  (cost,                       interests or personal relationships that could have appeared to influence
+comfort, emissions) and micro-level rule compliance. The iterative re­                           the work reported in this paper.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                            15
+
+=== PDF PAGE 16 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                             Applied Energy 415 (2026) 127976
+
+Appendix A . Household environment parameters
+
+    Table 12 presents the complete parameter configuration for the household environment used in our experiments.
+
+
+
+                                               Table 12
+                                               Modeling parameters of the household environment.
+
+                                                 Parameter                                          Notation          Value
+
+                                                 Thermal Dynamics
+                                                    Specific heat / density of air                  𝑐air, 𝜌air        3×10−4 kWh/(kg⋅     ◦C), 1.30 kg/m3
+                                                    House volume                                    𝑉 hou             420 m3
+                                                    Thermal conductivity                            𝜆                 9.3×10    −4 kW/(m2⋅ ◦C)
+                                                    Envelope surface / window area                  𝐴suf, 𝐴fen        266 m2, 16 m2
+                                                    Air change rate / SHGC                          ACH, SHGC         0.7 h-1, 0.30
+
+                                                 Air Conditioner (AC)
+                                                    Rated / standby power                           𝑃 arat, 𝑃 asta    1.5 kW, 0.010 kW
+                                                    Efficiency / rated COP                          𝜂a, coprat        0.08, 3.51
+
+                                                 Battery Energy Storage System (BESS)
+                                                    Rated power / capacity                          𝑃 brat, 𝐸rat      3.0 kW, 50 kWh
+                                                    Efficiency / self-discharge rate                𝜂b, SD            0.98, 0.005 h-1
+                                                 Photovoltaic (PV) System
+                                                    Rated output / efficiency                       𝑃 PVrat, 𝜂PV      0.28 kW/m2, 0.20
+                                                    Min. irradiance / panel area                    𝐼min, 𝐴pan        0.01 kW/m2, 10 m2
+
+                                                 Stochastic Occupancy Model
+                                                    Probability of going out (work/rest)            𝑝outwork, 𝑝outrest0.90, 0.45
+                                                    Mean departure time (work/rest)                 𝜇depwork, 𝜇deprest9:00, 11:00
+                                                    Std. dev. of departure (work/rest)              𝜎depwork, 𝜎deprest1.0 h, 2.0 h
+                                                    Mean arrival time (work/rest)                   𝜇arrwork, 𝜇arrrest19:00, 17:00
+                                                    Std. dev. of arrival (work/rest)                𝜎arrwork, 𝜎arrrest1.0 h, 2.0 h
+
+                                                 Comfort Settings
+                                                    Temperature setpoint / deviation band           𝑇 set, 𝑇 band     19 ◦C, 2 ◦C
+
+
+
+
+
+Appendix B . Data provenance and preprocessing
+
+    Table 13 summarizes the data sources, fields, and preprocessing steps used to construct the simulation environment.
+
+
+
+ Table 13
+ Data provenance. All streams share 1-minute native resolution and are downsampled to 5-minute intervals for the control MDP. Missing weather values are imputed
+ by backward-fill then forward-fill.
+
+   Data stream             Source                                                         Fields used                                                            Notes
+
+   Household load          Pecan Street [38], Apt. #3938, San Diego, CA                   Equipment electric power (kW)                                          2016; 120-day summer window used
+   Weather                 NOAA BSRN, Trinidad Head (THD) station, CA [39]                Dry-bulb temperature (◦C), global solar irradiance (W/m2)              Missing: solar 0.32%, temp. 5.72%
+   Electricity price       CityLearn v2 [40]                                              Price ($/kWh)                                                          Time-of-use (TOU) schedule
+   Carbon intensity        CityLearn v2 [40]                                              Grid CO2 intensity (kg/kWh)                                            Hourly profile, 2016
+   Occupancy               Stochastic model                                               Binary (home/away)                                                     See Table 12
+
+
+
+Appendix C . Prompt templates
+
+    This appendix provides the complete prompt templates used by the three LLM agents in LA-UPAHEM. The functional roles and inter-agent
+mechanisms are described in Section 5; here we present the actual prompts for reproducibility.
+
+
+C.1 . Code generation agent prompt
+
+System Prompt:
+
+
+
+
+
+
+
+
+
+User Prompt Structure:
+    Table  14  summarizes  the  structured  sections  of  the  user  prompt,  each  dynamically  populated  from  the  task-specific  context 𝐂  and  user
+preferences 𝐏.
+
+                                                                                                      16
+
+=== PDF PAGE 17 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                                Applied Energy 415 (2026) 127976
+
+                                                    Table 14
+                                                    Code generation Agent user prompt composition.
+
+                                                       Section                     Source         Content
+
+                                                       Task Overview               𝐜des           HEMS control task, controllable devices (AC,
+                                                                                                  BESS), action space (control signal, desired state,
+                                                                                                  desired power), grid constraints. E.g., “The AC ac­
+                                                                                                  tion is a continuous signal in [−1,1] : positive values
+                                                                                                  activate cooling toward a desired temperature.”
+                                                       KPI Definitions             𝐜kpi           KPI metrics with names, units, optimiza­
+                                                                                                  tion directions. E.g., “electricity_cost
+                                                                                                  ($/day, minimize): total daily grid import cost;
+                                                                                                 (thermal_discomfort ◦C⋅h, minimize): cumulative
+                                                                                                  deviation from set-point.”
+                                                       User Preference             𝐏              Natural language preference, preference name,
+                                                                                                  focus KPI areas
+                                                       Observation Space           𝐜des           33 state variables (+5 optional), each with in­
+                                                                                                  dex, type, range, unit. E.g., “idx 6: indoor_temp,
+                                                                                                  float, [15, 35]◦C, current indoor air temperature;
+                                                                                                  idx 18: battery_soc, float, [0, 1], battery state of
+                                                                                                  charge.”
+                                                       State Dictionary            𝐜des          for Access pattern: state['name_history'][−1]
+                                                                                                 for full current value, state['name_history']
+                                                                                                  history
+                                                       Reference Code              𝐜rref,𝐜 mref reference and Reward Complete StateModifier
+                                                                                                  implementations
+                                                       Output Format               –             first,Two Python code blocks: StateModifier
+                                                                                                 secondReward
+
+                                                       Additional for update mode (iterations 𝑖 >1     ):
+                                                       Previous Experience         D              Last 𝑚 iterations’ code, KPIs, and analysis
+                                                                                                  feedback
+
+
+
+The complete user prompt is assembled by concatenating the sections listed in Table 14 in order, followed by the core generation instruction below:
+
+
+
+
+
+
+
+
+
+
+
+
+
+In update mode (iterations 𝑖  >1                ), the previous iteration experience from the memory pool D (Table 14, last row) is appended, followed by an
+additional instruction:
+
+
+
+
+C.2 . Result analysis agent prompt
+
+System Prompt:
+
+
+
+
+
+User Prompt Input: The task-specific context (                       Table 14, rows 1–5), plus training results for all 𝑛 candidates (state modifier code, reward code,
+trajectories, KPI metrics).
+Analysis Instructions (verbatim):
+In the following prompts, are runtime-populated placeholders for the user’s natural language preference and focus KPI areas, and {focus_areas} {P}
+respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                        17
+
+=== PDF PAGE 18 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                           Applied Energy 415 (2026) 127976
+
+C.3 . Optimal performance search agent prompt
+
+System Prompt:
+
+
+
+User Prompt Input: The task-specific context, plus KPI results and analysis from the search range. Reward code is excluded to avoid biasing selection
+toward code style.
+Selection Instructions (verbatim):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Appendix D . Reference code templates
+
+    The following Python implementations correspond to the state modification template 𝐜mref (Eq. 11) and the reward function template 𝐜rref (Eq. 12)
+described in Section 5.1. These are provided to the Code Generation Agent as structural references; the generated code may deviate substantially
+from these templates.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Appendix E . Code generation safety measures
+
+    This appendix details the five-layer validation pipeline introduced in Section 5.4. Each layer targets a distinct failure mode:
+
+                                                                                           18
+
+=== PDF PAGE 19 ===
+     Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                                  Applied Energy 415 (2026) 127976
+
+     1.  Interface constraints: all generated code must inherit from abstract base classes (BaseReward with method returningcompute_reward(state)
+         ; BaseStateModifier floatwith method returning modify_state(state) dict), ensuring structural compatibility with the environment
+         wrapper.
+     2.  Syntactic validation: each LLM response must contain at least two Python code blocks, which are imported as modules and checked for the
+         presence of required class names.
+     3.  Runtime testing: a test HEMS environment is instantiated with the generated classes, and five random action steps are executed to verify that
+         the state modifier processes states without exceptions and the reward function returns valid numerical values.
+     4.  Retry mechanism: up to            𝑁try = 50 generation attempts are allowed per sample, with automatic rejection and regeneration upon any validation
+         failure. In practice, commercial APIs (GPT-4, Claude, DeepSeek V3) typically pass within 1–3 attempts, while LLaMA-3 70B requires 5–8
+         attempts (Section 6.7).
+     5.  State space documentation: the prompt template explicitly specifies all 33 observation features with their indices, types, ranges, and units
+         (Appendix C.1, Table 14), constraining the generated code to access only documented state variables.
+
+
+Data availability
+
+    Data will be made available on request.
+
+References
+
+   [1]  Rokonuzzaman M, Rahman S, Hannan MA, Mishu MK, Tan W-S, Rahman KS, Pasupuleti J, Amin N. Levenberg-marquardt algorithm-based solar pv energy integrated internet of
+        home energy management system. Appl Energy 2025;378.
+   [2]  Tuomela S, de Castro Tomé M, Iivari N, Svento R. Impacts of home energy management systems on electricity consumption. Appl Energy 2021;299:117310.
+   [3]  Chen X, Qu G, Tang Y, Low S, Li N. Reinforcement learning for selective key applications in power systems: recent advances and future challenges. IEEE Trans Smart Grid
+        2022;13:2935–58.
+   [4]  Xiong S, Liu D, Chen Y, Zhang Y, Cai X. A deep reinforcement learning approach based energy management strategy for home energy system considering the time-of-use price and
+        real-time control of energy storage system. Energy Rep 2024;11:3501–8.
+   [5]  Ren K, Liu J, Wu Z, Liu X, Nie Y, Xu H. A data-driven drl-based home energy management system optimization framework considering uncertain household parameters. Appl
+        Energy 2024;355:122258.
+   [6]  Yang Y, Hao J, Zheng Y, Yu C. Large-scale home energy management using entropy-based collective multiagent deep reinforcement learning framework. In: IJCAI; 2019. p. 630–6.
+   [7]  Liu ZE, Zhou Q, Li Y, Shuai S, Xu H. Safe deep reinforcement learning-based constrained optimal control scheme for HEV energy management. IEEE Trans Transp Electrif
+        2023;9:4278–93.
+   [8]  Gokhale G, Claessens B, Develder C. Explainable home energy management systems based on reinforcement learning using differentiable decision trees. In: Proceedings of the
+        15th ACM international conference on future and sustainable energy systems; 2024. p. 687–91.
+   [9]  Gao J, Wang W, Nikseresht F, Govinda Rajan V, Campbell B. PFDRL: personalized federated deep reinforcement learning for residential energy management. In: Proceedings of
+        the 52nd international conference on parallel processing; 2023. p. 402–11.
+ [10]   Sumayli M, Anubi OM. Integration of multi-mode preference into home energy management system using deep reinforcement learning. arXiv:2505.01332 [arXiv preprint] 2025.
+ [11]   Saroha P, Singh G, Lilhore UK, Simaiya S, Khan M, Alroobaea R, Alsafyani M, Alsufyani H. Dynamic appliance scheduling and energy management in smart homes using adaptive
+        reinforcement learning techniques. Sci Rep 2025;15:24594.
+ [12]   Parrish B, Heptonstall P, Gross R, Sovacool BK. A systematic review of motivations, enablers and barriers for consumer engagement with residential demand response. Energy
+        Policy 2020;138:111221.
+ [13]   Chen  S-J,  Chiu  W-Y,  Liu  W-J.  User  preference-based  demand  response  for  smart  home  energy  management  using  multiobjective  reinforcement  learning.  IEEE  Access
+        2021;9:161627–37.
+ [14]   Kaplar A, Vidaković M, Vidaković J, Slivka J. House energy management system for balancing electricity costs and residential comfort based on deep reinforcement learning. Acta
+        Polyt Hung 2024;21:289–308.
+ [15]   Yao L, Liu P-Y, Teo JC. Hierarchical multi-agent deep reinforcement learning with adjustable hierarchy for home energy management systems. Energy Build 2025;331:115391.
+ [16]   Almeida R, Georgieva P, Martins N. Heating setpoint recommendation strategy for thermal comfort and energy consumption optimization. Energy Build 2023;296:113406.
+ [17]   Liu Y, Ma J, Xing X, Liu X, Wang W. A home energy management system incorporating data-driven uncertainty-aware user preference. Appl Energy 2022;326:119911.
+ [18]   Nagy Z, Henze G, Dey S, Arroyo J, Helsen L, Zhang X, Chen B, Amasyali K, Kurte K, Zamzam A, et al. Ten questions concerning reinforcement learning for building energy
+        management. Build Environ 2023;241:110435.
+ [19]   Mahmood S, Sun H, Ali Alhussan A, Iqbal A, El-Kenawy E-SM. Active learning-based machine learning approach for enhancing environmental sustainability in green building
+        energy consumption. Sci Rep 2024;14:19894.
+ [20]   Kojima T, Gu SS, Reid M, Matsuo Y, Iwasawa Y. Large language models are zero-shot reasoners. Adv Neural Inf Process Syst 2022;35:22199–213.
+ [21]   Ouyang L, Wu J, Jiang X, Almeida D, Wainwright C, Mishkin P, Zhang C, Agarwal S, Slama K, Ray A, et al. Training language models to follow instructions with human feedback.
+        Adv Neural Inf Process Syst 2022;35:27730–44.
+ [22]   Sun G, Xie W, Niyato D, Mei F, Kang J, Du H, Mao S. Generative AI for deep reinforcement learning: framework, analysis, and use cases. IEEE Wirel Commun 2025;32(3):186–195.
+ [23]   Xu F, Hao Q, Zong Z, Wang J, Zhang Y, Wang J, Lan X, Gong J, Ouyang T, Meng F, et al. Towards large reasoning models: A survey of reinforced reasoning with large language
+        models. arXiv:2501.09686 [arXiv preprint] 2025.
+ [24]   Qiu D, Chen Y, Niu M, Feng F, Zhao Y, Huang J, Xu M, Yin D. Embodied executable policy learning with language-based scene summarization. In: Proceedings of the 2024
+        conference of the north American chapter of the association for computational linguistics: human language technologies (NAACL); 2024.
+ [25]   Agashe S, Fan Y, Wang XE. Evaluating multi-agent coordination abilities in large language models. arXiv:2310.03903 [arXiv preprint] 2023.
+ [26]   Carta T, Romac C, Wolf T, Lamprier S, Sigaud O, Oudeyer P-Y. Grounding large language models in interactive environments with online reinforcement learning. In: Proceedings
+        of the 40th international conference on machine learning (ICML); 2023. p. 3676–713.
+ [27]   Tang X, Liu F, Xu D, Jiang J, Tang Q, Wang B, Wu Q, Chen CLP. Llm-assisted reinforcement learning: leveraging lightweight large language model capabilities for efficient task
+        scheduling in multi-cloud environment. IEEE Trans Consum Electron 2025;71(2):5631–5644.
+ [28]   Yuan H, Zhang C, Wang H, Xie F, Cai P, Dong H, Lu Z. Skill reinforcement learning and planning for open-world long-horizon tasks. arXiv:2303.16563 [arXiv preprint] 2023.
+ [29]   Hu H, Sadigh D. Language instructed reinforcement learning for human-ai coordination. In: International conference on machine learning. PMLR; 2023. p. 13584–98.
+ [30]   Karine K, Marlin BM. Combining llm decision and rl action selection to improve rl policy for adaptive interventions. arXiv:2501.06980 [arXiv preprint] 2025.
+ [31]   Kwon M, Michael S. Reward design with language models. In: International conference on learning representations (ICLR); 2023.
+ [32]   Ma YJ, Liang W, Wang G, Huang D-A, Bastani O, Jayaraman D, Zhu Y, Fan L, Anandkumar A. Eureka: human-level reward design via coding large language models. In: International
+        conference on learning representations (ICLR); 2024.
+ [33]   Zhang S, Zheng S, Ke S, Liu Z, Jin W, Yuan J, Yang Y, Yang H, Wang Z. How can llm guide rl? a value-based approach. arXiv:2402.16181 [arXiv preprint] 2024.
+ [34]   Klissarov M, D’Oro P, Sodhani S, Raileanu R, Bacon P-L, Vincent P, Zhang A, Henaff M. Motif: intrinsic motivation from artificial intelligence feedback. In: International conference
+        on learning representations (ICLR); 2024.
+ [35]   Wang B, Qu Y, Jiang Y, Shao J, Liu C, Yang W, Ji X. Llm-empowered state representation for reinforcement learning. In: Proceedings of the 41st international conference on
+        machine learning (ICML); 2024.
+ [36]   Achiam J, Adler S, Agarwal S, Ahmad L, Akkaya I, Aleman FL, Almeida D, Altenschmidt J, Altman S, Anadkat S, et al. Gpt-4 technical report. arXiv:2303.08774 [arXiv preprint]
+        2023.
+ [37]   Valmeekam K, Sreedharan S, Marquez M, Olmo A, Kambhampati S. On the planning abilities of large language models: a critical investigation. In: Advances in neural information
+        processing systems (NeurIPS); 2023.
+ [38]   Pecan Street Inc. Pecan street database; 2020. http://www.pecanstreet.org/[Accessed: June 2024].
+ [39]   National Oceanic and Atmospheric Administration (NOAA). NOAA data, Online:; 2020. https://www.ncdc.noaa.gov/[Accessed: June 2024].
+
+                                                                                                         19
+
+=== PDF PAGE 20 ===
+      Downloaded from https://iranpaper.ir
+
+
+
+X. Du, F. Luo, J. Hu et al.                                                                                                                                                            Applied Energy 415 (2026) 127976
+
+
+ [40]   Nweye K, Kaspar K, Buscemi G, Fonseca T, Pinto G, Ghose D, Duddukuru S, Pratapa P, Li H, Mohammadi J, Lino Ferreira L, Hong T, Ouf M, Capozzoli A, Nagy Z. Citylearn v2:
+        energy-flexible, resilient, occupant-centric, and carbon-aware management of grid-interactive communities. J Build Perform Simul 2024;18(1):17–38.
+ [41]   Haarnoja T, Zhou A, Abbeel P, Levine S. Soft actor-critic: off-policy maximum entropy deep reinforcement learning with a stochastic actor. In: International conference on machine
+        learning. PMLR; 2018. p. 1861–70.
+ [42]   Guo  D,  Yang  D,  Zhang  H,  Song  J,  Zhang  R,  Xu  R,  Zhu  Q,  Ma  S,  Wang  P,  Bi  X,  et  al.  Deepseek-r1:  Incentivizing  reasoning  capability  in  llms  via  reinforcement  learning.
+        arXiv:2501.12948 [arXiv preprint] 2025.
+ [43]   Dubois Y, Galambosi B, Liang P, Hashimoto TB. Length-controlled alpacaeval: A simple way to debias automatic evaluators. arXiv:2404.04475 [arXiv preprint] 2024.
+ [44]   Fujimoto S, Hoof H, Meger D. Addressing function approximation error in actor-critic methods. In: International conference on machine learning. PMLR; 2018. p. 1587–96.
+ [45]   Schulman J, Wolski F, Dhariwal P, Radford A, Klimov O. Proximal policy optimization algorithms. arXiv:1707.06347 [arXiv preprint] 2017.
+ [46]   Duan Y, Chen X, Houthooft R, Schulman J, Abbeel P. Benchmarking deep reinforcement learning for continuous control. In: International conference on machine learning. PMLR;
+        2016. p. 1329–38.
+ [47]   Lowe R, Wu YI, Tamar A, Harb J, Abbeel P, Mordatch I. Multi-agent actor-critic for mixed cooperative-competitive environments. In: Advances in neural information processing
+        systems, vol. 30. 2017. p. 6379–90.
+ [48]   Anthropic. Claude opus 4 and claude sonnet 4 system card; 2025. https://www.anthropic.com/research/claude-4-system-card[accessed: March 2026].
+ [49]   Grattafiori A, Dubey A, Jauhri A, Pandey A, Kadian A, Al-Dahle A, Letman A, Mathur A, Schelten A, Yang A, et al. The llama 3 herd of models. arXiv:2407.21783 [arXiv preprint]
+        2024.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                               20

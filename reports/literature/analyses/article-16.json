@@ -1,0 +1,487 @@
+{
+  "id": "article-16",
+  "title": {
+    "en": "AI-Powered Building Ecosystems: A Narrative Mapping Review on the Integration of Digital Twins and LLMs for Proactive Comfort, IEQ, and Energy Management",
+    "fa": "زیست‌بوم‌های ساختمانی مبتنی بر هوش مصنوعی: مرور نگاشت روایی ادغام دوقلوی دیجیتال و مدل زبانی برای آسایش، کیفیت محیط و مدیریت انرژی"
+  },
+  "short_title": "Building ecosystems / Amangeldy",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, research aims & hypothesis status",
+        "fa": "مشخصات، اهداف و وضعیت فرضیه"
+      },
+      "paragraphs": [
+        {
+          "en": "Amangeldy et al., Sensors 2025, 25, 5265; DOI 10.3390/s25175265. This is a review, not a newly implemented HEMS controller. Its stated aim is an end-to-end synthesis from sensors through building/occupant Twins to AI control and LLM interfaces; no numbered experimental hypothesis set is supplied.",
+          "fa": "Amangeldy و همکاران، Sensors سال ۲۰۲۵، شماره 5265. این اثر مرور است و کنترل‌گر جدید پیاده‌سازی‌شده HEMS نیست. هدف آن ترکیب زنجیره حسگر تا دوقلوی ساختمان/انسان، کنترل هوشمند و رابط زبانی است؛ فرضیه آزمایشی شماره‌دار ندارد.",
+          "pages": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "methodology",
+      "title": {
+        "en": "Review method & evidence provenance",
+        "fa": "روش مرور و منشأ شواهد"
+      },
+      "paragraphs": [
+        {
+          "en": "Section 2 describes PRISMA-ScR-style selection: 300 records, 21 duplicates removed, 279 title/abstract screens, 11 exclusions, 268 full texts sought, 12 unavailable, 256 assessed, 27 further exclusions, 229 included. Two reviewers screen independently with a third resolving disagreements. It names Scopus, Web of Science, Nature, IEEE Xplore, ACM Digital Library, PubMed and Google Scholar and a 2009–2025 window.",
+          "fa": "بخش ۲ انتخاب به سبک PRISMA-ScR را با ۳۰۰ رکورد، حذف ۲۱ تکراری، غربال ۲۷۹، حذف ۱۱، درخواست ۲۶۸ متن، ۱۲ غیرقابل‌دسترسی، ارزیابی ۲۵۶ و حذف ۲۷ تا رسیدن به ۲۲۹ اثر توصیف می‌کند. دو مرورگر و داور سوم ذکر شده‌اند و بازه ۲۰۰۹ تا ۲۰۲۵ است.",
+          "pages": [
+            3,
+            4
+          ]
+        },
+        {
+          "en": "The introduction instead describes 180 publications, a 2015–2025 window and three databases. These are different corpus descriptions within the same paper; the report preserves both rather than silently reconciling them. Table 1 collects design, setting, datasets, methods, comparator and outcome information from the selected literature.",
+          "fa": "مقدمه به‌جای آن ۱۸۰ اثر، بازه ۲۰۱۵ تا ۲۰۲۵ و سه پایگاه را توصیف می‌کند. این دو توصیف متفاوت پیکره در همان مقاله‌اند و بدون اصلاح پنهان حفظ شده‌اند. جدول ۱ مشخصات طراحی، بستر، داده، روش، مقایسه و نتیجه آثار را گردآوری می‌کند.",
+          "pages": [
+            2,
+            3,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "approach",
+      "title": {
+        "en": "Architecture and implementation-relevant synthesis",
+        "fa": "معماری و ترکیب مرتبط با پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "The conceptual stack combines environmental/personal sensing, communications, edge/cloud processing, predictive models, optimization/actuation and user interfaces. DT-B models the building; DT-H represents the occupant. Their hybrid is intended to connect physical energy behavior to individual comfort and health rather than use one undifferentiated model.",
+          "fa": "پشته مفهومی حسگری محیطی/فردی، ارتباطات، پردازش لبه/ابر، پیش‌بینی، بهینه‌سازی/عملگر و رابط کاربر را ترکیب می‌کند. DT-B ساختمان و DT-H فرد را نمایش می‌دهد تا رفتار انرژی به آسایش و سلامت شخصی مرتبط شود.",
+          "pages": [
+            6,
+            7,
+            13,
+            14
+          ]
+        },
+        {
+          "en": "The review organizes foundational supervised/unsupervised learning separately from RL/DRL/MORL and generative language interfaces. Sensor choice is linked to measured quantity, standards, privacy/energy tradeoffs and multimodal fusion; datasets and evaluation metrics are tabulated. The figures are explanatory architectures and roadmaps rather than an executable reference implementation.",
+          "fa": "مرور یادگیری نظارت‌شده/بدون‌نظارت را از RL/DRL/MORL و رابط زبانی تفکیک می‌کند. انتخاب حسگر به کمیت، استاندارد، هزینه حریم خصوصی/انرژی و ادغام چندوجهی وصل شده و داده‌ها و معیارها جدول‌بندی شده‌اند. شکل‌ها معماری و نقشه‌راه توضیحی‌اند و پیاده‌سازی اجرایی مرجع نیستند.",
+          "pages": [
+            10,
+            13,
+            17,
+            20,
+            21,
+            27,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Reported evidence, comparisons & numerical interpretation",
+        "fa": "شواهد گزارش‌شده، مقایسه‌ها و تفسیر عددی"
+      },
+      "paragraphs": [
+        {
+          "en": "The review reports DRL-related annual HVAC demand reductions of 10–35%, supervised forecasting/comfort/fault accuracies of 87–97%, and cited ventilation-related complaint reductions of 40%. These ranges summarize heterogeneous primary studies, not a single new experiment or a pooled effect under matched baselines. The abstract explicitly distinguishes simulation from field results.",
+          "fa": "مرور کاهش تقاضای سالانه HVAC در محدوده ۱۰ تا ۳۵٪، دقت پیش‌بینی/آسایش/خطا ۸۷ تا ۹۷٪ و کاهش ۴۰٪ شکایت مرتبط با تهویه را نقل می‌کند. این‌ها ترکیب مطالعات ناهمگون‌اند، نه آزمایش جدید یا اثر تجمیعی با خط‌مبنای همسان. چکیده نتیجه شبیه‌سازی را از میدان تفکیک می‌کند.",
+          "pages": [
+            1,
+            5,
+            31,
+            34
+          ]
+        },
+        {
+          "en": "Table 7 covers prediction metrics and control/comfort metrics; Table 8 compares advanced AI approaches by strengths, limitations and application setting. Reported gains must retain each original study’s comparator and experimental context. No common train/validation/test split, seed count or head-to-head controller experiment is established for this review itself.",
+          "fa": "جدول ۷ معیارهای پیش‌بینی و کنترل/آسایش و جدول ۸ رویکردهای پیشرفته را با قوت، محدودیت و بستر مقایسه می‌کند. هر بهبود باید همراه مقایسه‌گر و شرایط مطالعه اصلی بماند. خود مرور تقسیم داده یا تعداد بذر مشترک و رقابت مستقیم کنترل‌گرها ندارد.",
+          "pages": [
+            21,
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gaps",
+      "title": {
+        "en": "Author-stated strengths, gaps & limitations",
+        "fa": "قوت‌ها، شکاف‌ها و محدودیت‌های نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors emphasize integration across previously segmented sensing, Twin, control and LLM literature and the human-centric DT-B+DT-H perspective. Barriers include data silos, scarce standardized public datasets, legacy interoperability, privacy of audio/video/personal sensing, reproducibility, computational burden, explainability and cost of calibration/scaling.",
+          "fa": "نویسندگان یکپارچه‌سازی ادبیات جداافتاده حسگر، دوقلو، کنترل و مدل زبانی و نگاه انسان‌محور را برجسته می‌کنند. موانع شامل جزیره داده، کمبود داده عمومی استاندارد، ناسازگاری سامانه قدیمی، حریم خصوصی، بازتولیدپذیری، هزینه محاسبات و کالیبراسیون و تفسیرپذیری است.",
+          "pages": [
+            3,
+            31,
+            32,
+            34
+          ]
+        },
+        {
+          "en": "The roadmap calls for modular interoperable platforms, open reproducible datasets/simulators, energy-aware edge models, privacy-preserving approaches, human oversight and validated deployment. These are research directions, not demonstrated guarantees of safety or clinical health benefit.",
+          "fa": "نقشه‌راه، بستر ماژولار و تعامل‌پذیر، داده/شبیه‌ساز باز، مدل لبه کم‌مصرف، حفظ حریم خصوصی، نظارت انسانی و استقرار اعتبارسنجی‌شده می‌خواهد. این‌ها جهت پژوهش‌اند، نه تضمین اثبات‌شده ایمنی یا منفعت بالینی.",
+          "pages": [
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "PRISMA-ScR flow of study selection",
+        "fa": "جریان انتخاب PRISMA-ScR"
+      },
+      "explanation": {
+        "en": "The review selection pipeline; compare these counts to the different introduction corpus description.",
+        "fa": "فرایند انتخاب مرور؛ تعدادها باید با توصیف متفاوت مقدمه مقایسه شوند."
+      },
+      "data": {
+        "en": "300 identified; 21 duplicates; 279 screened; 11 screening exclusions; 268 sought; 12 unavailable; 256 eligibility; 27 excluded; 229 included.",
+        "fa": "۳۰۰ شناسایی، ۲۱ تکراری، ۲۷۹ غربال، ۱۱ حذف، ۲۶۸ متن درخواست، ۱۲ ناموجود، ۲۵۶ ارزیابی، ۲۷ حذف و ۲۲۹ ورود."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "caption": {
+        "en": "Ecosystem of sensors, data and predictive intelligence",
+        "fa": "زیست‌بوم حسگر، داده و هوشمندی پیش‌بین"
+      },
+      "explanation": {
+        "en": "Links sensing, data processing, prediction and control in a smart building.",
+        "fa": "حسگری، پردازش، پیش‌بینی و کنترل ساختمان را به هم وصل می‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 14,
+      "caption": {
+        "en": "Hybrid digital twin architecture: DT-B + DT-H",
+        "fa": "معماری دوقلوی ترکیبی ساختمان و انسان"
+      },
+      "explanation": {
+        "en": "Separates building and occupant representations and their feedback for proactive occupant management.",
+        "fa": "بازنمایی ساختمان و انسان و بازخورد آن‌ها برای مدیریت پیش‌دستانه را تفکیک می‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 19,
+      "caption": {
+        "en": "Reinforcement learning concept for smart building control",
+        "fa": "مفهوم یادگیری تقویتی برای کنترل ساختمان"
+      },
+      "explanation": {
+        "en": "Agent/environment observations, actions and reward loop; illustrative, not a new trial.",
+        "fa": "حلقه عامل/محیط، مشاهده، کنش و پاداش؛ توضیحی و نه آزمایش جدید."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 23,
+      "caption": {
+        "en": "Deep reinforcement learning framework for building control",
+        "fa": "چارچوب یادگیری تقویتی عمیق در کنترل ساختمان"
+      },
+      "explanation": {
+        "en": "Adds deep function approximation to the feedback-control learning picture.",
+        "fa": "تقریب تابع عمیق را به حلقه کنترل یادگیرنده اضافه می‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 24,
+      "caption": {
+        "en": "Multi-objective reinforcement learning concept",
+        "fa": "مفهوم یادگیری تقویتی چندهدفه"
+      },
+      "explanation": {
+        "en": "Shows balancing energy, comfort and related objectives rather than scalar accuracy alone.",
+        "fa": "توازن انرژی، آسایش و اهداف دیگر را به‌جای صرف دقت نشان می‌دهد."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 26,
+      "caption": {
+        "en": "Digital Twin integration with DRL and MORL",
+        "fa": "ادغام دوقلوی دیجیتال با DRL و MORL"
+      },
+      "explanation": {
+        "en": "Explains simulation/training and physical feedback coupling. It does not specify our dual Reference/Operational Twin contract.",
+        "fa": "اتصال شبیه‌سازی/آموزش و بازخورد فیزیکی را توضیح می‌دهد؛ قرارداد دو دوقلوی پروژه ما را مشخص نمی‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 26,
+      "caption": {
+        "en": "Stagewise evolution of AI methods in smart building control",
+        "fa": "تکامل مرحله‌ای روش‌های هوش مصنوعی در کنترل ساختمان"
+      },
+      "explanation": {
+        "en": "Taxonomic progression across control-method families; no universal performance ranking follows from the diagram.",
+        "fa": "تکامل طبقه‌بندی خانواده روش‌ها؛ رتبه‌بندی عملکرد جهانی از آن به دست نمی‌آید."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "9",
+      "page": 28,
+      "caption": {
+        "en": "AI-driven environmental adjustment",
+        "fa": "تنظیم محیط بر پایه هوش مصنوعی"
+      },
+      "explanation": {
+        "en": "Natural-language and contextual interaction supporting environmental adjustment.",
+        "fa": "تعامل زبانی و زمینه‌ای در پشتیبانی تنظیم محیط."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 30,
+      "caption": {
+        "en": "Edge–cloud architecture",
+        "fa": "معماری لبه و ابر"
+      },
+      "explanation": {
+        "en": "Distributes sensing, local decisions and compute-heavy model processing.",
+        "fa": "حسگری، تصمیم محلی و پردازش سنگین را توزیع می‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 33,
+      "caption": {
+        "en": "Roadmap for smart building AI",
+        "fa": "نقشه‌راه هوش مصنوعی ساختمان"
+      },
+      "explanation": {
+        "en": "Priorities for responsible, scalable building intelligence; milestones are proposed directions, not measured experimental outcomes.",
+        "fa": "اولویت‌های هوشمندی مسئولانه و مقیاس‌پذیر؛ نقاط راه پیشنهادی‌اند نه نتایج آزمایشی اندازه‌گیری‌شده."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 5,
+      "title": {
+        "en": "Consolidated extraction across studies",
+        "fa": "استخراج تجمیعی مطالعات"
+      },
+      "summary": {
+        "en": "Study-level design, datasets, methods, comparators and outcomes; heterogeneous reported evidence.",
+        "fa": "طراحی، داده، روش، مقایسه و نتیجه در سطح مطالعه؛ شواهد ناهمگون."
+      }
+    },
+    {
+      "id": "2",
+      "page": 10,
+      "title": {
+        "en": "Sensor and IoT technologies",
+        "fa": "فناوری حسگر و اینترنت اشیا"
+      },
+      "summary": {
+        "en": "Environmental/occupancy technologies and their data uses.",
+        "fa": "فناوری‌های محیطی/حضور و کاربرد داده آن‌ها."
+      }
+    },
+    {
+      "id": "3",
+      "page": 11,
+      "title": {
+        "en": "Sensing technology comparison (continues p.12)",
+        "fa": "مقایسه حسگری؛ ادامه صفحه ۱۲"
+      },
+      "summary": {
+        "en": "Compares sensing modalities and deployment tradeoffs.",
+        "fa": "مقایسه روش‌های حسگری و مصالحه استقرار."
+      }
+    },
+    {
+      "id": "4",
+      "page": 13,
+      "title": {
+        "en": "Sensor–metric–standard mapping",
+        "fa": "نگاشت حسگر، معیار و استاندارد"
+      },
+      "summary": {
+        "en": "Multimodal fusions and privacy/accuracy tradeoffs; standards are discussed by the review, not independently verified here.",
+        "fa": "ادغام چندوجهی و مصالحه حریم خصوصی/دقت؛ استانداردها نقل مرور هستند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 17,
+      "title": {
+        "en": "Foundational ML comparison",
+        "fa": "مقایسه یادگیری ماشین پایه"
+      },
+      "summary": {
+        "en": "Supervised and unsupervised method families and applications.",
+        "fa": "خانواده روش‌های نظارت‌شده/بدون‌نظارت و کاربردها."
+      }
+    },
+    {
+      "id": "6",
+      "page": 20,
+      "title": {
+        "en": "Smart-building datasets",
+        "fa": "داده‌های ساختمان هوشمند"
+      },
+      "summary": {
+        "en": "Dataset context and characteristics for benchmarking.",
+        "fa": "بستر و مشخصات داده برای معیار ارزیابی."
+      }
+    },
+    {
+      "id": "7",
+      "page": 21,
+      "title": {
+        "en": "Evaluation metrics",
+        "fa": "معیارهای ارزیابی"
+      },
+      "summary": {
+        "en": "Forecasting, control, energy and comfort evaluation definitions.",
+        "fa": "تعریف معیار پیش‌بینی، کنترل، انرژی و آسایش."
+      }
+    },
+    {
+      "id": "8",
+      "page": 27,
+      "title": {
+        "en": "Advanced AI method comparison",
+        "fa": "مقایسه روش‌های پیشرفته"
+      },
+      "summary": {
+        "en": "DRL/MORL/Twin-related strengths and limitations from reviewed literature.",
+        "fa": "قوت و محدودیت روش‌های پیشرفته از ادبیات مرورشده."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Important as building-specific evidence that DT+LLM integration, occupant-centric control and simulation-based validation already have substantial prior art. It prevents presenting that combination alone as our novelty.",
+      "fa": "از نظر سابقه ادغام دوقلو و مدل زبانی، کنترل انسان‌محور و اعتبارسنجی شبیه‌سازی مهم است و مانع ادعای نوآوری صرف ترکیب این اجزا می‌شود.",
+      "pages": [
+        3,
+        14,
+        28
+      ]
+    },
+    "contribution": {
+      "en": "Contributes a component/interface taxonomy, sensor and metric mapping, and the DT-B/DT-H distinction to P0 and evidence design. It does not supply our five-family SCM, active-probe decision rule or verified recovery algorithm.",
+      "fa": "برای P0 طبقه‌بندی اجزا، نگاشت حسگر/معیار و تفکیک دوقلوی ساختمان/انسان فراهم می‌کند؛ SCM پنج‌خانواده، انتخاب پروب یا الگوریتم بازیابی ما را نمی‌دهد.",
+      "pages": [
+        13,
+        14,
+        21
+      ]
+    },
+    "employment": {
+      "en": "Use Tables 4/6/7 to check observable channels and measurement units; use the integration roadmap as a checklist for provenance, interface design and limitations. Trace any numerical saving claim to its primary paper before adopting a benchmark.",
+      "fa": "از جدول‌های ۴، ۶ و ۷ برای کنترل کانال مشاهده و واحدها و از نقشه‌راه برای منشأ، رابط و محدودیت استفاده کنیم. ادعای عددی صرفه‌جویی پیش از معیارسازی به مقاله اصلی ردیابی شود.",
+      "pages": [
+        13,
+        20,
+        21,
+        32
+      ]
+    },
+    "baseline": {
+      "en": "No direct executable baseline is recommended: this is a review without a single runnable algorithm. Primary studies identified through it may become adapted baselines after task and source-code verification; this is a recommendation, not a finalized requirement.",
+      "fa": "خط‌مبنای اجرایی مستقیم توصیه نمی‌شود؛ این اثر مرور و فاقد یک الگوریتم اجرایی واحد است. مطالعات اولیه آن پس از بررسی تکلیف و کد ممکن است خط‌مبنای اقتباسی شوند؛ این پیشنهاد است نه الزام قطعی.",
+      "pages": [
+        5,
+        27
+      ]
+    }
+  },
+  "bibliography_start_page": 36,
+  "critical": [
+    {
+      "en": "The introduction and methodology give incompatible corpus sizes/search windows. Any quantitative synthesis or novelty claim should cite the local passage and preserve this uncertainty.",
+      "fa": "اندازه پیکره و بازه جست‌وجوی مقدمه و روش ناسازگارند؛ ترکیب عددی یا ادعای نوآوری باید موضع منبع و این عدم‌قطعیت را حفظ کند.",
+      "pages": [
+        2,
+        3
+      ]
+    },
+    {
+      "en": "The DT-H concept is not equivalent to direct access to true preferences. Our limited-observability design must keep actual resident preferences latent when uncommunicated, even if an occupant model is used.",
+      "fa": "دوقلوی انسان معادل دسترسی به ترجیح حقیقی نیست. در پروژه ما ترجیح اعلام‌نشده حتی با مدل فرد باید پنهان بماند.",
+      "pages": [
+        14
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "The review reports 10–35% HVAC reductions and 87–97% accuracy ranges across cited work; these are not reproduced outcomes for Alameda or a common controlled experiment.",
+      "fa": "مرور کاهش ۱۰ تا ۳۵٪ HVAC و دقت ۸۷ تا ۹۷٪ را از آثار دیگر نقل می‌کند؛ نتیجه بازتولیدشده Alameda یا آزمایش همسان نیست.",
+      "pages": [
+        1
+      ]
+    }
+  ],
+  "coverage_notes": {
+    "en": "Full-text source review with all identified numbered figures and tables indexed. Review-reported findings are attributed to the synthesis; original pages preserve exact labels, equations, citations, footnotes and bibliography. Project relevance and critical observations are separately labeled assessments. Numerical values are transcribed only when explicitly printed; curve points are not estimated.",
+    "fa": "مرور منبع کامل با نمایه همه شکل‌ها و جدول‌های شماره‌دار شناسایی‌شده. یافته‌های نقل‌شده به مرور نسبت داده می‌شوند؛ صفحات اصلی برچسب، معادله، ارجاع، پانویس و کتاب‌نامه را حفظ می‌کنند. نقش در پروژه و نقدها ارزیابی مستقل‌اند. فقط اعداد صریح چاپ‌شده ثبت شده و نقاط منحنی تخمین زده نشده‌اند."
+  }
+}

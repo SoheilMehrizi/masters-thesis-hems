@@ -1,0 +1,386 @@
+{
+  "id": "article-13",
+  "title": {
+    "en": "Agentic digital twin-embedded maintenance methodology for energy equipment A self-evolving operational paradigm",
+    "fa": "نگهداری عامل‌محور تعبیه‌شده درTwin"
+  },
+  "short_title": "Agentic DT maintenance",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Research problem and scope",
+        "fa": "مسئله ودامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Wang Cong, Wu Tao and Bao Jinsong, Journal of Manufacturing Systems 84 (2026), pp. 100–116. Cognitive agents and virtual–real co-evolution address static Twins, ambiguous fault reasoning and resource coordination in industrial energy maintenance. The authors state contributions rather than numbered hypotheses.",
+          "fa": "Wang Congوهمکاران،۲۰۲۶.عامل شناختی وهم‌تکاملی مجازی/واقعی برایTwinایستا،ابهام تشخیص وهماهنگی منبع درنگهداری صنعتی پیشنهاد می‌شود.سهم‌هابیان شده‌اند،نه فرضیه شماره‌دار.",
+          "pages": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Methodology and implementation",
+        "fa": "شناخت،حافظه وبرنامه نگهداری"
+      },
+      "paragraphs": [
+        {
+          "en": "A central agentic Twin orchestrates monitoring, diagnostic, decision and execution agents. Hybrid symbolic–neural representations combine thermodynamic and ontology knowledge with sensor dynamics. Memory distinguishes long-term, short-term and working contexts. Algorithms 1–2 describe memory-driven and goal/constraint-based task planning; execution outcomes feed back into memory.",
+          "fa": "Twinمرکزی عامل پایش،تشخیص،تصمیم واجرا راهدایت می‌کند.نمایش نمادین–عصبی دانش حرارتی/هستی‌شناسی رابه دینامیک حسگر پیوند می‌دهد.حافظه بلندمدت،کوتاه‌مدت وکاری و الگوریتم۱–۲برنامه‌ریزی مبتنی برحافظه/هدف/قیدرادارند؛نتیجه اجرا بازخورد می‌شود.",
+          "pages": [
+            4,
+            6,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "en": "Algorithm 3 introduces Q-learning MARL for maintenance resource decisions. Boiler states discretize flue-gas temperature, steam pressure and water-flow indicators. Actions include no action, fuel–air adjustment, soot blowing and emergency shutdown. Reward balances efficiency, safety, downtime and cost. Illustrative model families in the equations should not all be treated as independently trained experimental components.",
+          "fa": "الگوریتم۳ازQ-learningچندعامل استفاده می‌کند.حالت بویلر از دما/فشار/دبی گسسته وکنش بی‌عملی،تنظیم سوخت–هوا،دوده‌زدایی وتوقف اضطراری است.پاداش بازده/ایمنی/توقف/هزینه را متوازن می‌کند.هرخانواده مدل نمونه درمعادلات الزاماًجزءتجربی آموزش‌داده‌شده مستقل نیست.",
+          "pages": [
+            6,
+            7,
+            11,
+            12,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments and comparisons",
+        "fa": "موردصنعتی ومقایسه‌ها"
+      },
+      "paragraphs": [
+        {
+          "en": "The case is a gas–steam boiler in a CHP plant with five years of operation and 5.2 million historical records. An 18-month tracking study and 1,000 maintenance-cycle analyses compare rule-based expert systems, pure machine learning, static Twins and centralized or single-agent maintenance against cognitive collaboration. The paper does not provide a public benchmark split or an LLM configuration sufficient for exact reproduction.",
+          "fa": "مورد بویلر گاز–بخار درنیروگاهCHP باپنج‌سال کار و۵٫۲میلیون رکورد است.مطالعه۱۸ماهه و۱۰۰۰چرخه نگهداری روش خبره،ML،Twinایستاومتمرکز/تک‌عامل را باهمکاری شناختی مقایسه می‌کند.تقسیم داده عمومی وپیکربندیLLMکافی برای بازتولید دقیق ارائه نشده است.",
+          "pages": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Reported results",
+        "fa": "نتایج ومخرج‌ها"
+      },
+      "paragraphs": [
+        {
+          "en": "The paper reports diagnostic accuracy of 97.3%, model updating reduced from 48 to 2.3 hours, fault-warning lead time extended from 24 to 72 hours and maintenance cost efficiency improved by 31.2%. Table 5 reports overall collaborative performance increasing from 82.2% to 95.5%. These are industrial case results, rather than a residential energy-control benchmark.",
+          "fa": "تشخیص۹۷٫۳٪،به‌روزرسانی دانش۴۸به۲٫۳ساعت،هشدار۲۴به۷۲ساعت،بازده هزینه+۳۱٫۲٪وهمکاری۸۲٫۲به۹۵٫۵٪گزارش شده است.جدول۵تشخیص۹۶٫۸درمقابل۷۸٫۵٪دارد؛متن بهبود۱۸٫۳٪وجدول۲۳٫۳٪می‌گوید.اختلاف بایدحفظ شود.",
+          "pages": [
+            1,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "en": "Across 18 months, diagnostic accuracy increases from 89.2% to 97.3%; knowledge entities grow from 8,427 to 15,863 and relations from 12,546 to 28,991; the calibration cycle falls from 30 to 5.8 days. The text describes 96.8% versus 78.5% collaborative diagnosis as an 18.3% improvement, whereas the table reports +23.3%; retain the reported distinction between percentage points and relative change.",
+          "fa": "دقت بلندمدت۸۹٫۲به۹۷٫۳٪،موجودیت۸۴۲۷به۱۵۸۶۳،رابطه۱۲۵۴۶به۲۸۹۹۱وکالیبراسیون۳۰به۵٫۸روز گزارش شده است.این نتیجه صنعتی مقاله است وکارایی موردانتظارHEMSنیست.",
+          "pages": [
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations",
+        "fa": "قوت،محدودیت وآینده نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors identify data quality, Twin fidelity, scalability and interpretability as limitations. Public raw data, executable component configurations and a sufficiently detailed split protocol are absent from the local article. This constrains reproduction and comparison with other domains.",
+          "fa": "نویسندگان حافظه/دانش تطبیقی وهماهنگی حلقه‌بسته رابرترمی‌دانند،اماوابستگی به کیفیت چندوجهی،دقتTwin،مقیاس‌پذیری وفرمان‌پذیری تفسیر درابهام را محدودیت می‌دانند.همجوشی،انتقال،توضیح علّی ودانش میان‌دامنه آینده‌اند.",
+          "pages": [
+            16
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Agentic diagnostic maintenance and adaptive Twins already have an industrial precedent. This paper matters for our novelty boundaries and for engineering memory across diagnostic episodes.",
+      "fa": "همپوشانی مستقیم نوآوری عاملTwin،تشخیص،حافظه،برنامه ونگهداری تطبیقی است.",
+      "pages": [
+        2,
+        3
+      ]
+    },
+    "contribution": {
+      "en": "It contributes a separation of monitoring, diagnosis, planning and execution; memory structures; and an industrial longitudinal evaluation of adaptive maintenance.",
+      "fa": "تفکیک حافظه–برنامه–اجراومعیار بازخورد صنعتی فراهم می‌کند.",
+      "pages": [
+        8,
+        11,
+        15
+      ]
+    },
+    "employment": {
+      "en": "Adapt the memory and task interfaces in our Operational Twin. Record evidence, interventions and outcomes with versioned parameters; keep the Reference Twin frozen for comparison. This employment is a project design recommendation, not a result tested by the article.",
+      "fa": "قراردادحافظه/وظیفه وبازخورد اجرا برایالهام معماری استفاده و فقطمفاهیم موجه بهعملیاتHEMSباایمنی مستقل ترجمه شوند.",
+      "pages": [
+        9,
+        11
+      ]
+    },
+    "baseline": {
+      "en": "Use as an architectural helper and novelty-collision reference. A memory-disabled ablation is a candidate; reproducing the entire industrial MARL maintenance system is not a mandatory residential baseline.",
+      "fa": "منبعکمکی/همپوشانی است،نه خط‌مبنای اجباری کامل.کنش بویلر وداده صنعتی وتخصیصQ-learningباوظیفه مسکونی متفاوت‌اند؛حذف حافظه/برنامه مشروط قابل اقتباس است.",
+      "pages": [
+        12,
+        15
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "The longitudinal industrial case is valuable evidence of integration, but incomplete public configuration and task differences prevent treating its scores as residential causal-diagnosis performance.",
+      "fa": "مقایسه کمی سودهای بزرگ به مخرج،مقایسه‌گر وتقسیم بازتولیدپذیرنیاز دارد.اختلاف متن/جدول دلیلحفظعدداصلی ومحدودیت است.",
+      "pages": [
+        15,
+        16
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Reported accuracy 97.3%; update 48 to 2.3 hours; warning lead time 24 to 72 hours; maintenance cost efficiency +31.2%.",
+      "fa": "تشخیص۹۷٫۳٪،به‌روزرسانی۲٫۳ساعت ودقت۱۸ماهه۸۹٫۲به۹۷٫۳٪.",
+      "pages": [
+        14,
+        16
+      ]
+    }
+  ],
+  "bibliography_start_page": 17,
+  "coverage_notes": {
+    "en": "Source text, original figure/table pages and bibliography inspected. Original source-page views preserve the complete graphics when individual crops are uncertain. Printed values only; no curve digitization. Project relevance and baseline recommendations are explicitly reviewer assessments. Supplementary material not supplied with the local PDF is not claimed reviewed.",
+    "fa": "متن،صفحات شکل/جدول وکتاب‌نامه بررسی شده‌اند.نمای صفحه اصلی تصویر کامل را درمرزبرش نامطمئن حفظ می‌کند.فقط عدد چاپ‌شده ثبت و منحنی تخمین زده نشده است.نقش پروژه وخط‌مبنا ارزیابی مستقل مرورگر است.پیوست بیرونی موجودنبوده،مطالعه‌شده ادعا نمی‌شود."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 2,
+      "caption": {
+        "en": "Traditional maintenance versus agentic cognitive maintenance.",
+        "fa": "مقایسه نگهداری سنتی و شناختی؛ نمودار مفهومی است، نه نتیجه عددی."
+      },
+      "explanation": {
+        "en": "Contrasts manual interpretation with autonomous reasoning and virtual–real feedback. It is a conceptual architecture, not an experimental performance graph.",
+        "fa": "مقایسه نگهداری سنتی و شناختی؛ نمودار مفهومی است، نه نتیجه عددی."
+      },
+      "data": {
+        "en": "Contrasts manual interpretation with autonomous reasoning and virtual–real feedback. It is a conceptual architecture, not an experimental performance graph.",
+        "fa": "مقایسه نگهداری سنتی و شناختی؛ نمودار مفهومی است، نه نتیجه عددی."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Overall agentic Digital Twin architecture.",
+        "fa": "معماری پایش، تشخیص، تصمیم و اجرا و جریان دانش و داده را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Monitoring, diagnosis, decision and execution interact through data, knowledge and virtual–real evolution. The diagram specifies component relationships; it reports no separate numerical result.",
+        "fa": "معماری پایش، تشخیص، تصمیم و اجرا و جریان دانش و داده را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Monitoring, diagnosis, decision and execution interact through data, knowledge and virtual–real evolution. The diagram specifies component relationships; it reports no separate numerical result.",
+        "fa": "معماری پایش، تشخیص، تصمیم و اجرا و جریان دانش و داده را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "3",
+      "page": 8,
+      "caption": {
+        "en": "Memory system of the cognitive maintenance framework.",
+        "fa": "حافظه بلندمدت، کوتاه‌مدت و کاری از یکدیگر تفکیک شده‌اند."
+      },
+      "explanation": {
+        "en": "Long-term, short-term and working memory separate persistent knowledge from current context. Memory organization is methodological evidence, not an accuracy measurement.",
+        "fa": "حافظه بلندمدت، کوتاه‌مدت و کاری از یکدیگر تفکیک شده‌اند."
+      },
+      "data": {
+        "en": "Long-term, short-term and working memory separate persistent knowledge from current context. Memory organization is methodological evidence, not an accuracy measurement.",
+        "fa": "حافظه بلندمدت، کوتاه‌مدت و کاری از یکدیگر تفکیک شده‌اند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 8,
+      "caption": {
+        "en": "Interactions between the three memory types.",
+        "fa": "بازیابی و به‌روزرسانی، تجربه تاریخی را به استدلال جاری پیوند می‌دهد."
+      },
+      "explanation": {
+        "en": "Retrieval and update paths connect historical maintenance experience to current reasoning. No numerical ablation of these individual arrows is printed in the figure.",
+        "fa": "بازیابی و به‌روزرسانی، تجربه تاریخی را به استدلال جاری پیوند می‌دهد."
+      },
+      "data": {
+        "en": "Retrieval and update paths connect historical maintenance experience to current reasoning. No numerical ablation of these individual arrows is printed in the figure.",
+        "fa": "بازیابی و به‌روزرسانی، تجربه تاریخی را به استدلال جاری پیوند می‌دهد."
+      }
+    },
+    {
+      "id": "5",
+      "page": 11,
+      "caption": {
+        "en": "Task planning interactions in cognitive maintenance.",
+        "fa": "هدف، قید، وظیفه عامل و بازخورد اجرا در گردش برنامه‌ریزی پیوند می‌خورند."
+      },
+      "explanation": {
+        "en": "The planning workflow connects goals, constraints, agent tasks and execution feedback. Read with Algorithms 1–2 rather than treating the schematic as a controller benchmark.",
+        "fa": "هدف، قید، وظیفه عامل و بازخورد اجرا در گردش برنامه‌ریزی پیوند می‌خورند."
+      },
+      "data": {
+        "en": "The planning workflow connects goals, constraints, agent tasks and execution feedback. Read with Algorithms 1–2 rather than treating the schematic as a controller benchmark.",
+        "fa": "هدف، قید، وظیفه عامل و بازخورد اجرا در گردش برنامه‌ریزی پیوند می‌خورند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 13,
+      "caption": {
+        "en": "Self-evolving operational maintenance mechanism.",
+        "fa": "نتیجه مشاهده‌شده باعث به‌روزرسانی دانش و مدل می‌شود؛ اعداد طولی در جدول۶ است."
+      },
+      "explanation": {
+        "en": "Observed outcomes support knowledge and model updates. The diagram explains the adaptation loop; longitudinal numerical results are in Table 6.",
+        "fa": "نتیجه مشاهده‌شده باعث به‌روزرسانی دانش و مدل می‌شود؛ اعداد طولی در جدول۶ است."
+      },
+      "data": {
+        "en": "Observed outcomes support knowledge and model updates. The diagram explains the adaptation loop; longitudinal numerical results are in Table 6.",
+        "fa": "نتیجه مشاهده‌شده باعث به‌روزرسانی دانش و مدل می‌شود؛ اعداد طولی در جدول۶ است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 14,
+      "caption": {
+        "en": "Multi-agent and Twin operation and maintenance platform.",
+        "fa": "نمای سامانه، تجهیزات مجازی و رابط نگهداری را نمایش می‌دهد."
+      },
+      "explanation": {
+        "en": "The application view shows virtual equipment and operational maintenance interfaces. It documents system integration, without an independent usability experiment.",
+        "fa": "نمای سامانه، تجهیزات مجازی و رابط نگهداری را نمایش می‌دهد."
+      },
+      "data": {
+        "en": "The application view shows virtual equipment and operational maintenance interfaces. It documents system integration, without an independent usability experiment.",
+        "fa": "نمای سامانه، تجهیزات مجازی و رابط نگهداری را نمایش می‌دهد."
+      }
+    },
+    {
+      "id": "8",
+      "page": 14,
+      "caption": {
+        "en": "Physical sensor data compared with virtual simulation.",
+        "fa": "سیگنال واقعی و شبیه‌سازی برای همگامی مقایسه شده؛ مقدار منحنی تخمین زده نشده است."
+      },
+      "explanation": {
+        "en": "Measured and simulated boiler signals are compared to illustrate synchronization. No values have been estimated from the plotted curves; retain axes and units in the source page.",
+        "fa": "سیگنال واقعی و شبیه‌سازی برای همگامی مقایسه شده؛ مقدار منحنی تخمین زده نشده است."
+      },
+      "data": {
+        "en": "Measured and simulated boiler signals are compared to illustrate synchronization. No values have been estimated from the plotted curves; retain axes and units in the source page.",
+        "fa": "سیگنال واقعی و شبیه‌سازی برای همگامی مقایسه شده؛ مقدار منحنی تخمین زده نشده است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 3,
+      "title": {
+        "en": "Prior Twin maintenance studies",
+        "fa": "مرور کارهای پیشین بر پایه نوع داده، حوزه و وظیفه است."
+      },
+      "summary": {
+        "en": "Classifies prior work by data type, field and task; this is literature context, not a new baseline run.",
+        "fa": "مرور کارهای پیشین بر پایه نوع داده، حوزه و وظیفه است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "title": {
+        "en": "System formalization variables",
+        "fa": "متغیرهای حالت، کنش، دانش و عامل در چارچوب تعریف می‌شوند."
+      },
+      "summary": {
+        "en": "Defines state, action, knowledge and agent variables used in the formal framework.",
+        "fa": "متغیرهای حالت، کنش، دانش و عامل در چارچوب تعریف می‌شوند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "title": {
+        "en": "Sources and types of data flow",
+        "fa": "مبدأ، مقصد و نوع داده یا فرمان مبادله‌شده را فهرست می‌کند."
+      },
+      "summary": {
+        "en": "Lists source/target components and exchanged data or commands.",
+        "fa": "مبدأ، مقصد و نوع داده یا فرمان مبادله‌شده را فهرست می‌کند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 15,
+      "title": {
+        "en": "Maintenance approach comparison",
+        "fa": "دقت۹۷٫۳٪، به‌روزرسانی۲٫۳ساعت و هشدار۷۲ساعت برای روش پیشنهادی گزارش شده است."
+      },
+      "summary": {
+        "en": "Reports diagnostic accuracy 97.3%, model update 2.3 hours and warning lead time 72 hours for the proposed framework; preserve comparator definitions in the original table.",
+        "fa": "دقت۹۷٫۳٪، به‌روزرسانی۲٫۳ساعت و هشدار۷۲ساعت برای روش پیشنهادی گزارش شده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 16,
+      "title": {
+        "en": "Multi-agent collaboration performance",
+        "fa": "عملکرد کلی از۸۲٫۲٪ به۹۵٫۵٪ می‌رسد؛ تفاوت درصد نسبی و واحددرصد در متن حفظ شده است."
+      },
+      "summary": {
+        "en": "Overall performance rises from 82.2% to 95.5%; the text/table distinction for 96.8% versus 78.5% diagnosis is preserved in results.",
+        "fa": "عملکرد کلی از۸۲٫۲٪ به۹۵٫۵٪ می‌رسد؛ تفاوت درصد نسبی و واحددرصد در متن حفظ شده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 16,
+      "title": {
+        "en": "Long-term self-evolution",
+        "fa": "در۱۸ماه دقت۸۹٫۲ به۹۷٫۳٪ و چرخه کالیبراسیون۳۰ به۵٫۸روز تغییر می‌کند."
+      },
+      "summary": {
+        "en": "Across 18 months accuracy rises 89.2% to 97.3%; entities 8,427 to 15,863; relations 12,546 to 28,991; calibration cycle 30 to 5.8 days.",
+        "fa": "در۱۸ماه دقت۸۹٫۲ به۹۷٫۳٪ و چرخه کالیبراسیون۳۰ به۵٫۸روز تغییر می‌کند."
+      }
+    }
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "id": "article-11",
+  "title": {
+    "en": "Large language model-enhanced home energy management with dynamic user preference elicitation and hierarchical data-sharing",
+    "fa": "مدیریت انرژی خانه تقویت‌شده با مدل زبانی، استخراج پویای ترجیحات و اشتراک سلسله‌مراتبی داده"
+  },
+  "short_title": "Zhang / Dynamic preferences",
+  "sections": [
+    {
+      "id": "questions",
+      "title": {
+        "en": "Problem and research objective",
+        "fa": "مسئله و هدف"
+      },
+      "paragraphs": [
+        {
+          "en": "Zhang et al. address three challenges: natural-language preference perception, efficient DRL learning under limited data, and privacy-sensitive sharing. The proposed components are KG-CoT elicitation, LLM reference-action guidance and hierarchical knowledge sharing. A numbered hypothesis list is not explicitly given.",
+          "fa": "ژانگ و همکاران سه چالش ادراک ترجیح زبان طبیعی، یادگیری DRL با داده کم و اشتراک حساس به حریم خصوصی را هدف می‌گیرند. اجزا KG-CoT، هدایت کنش مرجع و اشتراک سلسله‌مراتبی دانش‌اند؛ فرضیه شماره‌دار صریح وجود ندارد.",
+          "pages": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Methods and implementation",
+        "fa": "روش و پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "Hourly DDPG actions control AC on/off and setpoint, washing-machine operation and battery power. Two-round elicitation identifies season, parameter/direction, then a historical-memory-informed numerical JSON update. Transient memory retains three turns. Manual adjustment, seasonal change or a neighbor-change threshold can trigger interaction; second-round collection probability is max(.2,.8−tCdecay).",
+          "fa": "کنش ساعتی DDPG شامل روشن‌بودن و دمای تهویه، لباس‌شویی و توان باتری است. استخراج دو دور ابتدا فصل، سپس پارامتر/جهت و در پایان به‌روزرسانی عددی JSON مبتنی بر سابقه را می‌سازد. حافظه سه نوبت را نگه می‌دارد. تغییر دستی، فصل یا آستانه همسایه تعامل را تحریک می‌کند و احتمال دور دوم max(.2,.8−tCdecay) است.",
+          "pages": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "en": "Algorithm1 blends base and LLM reference actions when TriggerLLM fires, otherwise adds exploration noise; ConstrainAction clips AC/battery and enforces a continuous nonrepeated daily laundry cycle. Daily extraction transforms private raw system/preference information into descriptions then generalized shared knowledge. Table1 sets critic/actor learning rates .001/.0001, batch64 and replay10,000.",
+          "fa": "الگوریتم۱ کنش پایه و مرجع LLM را هنگام تحریک ترکیب می‌کند و در غیر این صورت نویز اکتشاف می‌افزاید. ConstrainAction حدود تهویه/باتری و چرخه پیوسته و غیرتکراری لباس‌شویی را اعمال می‌کند. استخراج روزانه داده خصوصی را به توصیف و سپس دانش مشترک تعمیم می‌دهد. نرخ منتقد/کنشگر۰٫۰۰۱/۰٫۰۰۰۱، دسته۶۴ و حافظه۱۰هزار است.",
+          "pages": [
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments and evaluation",
+        "fa": "آزمایش و ارزیابی"
+      },
+      "paragraphs": [
+        {
+          "en": "Three simulated heterogeneous households are used. Seasonal numerical preference weights and temperatures are predefined through one volunteer, then consistent language interactions are simulated. Five repeated runs supply mean±one standard deviation learning curves. Converged results use the last20days of each season; transition experiments use the first20days. MAPE evaluates elicited numerical preferences.",
+          "fa": "سه خانوار شبیه‌سازی‌شده ناهمگون استفاده می‌شوند. وزن و دمای فصلی با یک داوطلب از پیش تعریف و تعامل زبانی سازگار شبیه‌سازی می‌شود. پنج تکرار میانگین و یک انحراف معیار منحنی را می‌دهند. نتیجه همگرا بیست روز آخر و گذار بیست روز نخست فصل است؛ MAPE ترجیح عددی را می‌سنجد.",
+          "pages": [
+            7,
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baselines",
+      "title": {
+        "en": "Baselines and ablations",
+        "fa": "خط‌مبنا و حذف مؤلفه"
+      },
+      "paragraphs": [
+        {
+          "en": "Control baselines: fixed-preference DDPG; MPC using a two-layer128-unit neural next-state model and COBYLA; incremental learning with six-hour updates using30%new/70%historical data then COBYLA. MPC/IL receive accurate preference parameters. Elicitation compares feedback-only, feedback+history and KG-CoT. Ablations remove preference elicitation, action guidance or sharing.",
+          "fa": "خط‌مبناها DDPG با ترجیح ثابت، MPC با شبکه دو لایه۱۲۸ و COBYLA و یادگیری افزایشی شش‌ساعته با۳۰٪جدید/۷۰٪تاریخی هستند. MPC/IL ترجیح دقیق می‌گیرند. استخراج بازخورد تنها، بازخورد+سابقه و KG-CoT را مقایسه و استخراج ترجیح، هدایت کنش یا اشتراک حذف می‌شود.",
+          "pages": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated discussion and limitations",
+        "fa": "بحث و محدودیت نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors state that preferences have the largest effect and sharing a smaller direct control effect, consistent with its privacy purpose. Historical memories can bias elicitation after seasonal changes. Generalization evidence is limited to the simulated heterogeneous community and controlled numerical-to-language protocol; the paper discusses expansion and improved real-world deployment.",
+          "fa": "نویسندگان اثر ترجیحات را بزرگ‌تر و اثر مستقیم اشتراک بر کنترل را کوچک‌تر و متناسب با هدف حریم خصوصی می‌دانند. سابقه می‌تواند استخراج پس از تغییر فصل را سوگیر کند. شواهد به جامعه شبیه‌سازی و پروتکل کنترل‌شده عدد به زبان محدود است؛ گسترش و استقرار واقعی مطرح می‌شود.",
+          "pages": [
+            9,
+            10
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 2,
+      "caption": {
+        "en": "Architecture for HEM",
+        "fa": "معماری HEM"
+      },
+      "explanation": {
+        "en": "Connects household generation, storage, appliances and grid for the physical energy model.",
+        "fa": "تولید، ذخیره‌ساز، وسایل و شبکه را در مدل انرژی خانه متصل می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 4,
+      "caption": {
+        "en": "Control framework of LLM-enhanced HEM",
+        "fa": "چارچوب کنترل تقویت‌شده"
+      },
+      "explanation": {
+        "en": "Shows hourly control, daily sharing and seasonal preference elicitation as different loops.",
+        "fa": "کنترل ساعتی، اشتراک روزانه و استخراج فصلی را در حلقه‌های متفاوت نشان می‌دهد."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "caption": {
+        "en": "Dynamic preference elicitation process",
+        "fa": "فرایند استخراج پویای ترجیح"
+      },
+      "explanation": {
+        "en": "Two-round interaction uses KG-CoT and transient memory to update weights/temperature.",
+        "fa": "تعامل دو دور از KG-CoT و حافظه برای اصلاح وزن/دما استفاده می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 7,
+      "caption": {
+        "en": "Hierarchical data sharing with LLM knowledge extraction",
+        "fa": "اشتراک سلسله‌مراتبی با استخراج دانش"
+      },
+      "explanation": {
+        "en": "Separates raw system/preference data, descriptions and generalized knowledge; knowledge selection feeds action guidance.",
+        "fa": "داده خام، توصیف و دانش تعمیم‌یافته را جدا و انتخاب دانش را به هدایت کنش متصل می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 8,
+      "caption": {
+        "en": "Control-method learning comparison",
+        "fa": "مقایسه یادگیری کنترل‌گرها"
+      },
+      "explanation": {
+        "en": "Fixed DDPG, MPC, IL and proposed reward trajectories are compared across seasons; curves are means over5runs with±1SD shading.",
+        "fa": "مسیر پاداش چهار روش در فصل‌ها؛ میانگین پنج اجرا با سایه یک انحراف معیار است."
+      },
+      "data": {
+        "en": "Exact converged table totals: reward41.49/−48.11/−49.04/68.22 for fixed/IL/MPC/proposed; costs8.760/33.085/33.583/6.233.",
+        "fa": "کل پاداش روش ثابت/IL/MPC/پیشنهادی۴۱٫۴۹/−۴۸٫۱۱/−۴۹٫۰۴/۶۸٫۲۲؛ هزینه۸٫۷۶۰/۳۳٫۰۸۵/۳۳٫۵۸۳/۶٫۲۳۳ است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 10,
+      "caption": {
+        "en": "Learning process in ablation studies",
+        "fa": "فرایند یادگیری حذف مؤلفه"
+      },
+      "explanation": {
+        "en": "Compares complete framework with fixed preferences, no guidance and no sharing.",
+        "fa": "چارچوب کامل با ترجیح ثابت، حذف هدایت و حذف اشتراک مقایسه می‌شود."
+      },
+      "data": {
+        "en": "Summer reward in Table5: fixed−7.65; no guidance17.11; no sharing33.02; full43.81.",
+        "fa": "پاداش تابستان جدول۵: ثابت−۷٫۶۵؛ بدون هدایت۱۷٫۱۱؛ بدون اشتراک۳۳٫۰۲؛ کامل۴۳٫۸۱."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 7,
+      "title": {
+        "en": "Experiment hyperparameters",
+        "fa": "ابرپارامترها"
+      },
+      "summary": {
+        "en": "Actor .0001; critic .001; batch64; replay10,000; battery efficiency .85; AC setpoint18–30°C.",
+        "fa": "کنشگر۰٫۰۰۰۱، منتقد۰٫۰۰۱، دسته۶۴، حافظه۱۰هزار، بازده باتری۰٫۸۵ و دما۱۸–۳۰."
+      }
+    },
+    {
+      "id": "2",
+      "page": 8,
+      "title": {
+        "en": "Seasonal performance comparison",
+        "fa": "مقایسه فصلی"
+      },
+      "summary": {
+        "en": "Proposed total cost6.233 versus fixed8.760; comfort13.391 versus12.249; carbon10.436 versus7.629. Thus lower cost does not imply every metric improves.",
+        "fa": "هزینه پیشنهادی۶٫۲۳۳ دربرابر۸٫۷۶۰؛ آسایش۱۳٫۳۹۱ دربرابر۱۲٫۲۴۹؛ کربن۱۰٫۴۳۶ دربرابر۷٫۶۲۹؛ هزینه کمتر به معنی بهبود همه معیارها نیست."
+      }
+    },
+    {
+      "id": "3",
+      "page": 9,
+      "title": {
+        "en": "Elicitation accuracy",
+        "fa": "دقت استخراج"
+      },
+      "summary": {
+        "en": "Feedback only9.50iterations/42.60%MAPE; history3.50/5.43%; KG-CoT1.25/.30%.",
+        "fa": "بازخورد تنها۹٫۵۰تکرار/۴۲٫۶۰٪؛ با سابقه۳٫۵۰/۵٫۴۳٪؛ KG-CoT۱٫۲۵/۰٫۳۰٪."
+      }
+    },
+    {
+      "id": "4",
+      "page": 9,
+      "title": {
+        "en": "Season-transition performance",
+        "fa": "عملکرد گذار فصل"
+      },
+      "summary": {
+        "en": "First20days; total reward fixed−13.406, feedback−6.203, history−2.589, KG-CoT17.169.",
+        "fa": "بیست روز نخست؛ کل پاداش ثابت−۱۳٫۴۰۶، بازخورد−۶٫۲۰۳، سابقه−۲٫۵۸۹، KG-CoT۱۷٫۱۶۹."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "title": {
+        "en": "Module ablation outcomes",
+        "fa": "نتایج حذف مؤلفه"
+      },
+      "summary": {
+        "en": "Total reward fixed41.49, no-guidance54.15, no-sharing61.72, full68.22. Full cost6.233 exceeds no-guidance4.406, showing multi-objective tradeoffs.",
+        "fa": "کل پاداش ثابت۴۱٫۴۹، حذف هدایت۵۴٫۱۵، حذف اشتراک۶۱٫۷۲، کامل۶۸٫۲۲؛ هزینه کامل۶٫۲۳۳ از حذف هدایت۴٫۴۰۶ بیشتر و نشان‌دهنده مصالحه چندهدفه است."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Important for preference drift, elicitation, history and the distinction between user-intent errors and control errors.",
+      "fa": "برای رانش ترجیح، استخراج، سابقه و تمایز خطای نیت و خطای کنترل مهم است.",
+      "pages": [
+        5,
+        9
+      ]
+    },
+    "contribution": {
+      "en": "Contributes a concrete JSON preference-update mechanism and ablations isolating elicitation/guidance/sharing.",
+      "fa": "سازوکار ملموس اصلاح JSON و حذف مؤلفه‌های استخراج، هدایت و اشتراک را می‌دهد.",
+      "pages": [
+        5,
+        6,
+        9
+      ]
+    },
+    "employment": {
+      "en": "Adapt elicitation to typed preference events and logged authorization in our C1 scenarios; test historical-memory bias and preference estimation separately from causal equipment diagnosis.",
+      "fa": "استخراج به رویداد ترجیح نوع‌دار و مجوز ثبت‌شده در C1 اقتباس شود؛ سوگیری حافظه جدا از تشخیص تجهیز آزموده شود.",
+      "pages": [
+        5,
+        9
+      ]
+    },
+    "baseline": {
+      "en": "Optional adapted preference baseline; implement KG-CoT/feedback-only comparisons if preference acquisition is evaluated. Full DDPG/data-sharing reproduction is not required for the central causal intervention claim.",
+      "fa": "خط‌مبنای اختیاری ترجیح؛ اگر استخراج ارزیابی شود KG-CoT/بازخورد تنها اقتباس شوند. بازتولید کامل DDPG و اشتراک برای ادعای اصلی الزامی نیست.",
+      "pages": [
+        8,
+        9
+      ]
+    }
+  },
+  "bibliography_start_page": 10,
+  "critical": [
+    {
+      "en": "Reviewer observation: one volunteer’s predefined targets and simulated matching utterances support a controlled elicitation benchmark, not broad real-resident intent accuracy. Semantic generalization/anonymization is not a formal privacy guarantee.",
+      "fa": "ملاحظه مرورگر: هدف ازپیش‌تعریف‌شده یک داوطلب و گفتار سازگار، معیار کنترل‌شده است و دقت نیت همه ساکنان را اثبات نمی‌کند. ناشناس‌سازی معنایی تضمین رسمی حریم خصوصی نیست.",
+      "pages": [
+        7,
+        9
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Reported cost improvement28.8% and comfort9.3% versus fixed preference DDPG; elicitation MAPE.30%/1.25cycles in the controlled protocol.",
+      "fa": "کاهش هزینه۲۸٫۸٪ و افزایش آسایش۹٫۳٪ نسبت به DDPG ثابت؛ MAPE استخراج۰٫۳۰٪ و۱٫۲۵چرخه در پروتکل کنترل‌شده.",
+      "pages": [
+        8,
+        9
+      ]
+    }
+  ],
+  "coverage_notes": {
+    "en": "Main article and its embedded figures/tables reviewed. Original pages retain full equations and tables. Bibliography is source transcription; cited works were not independently reviewed.",
+    "fa": "متن اصلی و شکل‌ها و جدول‌های درون آن بررسی شده‌اند. معادلات و جدول‌های کامل در صفحات اصلی حفظ شده‌اند. کتاب‌نامه استخراج منبع است و آثار ارجاع‌شده مستقلاً مرور نشده‌اند."
+  }
+}

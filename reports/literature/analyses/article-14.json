@@ -1,0 +1,349 @@
+{
+  "id": "article-14",
+  "title": {
+    "en": "A smart home platform integrating an energy-aware digital twin and an LLM-enabled conversational agent",
+    "fa": "خانه هوشمندسبز وTwinمکالمه‌ای"
+  },
+  "short_title": "Green Smart Home / GSH",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Research problem and scope",
+        "fa": "مسئله وجهت مطالعه"
+      },
+      "paragraphs": [
+        {
+          "en": "Barricelli et al. present a Green Smart Home (GSH) platform combining a smart-home Digital Twin, conversational LLM interaction and automation checking. The research concerns human-centered energy awareness and usable automation; it does not state a formal numerical causal-diagnosis hypothesis.",
+          "fa": "Barricelliوهمکاران،۲۰۲۶.خانهGSHدوقلوی آگاه ازانرژی وگفتگویLLMرابرایساخت خودکارسازی توسطغیرمتخصص،فهم تعارض وپایش مصرف ادغام می‌کند.طراحی انسان‌محورو ارزیابی کیفی محوراست؛فرضیه رسمی شماره‌دارندارد.",
+          "pages": [
+            1,
+            2,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Methodology and implementation",
+        "fa": "معماری وبررسی‌گرها"
+      },
+      "paragraphs": [
+        {
+          "en": "The three-layer architecture links Home Assistant and IoT devices to backend services and a web frontend. FastAPI, PyMongo and a TensorFlow LSTM support data management and a 12-hour consumption forecast. Natural-language requests generate structured automation descriptions rather than directly bypassing backend checks.",
+          "fa": "سه‌لایهIoT/HomeAssistant،بک‌اندماژولارورابطوب دارد.نقطه‌پایانیFastAPIادغام،داده/تنظیم،تحلیل وخودکارسازی رادارند.LSTMTensorFlowمصرف۱۲ساعت بعدراازسابقه/زمان/دستگاه پیش‌بینی می‌کند.درخواست بهJSONسازگارباHAتبدیل وپیش‌ازنصب باRuleCheckerوEnergyCheckerبررسی می‌شود.",
+          "pages": [
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "en": "A Rule Checker tests direct and indirect conflicts, including chains of environmental effects described through semantic JSON device models. An Energy Checker evaluates power and stated duration using minute-level blocks. Possible indirect conflicts are presented as possibilities; the LLM explains problems and suggests alternatives.",
+          "fa": "RuleCheckerکنش متعارض،همپوشانی شرط/محرک وزنجیره مستقیم/غیرمستقیم رامی‌سنجد.JSONمعنایی اثر دستگاه برمتغیرمحیط رامی‌دهد؛زنجیره بالقوه هشداراست،نه رخدادقطعی.LLMمسئله وراه‌حل جایگزین می‌گوید.EnergyCheckerتوان/مدت حالت و میانگینخانه راازبلوکدقیقه‌ای می‌سازد.",
+          "pages": [
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments and comparisons",
+        "fa": "ارزیابی آزمایشگاهی وخانه"
+      },
+      "paragraphs": [
+        {
+          "en": "The design evaluation includes a laboratory study with 10 users aged 23–56 completing six tasks and answering the BUS questionnaire. A subsequent study ran in six design-team members’ homes between 24 July and 20 October 2025, with variable participation periods, 50 diary entries and 29 comments. There is no randomized controller or measured energy-saving baseline.",
+          "fa": "ارزیابی اولیه۱۰کاربر۲۳تا۵۶سال با۶وظیفه،تفکرباصدا ومقیاسکاربردپذیری دارد.مطالعهخودمردم‌نگارانه درشش‌خانه اعضاتیم از۲۴ژوئیهتا۲۰اکتبر۲۰۲۵با۵۰یادداشت و۲۹نظرانجام شده است.جدول۳–۴دستگاه/مشارکت رادارد.رقابت کنترل بهینه یاFDDانجام نشده است.",
+          "pages": [
+            10,
+            18,
+            19,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Reported results",
+        "fa": "تجربه مشاهده‌شده،نه آزمایشصرفه‌جویی"
+      },
+      "paragraphs": [
+        {
+          "en": "Of 34 automation-creation entries, 17 reported no rule conflict, 16 reported a conflict and one was uncertain; there was one energy-overload warning. Consumption checking appears in 28 of the 50 diary entries. The evaluation supports interaction and usability findings; it does not quantify controlled energy savings or fault-recovery performance.",
+          "fa": "از۳۴یادداشتساخت خودکارسازی،۱۷بدونتعارض،۱۶تعارض و۱نامطمئن؛فقطیکاضافه‌بارانرژی گزارش شد.در۲۸از۵۰یادداشت مصرف بررسی و۲۹نظرپنج مضمون ساختند.فایده همراه مشکلات اینترنت/دستگاه،هشدارزیادومحرکپیچیده است.مخرج‌یادداشتاست،نه کاربرمستقل.",
+          "pages": [
+            19,
+            20,
+            21,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations",
+        "fa": "محدودیت وآینده نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors discuss a small and potentially biased participant sample, heterogeneous home configurations, technical integration demands and limitations of semantic conflict modeling. Longitudinal feedback from the design team should be distinguished from an independent field trial with controlled energy outcomes.",
+          "fa": "نویسندگان سوگیریتأیید/تفسیررابه‌علتطراح‌بودنشرکت‌کنندگانمی‌پذیرند.آشناییوتحملمشکل اعتباربیرونی رامحدودمی‌کند.وسایل پرمصرفکم،آزمونانرژیراضعیفمی‌کند.مطالعه مستقلطولانی،نمایش بصریوخدماتپایداری پیشنهادشده‌اند.صرفه‌جویی کمیخانه دراینمطالعه تأییدنشده است.",
+          "pages": [
+            22
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "It demonstrates an existing DT-plus-LLM smart-home integration and identifies practical preference clarification and automation-conflict problems relevant to our research.",
+      "fa": "ادغام واقعیTwin+LLMخانهپیشینهاست؛برایروشن‌سازیترجیح وتعارض هماهنگیمهم است.",
+      "pages": [
+        11,
+        13
+      ]
+    },
+    "contribution": {
+      "en": "It contributes rule and energy checks, understandable alternative actions and observed interaction failures in actual homes.",
+      "fa": "بررسیقاعده/انرژی،عملجایگزین قابل‌فهم ومواردشکستتعاملواقعی می‌دهد.",
+      "pages": [
+        13,
+        19,
+        20
+      ]
+    },
+    "employment": {
+      "en": "Adapt clarification dialogues, conflict explanations and visible approval states. Our execution contracts would additionally enforce numerical physical bounds and diagnostic evidence; that extension is our design judgment.",
+      "fa": "برایروشن‌سازیترجیح،توضیحتعارض ووضعیتتأییدالهامدهد؛قرارداداجرایماقیودفیزیکی رافرارازسازگاریخودکارسازی اعمالکند.",
+      "pages": [
+        13,
+        14
+      ]
+    },
+    "baseline": {
+      "en": "Use as a helper and novelty-collision reference. An adapted rule-conflict checker is a candidate for coordination scenarios. Qualitative home feedback is not directly comparable with our recovery metrics; full replication is not mandatory.",
+      "fa": "کمکی/همپوشانی است،نه خط‌مبنای عددی اجباری.بررسی‌گرتعارض برایC5اختیاری است؛بازخوردکیفی رامستقیماًبامعیاربازیابی مقایسه نکنیم.",
+      "pages": [
+        18,
+        22
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Positive home feedback supports usability but does not establish robust control or causal diagnosis. Indirect semantic chains indicate possible conflicts rather than counterfactual certainty.",
+      "fa": "تجربهمثبتخانه شاهدکاربردپذیری است،نه اثباتکنترل مقاوم یاتشخیصعلّی.مدلمعناییزنجیرهغیرمستقیم امکانراپیش‌بینی می‌کند،نه قطعیتخلاف‌واقع.",
+      "pages": [
+        13,
+        22
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Six homes, 50 diary entries, 34 automation-creation entries and one energy-overload warning.",
+      "fa": "شش‌خانه،۵۰یادداشت،۳۴رکوردساختخودکارسازی ویکهشداراضافه‌بار.",
+      "pages": [
+        18,
+        19,
+        22
+      ]
+    }
+  ],
+  "bibliography_start_page": 23,
+  "coverage_notes": {
+    "en": "Source text, original figure/table pages and bibliography inspected. Original source-page views preserve the complete graphics when individual crops are uncertain. Printed values only; no curve digitization. Project relevance and baseline recommendations are explicitly reviewer assessments. Supplementary material not supplied with the local PDF is not claimed reviewed.",
+    "fa": "متن،صفحات شکل/جدول وکتاب‌نامه بررسی شده‌اند.نمای صفحه اصلی تصویر کامل را درمرزبرش نامطمئن حفظ می‌کند.فقط عدد چاپ‌شده ثبت و منحنی تخمین زده نشده است.نقش پروژه وخط‌مبنا ارزیابی مستقل مرورگر است.پیوست بیرونی موجودنبوده،مطالعه‌شده ادعا نمی‌شود."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 6,
+      "caption": {
+        "en": "Human-centered design process.",
+        "fa": "فرایند طراحی انسان‌محور از نیاز تا ارزیابی رابط نمایش داده شده است."
+      },
+      "explanation": {
+        "en": "The process links user investigation, scenarios, prototyping and evaluation. This explains how the interface was designed rather than measuring energy reduction.",
+        "fa": "فرایند طراحی انسان‌محور از نیاز تا ارزیابی رابط نمایش داده شده است."
+      },
+      "data": {
+        "en": "The process links user investigation, scenarios, prototyping and evaluation. This explains how the interface was designed rather than measuring energy reduction.",
+        "fa": "فرایند طراحی انسان‌محور از نیاز تا ارزیابی رابط نمایش داده شده است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 9,
+      "caption": {
+        "en": "Consumption forecast storyboard.",
+        "fa": "سناریوی بررسی پیش‌بینی مصرف و تعامل کاربر است، نه خطای عددی پیش‌بینی."
+      },
+      "explanation": {
+        "en": "The storyboard describes a user inspecting predicted energy consumption and acting through the platform. It is an interaction scenario rather than a measured forecast error result.",
+        "fa": "سناریوی بررسی پیش‌بینی مصرف و تعامل کاربر است، نه خطای عددی پیش‌بینی."
+      },
+      "data": {
+        "en": "The storyboard describes a user inspecting predicted energy consumption and acting through the platform. It is an interaction scenario rather than a measured forecast error result.",
+        "fa": "سناریوی بررسی پیش‌بینی مصرف و تعامل کاربر است، نه خطای عددی پیش‌بینی."
+      }
+    },
+    {
+      "id": "3",
+      "page": 11,
+      "caption": {
+        "en": "Integrated platform architecture.",
+        "fa": "سه لایه دستگاه خانه، منطق پشتیبان و رابط کاربر را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Smart-home devices, backend logic and frontend form the three layers. The source page preserves named modules and communication paths.",
+        "fa": "سه لایه دستگاه خانه، منطق پشتیبان و رابط کاربر را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Smart-home devices, backend logic and frontend form the three layers. The source page preserves named modules and communication paths.",
+        "fa": "سه لایه دستگاه خانه، منطق پشتیبان و رابط کاربر را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "4",
+      "page": 15,
+      "caption": {
+        "en": "Main GSH dashboard.",
+        "fa": "داشبورد اطلاعات خانه و قابلیت تعامل انرژی را کنار هم دارد."
+      },
+      "explanation": {
+        "en": "The dashboard combines home information and energy interaction features. A screenshot is implementation evidence, not proof of energy savings.",
+        "fa": "داشبورد اطلاعات خانه و قابلیت تعامل انرژی را کنار هم دارد."
+      },
+      "data": {
+        "en": "The dashboard combines home information and energy interaction features. A screenshot is implementation evidence, not proof of energy savings.",
+        "fa": "داشبورد اطلاعات خانه و قابلیت تعامل انرژی را کنار هم دارد."
+      }
+    },
+    {
+      "id": "5",
+      "page": 16,
+      "caption": {
+        "en": "Hourly consumption view.",
+        "fa": "رابط، مصرف کل را ساعتی نشان می‌دهد؛ عدد چاپ‌نشده بازسازی نشده است."
+      },
+      "explanation": {
+        "en": "The interface displays total energy consumption at hourly resolution. No unprinted numerical values are reconstructed from the screenshot.",
+        "fa": "رابط، مصرف کل را ساعتی نشان می‌دهد؛ عدد چاپ‌نشده بازسازی نشده است."
+      },
+      "data": {
+        "en": "The interface displays total energy consumption at hourly resolution. No unprinted numerical values are reconstructed from the screenshot.",
+        "fa": "رابط، مصرف کل را ساعتی نشان می‌دهد؛ عدد چاپ‌نشده بازسازی نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 16,
+      "caption": {
+        "en": "Automation list, creation chat and checker results.",
+        "fa": "فهرست خودکارسازی، گفت‌وگو و نتیجه بررسی قاعده و انرژی کنار هم‌اند."
+      },
+      "explanation": {
+        "en": "The example joins conversational automation creation with Rule Checker and Energy Checker feedback. This shows where explanations enter the user workflow.",
+        "fa": "فهرست خودکارسازی، گفت‌وگو و نتیجه بررسی قاعده و انرژی کنار هم‌اند."
+      },
+      "data": {
+        "en": "The example joins conversational automation creation with Rule Checker and Energy Checker feedback. This shows where explanations enter the user workflow.",
+        "fa": "فهرست خودکارسازی، گفت‌وگو و نتیجه بررسی قاعده و انرژی کنار هم‌اند."
+      }
+    },
+    {
+      "id": "7",
+      "page": 17,
+      "caption": {
+        "en": "Interaction flow for a new automation.",
+        "fa": "مراحل ایجاد، بررسی و تعامل کاربر برای خودکارسازی جدید را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "The workflow exposes creation, checking and user interaction steps before an automation is accepted. It is the relevant procedural source for preference clarification.",
+        "fa": "مراحل ایجاد، بررسی و تعامل کاربر برای خودکارسازی جدید را نشان می‌دهد."
+      },
+      "data": {
+        "en": "The workflow exposes creation, checking and user interaction steps before an automation is accepted. It is the relevant procedural source for preference clarification.",
+        "fa": "مراحل ایجاد، بررسی و تعامل کاربر برای خودکارسازی جدید را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "8",
+      "page": 18,
+      "caption": {
+        "en": "Device configuration view.",
+        "fa": "پیکربندی دستگاه مبنای قواعد و استدلال انرژی است؛ پوشش همگانی ادعا نمی‌شود."
+      },
+      "explanation": {
+        "en": "Users configure the devices that ground automation rules and energy reasoning. The screenshot does not establish that all household devices are universally supported.",
+        "fa": "پیکربندی دستگاه مبنای قواعد و استدلال انرژی است؛ پوشش همگانی ادعا نمی‌شود."
+      },
+      "data": {
+        "en": "Users configure the devices that ground automation rules and energy reasoning. The screenshot does not establish that all household devices are universally supported.",
+        "fa": "پیکربندی دستگاه مبنای قواعد و استدلال انرژی است؛ پوشش همگانی ادعا نمی‌شود."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 8,
+      "title": {
+        "en": "Personas",
+        "fa": "نمایه، زمینه و آشنایی فنی شخصیت‌های طراحی را می‌دهد."
+      },
+      "summary": {
+        "en": "Documents user profiles, context and technical familiarity used during design.",
+        "fa": "نمایه، زمینه و آشنایی فنی شخصیت‌های طراحی را می‌دهد."
+      }
+    },
+    {
+      "id": "2",
+      "page": 8,
+      "title": {
+        "en": "Design scenarios",
+        "fa": "سناریوهای خودکارسازی سبز و پیش‌بینی مصرف و تعامل را خلاصه می‌کند."
+      },
+      "summary": {
+        "en": "Summarizes green automation, consumption forecasting and related interaction scenarios.",
+        "fa": "سناریوهای خودکارسازی سبز و پیش‌بینی مصرف و تعامل را خلاصه می‌کند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 19,
+      "title": {
+        "en": "Home-study participation",
+        "fa": "بازه متفاوت مشارکت شش‌نفر و مجموع۵۰یادداشت را دارد."
+      },
+      "summary": {
+        "en": "Lists variable study periods and diary counts for six participants; total 50 entries.",
+        "fa": "بازه متفاوت مشارکت شش‌نفر و مجموع۵۰یادداشت را دارد."
+      }
+    },
+    {
+      "id": "4",
+      "page": 19,
+      "title": {
+        "en": "Participant home configuration",
+        "fa": "طبقات، حسگر و اشیای هوشمند متفاوت خانه‌ها را ثبت می‌کند."
+      },
+      "summary": {
+        "en": "Lists floors, sensors and smart objects; heterogeneous installations constrain direct comparison across homes.",
+        "fa": "طبقات، حسگر و اشیای هوشمند متفاوت خانه‌ها را ثبت می‌کند."
+      }
+    }
+  ]
+}

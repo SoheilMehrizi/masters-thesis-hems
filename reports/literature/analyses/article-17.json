@@ -1,0 +1,378 @@
+{
+  "id": "article-17",
+  "title": {
+    "en": "Automated building energy modeling for energy retrofits using a large language model-based multi-agent framework",
+    "fa": "مدل‌سازی خودکارData2BEM"
+  },
+  "short_title": "Data2BEM automated modeling",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Research problem and scope",
+        "fa": "هدف وشکافادعاشده"
+      },
+      "paragraphs": [
+        {
+          "en": "Lu et al., iScience 28 (2025), article 113867. Data2BEM automates building energy modeling from heterogeneous documents, sensor data and user instructions through calibration and retrofit assessment. The stated gap is fragmented geometry, parameterization, calibration and assessment tools. No numbered hypothesis list is presented.",
+          "fa": "Luوهمکاران،۲۰۲۵.Data2BEMمدل‌سازیانرژیرامستندات/حسگرو دستورکاربرتاارزیابیبازسازی خودکارمی‌کند.شکافگسستابزارهندسه،پارامتر،کالیبراسیونوارزیابیاست.فرضیهرسمیشماره‌دارندارد.",
+          "pages": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Methodology and implementation",
+        "fa": "نقشعامل وابزارمهندسی"
+      },
+      "paragraphs": [
+        {
+          "en": "GPT-4-based Information Retriever, Programmer, Result Analyzer, Interpreter and Reviewer agents exchange structured information and code. CAD/DXF geometry, specifications, schedules and sensor data become JSON, OpenStudio code and an EnergyPlus model. Human review remains part of the workflow.",
+          "fa": "بازیاباطلاعات،برنامه‌نویس،تحلیل‌گرنتیجه،مفسر وبازبین مبتنیبرGPT-4پارامترساختاریافته،کدOpenStudio،خروجی وگزارش مبادله می‌کنند.CAD/DXF،اسنادHVAC،برنامه ومصرفاندازه‌گیری‌شدهورودی‌اند.OpenStudio/EnergyPlusشبیه‌سازیعددیراانجام می‌دهندوکاربرحضور دارد.",
+          "pages": [
+            3,
+            6,
+            20,
+            21
+          ]
+        },
+        {
+          "en": "Calibration uses 2018 heating measurements and a genetic algorithm with population 100, 20 generations, crossover probability 0.5 and mutation probability 0.2. Parameters and bounds are retrieved or confirmed before model runs. External numerical simulation evaluates candidates; the language model does not replace the building physics solver.",
+          "fa": "کالیبراسیونباانرژیگرمایش۲۰۱۸والگوریتمژنتیکجمعیت۱۰۰،۲۰نسل،تقاطع۰٫۵وجهش۰٫۲است.عاملکرانپارامتررادرJSONواپراتورکدتولیدمی‌کند.سناریوبویلربهASHPمدل،خروجی وحسابهزینه/کربن راتغییرمی‌دهد.",
+          "pages": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments and comparisons",
+        "fa": "مورد،معیاردستی وآزمونپرامپت"
+      },
+      "paragraphs": [
+        {
+          "en": "The real-building case evaluates geometry, heating-system modeling, schedules, simulation configuration, calibration and a boiler-to-air-source-heat-pump retrofit. Two modelers with six months and four years of experience require 32 and 8 hours, respectively, versus 48 minutes for Data2BEM. Prompt-style perturbations are tested; detailed supplementary traces are referenced but not included in the local PDF.",
+          "fa": "یکدفترکمبریجهندسه،گرمایش،برنامه،شبیه‌سازی،کالیبراسیون وبازسازیرا آزموده است.دومدل‌ساز مستقل با۶ماهوبیشاز۴سالتجربه،ورودییکسانوSketchUp/OpenStudioبدونLLMدارند.پرامپت با لحن،غلطاملایی وکلمهاضافی آزموده می‌شود.دادهS1–S7وشکلپیوستهمهدرPDFموجودنیستند.",
+          "pages": [
+            6,
+            8,
+            12,
+            14,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Reported results",
+        "fa": "نتایجکالیبراسیون،زمان وبازسازی"
+      },
+      "paragraphs": [
+        {
+          "en": "Calibration reports NMBE 2.91%, CV-RMSE 0.139 and R² 0.972. The simulated retrofit reduces energy cost from 16,164.25 to 9,026.32 (44.16%) and carbon tax from 7,813.19 to 1,621.49. These are model-based retrofit estimates, not measured savings after installation.",
+          "fa": "کالیبراسیونNMBE۲٫۹۱٪،CV-RMSE۰٫۱۳۹وR²۰٫۹۷۲؛زمان۴۸دقیقهدرمقابل۸و۳۲ساعتمدل‌سازاست.هزینهسالانهشبیه‌سازی۱۶۱۶۴٫۲۵به۹۰۲۶٫۳۲پوند(۴۴٫۱۶٪)ومالیاتکربن۷۸۱۳٫۱۹به۱۶۲۱٫۴۹می‌رسد.اینمقایسهمدل‌شده است،نه اندازه‌گیریپسازنصب.",
+          "pages": [
+            12,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations",
+        "fa": "محدودیت وبازتولیدنویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Validation concerns one richly documented building. Detailed room control and continuous updates are not tested; calibration is offline, the genetic algorithm is not universally suitable and peak-load discrepancies remain. The paper reports code at Zenodo DOI 10.5281/zenodo.17374005, while operational and design data are private. Real-time Twin adaptation remains future work.",
+          "fa": "اعتبارسنجییکساختمانیوغنایدادهلازماست.کنترلاتاقدقیقوبه‌روزرسانیپیوسته آزموده نشده.کالیبراسیونآفلاین،GAهمگانی نیست واختلافاوجباقیاست.کدZenodoباDOI10.5281/zenodo.17374005گزارش شدهامادادهخصوصی است؛Twinبلادرنگآینده است.",
+          "pages": [
+            16,
+            17
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Agentic generation and calibration of building models already exist. This is relevant to Twin-update engineering and to defining what our causal intervention contribution adds.",
+      "fa": "وجودمدل‌سازی/کالیبراسیونعامل‌محوررااثباتپیشینه می‌کند؛برایمهندسیبه‌روزرسانیTwinونوآوریمرتبطاست.",
+      "pages": [
+        3,
+        17
+      ]
+    },
+    "contribution": {
+      "en": "It contributes structured retrieval, coding and review interfaces plus an external simulation and calibration workflow.",
+      "fa": "قراردادبازیابی–کد–بازبینی وگردش‌کارشبیه‌سازی/کالیبراسیونبیرونی می‌دهد.",
+      "pages": [
+        3,
+        20,
+        21
+      ]
+    },
+    "employment": {
+      "en": "Adapt versioned calibration proposals and a reviewer interface in the isolated Operational Twin sandbox. Keep the Reference Twin frozen and require diagnostic evidence before accepting parameter changes. This is our proposed use, not an evaluated article result.",
+      "fa": "رابطپیشنهادکالیبراسیوننسخه‌داروبازبین درsandboxTwinعملیاتی اقتباس شود؛Twinمرجع ثابتماندوتغییرپارامترشاهدتشخیصی بخواهد.",
+      "pages": [
+        11,
+        16,
+        17
+      ]
+    },
+    "baseline": {
+      "en": "Use as a modeling and calibration helper rather than a mandatory control or diagnosis baseline. A calibration-workflow comparison is optional if input data and task scope can be matched.",
+      "fa": "کمکی است،نه خط‌مبنایکنترل/تشخیصاجباری.مقایسهکالیبراسیون فقطباورودیهمساناختیاریاست؛تولیدآفلاینData2BEMوظیفهمداخلهعلّیآنلاینمانیست.",
+      "pages": [
+        16,
+        17
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "The 48-minute comparison with two modelers is case-specific. Calibration fit does not identify equipment fault causes or prove measured post-retrofit recovery.",
+      "fa": "۴۸دقیقهدرمقابلدومدل‌سازمقایسهموردیاست،نه بهره‌وریجمعیتی.برازشکالیبراسیونعلتخطایاتعقیببازیابیواقعیرااثباتنمی‌کند.",
+      "pages": [
+        12,
+        14
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Calibration NMBE 2.91%, CV-RMSE 0.139, R² 0.972; modeling 48 minutes; simulated ASHP energy cost −44.16%.",
+      "fa": "کالیبراسیون۲٫۹۱٪/۰٫۱۳۹/۰٫۹۷۲؛مدل‌سازی۴۸دقیقه؛کاهشهزینهشبیه‌سازی۴۴٫۱۶٪.",
+      "pages": [
+        12,
+        14
+      ]
+    }
+  ],
+  "bibliography_start_page": 18,
+  "coverage_notes": {
+    "en": "Source text, original figure/table pages and bibliography inspected. Original source-page views preserve the complete graphics when individual crops are uncertain. Printed values only; no curve digitization. Project relevance and baseline recommendations are explicitly reviewer assessments. Supplementary material not supplied with the local PDF is not claimed reviewed.",
+    "fa": "متن،صفحات شکل/جدول وکتاب‌نامه بررسی شده‌اند.نمای صفحه اصلی تصویر کامل را درمرزبرش نامطمئن حفظ می‌کند.فقط عدد چاپ‌شده ثبت و منحنی تخمین زده نشده است.نقش پروژه وخط‌مبنا ارزیابی مستقل مرورگر است.پیوست بیرونی موجودنبوده،مطالعه‌شده ادعا نمی‌شود."
+  },
+  "figures": [
+    {
+      "id": "graphical-abstract",
+      "page": 1,
+      "caption": {
+        "en": "Graphical abstract (unnumbered).",
+        "fa": "چکیده تصویری بدون شماره."
+      },
+      "explanation": {
+        "en": "The cover graphic summarizes multi-source retrieval, programming and review, followed by model generation and iterative calibration. It is a summary of the workflow rather than an additional experiment.",
+        "fa": "تصویر،بازیابی چندمنبعی،برنامه‌نویسی وبازبینی وسپس تولیدمدل و کالیبراسیون تکراری را خلاصه می‌کند؛ آزمایش اضافی نیست."
+      },
+      "data": {
+        "en": "Printed highlights report modeling-time reduction >90% (48 minutes versus 8–32 hours), simulated energy cost reduction about 44% and carbon tax roughly fivefold lower. These summarize the main case and are not independent replications.",
+        "fa": "نکته چاپی:کاهش زمان بیش‌از۹۰٪(۴۸دقیقه درمقابل۸–۳۲ساعت)،کاهش هزینه شبیه‌سازی حدود۴۴٪ و مالیات کربن تقریباًپنج‌برابرکمتر؛ همان مورد اصلی است،نه تکرار مستقل."
+      }
+    },
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "Overview of automated building energy modeling.",
+        "fa": "پوشش مراحل مدل‌سازی تا کالیبراسیون و بازسازی را مقایسه می‌کند، نه دقت را."
+      },
+      "explanation": {
+        "en": "Compares task coverage of earlier frameworks and shows Data2BEM spanning model construction, calibration and retrofit assessment. Bars denote supported stages, not accuracy scores.",
+        "fa": "پوشش مراحل مدل‌سازی تا کالیبراسیون و بازسازی را مقایسه می‌کند، نه دقت را."
+      },
+      "data": {
+        "en": "Compares task coverage of earlier frameworks and shows Data2BEM spanning model construction, calibration and retrofit assessment. Bars denote supported stages, not accuracy scores.",
+        "fa": "پوشش مراحل مدل‌سازی تا کالیبراسیون و بازسازی را مقایسه می‌کند، نه دقت را."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "caption": {
+        "en": "Automated geometry modeling.",
+        "fa": "گردش بازیابی و برنامه‌نویسی هندسه و گفت‌وگوی ساده‌شده را نمایش می‌دهد."
+      },
+      "explanation": {
+        "en": "Information Retriever and Programmer collaborate on geometry. Illustrated dialogue is simplified; full interaction traces are in supplementary Data S3, which is not locally supplied.",
+        "fa": "گردش بازیابی و برنامه‌نویسی هندسه و گفت‌وگوی ساده‌شده را نمایش می‌دهد."
+      },
+      "data": {
+        "en": "Information Retriever and Programmer collaborate on geometry. Illustrated dialogue is simplified; full interaction traces are in supplementary Data S3, which is not locally supplied.",
+        "fa": "گردش بازیابی و برنامه‌نویسی هندسه و گفت‌وگوی ساده‌شده را نمایش می‌دهد."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "caption": {
+        "en": "Automated heating-system modeling.",
+        "fa": "مشخصات گرمایش به کد و پیکربندی مدل ساختمان تبدیل می‌شوند."
+      },
+      "explanation": {
+        "en": "Retrieved heating specifications become model code and a building heating configuration. Preserve the printed system relationships instead of assuming a generic HVAC model.",
+        "fa": "مشخصات گرمایش به کد و پیکربندی مدل ساختمان تبدیل می‌شوند."
+      },
+      "data": {
+        "en": "Retrieved heating specifications become model code and a building heating configuration. Preserve the printed system relationships instead of assuming a generic HVAC model.",
+        "fa": "مشخصات گرمایش به کد و پیکربندی مدل ساختمان تبدیل می‌شوند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 9,
+      "caption": {
+        "en": "Automated schedule modeling.",
+        "fa": "استخراج برنامه زمانی و تولید کد، شرح بهره‌برداری را وارد مدل می‌کند."
+      },
+      "explanation": {
+        "en": "Schedule extraction and code generation connect operational descriptions to model schedules. Dialogue details are deferred by the authors to supplementary Data S3.",
+        "fa": "استخراج برنامه زمانی و تولید کد، شرح بهره‌برداری را وارد مدل می‌کند."
+      },
+      "data": {
+        "en": "Schedule extraction and code generation connect operational descriptions to model schedules. Dialogue details are deferred by the authors to supplementary Data S3.",
+        "fa": "استخراج برنامه زمانی و تولید کد، شرح بهره‌برداری را وارد مدل می‌کند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 10,
+      "caption": {
+        "en": "Automated simulation settings.",
+        "fa": "پارامتر مدل و شبیه‌سازی بر پایه درخواست در فایل .osm یکپارچه می‌شوند."
+      },
+      "explanation": {
+        "en": "The Programmer integrates model and simulation parameters into a unified .osm file according to the request. This is implementation workflow evidence, not an independent test dataset.",
+        "fa": "پارامتر مدل و شبیه‌سازی بر پایه درخواست در فایل .osm یکپارچه می‌شوند."
+      },
+      "data": {
+        "en": "The Programmer integrates model and simulation parameters into a unified .osm file according to the request. This is implementation workflow evidence, not an independent test dataset.",
+        "fa": "پارامتر مدل و شبیه‌سازی بر پایه درخواست در فایل .osm یکپارچه می‌شوند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 11,
+      "caption": {
+        "en": "Automated calibration workflow and results.",
+        "fa": "گردش کالیبراسیون، حدود پارامتر و برازش را دارد:۲٫۹۱٪،۰٫۱۳۹ و۰٫۹۷۲."
+      },
+      "explanation": {
+        "en": "The panels show agent collaboration, parameter bounds and fitted energy behavior. Reported fit is NMBE 2.91%, CV-RMSE 0.139 and R² 0.972; no curve values are estimated.",
+        "fa": "گردش کالیبراسیون، حدود پارامتر و برازش را دارد:۲٫۹۱٪،۰٫۱۳۹ و۰٫۹۷۲."
+      },
+      "data": {
+        "en": "Printed calibration (range; before→after): heating setpoint 18–24°C, 24→24; infiltration 0.5–1.5 ACH, 1.0→1.3; equipment 3–22 W/m², 10→3.5; lighting 1.5–15 W/m², 15→1.5; people 30–200, 100→135; boiler water flow 0.0001–0.005 m³/s, 0.005→0.0022; boiler minimum part load 0.1–0.4, 0.15→0.28; maximum part load 0.6–0.9, 0.7→0.6; heating-coil UA 500–2000 W/K, 500→630; coil flow 0.001–0.006 m³/s, 0.001→0.001. Fit: NMBE 2.91%, CV-RMSE 0.139, R² 0.972. The figure prints guideline targets ±5%, <0.15 and >0.75.",
+        "fa": "پارامتر چاپی پیش/پس:ست‌پوینت۲۴/۲۴،نفوذ۱/۱٫۳ACH،تجهیز۱۰/۳٫۵،روشنایی۱۵/۱٫۵وات‌برمترمربع،افراد۱۰۰/۱۳۵،دبی بویلر۰٫۰۰۵/۰٫۰۰۲۲،بارجزئی کم۰٫۱۵/۰٫۲۸وزیاد۰٫۷/۰٫۶،UAکویل۵۰۰/۶۳۰،دبی کویل۰٫۰۰۱/۰٫۰۰۱.برازش۲٫۹۱٪،۰٫۱۳۹،۰٫۹۷۲و هدف راهنما±۵٪،کمتر۰٫۱۵وبیشتر۰٫۷۵است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 13,
+      "caption": {
+        "en": "Automated retrofit evaluation.",
+        "fa": "بازسازی بویلر به پمپ حرارتی شبیه‌سازی است؛ هزینه از۱۶۱۶۴٫۲۵ به۹۰۲۶٫۳۲ می‌رسد."
+      },
+      "explanation": {
+        "en": "The boiler-to-ASHP comparison is simulation based. Reported cost changes from 16,164.25 to 9,026.32, a 44.16% reduction; this is not measured post-installation saving.",
+        "fa": "بازسازی بویلر به پمپ حرارتی شبیه‌سازی است؛ هزینه از۱۶۱۶۴٫۲۵ به۹۰۲۶٫۳۲ می‌رسد."
+      },
+      "data": {
+        "en": "The boiler-to-ASHP comparison is simulation based. Reported cost changes from 16,164.25 to 9,026.32, a 44.16% reduction; this is not measured post-installation saving.",
+        "fa": "بازسازی بویلر به پمپ حرارتی شبیه‌سازی است؛ هزینه از۱۶۱۶۴٫۲۵ به۹۰۲۶٫۳۲ می‌رسد."
+      }
+    },
+    {
+      "id": "8",
+      "page": 14,
+      "caption": {
+        "en": "Modeling time comparison.",
+        "fa": "دو مدل‌ساز۳۲ و۸ساعت و سامانه۴۸دقیقه زمان برده‌اند؛ مقایسه موردی است."
+      },
+      "explanation": {
+        "en": "Two modelers require 32 and 8 hours, compared with 48 minutes for Data2BEM. This is a case-specific comparison with two people, not population-level productivity evidence.",
+        "fa": "دو مدل‌ساز۳۲ و۸ساعت و سامانه۴۸دقیقه زمان برده‌اند؛ مقایسه موردی است."
+      },
+      "data": {
+        "en": "Two modelers require 32 and 8 hours, compared with 48 minutes for Data2BEM. This is a case-specific comparison with two people, not population-level productivity evidence.",
+        "fa": "دو مدل‌ساز۳۲ و۸ساعت و سامانه۴۸دقیقه زمان برده‌اند؛ مقایسه موردی است."
+      }
+    },
+    {
+      "id": "9",
+      "page": 15,
+      "caption": {
+        "en": "Prompt-style effects on extraction and code naming.",
+        "fa": "اثر سبک پرامپت بر استخراج پارامتر و نام متغیر آزموده شده است."
+      },
+      "explanation": {
+        "en": "Perturbed prompt styles test calibration parameter extraction and generated variable names. The supplied main figure is retained; unavailable supplemental trials are not claimed reviewed.",
+        "fa": "اثر سبک پرامپت بر استخراج پارامتر و نام متغیر آزموده شده است."
+      },
+      "data": {
+        "en": "Perturbed prompt styles test calibration parameter extraction and generated variable names. The supplied main figure is retained; unavailable supplemental trials are not claimed reviewed.",
+        "fa": "اثر سبک پرامپت بر استخراج پارامتر و نام متغیر آزموده شده است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 16,
+      "caption": {
+        "en": "LLM multi-agent modeling framework.",
+        "fa": "نقش بازیابی، برنامه‌نویسی، تحلیل، تفسیر و بازبینی تقسیم شده‌اند."
+      },
+      "explanation": {
+        "en": "Information retrieval, programming, result analysis, interpretation and review divide the end-to-end modeling task. This distinguishes orchestration roles from the numerical simulator.",
+        "fa": "نقش بازیابی، برنامه‌نویسی، تحلیل، تفسیر و بازبینی تقسیم شده‌اند."
+      },
+      "data": {
+        "en": "Information retrieval, programming, result analysis, interpretation and review divide the end-to-end modeling task. This distinguishes orchestration roles from the numerical simulator.",
+        "fa": "نقش بازیابی، برنامه‌نویسی، تحلیل، تفسیر و بازبینی تقسیم شده‌اند."
+      }
+    },
+    {
+      "id": "11",
+      "page": 17,
+      "caption": {
+        "en": "Multi-source data and knowledge base.",
+        "fa": "داده هندسه، اسناد و بهره‌برداری زمینه مشترک عامل‌ها را می‌سازند."
+      },
+      "explanation": {
+        "en": "Documents, geometry and operational data supply the shared modeling context. This also explains the dependence on rich building documentation and private source data.",
+        "fa": "داده هندسه، اسناد و بهره‌برداری زمینه مشترک عامل‌ها را می‌سازند."
+      },
+      "data": {
+        "en": "Documents, geometry and operational data supply the shared modeling context. This also explains the dependence on rich building documentation and private source data.",
+        "fa": "داده هندسه، اسناد و بهره‌برداری زمینه مشترک عامل‌ها را می‌سازند."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "resources",
+      "page": 20,
+      "title": {
+        "en": "Key resources",
+        "fa": "منابع نرم‌افزار و شناسه بازتولید را دارد؛ کدZenodo عمومی ولی داده ساختمان خصوصی است."
+      },
+      "summary": {
+        "en": "Lists software and resource identifiers supporting reproducibility; code is reported at Zenodo 10.5281/zenodo.17374005 while source building data remain private.",
+        "fa": "منابع نرم‌افزار و شناسه بازتولید را دارد؛ کدZenodo عمومی ولی داده ساختمان خصوصی است."
+      }
+    }
+  ]
+}

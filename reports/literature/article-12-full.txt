@@ -1,0 +1,1295 @@
+
+=== PDF PAGE 1 ===
+DT-BEMS: Digital twin-enabled building energy management system for 
+information fusion and energy efficiency
+Jaemin Hwang a, Jiwon Kim a, Sungmin Yoon a,b,*
+a BIST Lab, Department of Global Smart City, Sungkyunkwan University, Suwon, 16419, South Korea
+b School of Civil Architectural Eng., and Landscape Architecture, Sungkyunkwan University, Suwon, 16419, South Korea
+ARTICLE INFO
+Handling Editor: Dr X Zhao
+Keywords:
+Digital twin
+Building energy management system
+Building energy efficiency
+Building energy diagnosis
+Virtual sensor
+ABSTRACT
+Building Energy Management Systems (BEMS) collect and monitor building operational data for energy effi-
+ciency but face challenges such as complex data management, reliability issues, and a lack of holistic approaches 
+to energy efficiency. To address these limitations, this study proposes Digital Twin-enabled BEMS (DT-BEMS), 
+integrating Digital Twin technology with BEMS to enhance functionality. DT-BEMS uses the Brick schema to 
+create a BEMS ontology and incorporates a virtual building model defined as a mathematical representation of 
+building physical behavior. This model includes three behavioral models: the energy imputation model, the 
+Predicted Mean Vote (PMV) virtual model, and the occupancy model. Holistic Operational Signature (HOS) 
+analyzes building operation data, identifying patterns and relationships for comprehensive efficiency evaluation. 
+In DT-BEMS, a rule-based HOS classifier enables real-time operational signature identification, generating energy 
+efficiency insights. The process of energy efficiency information generation was continuously updated 
+throughout the building operation stages to ensure reliability and accuracy. The proposed system was validated 
+using one month’s data from an office space, with data expanded at three-day intervals. DT-BEMS identified 
+eight operational signature types, achieving a 97.9 % accuracy rate when using just 12 days of data compared to 
+a full month. During the study, 23.5 % of operations were identified as inefficient, with energy waste during 
+unoccupied periods being the most prevalent (19.9 %). The virtual model improved identification accuracy by 
+4.6 % of the data. Real-time operational signature identification was implemented in the Dynamo environment, 
+highlighting DT-BEMS as a practical tool for enhancing building energy management, reducing inefficiencies, 
+and supporting sustainable building operations.
+Nomenclatures
+Abbreviations
+Adam adaptive moment estimation
+AEC Architecture, engineering and construction
+BEMS build energy management systems
+BIM building information modeling
+BMS building management system
+Clo clothing
+DH district heating
+DR demand response
+DT digital twin
+EHP electric heat pump
+GMM gaussian mixture model
+HOS holistic operational signature
+HVAC heating, ventilating, and air conditioning
+(continued on next column)
+(continued)
+Abbreviations
+IoT internet of things
+ISO international organization for standardization
+MAE mean absolute error
+MCMC Markov chain Monte Carlo
+MET metabolic equivalent task
+MLP multi-layer perceptron
+MPC model predictive control
+MRT mean radiant temperature
+O&M building operation and maintenance
+OS operational signature
+PIR passive infrared
+PLM product lifecycle management
+PMV predicted mean vote
+PV photovoltaic
+(continued on next page)
+* Corresponding author. BIST Lab, Department of Global Smart City, Sungkyunkwan University, Suwon, 16419, South Korea.
+E-mail address: S.Yoon@skku.edu (S. Yoon). 
+Contents lists available at ScienceDirect
+Energy
+journal homepage: www.elsevier.com/locate/energy
+https://doi.org/10.1016/j.energy.2025.136162
+Received 28 November 2024; Received in revised form 20 March 2025; Accepted 13 April 2025  
+Energy 326 (2025) 136162 
+Available online 14 April 2025 
+0360-5442/© 2025 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 2 ===
+(continued)
+Abbreviations
+RDF resource description framework
+ReLU rectified linear unit
+Symbols
+Cf correction function
+Cres sensible heat exchange through respiration
+E evaporation
+H heat loss through convection and radiation
+M metabolic rate
+n number of datasets
+x true value
+̂x predicted value
+W effective mechanical work
+Subscripts
+c cooling
+i counter
+res respiration
+1. Introduction
+In the face of the growing importance of addressing the climate crisis 
+and achieving carbon neutrality, building energy management has 
+emerged as a crucial task for a sustainable future. Approximately 40 % of 
+global energy consumption occurs in buildings, accounting for a sig-
+nificant portion of total carbon emissions [1]. Urbanization and eco-
+nomic growth have led to a continuous increase in building energy 
+consumption, making efficient energy management a necessity rather 
+than a choice [2]. Therefore, improving the energy efficiency of build-
+ings is essential for reducing carbon emissions and mitigating climate 
+change [3]. By effectively implementing energy management strategies, 
+it is possible to lower energy consumption, reduce greenhouse gas 
+emissions, and ultimately achieve sustainable development objectives.
+Building Energy Management Systems (BEMS) are important tools 
+used to monitor and control energy consumption within buildings, 
+thereby enhancing energy efficiency [4]. BEMS collect real-time data 
+through sensors and metering devices, analyze energy usage patterns, 
+and propose optimized energy management strategies [5]. These sys-
+tems integrate various building systems such as heating, cooling, light-
+ing, and ventilation to maximize energy-saving effects. As a result, they 
+reduce energy consumption, lower operational costs, and improve 
+occupant comfort, making BEMS an essential component of modern 
+building management. Furthermore, the information on building energy 
+behavior and efficiency analyzed through BEMS during the building 
+operation phase can significantly contribute to policy and certification 
+systems, urban management, and the advancement of zero-energy 
+building design and engineering in the construction industry [6]. This 
+comprehensive data supports the development of informed energy pol-
+icies, helps cities manage their energy resources more efficiently, and 
+drives the construction industry towards achieving higher standards of 
+sustainability [7].
+However, traditional BEMS have several limitations. Primarily 
+relying on sensor and metering-based monitoring incurs high installa-
+tion and maintenance costs. The complexity of managing large volumes 
+of data from various sensors can be challenging, and any issues with data 
+accuracy and reliability can compromise the effectiveness of energy 
+management. Additionally, these systems are often limited to data-based 
+analysis, restricting the application of advanced energy efficiency so-
+lutions [8]. There is also an insufficient understanding of the interaction 
+between building physical behavior and energy consumption, which 
+limits the potential for maximizing energy management effectiveness. 
+To address these issues, a more sophisticated and integrated approach is 
+necessary. By leveraging Digital Twin technology, which has been 
+actively studied in recent years, the capabilities of BEMS can be 
+enhanced [9]. This approach addresses the limitations of traditional 
+BEMS, enabling more efficient building management.
+The concept of the Digital Twin was first introduced at University of 
+Michigan presentation in 2002 aimed at establishing a Product Lifecycle 
+Management (PLM) center [10]. Digital Twin, initially proposed in the 
+manufacturing industry, has continuously developed and is utilized 
+across various industries for purposes such as monitoring, simulation, 
+optimization, and diagnosis, among others [11]. Recently, a plenty of 
+papers on Digital Twin have been published in the Architecture, Engi-
+neering and Construction (AEC) industry [12]. Similar to its use in 
+product lifecycle management in manufacturing, Digital Twin enables 
+effective building management throughout the building lifecycle in 
+construction. In particular, the focus of Digital Twin is on O&M (Oper-
+ation and Maintenance) stage, where Digital Twin significantly con-
+tributes to the operation and management of physical buildings [13].
+Digital Twin technology creates a virtual model of physical systems, 
+enabling real-time monitoring and prediction based on real-time data 
+[10]. Tao et al. [11] proposed a five-dimensional Digital Twin concept, 
+defined by physical entities, virtual models, services, and the connec-
+tions between them.These connections, or relations, encompass the ex-
+change of data, information, and knowledge. By applying Digital Twin 
+technology to BEMS, interaction between the physical building and the 
+virtual model, based on real-time data, becomes possible. From this 
+perspective, integrating Digital Twin with BEMS provides energy effi-
+ciency information or knowledge that reflects the building’s physical 
+behavior using real-time data. Therefore, combining Digital Twin 
+technology with BEMS can help address certain limitations, such as an 
+overreliance on data-based analysis and a lack of comprehensive un-
+derstanding of the building’s physical behavior and energy 
+consumption.
+Some studies have demonstrated the potential for integrating Digital 
+Twin technology with BEMS. Faham et al. [14] explored the application 
+potential of Digital Twin technology in building energy management, 
+highlighting its ability to monitor, optimize, and predict energy con-
+sumption in real time, thus contributing to sustainable building energy 
+management and cost reduction. Moreover, Grieves and Vickers [10] 
+have extensively discussed the potential of Digital Twins in enhancing 
+the predictability and optimization of complex systems, which is 
+applicable to building energy management as well. Zakharchenko and 
+Stepanets [15] proposed the concept of Digital Twin as an integrated 
+platform for Building Management Systems (BMS), Building Information 
+Modeling (BIM), and Internet of Things (IoT) in building automation to 
+enhance energy efficiency. Hwang et al. [16] proposed a Digital 
+Twin-based BEMS (DT-BEMS), discovering a potential energy savings of 
+17.2 % based on data from the past month. These studies underscore the 
+potential of Digital Twin technology to enhance the accuracy and 
+effectiveness of energy management systems. Applying Digital Twin 
+technology to building energy management allows for more accurate 
+energy management through real-time interaction between physical 
+buildings and virtual models. This enables the implementation of 
+advanced applications and significantly improves energy efficiency. 
+Digital Twins can detect system changes and anomalies in real-time, 
+allowing for immediate response, and contributing to long-term en-
+ergy savings and cost reductions.
+Despite the potential of integrating Digital Twin technology with 
+BEMS, the technical development for embedding DT into BEMS remains 
+insufficient, necessitating further studies [17]. The limitations of pre-
+vious studies are as follows: 
+● Absence of a detailed methodology for virtual modeling: Exist-
+ing research lacks robust virtual modeling methodologies and 
+improvement processes for virtual models during the O&M stage. 
+Virtual models must be developed in-situ and continuously to 
+accommodate the variability inherent in building operations [18].
+● Lack of data quality management within BEMS: There is a notable 
+deficiency in strategies to address data missing due to communica-
+tion errors, sensor failures, and data mapping issues within BEMS. 
+The quality of data acquired from BEMS significantly impacts 
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+2 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 3 ===
+applications aimed at improving building energy efficiency, thereby 
+necessitating improvements in data quality.
+● Insufficiency of comprehensive energy efficiency strategies and 
+real-time implementation methodologies: There is a lack of 
+comprehensive energy efficiency strategies and methodologies for 
+real-time implementation in buildings. Instead of merely reducing 
+absolute energy consumption, it is necessary to adopt a holistic 
+approach that considers the indoor environment from an occupant- 
+centric perspective and incorporates the building’s own power gen-
+eration in a carbon-neutral context. Additionally, methodologies that 
+can apply these energy efficiency strategies in real time to actual 
+buildings are essential.
+● Provision of operational solutions limited to a data-driven 
+approach: Existing systems propose energy efficiency strategies 
+that are restricted to a data-driven approach. However, meaningful 
+insights into building operational states should be provided by 
+leveraging multi-source data.
+The purpose of this study is to propose a Digital Twin-based Building 
+Energy Management System (DT-BEMS) and demonstrate the synergy 
+between Digital Twin technology and BEMS by presenting the concept 
+and implementation methodologies for DT-BEMS. DT-BEMS is a build-
+ing management system that integrates Digital Twin with traditional 
+BEMS to achieve real-time energy efficiency. The specific objectives of 
+this study are outlined as follows: 
+● In-situ and continuous construction of the virtual model: The in- 
+situ and continuous construction of the virtual model facilitates 
+ongoing adaptation and refinement, effectively reflecting real-time 
+changes in the building’s operational conditions. Yoon [19] 
+defined the virtual model in a Digital Twin as one that integrates 
+both geometrical information and a mathematical model to describe 
+the physical behavior of a building throughout its lifecycle. In-situ 
+modeling involves creating more accurate models tailored to the 
+specific operational conditions of the target building, compared to 
+those developed using external factors such as different buildings or 
+modeling environments [20]. This study utilizes operational data 
+from BEMS and intrusive measurement data to construct the virtual 
+model that describes the physical behavior of the building. Addi-
+tionally, the performance of the virtual model continuously improves 
+as data is accumulated during the building’s operational phase.
+● Improvement of BEMS data quality: This research enhances 
+operational data quality by representing the structure and architec-
+ture of BEMS in ontology from an informatics perspective. Moreover, 
+it employs machine learning-based virtual models that reflect the 
+physical behavior of the building.
+● Provision of comprehensive energy efficiency strategies based 
+on holistic operational signature (HOS): HOS assesses the opera-
+tional state comprehensively by identifying the operational signature 
+of the building. This study proposes a rule-based HOS classifier to 
+provide holistic energy efficiency strategies in real-time, considering 
+the indoor environment, power generation by the building’s facil-
+ities, and energy consumption.
+● DT-BEMS from the perspective of building operations infor-
+matics: This study analyzes the patterns of individual multi-source 
+data and applies virtual models to generate meaningful informa-
+tion. These insights are implemented as information on building 
+operational states through HOS-based operational signature identi-
+fication, providing a foundation for optimal building control. Addi-
+tionally, DT-BEMS is updated based on the operational data 
+accumulated during its operation, generating more reliable and ac-
+curate information and knowledge.
+DT-BEMS optimizes energy consumption, reduces maintenance 
+costs, and enhances occupant comfort by processing real-time data and 
+employing advanced applications. This contributes to sustainable 
+building operations and supports the achievement of carbon neutrality 
+goals. Additionally, this study provides a foundational reference for 
+developing diverse energy management solutions utilizing Digital Twin 
+technology in the future.
+The remainder of this paper is composed as follows. Section 2 in-
+troduces the methodology for identifying operational signatures in DT- 
+BEMS, while Section 3 explains how this method was applied to real 
+BEMS. Section 4 includes analytics of the results.
+2. Digital Twin-based building energy management system
+2.1. DT-BEMS concept
+DT-BEMS is an advanced energy management system from the 
+perspective of operational informatics that leverages real-time data from 
+BEMS to create a virtual model that reflects the dynamic characteristics 
+of a building throughout its lifecycle and provides holistic energy effi-
+ciency strategies in real-time. The concept of DT-BEMS proposed in this 
+study is shown in Fig. 1. DT-BEMS enables the development of energy 
+efficiency strategies through (1) BEMS informatics based on ontology 
+construction, (2) application of virtual models to generate behavior- 
+reflective data, (3) real-time operational signatures identification by 
+HOS, and (4) continuous updates on DT-BEMS across building opera-
+tions. BEMS informatics is designing a metadata schema of BEMS by 
+constructing BEMS ontology on Brick schema [21]. Virtual models that 
+describe the energy and physical behavior of buildings are generated by 
+leveraging operational data from BEMS. In the case of specific virtual 
+models, the performance can be improved by implementing intrusive 
+measurements, which require the temporary installation of sensors 
+within the building. After constructing the virtual model, the HOS 
+technique is employed as a comprehensive analytical method to provide 
+energy efficiency information. HOS analyses the operation of the 
+building system during the operational stage by identifying operational 
+signatures [22]. This study expands the existing HOS to real-time, 
+enabling real-time identification of operational signatures that 
+comprehensively incorporate multi-source data. Updates on DT-BEMS 
+are performed to reflect the building data more accurately. This 
+approach enables the development of energy efficiency strategies 
+considering the variability in building operations.
+2.2. Methods
+2.2.1. BEMS informatics
+BEMS informatics is defined as the representation of a building’s 
+architecture and the BEMS data collection system in the form of 
+ontology from an informatics perspective. BEMS informatics enables a 
+more precise understanding of the BEMS system and provides a foun-
+dation for efficient building system management. Additionally, it ad-
+dresses the mapping issues within BEMS data by representing the data 
+collection system, thereby improving the quality of the collected data. 
+BEMS ontology represents the control points and data collection pro-
+cesses within BEMS by leveraging Brick schema. Brick schema is a 
+metadata schema that standardizes semantic descriptions of the phys-
+ical, logical, and virtual assets in buildings and the relationships be-
+tween them [23]. Brick schema comprises three main entities: 
+● Location: represents physical spaces such as floor, space, or zone
+● Equipment: covers various devices like a meter, AHU, and chiller
+● Point: includes specific points that generate or utilize data, including 
+sensors, setpoints, and status indicators
+By using these entities to represent BEMS control points and defining 
+the relationships between them, BEMS ontology offers a clear and 
+structured view of the BEMS. This structured representation enhances 
+system understanding and supports effective building energy 
+management.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+3 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 4 ===
+2.2.2. Virtual model
+Virtual model is a mathematical model that represents the physical 
+behavior of building throughout its lifecycle [19]. By applying virtual 
+model, it is possible to predict variables that are challenging to measure 
+with physical sensors, enhance the quality of data collected within 
+buildings, and generate data that reflects the physical behavior of 
+buildings. In DT-BEMS environments, the virtual model includes three 
+types of behavioral models: energy imputation model, occupancy 
+model, and predicted mean vote (PMV) virtual model.
+The energy imputation model is defined as a data imputation method 
+for building energy variables, developed to predict energy consumption 
+and generation throughout the building lifecycle. One of the major is-
+sues related to the quality of BEMS data is the frequent occurrence of 
+missing values. These missing values degrade the quality of data 
+collected by BEMS, significantly impacting building energy analysis. To 
+address this issue, DT-BEMS applies a machine learning-based energy 
+imputation model, filling in missing values with data that reflects the 
+building’s physical behavior. This approach directly enhances the 
+quality of BEMS data.
+The occupancy model is an occupant detection model used to infer 
+the presence of occupants in specific spaces when occupant-detecting 
+physical sensors are unavailable. Building occupancy is crucial for the 
+efficient control of building systems and for reducing energy consump-
+tion based on occupancy status [24]. While machine learning can be a 
+method for occupancy modeling in environments where physical 
+sensor-based occupant detection is limited, obtaining ground truth of 
+occupancy data remains a significant challenge [25]. Furthermore, 
+buildings with clear purposes, such as office or residential buildings, 
+generally follow typical operational schedules. Consequently, this study 
+leverages operational schedules and operational data analysis to 
+construct the occupancy model.
+The PMV virtual model is a gray-box model designed to predict the 
+PMV for real occupied area. Among various indoor environmental fac-
+tors, the thermal environment is the one most directly related to 
+building system energy usage [26,27]. PMV is an index established by 
+Fanger for the evaluation of thermal environments [28]. PMV is a widely 
+used thermal environment assessment index, and its calculation is 
+formula-based, making it suitable for virtual model development and 
+facilitating measurement using physical sensors [29]. For these reasons, 
+DT-BEMS utilizes the PMV index for indoor environment evaluation. It 
+ranges from   3 to +3, where values approaching   3 indicate colder 
+conditions, values nearing +3 denote warmer conditions, and values 
+approximating 0 signify a state of comfort. Additionally, since indoor 
+environmental sensors are usually installed on walls, it is difficult to 
+accurately assess the thermal environment of the central areas where 
+people reside based solely on the variables measured by these sensors. 
+Therefore, developing the PMV model is essential for understanding the 
+thermal environment of real occupied areas and conducting compre-
+hensive energy efficiency analysis. Kim and Yoon [30] implemented a 
+model to predict the PMV of the real occupied zones using intrusive data 
+depending on the modeling method. Furthermore, they highlighted that 
+a gray box virtual model, which corrects PMV values calculated using 
+the ISO 7730 standard [31] through Bayesian estimation, showed su-
+perior predictive performance. The gray-box PMV virtual model neces-
+sitates intrusive measurements to gather PMV data of the target area, 
+requiring temporary installation of PMV sensors.
+Fig. 1. Digital Twin-enabled BEMS concept.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+4 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 5 ===
+2.2.3. Holistic operational signature
+The real-time provision of energy efficiency information in DT-BEMS 
+is achieved based on the HOS by utilizing the results of the virtual model 
+and the operational data from BEMS. HOS is a technique for identifying 
+the relationships and patterns among various variables during the 
+building operation stage, based on operational signature type analysis. It 
+enables a comprehensive efficiency analysis of building systems. Oper-
+ational signature is an analytical approach that reveals unique correla-
+tions between building energy variables and environmental variables. 
+Operational signature is useful for identifying energy consumption 
+patterns, operational conditions, and potential abnormal behaviors. 
+Hong et al. [22]. Introduced the HOS concept, including multiple 
+operational signature elements (x-OS) and representation types, for 
+comprehensive operational analysis of building-side district heating 
+(DH) substations. By applying HOS, it is possible to conduct 
+post-evaluations of building design during the operational phase, 
+analyze control quality within building systems, and assess 
+energy-saving potential. In DT-BEMS, the process of real-time opera-
+tional signature identification and energy efficiency information provi-
+sion through HOS is illustrated in Fig. 2. This includes data 
+preprocessing for pattern analysis through symbolic representation and 
+modeling a rule-based HOS classifier which performs real-time identi-
+fication, visualization, and interpretation of operational signatures. The 
+process of data preprocessing encompasses the assignment of meaning 
+to numerical data and is essential prior to HOS-based data analysis. To 
+enable clustering-based HOS for real-time applications, a rule-based 
+HOS classifier is required to identify operational signatures at each 
+data collection interval. HOS classifier utilizes data such as building 
+energy usage, solar power generation, and indoor environmental PMV to 
+identify the current state according to predefined operational signature 
+types. Upon completing the identification, energy efficiency insights are 
+generated through visualization and analysis. For building energy usage, 
+heating and cooling energy consumption are primarily analyzed as they 
+have the most significant impact on indoor environmental conditions 
+and represent the largest portion of energy consumption in buildings. 
+The HOS classifier is subsequently applied to provide a comprehensive 
+analysis of building energy efficiency, supporting informed 
+decision-making for energy management and optimization.
+2.2.4. Updates on DT-BEMS
+DT-BEMS is continuously updated as data accumulates throughout 
+the building operation phase, enabling the provision of energy efficiency 
+strategies that more accurately reflect building operational data. This 
+approach is designed to ensure that DT-BEMS can adapt to the vari-
+ability in building operations to generate more accurate and reliable 
+information and knowledge from an informatics perspective. This 
+process involves continuously incorporating building operational data 
+into the virtual model and HOS. The virtual model should be continu-
+ously updated as operational data from BEMS accumulates to reflect the 
+characteristics of physical building from an in-situ, site-centered 
+modeling perspective. For example, if an occupancy model uses indoor 
+CO2 concentrations to determine occupancy, the results vary as the CO2 
+threshold defining occupancy is consistently updated. Modifications to 
+the HOS occur during the data preprocessing stage as the criteria for 
+symbolizing data are continually adjusted throughout the building’s 
+operational phases. These changes subsequently refine the outcomes of 
+the HOS.
+3. Application of Digital Twin-based BEMS
+3.1. Target space
+A three-story building is utilized for the application of the DT-BEMS 
+as shown in Fig. 3. DT-BEMS environment was built for second floor 
+office space. A detailed description of the target building is provided in 
+Table 1. The target building employs a heating and cooling system based 
+on the Electric Heat Pump (EHP). The building’s energy generation 
+system employs PV (photovoltaic) panels for solar power production. 
+Building data utilized includes one month of BEMS data (from January 
+2021, recorded at 5-min intervals) and five days of intrusive measure-
+ment data. The intrusive measurement data were specifically used to 
+develop the PMV virtual model, thereby deriving the PMV of the actual 
+occupied area. DT-BEMS was implemented within the Dynamo envi-
+ronment, enabling the real-time identification of operational signatures 
+and determination of the operational status. Therefore, holistic energy 
+efficiency information of building systems was created. Furthermore, 
+the operational signatures identification was progressively updated to 
+achieve more accuracy as data accumulated every three days.
+Fig. 2. Process of HOS application in DT-BEMS.
+Fig. 3. Target space and intrusive data acquisition images.
+Table 1 
+Description of the target building.
+Element Description
+Location Gyeongbuk, South Korea
+Building usage Public service facility
+Target space Office area on 2F
+Heating, ventilating, and air conditioning 
+(HVAC) system
+- 2 packaged air conditioner units 
+(EHP)
+- A mechanical ventilation unit
+Energy generation PV panel-based solar power 
+generation system
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+5 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 6 ===
+3.2. Target BEMS informatics
+BEMS ontology of the target building was represented using the Brick 
+schema, with a focus on the second-floor office space. The building 
+consists of three floors and a parking lot, where solar power is generated 
+by PV panels. Energy consumption in the second-floor office space is 
+divided into three main components: heating and cooling, lighting, and 
+plug. This study primarily focused on heating and cooling usage, which 
+relies on two indoor units and two outdoor units. An indoor environ-
+mental sensor in the target space collects temperature, humidity, and 
+CO2 data.
+As shown in Fig. 4, the architecture of the BEMS system was designed 
+using the Resource Description Framework (RDF) and then converted 
+into a TTL file for visualization. The development of the BEMS ontology 
+facilitated the integration and interpretation of data from multiple 
+sources, establishing a foundation for comprehensive energy efficiency 
+strategy development for building managers. Additionally, the BEMS 
+ontology addresses data mapping issues by clearly defining control 
+points within the BEMS.
+3.3. Application of the virtual model
+3.3.1. Energy data imputation model
+To fill missing values in the energy dataset of the target BEMS, an 
+energy data imputation model based on an MLP (Multi-Layer Percep-
+tron) [32] was developed. For the HOS application, models were 
+developed for building heating and cooling energy consumption data as 
+well as solar power generation data. In the target BEMS system, there are 
+four types of cooling and heating energy data: the usage of outdoor units 
+1 and 2, and the usage of indoor units 1 and 2. However, the usage of 
+indoor units is minimal and infrequently measured. As a result, energy 
+data imputation models were developed for outdoor units 1 and 2, along 
+with solar power generation. The model structure and input variables for 
+each model are presented in Table 2.
+To address missing data for the next three days, the three types of 
+models were re-trained every three days as new data accumulated. For 
+example, data from days 1–3 was used to impute missing values for days 
+4–6. The imputed data from days 4–6 was then combined with the data 
+from days 1–3 to create a dataset covering days 1–6. The model trained 
+on data from days 1–6 was subsequently used to address missing data for 
+days 7–9.
+3.3.2. Occupancy model
+The process of occupancy model consists of an initial occupancy state 
+setting based on the operational schedule and occupancy updating by 
+using operational data. In operational data, building energy consump-
+tion and indoor environmental variables can be utilized in the occu-
+pancy model. However, if energy consumption is used for occupancy 
+estimation, it becomes difficult to detect energy waste in unoccupied 
+situations. Additionally, among the environmental variables measured 
+by indoor sensors, CO2 concentration is most strongly correlated with 
+occupancy status [33,34]. Therefore, as illustrated in Fig. 5, this study 
+constructed an occupancy model based on the operational schedule and 
+CO2 concentration.
+Since the target space is an office environment, daytime was set as 
+the initial occupied state, and nighttime was set as the unoccupied state. 
+In the initial occupied state, if the absolute CO2 concentration is low 
+(below the average value during occupied periods) and shows a 
+decreasing trend, it was updated to unoccupied state. In contrast, if the 
+CO2 concentration during initial unoccupied state is higher than the 
+average CO2 concentration during unoccupied time and increasing, the 
+status was changed to occupied. As the average CO2 concentration 
+changes with data accumulation, the occupancy model result was 
+updated every three days.
+3.3.3. PMV virtual model
+For the PMV virtual model construction, three days of intrusive data 
+were used. The modeling approach employed the Bayesian MCMC 
+(Markov Chain Monte Carlo) [35] based gray box modeling method 
+proposed in a previous study [30]. In this modeling approach, a white 
+box modeling process, utilizing the PMV equation (Equation (1)) to 
+calculate PMV, precedes the correction process through Bayesian 
+Fig. 4. BEMS ontology of target space.
+Table 2 
+Settings of energy imputation model.
+Model type Energy consumption Solar power generation
+Input variables energy consumption from 5 min prior, outdoor temperature, indoor 
+temperature, humidity, carbon dioxide concentration
+solar power generation from 5 min prior, outdoor temperature, indoor 
+temperature, humidity, carbon dioxide concentration
+Output variable Energy consumption (outdoor unit) Solar power generation
+Hidden layers (Number of 
+nodes for each layer)
+2 layers (64-64)
+Activation function ReLU
+Batch size/Epoch 32/200
+Loss function Mean squared error
+Optimizer Adam
+Ratio of training data set to 
+validation data set
+0.8/0.2
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+6 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 7 ===
+MCMC. 
+PMV=
+ 
+0.303e  0.0036M+ 0.28)×[(M  W)  H  Ec  Cres  Eres] (1) 
+(1) Setting Variables
+To calculate PMV, values of variables such as Clo, Met, MRT, air 
+velocity, dry-bulb temperature, and humidity are required. Among 
+these, dry-bulb temperature and humidity values were obtained through 
+the data from BEMS. Other variables were assumed based on the criteria 
+outlined in the ISO 7730 standard [31] as shown in Table 3. Considering 
+the characteristics of an office, MET value of 1.0 was used, representing 
+a person sitting comfortably. For Clo, a value of 1.0 was utilized to 
+reflect seasonal variations in the data. Since MRT cannot be directly 
+measured, it was assumed to be the same as the dry-bulb temperature 
+(data from BEMS). Air velocity was set to 0.1 m/s based on common 
+assumptions. Any errors resulting from these assumptions can be mini-
+mized through the correction process using Bayesian MCMC after the 
+calculations with the PMV equation.
+(2) Correction function
+To determine the correction function, constant, 1st-order, 2nd-order, 
+and 3rd-order equations were compared to assess the accuracy. For 
+evaluating accuracy, MAE (Mean Absolute Error) as shown in equation 
+(7) was utilized. As indicated in Table 4, calibration with 2nd-order 
+equation yielded the lowest MAE value. Additionally, as illustrated in 
+Fig. 6, the quadratic correction function provided the most accurate 
+adjustment with the true values. Based on these results, the 2nd-order 
+equation (Cf2) was adopted as the form of the correction function. 
+Through Bayesian MCMC, results as Table 5 for the correction param-
+eters (a, b, c) were obtained. Among these, the median values were used 
+to set the coefficients of the correction function. 
+Cf0= a (3) 
+Cf1= aX+ b (4) 
+Cf2= aX2+ bX+ c (5) 
+Cf3= aX3+ bX2+ cX+ d (6) 
+MAE= 1n∑ni=1 |xi  ̂xi| (7) 
+3.4. HOS application
+The application of HOS involves binning data to symbolize each 
+segment, followed by identifying the operational signature type using 
+the HOS classifier.
+3.4.1. Data binning
+Data binning in DT-BEMS refers to the process of segmenting various 
+data of BEMS to assign meaning to each segment. Data binning is 
+valuable for simplifying data, allowing for a holistic consideration of 
+diverse datasets. In this study, data binning was performed on three 
+types of data. Absolute criteria were applied to PMV data obtained 
+through the application of the PMV virtual model, while relative criteria 
+were used for energy consumption data and solar power generation 
+data.
+(1) Absolute criteria
+Data binning using absolute criteria is a method that performs seg-
+mentation based on fixed boundaries according to predefined standards. 
+PMV data was binned using absolute criteria based on its definition. The 
+PMV range of   0.5 to 0.5 was defined as the comfort zone, and the data 
+was divided into three segments based on this range. If the PMV value 
+was below   0.5, it was labeled as cold, and if it was above 0.5, it was 
+labeled as hot. Since the data used in this study was collected during the 
+winter, PMV values below the comfort zone (cold) were interpreted as 
+indicating an uncomfortable state, while PMV values above the comfort 
+zone (hot) were considered as an over-comfort state.
+(2) Relative criteria
+Data binning using relative criteria refers to the method of estab-
+lishing data intervals based on the distribution of existing data values. 
+Due to the significant variability of BEMS energy data, it is challenging 
+to establish fixed boundaries. Therefore, using relative criteria is ad-
+vantageous. For the binning of energy consumption and solar power 
+generation data, GMM (Gaussian Mixture Model) and K-means clus-
+tering were utilized as shown in Fig. 7. GMM was used to identify the 
+boundary between non-operating and operating states. For the oper-
+ating state, K-means clustering was then applied to determine the 
+boundaries for categorizing the data into three levels: low, middle, and 
+high. Based on these boundaries, energy consumption data and solar 
+power generation data were classified into four clusters. To continuously 
+update the boundaries and better reflect the characteristics of the data, 
+Table 3 
+PMV calculation variables assumptions.
+Variables Value Meaning
+MET 1.0 Seated, relaxed
+Clo 1.0 Typical indoor winter clothing ensemble
+MRT Dry-bulb temperature –
+Air velocity 0.1 –
+Table 4 
+Comparison of MAE by order of correction function.
+Correction 
+function
+MAE after 
+calibration
+Increase in MAE before and after 
+calibration
+Cf0 0.0446 0.1984
+Cf1 0.0410 0.2019
+Cf2 0.0384 0.2046
+Cf3 0.0666 0.1763
+Fig. 5. Occupancy determination process by occupancy model.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+7 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 8 ===
+Table 5 
+Correction parameters result.
+c b a
+Mean Median Standard devitaion Mean Median Standard devitaion Mean Median Standard devitaion
+0.1534 0.1383 0.3899 0.1039 0.1054 0.4069 0.0274 0.0406 0.3946
+Fig. 6. Comparison of PMV before and after calibration using four correction functions.
+Fig. 7. Boundary values extraction through clustering.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+8 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 9 ===
+this process was repeated every three days as new data accumulated. For 
+example, the boundaries from the binning process for days 1–3 were 
+used as the criteria for binning days 4–6 data. Additionally, the 
+boundaries from days 1–6 data were used to perform binning for the 
+data from days 7–9.
+3.4.2. Operational signatures identification using HOS classifier
+After applying data binning, operational signatures for each time 
+were identified in real-time using the rule-based HOS classifier shown in 
+Fig. 8. The types of operational signatures are defined as shown in 
+Table 6. Initially, the operational status of the building system is 
+determined using threshold values of energy consumption obtained 
+from data binning. When the building system is in operation, the oc-
+cupancy model is applied to ascertain whether the space is occupied. If 
+the target space is unoccupied, it is classified as Energy waste. Given 
+that the target area was heated, employing techniques such as radiant 
+heating may imply that energy consumption during periods of unoccu-
+pancy is not inherently inefficient. Nevertheless, as the current target 
+area is being heated by the EHP, considerable energy usage during un-
+occupied periods was deemed wasteful consumption. If the target space 
+was occupied, the operating status is then categorized into one of five 
+categories based on PMV, energy consumption, and solar generation 
+data. For example, a situation where the PMV exceeds 0.5 with high 
+energy usage indicates excessive heating. This condition is classified as 
+Recommendation for reduced operation. Conversely, if the PMV is 
+below   0.5 (indicating cold and uncomfortable) and energy usage is 
+high, it suggests that the heating load is excessive, resulting in classifi-
+cation as Inefficient operation.
+Since the results of behavioral models and data binning were upda-
+ted every three days, the identification outcomes also followed a three- 
+day update cycle. Datasets accumulated in three-day intervals were used 
+to identify the full month’s data, and the results of each dataset were 
+compared. Additionally, a comparison was made between the results 
+obtained before and after applying PMV virtual model and occupancy 
+model.
+3.5. Updates on implemented DT-BEMS
+Table 7 summarizes the process of updating the virtual model and 
+HOS through data accumulation in three-day intervals, as illustrated in 
+Fig. 9. The virtual model, excluding the PMV virtual model, was updated 
+every three days as data accumulated, aiming for continuous 
+performance enhancement over time. The energy imputation model was 
+updated by remodeling with an incrementally expanding dataset at 
+Table 6 
+Types of operational signatures.
+Current state Operational signature 
+type
+Explanation
+The building 
+system is not in 
+operation.
+Non-Operation The building system is in an idle 
+state with very low energy 
+consumption and relatively low 
+solar power generation.
+Surplus Energy The building system is not in 
+operation, and high solar power 
+generation occurs, resulting in 
+surplus energy.
+The target space is 
+unoccupied.
+Energy waste It is an energy waste situation 
+where a significant amount of 
+energy consumption occurs 
+despite the space being 
+unoccupied.
+The target space is 
+occupied.
+Uncomfortable 
+Operation
+This type arises when additional 
+operations are needed to achieve 
+comfort based on PMV but cannot 
+be performed due to insufficient 
+solar power generation, leading to 
+a prolonged state of discomfort.
+Recommendation for 
+Increased Operation
+Similar to the Uncomfortable 
+Operation type, this type is 
+characterized by PMV indicating 
+discomfort. However, with 
+relatively high solar power 
+generation, additional operations 
+are proposed to enhance indoor 
+comfort, even if they may result in 
+increased energy consumption.
+Proper Operation It represents an optimal 
+operational state where PMV is 
+comfort state and energy 
+consumption is at an appropriate 
+level.
+Recommendation for 
+Reduced Operation
+This type occurs when the indoor 
+environment exceeds the comfort 
+range, yet the system continues to 
+operate excessively, requiring a 
+reduction in operation.
+Inefficient Operation Inefficient Operation refers to a 
+state where PMV indicates 
+discomfort despite high energy 
+consumption.
+Fig. 8. HOS classifier for operational signatures identification.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+9 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 10 ===
+three-day intervals. Regarding the occupancy model, although the initial 
+estimation of occupancy based on the operational schedule remained 
+constant, the subsequent occupancy update outcomes derived from the 
+CO2 concentration were modified due to changes in the average CO2 
+value. The PMV virtual sensor, modeled based on intrusive measure-
+ments, was not updated as no additional intrusive measurements were 
+conducted. In the case of HOS, the algorithm of the HOS classifier 
+remained unchanged. However, as the relative criteria-based data 
+binning (clustering-based) for energy consumption and solar generation 
+data was updated every three days, the overall HOS results were also 
+affected.
+3.6. DT-BEMS in Dynamo interface
+The DT-BEMS environment was developed using the Dynamo inter-
+face with a focus on real-time application. Fig. 10 represents the 
+workflow of DT-BEMS for real-time operational signature identification. 
+Energy data and indoor environment data were integrated, and three 
+behavioral models within the virtual building model were applied. After 
+reflecting physical building behavior through the virtual building 
+model, data binning was conducted to symbolize the operational data. 
+Subsequently, the HOS classifier determined the operational signature 
+and energy efficiency information was generated. Operational signature 
+was determined for each timestamp in real-time, and after a one-day 
+analysis, the data was visualized using tools such as heatmaps and pie 
+charts.
+4. Results and discussion
+4.1. Virtual building model results
+4.1.1. The result of energy data imputation model
+Three types of models (outdoor unit 1, outdoor unit 2, and solar 
+power generation) were developed at three-day intervals, and their ac-
+curacy was evaluated using the R-square metric. Fig. 11 illustrates the 
+accuracy of models that were trained with data accumulated at three- 
+day intervals, and all models showed an increasing trend in accuracy 
+as the data accumulated. For outdoor unit 1, the R-squared value 
+increased from 0.792 to 0.885. Outdoor unit 2 demonstrated the largest 
+improvement, ultimately reaching an R-squared value of 0.973. In the 
+solar power generation model, a high overall accuracy was observed 
+Fig. 9. Dataset utilized based on data accumulated in three-day intervals.
+Fig. 10. Implementation of DT-BEMS in the Dynamo environment.
+Table 7 
+Types of operational signatures.
+Type Category Update Method of update
+Virtual 
+model
+Energy 
+imputation 
+model
+O Remodeling
+Occupancy 
+model
+O Adjustment of average CO2 value
+PMV virtual 
+model
+X –
+HOS Data binning O Modification of thresholds for grouping 
+energy consumption and solar 
+generation data
+HOS classifier X –
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+10 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 11 ===
+with a gradual increase in accuracy over time. By remodeling the energy 
+imputation model every three days, it gains the advantage of enhanced 
+accuracy as the DT-BEMS operates for longer durations and collects 
+more data.
+In the target BEMS system, missing data occurred as follows: 0.12 % 
+for outdoor unit data 1 and 2, and 0.03 % for solar power generation 
+data during the month. Using the energy imputation model, it was 
+possible to fill in missing values with data reflecting the energy behavior 
+of the building in real-time whenever missing data was detected.
+4.1.2. Results of the occupancy model
+Based on the occupancy model described in Section 3.3.2, the oc-
+cupancy in the target space was determined. For the month of January, 
+daytime was initially set as occupied and nighttime as unoccupied. 
+Subsequently, occupancy status was updated based on CO2 values. The 
+daily CO2 concentration trend for the entire month is illustrated in 
+Fig. 12(a). The line chart in Fig. 12(b) represents the average CO2 
+concentrations during occupied and unoccupied times which were 
+initially determined based on the operational schedule. The bar chart in 
+Fig. 11. Energy data imputation model accuracy as data accumulated (test set).
+Fig. 12. CO2 concentration information and occupancy model results.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+11 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 12 ===
+Fig. 12(b) illustrates the results of occupancy state updates based on CO2 
+concentrations. As the average CO2 concentration changed, the results of 
+the occupancy state update based on the occupancy model also varied 
+with the accumulation of the dataset. The proportion of initially occu-
+pied states updated to unoccupied states by the occupancy model 
+increased with data accumulation, reaching 31.6 %. In contrast, the 
+proportion of initially unoccupied states updated to occupied states 
+showed a decreasing trend as more data was collected.
+4.1.3. Results of the PMV virtual model
+Using temperature and humidity data from BEMS along with intru-
+sive data, the PMV virtual model was developed to predict the real 
+occupied area PMV. As shown in Fig. 13, the calculated PMV based on 
+indoor environment sensor data (orange) was calibrated using the PMV 
+virtual model (green). The application of the PMV virtual model resulted 
+in adjustments with a maximum of 0.348 and an average of about 0.129. 
+This indicates a significant difference between the PMV values calcu-
+lated using the temperature and humidity data from BEMS with the PMV 
+formula (Equation (1)) and the real occupied area PMV obtained 
+through the PMV virtual model application. The bar chart in Fig. 13
+represents two scenarios: the proportion of cases that were within the 
+comfort range (  0.5 to 0.5) in the initial calculation but fell outside the 
+comfort range after applying the PMV model (purple), and the propor-
+tion of cases that were outside the comfort range in the initial 
+Fig. 13. Difference between before and after PMV model application (Type 1 is initially within the comfort range (  0.5 to 0.5) that shifted outside after applying the 
+PMV model, Type 2 is initially outside the comfort range that moved inside after applying the PMV model.).
+Fig. 14. Data binning using relative criteria.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+12 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 13 ===
+calculation but entered the comfort range after applying the PMV model 
+(blue). 28.09 % of data fell outside the comfort range that was within the 
+comfort range before applying the virtual model. Conversely, 11.21 % of 
+the data that was originally outside the comfort range moved inside it 
+after applying the virtual model. This indicates that the PMV virtual 
+model not only calibrates PMV values but also enables a more accurate 
+assessment of the actual comfort level in the occupied area. Addition-
+ally, PMV values generally increased after applying the PMV model, 
+suggesting that the real occupied areas in the target building tend to 
+have relatively high PMV values due to heat generated by occupants and 
+equipment.
+4.2. Operational signatures identification by HOS
+4.2.1. Updates based on data accumulation at 3-day intervals
+(1) Data binning results
+The data binning method described in Section 3.3.1 was applied to 
+energy consumption, solar generation, and PMV data. In contrast to 
+PMV, which was segmented using predefined comfort ranges, energy 
+consumption and solar generation data were categorized with relative 
+criteria based on K-means and GMM clustering. As a result, as datasets 
+were expanded every three days, the boundary values for each segment 
+were updated. Fig. 14 presents the segmentation results of one month of 
+energy consumption and solar generation data when data was accu-
+mulated for three days, fifteen days, and a full month. Since the 
+boundary values defining high, middle, low, and non-operation states in 
+the heatmap constantly change, different results were obtained when 
+using the same dataset. Fig. 15 shows a heatmap of PMV data segmented 
+using absolute criteria.
+(2) The result of operational signatures identification using HOS 
+classifier
+Operational signatures were identified for the entire month’s data 
+using datasets accumulated at three-day intervals. The results of these 
+identifications varied with each 3-day data accumulation due to updates 
+in the energy imputation model, occupancy model, and data binning 
+with relative criteria. Fig. 16 depicts the degree of agreement between 
+the operational signatures identified using data accumulated every three 
+days and those identified with the full month’s data. As shown in the 
+figure, once 12 days of data are accumulated, the results achieve a 97.9 
+% agreement with the identification based on the entire month’s data. 
+This finding demonstrates that highly accurate results can be obtained 
+even with a reduced dataset, enabling the development of building en-
+ergy optimization strategies through HOS implementation in a more 
+efficient and expedited manner.
+Fig. 17 shows the results of diagnosing the operational signatures 
+over an entire month based on data gathered at three-day intervals. Each 
+bar illustrates the distribution ratio of a specific type throughout the 
+month. When identifying the entire month’s data using 1–3 days of 
+accumulated data compared to using the full month’s data, there was a 
+detection of 1.1 % more instances of uncomfortable operation. Addi-
+tionally, proper operation increased by 9.7 %, while energy waste types 
+decreased by 8.1 %. Ultimately, 3.6 % of the total data was identified as 
+having an uncomfortable indoor environment, comprising 1.4 % inef-
+ficient operation and 2.2 % uncomfortable operation. Additionally, 
+recommendation for reduced operation was detected in 0.2 % of the 
+Fig. 15. Data binning using absolute criteria (PMV).
+Fig. 16. Comparison of accuracy between verification results using 3-day cu-
+mulative data and those using full-month data for verifying the entire 
+month’s data.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+13 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 14 ===
+data. Overall, a high proportion of proper operation was observed, 
+which is assumed to be because the target building is not large-scale and 
+is well-managed. The most significant issue in the target space was the 
+high rate of energy waste, which accounted for 19.9 %, primarily 
+occurring during nighttime. This was primarily due to the continuous 
+operation of the heating systems on specific days of the month, such as 
+January 10th, 11th, and 12th, even during times deemed unoccupied 
+(Fig. 18). In such cases, where energy waste patterns appear dominantly, 
+integrating occupancy detection sensors with HVAC control algorithms 
+may be an effective approach. However, the significance of the DT- 
+BEMS proposed in this study lies in generating energy efficiency infor-
+mation by identifying diverse operational signatures throughout the 
+building operation phase.
+The results of such operational signature identifications contribute to 
+generating real-time energy efficiency insights. For example, in cases of 
+energy waste, DT-BEMS can provide information such as recommen-
+dations for turning off the building facility system to minimize further 
+energy waste because the system is in operation while no occupants are 
+present. Additionally, identifying the surplus energy type enables 
+building users to explore ways to utilize the excess energy effectively. 
+One of the approaches is to integrate with Smart Grid technology [36] to 
+facilitate energy trading between users or to implement energy man-
+agement strategies through demand response (DR) [37]. By connecting 
+this energy efficiency information to the building system, it is possible to 
+reduce unnecessary energy consumption, improve indoor thermal 
+comfort, and adjust equipment operation or set points accordingly. This 
+allows for intuitive, building-level energy optimization, enhancing 
+overall energy efficiency.
+4.2.2. Comparison before and after virtual building model application
+To examine the changes in operational signature identification re-
+sults following the application of behavioral models, Fig. 19 compares 
+the identification results before and after applying the PMV virtual 
+model and the occupancy model using the entire month’s data. In the 
+case of Fig. 19(a), PMV values were calculated by PMV equation based 
+on temperature and humidity data measured by the BEMS, without 
+applying a PMV virtual model. Additionally, occupant presence was 
+determined using only a typical occupancy schedule, without incorpo-
+rating an occupancy model. Under these conditions, the verification 
+results were dominated by non-operation (37.8 %) and proper operation 
+(36.1 %), while energy waste (15.4 %) and uncomfortable operation 
+(4.1 %) were also detected. When only PMV virtual sensor was applied, 
+Fig. 18. Operational signature heatmaps.
+Fig. 17. Identification results of operational signature types for the full month’s data using the HOS classifier based on 3-day cumulative data.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+14 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 15 ===
+compared to the pre-application results, uncomfortable operation 
+decreased by 1.7 %, inefficient operation by 0.5 %, while proper oper-
+ation increased by 2 %, and recommendations for reduced operation 
+rose by 0.2 %. In the uncomfortable operation type, PMV values were 
+’cold,’ while in proper operation, PMV values were ’comfort’ or ’hot.’ 
+For the recommendation for reduced operation category, PMV values 
+were ’hot.’ This suggests that the PMV values for certain time periods 
+noticeably increased with the application of the PMV virtual sensor. 
+These results align with the trend identified in Fig. 13, where the PMV 
+values increased after applying the virtual sensor. Since the PMV virtual 
+sensor was modeled based on intrusive data, it accurately reflects the 
+characteristics of the indoor environment. Therefore, it is evident that 
+the changes in results after applying the PMV virtual model offer a more 
+accurate identification by considering the thermal comfort of the real 
+occupied area. As demonstrated, the application of the PMV virtual 
+model allows for a more precise real-time identification of operational 
+signatures compared to when it was not applied. Moreover, a compari-
+son was made between determining occupancy based only on a typical 
+occupancy schedule and using the occupancy model. Proper operation 
+decreased by 3.4 %, while inefficient operation and uncomfortable 
+operation decreased by 0.7 % and 0.3 %, respectively. In contrast, the 
+detection of energy waste increased by 4.5 %.
+4.3. Essential requirements for the development of DT-BEMS
+The implementation of DT-BEMS in the target space, based on the 
+findings of this study, requires several essential conditions. First, at least 
+12 days of 24-h energy consumption, power generation, and indoor 
+Fig. 19. Comparison of operational signatures distribution before and after virtual building model application.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+15 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 16 ===
+temperature and humidity data must be available at a resolution higher 
+than 1 h. As shown in Fig. 16, achieving a certain level of accuracy in the 
+operational signature identification necessitates a minimum of 12 days 
+of data. When data was accumulated for more than 12 days, the R- 
+squared accuracy of the energy imputation models exceeded 0.8, 
+demonstrating high reliability. The occupancy model was designed to 
+require CO2 concentration data for both daytime and nighttime. 
+Therefore, the availability of 24-h data is necessary for its development. 
+While the HOS classifier can be modeled regardless of data resolution, a 
+resolution higher than 1 h is essential for heatmap-based visualization of 
+the target space’s operational signatures. Additionally, if the data res-
+olution is lower than 1 h, the real-time aspect may be diminished, and 12 
+days of data may be insufficient for DT-BEMS. In the case of the PMV 
+virtual model applied in this study, intrusive measurement data were 
+utilized, making the availability of such data a prerequisite.
+By utilizing these datasets, DT-BEMS energy efficiency strategies can 
+be developed in Dynamo environment.
+4.4. Limitations and future directions
+This study has several limitations. The occupancy model applied to 
+the target space determined occupancy status based on the operational 
+schedule and CO2 concentration in a constrained sensing environment. 
+However, further refinement of the model is necessary. Additionally, the 
+HOS classifier was designed with a focus on the characteristics of the 
+target building, which employs an EHP-based heating and cooling sys-
+tem. Moreover, it was only applied for a month (January) during winter. 
+Finally, while DT-BEMS effectively identified operational signatures and 
+generated energy efficiency information, the study lacks a quantitative 
+assessment of its impact on actual energy savings and operational cost 
+reductions.
+Considering these limitations, future research should proceed as 
+follows. First, ground truth data of occupancy status should be estab-
+lished by integrating passive infrared (PIR) sensors or installing cameras 
+in the target space, enabling the development of a more advanced oc-
+cupancy model. Second, the HOS classifier that can be generally applied 
+across various building systems should be developed and validated 
+under diverse climate conditions to ensure adaptability. Third, DT-BEMS 
+should be directly integrated with the building control system, incor-
+porating an ontology-based AI agent system. By leveraging BEMS 
+informatics, the AI agent can be specialized for the target building sys-
+tem and domain, thereby enabling building control based on operational 
+signature types. This integration will facilitate the quantitative evalua-
+tion of energy savings and operational cost reductions. Additionally, 
+integrating with control algorithms such as model predictive control 
+(MPC) can further maximize energy-efficient operation.
+5. Conclusion
+In this study, the concept of DT-BEMS was proposed and imple-
+mented in the Dynamo environment to verify the operational signatures 
+of the target space in real-time, thereby generating building energy ef-
+ficiency information. In BEMS informatics, the representation of the 
+BEMS data collection system and building structure in an ontology 
+format was completed to promote the digitalization of both the building 
+and the BEMS system. From the Digital Twin perspective, three types of 
+virtual models were developed. The energy imputation model improved 
+data quality by filling in missing values with data that reflect the 
+building’s physical behavior. The PMV virtual model enabled the esti-
+mation of PMV values within actual occupied zones. Additionally, an 
+occupancy model was implemented to determine occupancy status 
+based on operational schedules and CO2 data. By integrating the out-
+comes of the virtual models with data binning for pattern analysis, the 
+HOS classifier diagnosed the operational signatures of specific time 
+periods. Through this approach, DT-BEMS generated information and 
+knowledge about building energy efficiency, with updates occurring 
+every three days to improve accuracy and reliability. In the target 
+building, using 12 days of data achieved 97.9 % similarity in identifying 
+operational signatures compared to the results obtained using a full 
+month’s dataset. When analyzing the operational signatures over a full 
+month, 23.5 % of operations were identified as inappropriate. Further-
+more, by comparing operational signature diagnostics before and after 
+applying the virtual models, the importance of the virtual model was 
+emphasized.
+In conclusion, this study successfully established an information 
+system for analyzing building operational states by leveraging real-time 
+multi-source data from BEMS through DT-BEMS. Generally, diagnosing 
+a building’s operational state and identifying appropriate response 
+strategies require continuous expert-level decision-making in the 
+building environment domain. The energy efficiency strategy proposed 
+in this study is initially designed by experts and evolves autonomously 
+during the operational phase. This approach has the potential to 
+significantly reduce the cost and time required for building energy ef-
+ficiency improvements. Furthermore, this system establishes a founda-
+tion for effective building control that considers indoor environmental 
+conditions.
+CRediT authorship contribution statement
+Jaemin Hwang: Writing – original draft, Methodology, Investiga-
+tion. Jiwon Kim: Software, Resources, Methodology. Sungmin Yoon: 
+Writing – review & editing, Supervision, Conceptualization.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgement
+This work was supported by the National Research Foundation of 
+Korea (NRF) grant funded by the Korea government (MSIT) (No. 
+2022R1C1C1008541). This work is financially supported by Korea 
+Ministry of Land, Infrastructure and Transport (MOLIT) as 「 Innovative 
+Talent Education Program for Smart City」 .
+Data availability
+The authors do not have permission to share data.
+References
+[1] P´erez-Lombard L, Ortiz J, Pout C. A review on buildings energy consumption 
+information. Energy Build 2008;40:394–8. https://doi.org/10.1016/j. 
+enbuild.2007.03.007.
+[2] IEA homepage. n.d. https://www.iea.org/energy-system/buildings (accessed 
+March 10, 2025).
+[3] Hu S, Zhang Y, Yang Z, Yan D, Jiang Y. Challenges and opportunities for carbon 
+neutrality in China’s building sector—Modelling and data. Build Simulat 2022;15: 
+1899–921. https://doi.org/10.1007/s12273-022-0912-1.
+[4] Katipamula S, Brambley MR. Review article : methods for fault detection, 
+diagnostics, and prognostics for building systems—A review, part I. HVAC R Res 
+2005;11:3–25. https://doi.org/10.1080/10789669.2005.10391123.
+[5] Zhao H, Magoul`es F. A review on the prediction of building energy consumption. 
+Renew Sustain Energy Rev 2012;16:3586–92. https://doi.org/10.1016/j. 
+rser.2012.02.049.
+[6] Ahn K-U, Kim Y-J, Park C-S, Kim I, Lee K. BIM interface for full vs. semi-automated 
+building energy simulation. Energy Build 2014;68:671–8. https://doi.org/ 
+10.1016/j.enbuild.2013.08.063.
+[7] Attia S, Hensen JLM, Beltr´an L, De Herde A. Selection criteria for building 
+performance simulation tools: contrasting architects’ and engineers’ needs. J Build 
+Perform Simul 2012;5:155–69. https://doi.org/10.1080/19401493.2010.549573.
+[8] Ma Z, Cooper P, Daly D, Ledo L. Existing building retrofits: methodology and state- 
+of-the-art. Energy Build 2012;55:889–902. https://doi.org/10.1016/j. 
+enbuild.2012.08.018.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+16 
+Downloaded from https://iranpaper.ir
+
+
+=== PDF PAGE 17 ===
+[9] Wang W, Xu K, Song S, Bao Y, Xiang C. From BIM to digital twin in BIPV: a review 
+of current knowledge. Sustain Energy Technol Assessments 2024;67:103855. 
+https://doi.org/10.1016/j.seta.2024.103855.
+[10] Grieves M, Vickers J. Digital twin: mitigating unpredictable, undesirable emergent 
+behavior in complex systems. Transdisciplinary perspectives on complex systems. 
+Cham: Springer International Publishing; 2017. p. 85–113. https://doi.org/ 
+10.1007/978-3-319-38756-7_4.
+[11] Qi Q, Tao F, Hu T, Anwer N, Liu A, Wei Y, et al. Enabling technologies and tools for 
+digital twin. J Manuf Syst 2021;58:3–21. https://doi.org/10.1016/j. 
+jmsy.2019.10.001.
+[12] Rafsanjani HN, Nabizadeh AH. Towards digital architecture, engineering, and 
+construction (AEC) industry through virtual design and construction (VDC) and 
+digital twin. Energy and Built Environment 2023;4:169–78. https://doi.org/ 
+10.1016/j.enbenv.2021.10.004.
+[13] de Wilde P. Building performance simulation in the brave new world of artificial 
+intelligence and digital twins: a systematic review. Energy Build 2023;292:113171. 
+https://doi.org/10.1016/j.enbuild.2023.113171.
+[14] Tahmasebinia F, Lin L, Wu S, Kang Y, Sepasgozar S. Exploring the benefits and 
+limitations of digital twin technology in building energy. Appl Sci 2023;13:8814. 
+https://doi.org/10.3390/app13158814.
+[15] Zakharchenko A, Stepanets O. Digital twin value in intelligent building 
+development. Advanced Information Systems 2023;7:75–86. https://doi.org/ 
+10.20998/2522-9052.2023.2.11.
+[16] Hwang J, Kim J, Yoon S. Building energy efficiency through the application of 
+digital twin-based BEMS. Journal of the Korean Solar Energy Society 2024;44: 
+33–42. https://doi.org/10.7836/kses.2024.44.3.033.
+[17] Kaewunruen S, Rungskunroch P, Welsh J. A digital-twin evaluation of net zero 
+energy building for existing buildings. Sustainability 2018;11:159. https://doi.org/ 
+10.3390/su11010159.
+[18] Yoon S, Koo J. In situ model fusion for building digital twinning. Build Environ 
+2023;243:110652. https://doi.org/10.1016/j.buildenv.2023.110652.
+[19] Yoon S. Virtual building models in built environments. Developments in the Built 
+Environment 2024;18:100453. https://doi.org/10.1016/j.dibe.2024.100453.
+[20] Yoon S. In situ modeling methodologies in building operation: a review. Build 
+Environ 2023;230:109982. https://doi.org/10.1016/j.buildenv.2023.109982.
+[21] Balaji B, Bhattacharya A, Fierro G, Gao J, Gluck J, Hong D, et al. Brick : Metadata 
+schema for portable smart building applications. Appl Energy 2018;226:1273–92. 
+https://doi.org/10.1016/j.apenergy.2018.02.091.
+[22] Hong Y, Yoon S. Holistic operational signatures for an energy-efficient district 
+heating substation in buildings. Energy 2022;250:123798. https://doi.org/ 
+10.1016/j.energy.2022.123798.
+[23] Garrido-Hidalgo C, Fürst J, Cheng B, Roda-Sanchez L, Olivares T, Kovacs E. 
+Interlinking the brick schema with building domain ontologies. Proceedings of the 
+20th ACM conference on embedded networked sensor systems. New York, NY, 
+USA: ACM; 2022. p. 1026–30. https://doi.org/10.1145/3560905.3567761.
+[24] Ryu SH, Moon HJ. Development of an occupancy prediction model using indoor 
+environmental data based on machine learning techniques. Build Environ 2016; 
+107:1–9. https://doi.org/10.1016/j.buildenv.2016.06.039.
+[25] Chen Z, Jiang C, Xie L. Building occupancy estimation and detection: a review. 
+Energy Build 2018;169:260–70. https://doi.org/10.1016/j.enbuild.2018.03.084.
+[26] Humphreys MA. Quantifying occupant comfort: are combined indices of the indoor 
+environment practicable? Build Res Inf 2005;33:317–25. https://doi.org/10.1080/ 
+09613210500161950.
+[27] Lai JHK, Yik FWH. Perception of importance and performance of the indoor 
+environmental quality of high-rise residential buildings. Build Environ 2009;44: 
+352–60. https://doi.org/10.1016/j.buildenv.2008.03.013.
+[28] Fanger PO. Thermal comfort. Analysis and applications in. Environ Eng 1970;244.
+[29] Zhang S, Cheng Y, Olaide Oladokun M, Wu Y, Lin Z. Improving predicted mean 
+vote with inversely determined metabolic rate. Sustain Cities Soc 2020;53:101870. 
+https://doi.org/10.1016/j.scs.2019.101870.
+[30] Kim J, Yoon S. Virtual PMV sensor towards smart thermostats: comparison of 
+modeling approaches using intrusive data. Energy Build 2023;301:113695. 
+https://doi.org/10.1016/j.enbuild.2023.113695.
+[31] ISO 7730. Ergonomics of the thermal environment-analytical determination and 
+interpretation of thermal comfort using calculation of the PMV and PPD indices 
+and local comfort criteria. 2005.
+[32] McCulloch WS, Pitts W. A logical calculus of the ideas immanent in nervous 
+activity. Bull Math Biophys 1943;5:115–33. https://doi.org/10.1007/ 
+BF02478259.
+[33] Franco A, Leccese F. Measurement of CO2 concentration for occupancy estimation 
+in educational buildings with energy efficiency purposes. J Build Eng 2020;32: 
+101714. https://doi.org/10.1016/j.jobe.2020.101714.
+[34] Szczurek A, Maciejewska M, Pietrucha T. Occupancy determination based on time 
+series of CO2 concentration, temperature and relative humidity. Energy Build 
+2017;147:142–54. https://doi.org/10.1016/j.enbuild.2017.04.080.
+[35] Metropolis N, Rosenbluth AW, Rosenbluth MN, Teller AH, Teller E. Equation of 
+state calculations by fast computing machines. J Chem Phys 1953;21:1087–92. 
+https://doi.org/10.1063/1.1699114.
+[36] Massoud Amin S, Wollenberg BF. Toward a smart grid: power delivery for the 21st 
+century. IEEE Power Energy Mag 2005;3:34–41. https://doi.org/10.1109/ 
+MPAE.2005.1507024.
+[37] Palensky P, Dietrich D. Demand side management: demand response, intelligent 
+energy systems, and smart loads. IEEE Trans Ind Inf 2011;7:381–8. https://doi. 
+org/10.1109/TII.2011.2158841.
+J. Hwang et al.                                                                                                                                                                                                                                  Energy 326 (2025) 136162 
+17 
+Downloaded from https://iranpaper.ir

@@ -1,0 +1,2666 @@
+=== PDF PAGE 1 ===
+Human-in-the-loop preference calibration for home energy management 
+via LLM-enabled contract-constrained language interfaces☆
+Zeqing Wu a, Yunfei Mu a,*, Jiarui Zhang a,b,*, Yue Zhou a, Hongjie Jia a, Yanze Xu a, Yilun Du a
+a State key laboratory of Smart Power Distribution Equipment and System, Tianjin University, China
+b School of Energy (National Industry-Education Platform for Energy Storage), Tianjin University, Tianjin, 300350, China
+HIGHLIGHTS
+• A contract-constrained LLM interface converts feedback into structured HEMS events.
+• Explicit and vague intents follow distinct paths for preference calibration.
+• CIPU updates user profiles with bounded projection and trust-region stabilization.
+• MPC coordinates HVAC and EV control under safety-constrained execution.
+• Vs. Survey MPC, complaints fall 74.46% and final mismatch up to 71.43%.
+ARTICLE INFO
+Keywords:
+Home energy management
+Human-in-the-loop
+Large language models
+Preference calibration
+Model predictive control
+ABSTRACT
+As residential energy systems become increasingly electrified and coordination-intensive, home energy man-
+agement systems (HEMS) must operate economically while remaining aligned with evolving user-authorized 
+comfort and service boundaries. Existing personalization approaches rely on questionnaire initialization, fixed 
+preference parameters, or indirect behavioral corrections, limiting alignment under changing needs and the use 
+of runtime natural-language feedback for long-horizon calibration. This paper proposes a large language model 
+(LLM)-enabled human-in-the-loop framework that converts user utterances into authorization-aware, contract- 
+constrained, machine-checkable events for downstream control and preference updating. The LLM is a contract- 
+constrained semantic interface, not a direct controller. Explicit intents support bounded execution and direct 
+profile correction, whereas vague feedback requires option negotiation and user confirmation before bounded 
+updating. A Contract-Informed Preference Update (CIPU) mechanism combines structured interaction evidence 
+with projection and trust-region stabilization, while model predictive control remains the safety-constrained 
+execution layer. In simulations, the proposed method reduces normalized preference distance by 22.50% and 
+complaints by 74.46% relative to Survey MPC across three role-conditioned profiles. On a controlled 188-utter-
+ance language-interface benchmark, the proposed interface achieves 100% structured-event exact match and a 
+0% parser-level false direct-execution rate. Closed-loop ablations show 59.40% fewer complaints than the 
+explicit-only variant, while event-log auditing of the no-contract-gate variant yields a 36.90% event-interface 
+mismatch rate after gate removal. Under mid-horizon preference drift, final preference mismatch is reduced 
+by 44.09% on average and up to 71.43% relative to Survey MPC.
+☆ This article is part of a Special issue entitled: ‘Large Energy Models’ published in Applied Energy.
+* Corresponding authors at: State key laboratory of Smart Power Distribution Equipment and System, Tianjin University, China.
+E-mail addresses: 2020201411@tju.edu.cn (Z. Wu), yunfeimu@tju.edu.cn (Y. Mu), jerry_zhang@tju.edu.cn (J. Zhang), zhouyue68@cardiff.ac.uk (Y. Zhou), 
+hjjia@tju.edu.cn (H. Jia), xyz0326_@tju.edu.cn (Y. Xu), 2025234388@tju.edu.cn (Y. Du). 
+Contents lists available at ScienceDirect
+Applied Energy
+journal homepage: www.elsevier.com/locate/apenergy
+https://doi.org/10.1016/j.apenergy.2026.129073
+Received 27 May 2026; Received in revised form 21 September 2026; Accepted 13 October 2026  
+Applied Energy 427 (2027) 129073 
+Available online 20 October 2026 
+0306-2619/© 2026 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 2 ===
+1. Introduction
+1.1. Background and motivation
+As end-use electrification deepens, the operational complexity of the 
+energy transition is increasingly shifting from the traditional supply side 
+to end-use energy systems. The IEA reports in Electricity 2026 that 
+global electricity demand grew by about 3% year-on-year in 2025 and is 
+projected to increase by around 3.6% per year on average during 
+2026–2030 [1]. In parallel, Energy Efficiency 2025 reports that build-
+ings account for roughly 30% of global energy demand, with residential 
+buildings contributing about 70% of building energy use [2]. Under this 
+trend, homes are evolving into small multi-device energy systems in 
+which critical loads such as HVAC and electric vehicle (EV) charging 
+must be continuously coordinated under time-varying prices, weather 
+conditions, and user routines. U.S. EIA residential end-use statistics 
+further show that space cooling and space heating remain among the 
+major household electricity end uses [3]. Accordingly, home energy 
+management systems (HEMS) can no longer be viewed as static sched-
+uling tools. Their practical effectiveness increasingly depends on 
+whether automated control decisions can remain aligned with residents' 
+evolving comfort, service, and cost-related requirements during sus-
+tained operation.
+A fundamental challenge is that the controllability of critical residential 
+loads is not determined by device physics alone. It is more appropriately 
+understood as user-conditioned operational flexibility, jointly shaped by 
+comfort tolerance, temporary tasks, behavioral preferences, and willing-
+ness to accept control actions. Consequently, system-level coordination 
+demand does not automatically translate into callable household control 
+authority. Stable coordinability can be preserved only if HEMS can 
+continuously perceive, confirm, and maintain user-authorized controllable 
+boundaries over time. This makes sustained user alignment not an auxiliary 
+feature, but a core requirement for practical residential energy coordina-
+tion. The urgency of this requirement is reinforced by the fact that, ac-
+cording to the IEA's Global Energy Review 2025, electricity use in buildings 
+increased by more than 600 TWh in 2024, accounting for nearly 60% of the 
+global electricity-demand increment that year, with air-conditioning 
+growth as an important driver [2].
+In real home settings, however, such boundaries are often context- 
+dependent, evolving, and difficult to express through fixed parameters 
+alone. Users may need to communicate immediate requests, nuanced 
+comfort corrections, or gradual shifts in operating preference, and these 
+signals are naturally expressed in language rather than in predefined nu-
+merical forms. Prior work has demonstrated the feasibility of natural- 
+language interfaces in related cyber-physical and IoT settings [4]. This 
+makes natural language a practical and low-friction channel for conveying 
+high-level user intent, but it also creates a critical interface mismatch: user 
+utterances are semantically rich yet unstructured, whereas downstream 
+control and optimization require consistent, machine-checkable inputs. 
+Moreover, runtime language feedback often mixes different control se-
+mantics, including directly executable instructions and longer-horizon 
+preference evidence. Without a robust interface that can separate and 
+stabilize these signals, short-term expressions may interfere with long-term 
+preference calibration, weakening sustained alignment between control 
+actions and user needs. A central question for modern HEMS is therefore 
+how natural-language feedback can be transformed into stable, verifiable, 
+and reusable evidence for both real-time execution and long-horizon 
+preference updating.
+1.2. Related work and motivation for this study
+Existing HEMS personalization studies have mainly incorporated user 
+needs in two ways. One line parameterizes user needs through comfort 
+ranges, preference weights, or control-related settings and then embeds 
+these quantities into scheduling or optimization models. For example, Liu 
+et al. developed a data-driven, uncertainty-aware preference modeling 
+pipeline and incorporated the identified preference levels into multi- 
+objective HEMS scheduling [5], while Ren et al. combined comfort eval-
+uation with reinforcement learning-based decision making to address 
+control under uncertain household parameters [6]. Another line adapts 
+preferences during operation using indirect feedback signals, such as 
+thermostat overrides or online behavioral traces. Elehwany et al. learned 
+preferences from thermostat override behavior [7], and Sha et al. contin-
+uously updated control-relevant models through online learning [8]. 
+Taken together, these studies have moved HEMS from one-shot setup to-
+ward dynamic adaptation. However, by representing user needs primarily 
+as preset parameters or by inferring them indirectly from sparse behavioral 
+evidence, they remain limited by a relatively low-bandwidth feedback 
+loop. As a result, they are not well suited to absorb semantically rich run-
+time language feedback as explicit, reusable evidence for sustained closed- 
+loop calibration.
+To make such semantically rich runtime feedback usable by HEMS, 
+the system must first identify the user's intent and determine whether 
+the utterance should trigger control-related processing. Wu et al. 
+developed SCADA-NLI, which combines hierarchical intent classifica-
+tion with semantic parsing to translate natural-language queries and 
+control instructions into structured intermediate commands, achieving 
+96.5% intent-recognition accuracy and 88.47% instruction-parsing ac-
+curacy [9]. Larson et al. constructed an evaluation dataset covering 150 
+intents across 10 domains and showed that benchmark classifiers per-
+formed well on supported intents but struggled to identify out-of-scope 
+queries [10]. These studies show that conventional intent recognition 
+and scripted parsing pipelines can effectively map language into 
+machine-readable representations when task classes and semantic 
+boundaries are specified in advance. In sustained HEMS operation, 
+however, the same temperature or SOC value may denote a requested 
+target, a current measurement, a historical record, or a candidate option, 
+while some utterances express only an adjustment direction and others 
+contain no current control request. Covering these cases with predefined 
+rules or fixed intent labels requires the relevant expressions and se-
+mantic roles to be specified beforehand, limiting their ability to process 
+open-form runtime feedback.
+To interpret such open-form expressions, large language models 
+(LLMs) have opened new possibilities for natural-language interaction in 
+building and energy systems. In building operation and maintenance, Li 
+et al. mapped natural-language queries to database access and question- 
+answering responses using LLM-based methods [11], while Chen et al. 
+developed a domain-adapted large-model framework for building en-
+ergy system O&M with integrated domain knowledge [12]. At a broader 
+methodological level, LLMs have also been explored for building load 
+forecasting [13] and for more general building energy management 
+tasks [14]. Human-in-the-loop mechanisms have likewise been explored 
+through user confirmation, overrides, and feedback correction in 
+building- and control-related settings. However, while LLMs are effec-
+tive for query assistance, advisory support, and local interaction, a 
+fundamental tension remains between the non-deterministic, open- 
+ended nature of language generation and the strict feasibility re-
+quirements of constraint-based control. This tension becomes especially 
+important when moving from read-oriented assistance to closed-loop 
+control participation. In such settings, unconstrained language outputs 
+cannot be directly treated as executable control signals. What is still 
+missing is a constrained intermediate representation that can transform 
+mixed-semantic runtime feedback into stable, verifiable, and reusable 
+evidence for both real-time execution and long-horizon preference 
+calibration. This unresolved interface problem directly motivates the 
+contract-constrained framework developed in this paper.
+1.3. Research gaps
+Based on the above review, we identify three key research gaps. 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+2 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 3 ===
+(1) First, a stable mechanism for long-horizon preference cali-
+bration during sustained HEMS operation is still missing. 
+Existing HEMS personalization methods have progressed in both 
+preset parameter modeling and in-operation adaptation, yet user 
+needs are still commonly treated as initialization priors or updated 
+only indirectly through sparse behavioral traces. For critical resi-
+dential loads, however, coordinability is jointly conditioned by 
+comfort tolerance, temporary tasks, and willingness to accept 
+control actions. User-authorized controllable boundaries there-
+fore evolve during operation rather than remaining fixed at system 
+startup. Although parts of this dynamic have been recognized, 
+current approaches still lack an online mechanism that can 
+continuously maintain and recalibrate these boundaries over time.
+(2) Second, runtime natural-language feedback has not yet 
+formed a stable intermediate representation for closed-loop 
+control. Large language models have made natural-language 
+interaction increasingly accessible in building and energy appli-
+cations, but most existing studies still use language primarily for 
+query answering, suggestion generation, or local task support. 
+From the perspective of sustained HEMS operation, semantically 
+rich runtime feedback must first be transformed into a consistent, 
+verifiable, and reusable intermediate form before it can serve as 
+valid control and updating evidence. Such a stable interface layer 
+is still largely missing.
+(3) Third, mixed-semantic feedback still lacks a unified but 
+differentiated closed-loop treatment. In practical home set-
+tings, runtime feedback often combines directly executable re-
+quests with longer-horizon preference evidence and expressions 
+that should not trigger a new control action. These signals carry 
+different meanings for control execution and profile updating, yet 
+existing approaches still do not separate them clearly enough. As 
+a result, short-term supervisory expressions may interfere with 
+long-term preference correction, while longer-horizon preference 
+signals may be reduced to local command handling. This se-
+mantic conflation weakens long-run alignment with evolving 
+user requirements and increases interference between real-time 
+execution and subsequent preference calibration.
+1.4. Contribution
+To address these gaps, this paper proposes a human-in-the-loop 
+closed-loop framework for sustained HEMS operation that enables 
+runtime natural-language feedback to enter control and preference 
+updating through a stable and machine-checkable interface. Rather than 
+using the large language model as a generic assistant, we position it as a 
+contract-constrained language interface between user expressions and 
+downstream control. The methodological focus lies in the controlled 
+transformation of language feedback into reusable interaction evidence 
+and online preference calibration, while MPC remains the constrained 
+execution layer. The main contributions are as follows. 
+(1) First, we establish a contract-constrained language interface 
+for closed-loop HEMS. This interface transforms user utterances 
+into structured, machine-checkable interaction events that 
+distinguish directly executable requests, negotiation-required 
+preferences, and expressions that should trigger no new action, 
+thereby bridging the mismatch between semantically rich lan-
+guage input and constraint-based downstream control. As a 
+result, runtime language feedback no longer remains at the level 
+of transient dialogue, but can be incorporated into the HEMS loop 
+through a stable intermediate representation.
+(2) Second, we develop a differentiated human-in-the-loop 
+handling mechanism for mixed-semantic feedback. Explicit 
+requests and vague preference feedback are allowed to enter the 
+same closed loop through distinct pathways: directly executable 
+signals support bounded execution and stronger profile 
+correction, whereas less specific signals are processed through 
+interpretable negotiation with user confirmation before bounded 
+updating. Expressions that contain no current control request 
+remain outside these active pathways. This design separates 
+short-term execution needs from long-horizon calibration re-
+quirements and reduces their mutual interference.
+(3) Third, we propose the Contract-Informed Preference Update 
+(CIPU) mechanism for online long-horizon preference cali-
+bration under preference drift. By combining structured 
+interaction evidence with contextual information, bounded pro-
+jection, and trust-region stabilization, CIPU continuously updates 
+the preference profile while limiting the effect of transient intent 
+expressions. This CIPU-based updating design, together with its 
+stability-oriented analytical support, enables more stable prefer-
+ence tracking and better long-run alignment between user needs 
+and control outcomes than one-shot preference setting or ap-
+proaches relying only on sparse behavioral evidence.
+1.5. Paper organization
+The remainder of this paper is organized as follows. Section 2 pre-
+sents the HEMS modeling framework and MPC formulation. Section 3 
+introduces the contract-constrained language interface, differentiated 
+handling of mixed-semantic feedback, and the CIPU-based online pref-
+erence calibration method. Section 4 presents the benchmark, language- 
+interface and mechanism ablation, and drift-tracking studies and dis-
+cusses the corresponding results. Section 5 concludes the paper.
+2. Control-oriented HEMS modeling and MPC formulation
+This section starts from the overall control problem of the home 
+energy management system and establishes a unified modeling foun-
+dation for the subsequent analysis. In this study, the HEMS is formulated 
+as a closed-loop decision-making system that links environmental 
+sensing with device-level actuation, as shown in Fig. 1. It continuously 
+integrates indoor and outdoor states, weather conditions, electricity 
+prices, and user requirements, and coordinates key residential loads 
+under the joint constraints of device capabilities, operational limits, and 
+service objectives [15]. From this overall perspective, HVAC and EV 
+charging are selected as the main modeling targets, since both exhibit 
+significant energy impacts, strong temporal coupling, and service attri-
+butes closely related to user experience, thereby capturing the core 
+characteristics of multi-device coordination at the household level. On 
+this basis, this section develops unified models of building thermal dy-
+namics, HVAC execution mechanisms, and EV charging dynamics, and 
+formulates the HEMS optimization and control problem within an MPC 
+framework.
+2.1. Building thermal state evolution model
+This study adopts a 3R2C resistance–capacitance (RC) model to 
+describe building thermal state evolution. A lumped-parameter RC 
+network is used to represent heat transfer between indoor air and the 
+outdoor environment, between indoor air and the building thermal 
+mass, and between the thermal mass and the outdoor environment.
+Let Ta denote indoor air temperature and Tm denote the aggregated 
+building thermal mass temperature. The 3R2C model consists of two 
+coupled energy-balance equations: the air node exchanges heat with the 
+outdoor environment and the thermal mass, while the mass node ex-
+changes heat with both the air node and the outdoor environment. The 
+net HVAC thermal input Qhvac is applied to the air node. Solar radiation 
+gains and internal heat gains are treated as external disturbances acting 
+on either the air node or the mass node.
+Accordingly, the continuous-time dynamics can be written as 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+3 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 4 ===
+Ca
+dTa
+dt = Gao(Tout  Ta)+ Gam(Tm  Ta)+ Qhvac+ Qgains,a + Qgaini,a
+Cm
+dTm
+dt = Gmo(Tout  Tm)+ Gam(Ta  Tm)+ Qgains,m + Qgaini,m
+(1) 
+where Ca and Cm denote the thermal capacitances of the air node and the 
+mass node, Gao, Gam, Gmo denote the heat-transfer conductances, Tout 
+denotes outdoor air temperature, and Qhvac denotes the net HVAC 
+thermal power injected into the air node. The disturbance terms Qgains,a 
+and Qgains,m denote solar radiation gains acting on the air node and the mass 
+node, respectively, while Qgaini,a and Qgaini,m denote internal heat gains acting 
+on the air node and the mass node, respectively. These parameters are 
+determined based on established building standards together with 
+reasonable assumptions and calculations, and the specific values are 
+provided in Section 4.
+For discrete-time control implementation, Eq. (1) is discretized with 
+sampling interval Δt and rewritten in the state-transition form indexed 
+by the discrete time step k = 0, 1, 2, …: 
+xthk+1 = fth  xthk , uk), xthk =[Tak, Tmk ]⊤ (2) 
+where xthk denotes the thermal state vector at time step k, including in-
+door air temperature Tak and aggregated building thermal mass tem-
+perature Tmk . The mapping fth denotes the discrete-time state-transition 
+relation determined by the 3R2C model and the adopted discretization 
+method, and uk denotes the control input at time step k, such as HVAC 
+actuation. This state-transition relation provides the basis for tempera-
+ture prediction and optimization in the subsequent HEMS control 
+formulation.
+2.2. Control-oriented HVAC model
+The HVAC subsystem is modeled using a thermostatic control logic 
+that regulates indoor air temperature through a switching band [
+Tsw,lok , Tsw,hik
+]
+, where Tsw,lok and Tsw,hik denote the lower and upper 
+switching thresholds at time step k, respectively. Based on the current 
+thermal state and the switching band, this control logic determines the 
+net delivered thermal power Qhvack , which enters the building thermal 
+state evolution model in Section 2.1 as a thermal input. In this study, the 
+sign convention is defined such that Qhvack > 0 represents heating and 
+Qhvack < 0 represents cooling. The control signal uhvack ∈{0, 1} indicates 
+whether the HVAC system is enabled. The switching band here is treated 
+as an execution-level control variable and is distinct from the comfort 
+range and hard safety bounds introduced later in the control 
+formulation.
+Given the indoor air temperature Tak and the enable signal uhvack , the 
+net delivered thermal power of the HVAC system is defined as 
+Qhvack =
+⎧
+⎪⎪⎪⎪⎪⎪⎪⎪⎨
+⎪⎪⎪⎪⎪⎪⎪⎪⎩
+0, uhvack = 0,
+Qheat
+(
+Tak, Tsw,lok , Tsw,hik
+)
+, uhvack = 1 and heating is active,
+Qcool
+(
+Tak, Tsw,lok , Tsw,hik
+)
+, uhvack = 1 and cooling is active,
+0, uhvack = 1 and Tsw,lok ≤ Tak ≤ Tsw,hik
+(3) 
+This thermostat model naturally introduces a deadband with width 
+Tsw,hik   Tsw,lok . When Tak ∈[Tsw,lok , Tsw,hik ], the controller delivers no thermal 
+power (Qhvack = 0). Heating is activated when the temperature falls 
+below Tsw,lok whereas cooling is activated when the temperature rises 
+above Tsw,hik . A constant-capacity thermostat strategy is adopted in this 
+study. Specifically, Qheat
+(
+Tak, Tsw,lok , Tsw,hik
+)
+= Qheatmax when Tak < Tsw,lok and 
+0 otherwise. Similarly, Qcool(⋅)= Qcoolmax when Tak > Tsw,hik and 0 otherwise. 
+The resulting Qhvack is therefore a piecewise-constant thermal input, 
+which is consistent with the on/off operating characteristics of ther-
+mostatic control and remains directly interpretable through the 
+switching thresholds and capacity limits.
+The corresponding electrical power is obtained from the net deliv-
+ered thermal power using a coefficient of performance (COP) relation-
+ship, while maintaining nonnegative electrical power. Specifically, 
+Fig. 1. The Proposed HEMS Architecture.
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+4 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 5 ===
+phvack =
+⎧
+⎪⎪⎪⎪⎪⎪⎪⎨
+⎪⎪⎪⎪⎪⎪⎪⎩
+Qhvack
+COPheat, Qhvack > 0,
+  Qhvack
+COPcool, Qhvack < 0,
+0, Qhvack = 0
+(4) 
+where COPheat and COPcool denote the coefficients of performance in 
+heating and cooling modes, respectively. This mapping indicates that, 
+although Qhvack is represented as a signed thermal power, the electrical 
+power consumption of the HVAC system remains positive in both 
+heating and cooling modes. The HVAC energy consumption over one 
+control interval is given by Ehvack = phvack Δt.
+2.3. Electric vehicle charging dynamics model
+The electric vehicle (EV) subsystem is modeled as a controlled dy-
+namic process jointly determined by the state of charge and connection 
+availability, and only home charging is considered in this study. Let sk∈
+[0, 1] denote the state of charge (SOC) at time step k and let ck∈{0, 1}
+indicate whether the EV is physically connected to the home charger. In 
+this study, ck is exogenously determined by a given daily travel 
+schedule: ck = 0 when the vehicle is away from home, and ck = 1 after it 
+returns and is plugged in.
+When the vehicle is connected, a binary charging action uevk is used to 
+indicate whether charging is activated, with charging proceeding at a 
+fixed effective rate. The SOC dynamics can be written as 
+sk+1 = sk+ ckηchPchuevk ΔtEcap (5) 
+Here Ecap denotes the battery capacity, Pch denotes the nominal 
+charging power, and ηch denotes the charging efficiency. The EV 
+charging energy consumed over one control interval is given by Eevk =
+ckPchuevk Δt.
+This model captures the basic physical relationship of the EV 
+charging process. The SOC increment is proportional to the effective 
+electrical energy delivered during the interval, with its magnitude 
+jointly determined by the charging power, charging efficiency, and 
+battery capacity. The connection indicator ck acts as a gating variable, 
+ensuring that SOC does not change due to charging when the EV is away 
+from home. This dynamic model provides the basis for EV service con-
+straints and charging scheduling in the subsequent HEMS control 
+formulation.
+2.4. HEMS control problem formulation
+Building on the thermal state evolution model established in Section 
+2.1 and the HVAC and EV dynamic models introduced in Sections 2.2 
+and 2.3, the HEMS decision-making task is formulated as a finite- 
+horizon constrained optimal control problem. At each decision instant 
+k, the system solves an optimization problem over a horizon of length H. 
+The system state consists of the thermal state xthk and EV SOC sk. For each 
+stage k + i within the horizon, the external information affecting system 
+evolution mainly includes weather-related terms, electricity-price sig-
+nals, and operational context such as device connection status. Specif-
+ically, weather-related terms are represented by the outdoor 
+temperature Toutk+i together with thermal disturbance terms, grid-side 
+information is represented by the time-varying electricity price πk+i, 
+and the EV connection status is represented by ck+i∈{0, 1}.
+Decision variables. To obtain a compact and solver-friendly formula-
+tion, the control actions over the prediction horizon are parameterized 
+by continuous power targets. The optimization variables consist of the 
+HVAC heating power, HVAC cooling power, and EV charging power, 
+vk =
+{
+Qheatk+i , Qcoolk+i, pevk+i}H  1i=0 (6) 
+where Qheatk+i and Qcoolk+i denote the heating and cooling thermal power 
+components, respectively, and pevk+i denotes the EV charging electrical 
+power. For notational convenience, the net HVAC thermal input is 
+defined as Qhvack+i = Qheatk+i   Qcoolk+i where Qhvack+i > 0 indicates heating and 
+Qhvack+i < 0 indicates cooling.
+Constraints. The optimization problem explicitly includes hard 
+feasibility and safety constraints, while comfort and departure readiness 
+are represented through soft penalty terms in the objective. First, the 
+system must satisfy the thermal dynamics in Section 2.1 and the EV SOC 
+dynamics in Section 2.3. Using the continuous charging-power variable 
+pevk+i = ck+iPchuevk+i, Eq. (5) can be equivalently written as 
+sk+i+1 = sk+i+ ηchpevk+iΔtEcap , i= 0, …, H  1 (7) 
+Second, the device power and availability constraints are given as 
+follows. The HVAC heating and cooling powers are bounded by their 
+respective capacity limits, 
+0≤ Qheatk+i ≤ Qheatmax, 0≤ Qcoolk+i ≤ Qcoolmax, i= 0, …, H  1 (8) 
+and the EV charging power is jointly constrained by the charging power 
+limit and the connection status 
+0≤ pevk+i ≤ pevmaxck+i, i= 0, …, H  1 (9) 
+In addition, the EV SOC is subject to box constraints 
+smin ≤ sk+i ≤ smax, i= 0, …, H (10) 
+The indoor air temperature is further constrained by nonnegotiable 
+hard safety bounds 
+Thd,lo ≤ Tak+i ≤ Thd,hi, i= 0, …, H (11) 
+where Thd,lo and Thd,hi denote the lower and upper hard safety bounds of 
+indoor air temperature, respectively.
+Objective function. Under the above constraints, the HEMS decision at 
+time k is formulated as a finite-horizon optimization problem over the 
+continuous control plan vk in Eq. (6).
+Let wk=
+[
+wcost,k, wtemp,k, wev,k, wsmooth,k
+]
+denote nonnegative prefer-
+ence weights at decision instant k. The objective is written as 
+minvk Jk = wcost,k
+∑H  1
+i=0
+πk+i
+ 
+phvack+i + pevk+i)Δt
++wtemp,k
+∑H
+i=0
+([
+Tcf,lok   Tak+i
+]2
++
++
+[
+Tak+i  Tcf,hik
+]2
++
+)
++wev,k
+∑H
+i=0
+mk+i
+[
+stark+i  sk+i]2+
++wsmooth,k
+∑H  2
+i=0
+ 
+Qhvack+i+1  Qhvack+i )2
+(12) 
+In Eq. (12), the first term captures electricity cost, the second term 
+penalizes deviations of indoor temperature from the comfort interval [
+Tcf,lok , Tcf,hik
+]
+, the third term penalizes EV SOC shortfall at departure- 
+related instants (i.e., when mk+i = 1), and the fourth term penalizes 
+abrupt changes in the net HVAC thermal input. For notational conve-
+nience, the comfort interval is parameterized by center temperature 
+Tcomfk and the comfort bandwidth bk, that is, Tcf,lok = Tcomfk   12bk and 
+Tcf,hik = Tcomfk + 12bk. Accordingly, comfort and departure readiness are 
+treated as soft service objectives, whereas system feasibility and safety 
+are enforced through hard constraints. The quantities involved here, 
+including the comfort interval, target SOC, and related weights, jointly 
+form the preference-related parameters of the control problem, whose 
+sources and update mechanisms will be specified later.
+The HVAC electrical power is approximated from the heating and 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+5 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 6 ===
+cooling thermal powers through a mode-dependent coefficient-of-per-
+formance (COP) relationship, 
+phvack+i = Qheatk+i
+COPheat+ Qcoolk+iCOPcool (13) 
+The resulting optimization problem is therefore jointly constrained 
+by the thermal state dynamics, EV SOC dynamics, device power limits, 
+connection availability, SOC box constraints, and the hard indoor- 
+temperature safety bounds, and it provides the basis for the subse-
+quent MPC-based closed-loop solution and execution.
+2.5. MPC solution and device-level execution
+To solve the finite-horizon constrained control problem established 
+in Section 2.4, this paper adopts model predictive control (MPC) as the 
+closed-loop execution mechanism [16]. At each decision instant, MPC 
+solves the optimization problem using the latest state measurements and 
+updated forecasts, implements only the first control action, and then 
+repeats the same procedure at the next instant based on newly observed 
+states and refreshed predictions. This receding-horizon mechanism en-
+ables the controller to continuously update decisions under the com-
+bined effects of multi-device constraints, time-varying electricity prices, 
+and weather disturbances, and is therefore well suited for coordinated 
+closed-loop control in HEMS.
+Slack-based soft constraints and feasibility protection. In practical 
+operation, even when hard indoor-air-temperature safety bounds are 
+imposed in the control problem, short-term infeasibility may still arise 
+due to model mismatch, prediction errors, and external disturbances. To 
+improve the solvability of the optimization problem in closed-loop 
+operation, bounded slack variables are introduced for the hard indoor- 
+air-temperature safety constraints, and penalty terms are added to the 
+objective function. In this way, cases that would otherwise lead to 
+infeasibility are transformed into controlled and explicit feasibility 
+trade-offs.
+For the hard indoor-temperature safety bounds in Eq. (11), lower and 
+upper slack variables, denoted by ξlok+i and ξhik+i, respectively, are intro-
+duced. Accordingly, the softened temperature safety constraints and the 
+admissible ranges of the slack variables are written as 
+Thd,lo  ξlok+i ≤ Tak+i ≤ Thd,hi+ ξhik+i, i= 0, …, H, 
+ξlok+i, ξhik+i)∈[0, ξlo]×[0, ξhi], i= 0, …, H. (14) 
+This treatment allows violations of the safety bounds only when 
+necessary, while explicitly quantifying the extent of each violation 
+through the slack variables. Based on this formulation, a slack penalty 
+term is added to the objective function in Section 2.4, yielding the 
+implemented MPC objective 
+minvk,ξk ̃Jk = Jk+ λslack
+∑H
+i=0
+( 
+ξlok+i)2+  ξhik+i)2) (15) 
+where Jk is the original objective function defined in Eq. (12), λslack > 0 is 
+a fixed slack penalty coefficient, andξk=
+{
+ξlok+i, ξhik+i}Hi=0 collects the slack 
+variables. The bounds ξ
+lo 
+and ξ
+hi 
+are predefined upper limits on the 
+admissible slack magnitudes. Comfort and departure readiness are still 
+represented through the soft penalty terms in Jk, whereas the additional 
+slack penalty is introduced only to recover feasibility in a limited 
+number of cases.
+From optimized plans to executable actions. The control problem in 
+Section 2.4 is formulated using continuous power targets, which is 
+convenient for optimization. In actual closed-loop execution, however, 
+device interfaces usually require discrete or bounded control commands. 
+Therefore, this paper further constructs a deterministic mapping from 
+optimization outputs to device-level actions, so that the time-domain 
+optimized plan can be converted into executable HVAC and EV 
+control signals. Let uk denote the device-level execution command 
+vector at time step k, including the HVAC enable signal, EV charging 
+enable signal, and thermostat switching band. Its construction proceeds 
+in three steps.
+First, the HVAC on/off signal is determined according to the planned 
+HVAC electrical power at the current time step. If phvack ≥ εhvac, then 
+uhvack = 1, otherwise, uhvack = 0. Here, εhvac > 0 is a small activation 
+threshold introduced to suppress numerical chattering around zero.
+Second, the EV charging on/off signal is determined according to the 
+planned EV charging power and the connection status. If pevk ≥ εev, then 
+uevk = ck; otherwise, uevk = 0. Here, εev > 0 reflects the resolution 
+requirement of practical charging equipment and avoids meaningless 
+switching actions when the planned charging power is extremely small. 
+This step maps the continuous charging-power variable pevk to the binary 
+execution action uevk used in Eq. (5).
+Finally, the thermostat switching temperature band is constructed 
+based on the current comfort center and comfort bandwidth. Let Tck =(
+Tcf,lok + Tcf,hik
+)
+/2, then the switching band is obtained by clipping the 
+desired band within the hard safety bounds, 
+Tsw,lok = clip
+(
+Tck  12bk, Thd,lo, Thd,hi
+)
+,
+Tsw,hik = clip
+(
+Tck+ 12bk, Thd,lo, Thd,hi
+)
+.
+(16) 
+This mapping ensures that the execution-layer setpoints always 
+satisfy device constraints and hard safety bounds, while remaining 
+consistent with the HVAC execution model introduced in Section 2.2.
+In implementation, after introducing auxiliary variables to handle 
+the piecewise terms in the objective function, the softened MPC problem 
+is reformulated as a quadratic program with linear constraints and 
+solved at each time step using a standard QP solver. If the solver fails to 
+return a usable solution, a deterministic fallback strategy is applied: the 
+HVAC switching band is set near the current comfort band, and EV 
+charging is enabled only when the vehicle is connected and the SOC 
+deficit is sufficiently large. In this way, the control problem established 
+in Section 2.4 is transformed into a receding-horizon execution mech-
+anism that is repeatedly solvable, equipped with feasibility preservation, 
+and directly implementable at the device-interface level.
+3. Contract-constrained human-in-the-loop method
+Section 2 has established the building and device models, opera-
+tional constraints, and the MPC-based closed-loop execution foundation 
+of the HEMS, thereby defining the feasible control space for subsequent 
+decision-making. Building on this foundation, this section presents a 
+contract-constrained human-in-the-loop method for incorporating run-
+time user feedback into HEMS control and preference updating in a 
+stable and verifiable manner. Fig. 2 illustrates the overall structure of 
+the method. Within this closed loop, the user is treated as an explicit 
+participant in the system and interacts with it through natural language 
+[17]. When a request requires further clarification or involves multiple 
+feasible trade-offs, the user confirms among candidate options. When 
+immediate needs arise, the user can also directly express them during 
+operation.
+Within this method, the language layer is responsible for constrained 
+interaction parsing and event generation, and it connects to the subse-
+quent control and update modules through a structured interface [18]. 
+Given a user utterance yk and its contextual information, the language 
+layer first uses the large language model to extract fixed semantic fields 
+and then forms the structured interaction event ek through predefined 
+contract mapping [19]. The system then checks the completeness and 
+validity of the event and routes it into different handling pathways ac-
+cording to the intent type. For explicit intents, the system gives priority 
+to the user's short-term request under operational constraints and 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+6 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 7 ===
+applies the required adjustment within a bounded scope while preser-
+ving coordinated multi-device operation. For vague intents, the system 
+first generates a small set of interpretable candidate options, evaluates 
+their implications under the current operating context, and then per-
+forms updating and execution after user confirmation. For utterances 
+containing no current control intent, the system assigns the none type 
+and introduces neither a new execution override nor a preference 
+update. The confirmed interaction is recorded as a structured and 
+traceable event, which is further used to calibrate the preference state. 
+The MPC planner then uses the updated preference state to generate 
+coordinated control actions.
+Fig. 2. Overall architecture of the human-in-the-loop closed-loop framework.
+Fig. 3. LLM-enabled contractual intent parsing and dual-path routing.
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+7 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 8 ===
+3.1. Contract-constrained intent interface and dual-path routing
+To enable runtime natural-language feedback to enter subsequent 
+control and preference updating in a stable manner, this section further 
+defines the basic representations and interaction interfaces required at 
+the method level. Specifically, the section first introduces the state 
+representation of the user preference profile, then defines intent types 
+and domains, and finally develops the contract-constrained structured 
+event interface, the dual-path handling mechanism, and the associated 
+safety contract and audit records. Fig. 3 further details the internal 
+workflow of the interaction layer.
+3.1.1. User preference profile
+This study uses a compact preference profile to represent the user- 
+side preference state relevant to HEMS control. In practical deploy-
+ment, this preference state is latent and cannot be directly observed from 
+a single questionnaire or a single interaction. User utterances and 
+interaction traces are therefore treated as observable evidence for cali-
+brating the online preference profile during operation [20]. In the 
+controlled experiments of this paper, predefined reference preference 
+profiles are used as evaluation targets to examine whether the proposed 
+contract-constrained event interface and CIPU update can recover 
+known role-conditioned preference states under structured interaction. 
+Accordingly, the online preference profile at time step k is represented 
+by a compact vector. It is defined as: 
+pk =
+(
+wcost,k, Tcomfk , stark , bk
+)
+(17) 
+Here pk is organized in a layered form to match the modular struc-
+ture of the HEMS and to improve interpretability. Specifically, pk con-
+sists of a global preference layer shared by all controllable devices and 
+device-specific layers associated with individual subsystems. The 
+global layer contains wcost,k, which reflects the household-wide emphasis 
+on electricity cost. The device-specific layers describe comfort and ser-
+vice requirements for different devices. For HVAC, Tcomfk denotes the 
+preferred comfort-center temperature, and bk denotes the preferred 
+comfort bandwidth. Together, they define the nominal comfort interval [
+Tcomfk   12bk, Tcomfk + 12bk
+]
+. For EV charging, stark denotes the desired state 
+of charge at the next departure-relevant time.
+This preference profile is directly linked to the preference-related 
+parameters in Section 2.4. Specifically, wcost,k enters the cost trade-off 
+term in the objective function, Tcomfk and bk jointly parameterize the 
+indoor comfort interval, and stark defines the EV target state of charge at 
+departure-related times. In this way, pk serves both as a compact rep-
+resentation of user preference and as a source of key parameters for the 
+MPC optimization and execution process.
+The entries in pk correspond to preference quantities that can be 
+adjusted online through interaction. In this way, pk includes the cost- 
+related preference weight wcost,k and the nominal comfort and service 
+targets 
+(
+Tcomfk , stark , bk
+)
+. Other coefficients appearing in the control 
+problem, such as the temperature penalty, EV penalty, and smoothness 
+penalty, are specified separately in the control layer and are not treated 
+as online-updated profile states. Feasibility safeguards and nonnego-
+tiable device limits are maintained as fixed safety settings θ outside the 
+profile, including the slack penalty coefficient λslack, slack bounds ξ, hard 
+temperature bounds, activation thresholds, and other actuation- 
+interface constants. This layered structure also supports extensibility: 
+when a new device is added, only the corresponding device layer needs 
+to be appended, while the global layer remains unchanged.
+3.1.2. Intent types and domains
+To reflect realistic human–system interaction, each user utterance yk 
+is first classified into three intent types: typek∈{explicit, vague, none}. 
+An explicit intent corresponds to a clear request that can be directly 
+grounded in the control layer. A vague intent conveys a preference di-
+rection, adjustment tendency, or service need, but does not yet specify a 
+unique executable target. A no-intent utterance contains no current 
+control intent and therefore provides no actionable evidence for 
+execution or preference updating. Correspondingly, domaink is used to 
+identify the scope addressed by the utterance. For explicit intents, 
+domaink∈{HVAC, EV}, indicating direct control requests for the HVAC 
+or EV subsystem. For vague intents, domaink = ∅ denotes a global 
+cost–comfort trade-off preference, whereas domaink = EV denotes EV- 
+related service urgency or charging tendency that has not yet been 
+expressed as a numerical target. For no-intent utterances, domaink = ∅. 
+This design is consistent with the HVAC and EV subsystems considered 
+in this study and preserves a unified interface for future extension to 
+additional devices.
+Explicit intents are used to express user-specified device-level tar-
+gets. In the HVAC domain, such intents typically appear as direct 
+temperature-setting requests. In the EV domain, they usually appear as 
+explicit charging targets, which are represented in this study as target 
+SOC values and then passed to subsequent execution and updating 
+procedures. Vague intents carry a broader range of preference infor-
+mation and mainly cover three cases. The first is a global cost–comfort 
+trade-off preference, such as a request to save more electricity cost or to 
+place more emphasis on comfort. The second is a comfort-adjustment 
+tendency, such as a desire for a cooler or warmer environment 
+without a specified magnitude. The third is EV-related service urgency 
+or charging tendency, such as a request for faster or slower charging 
+without a direct numerical target. All vague intents are first routed to the 
+negotiation path. When directional information is underspecified, as in 
+“I feel uncomfortable,” the system first resolves the direction and then 
+determines the adjustment magnitude. No-intent utterances include 
+greetings, chit-chat, unrelated questions, measured-state reports, his-
+torical descriptions, and other energy-related statements without a 
+current control intent. These utterances do not trigger preference 
+updating or new execution overrides.
+For example, “Set the indoor temperature to 24◦C" is explicit because 
+it specifies one directly executable numerical target. “Please make the 
+room a little cooler” is vague because it expresses a current adjustment 
+direction without a unique target. “The display currently shows 24◦C" is 
+none because the numerical value describes a measured state rather than 
+a requested target.
+The above intent types jointly determine the subsequent routing and 
+update behavior. A no-intent utterance keeps the current preference 
+profile pk unchanged, and the control layer continues to execute the 
+baseline MPC policy. An explicit intent produces a directly executable 
+target and enters the immediate execution path. A vague intent first goes 
+through negotiation and confirmation, and then influences pk in a 
+bounded manner. In this way, runtime language feedback is consistently 
+separated into direct execution signals, negotiable preference evidence, 
+and non-actionable expressions, which provides a clear semantic basis 
+for the contract-constrained structured event defined in the next 
+subsection.
+3.1.3. Contract-constrained structured event
+To establish a structured and traceable interface between the lan-
+guage layer and the downstream control and learning modules, this 
+study defines a contract-constrained structured interaction event as the 
+sole interface between the interaction layer and downstream modules. 
+Given a user utterance yk and the session context xk, the interaction layer 
+outputs the event 
+ek = fφ(yk, xk) (18) 
+where fφ(⋅) denotes the contract-constrained interaction module. In 
+implementation, fφ(⋅) combines an LLM-based semantic parser with 
+deterministic contract mapping. The parser extracts the intent type, 
+domain, parsed preference category, adjustment direction, and any 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+8 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 9 ===
+explicit numerical target; for vague intents, these semantic fields are 
+deterministically mapped to the negotiation-question field ωk.
+The event ek is a fixed field record that conveys the intent type, 
+domain, and payload consumed by downstream modules. Table 1
+summarizes these fields. The tuple (typek, domaink) provides the met-
+adata required for routing. For explicit intents, domaink identifies the 
+target subsystem, and the payload contains a numerical target. For 
+vague intents, domaink = ∅ denotes global requests, while EV-related 
+vague requests use domaink = EV to indicate service urgency without 
+specifying an explicit numerical target at parsing time. The structured 
+event contains no field that can modify the fixed safety settings θ. Its 
+fields provide only the information required to update the learnable 
+profile pk and to trigger bounded execution locks.
+To support option-based negotiation for vague intents, the vague 
+payload is represented by a pair (ωk,ζk). Here, ωk denotes the type of 
+negotiation question, and ζk is the user-confirmed option that de-
+termines both update direction and magnitude. For vague intents, the 
+interaction layer may output an event with a pending choice, where ωk is 
+present and ζk = ∅. In this case, the system presents a small set of 
+interpretable candidate options and requests an explicit selection before 
+committing to a preference update. The candidate set may include both 
+reinforcing and corrective levels, so that positive and reverse prefer-
+ences can be handled within the same contract interface. Only events 
+satisfying ζk ∕= ∅ are eligible to drive preference updates. For an 
+underspecified comfort request, the system may first trigger a direction- 
+disambiguation question (ωk = comfortDir), and then trigger a magni-
+tude question (ωk∈{coolLevel, warmLevel}) after the direction has 
+been confirmed, while preserving the same contract-constrained event 
+interface.
+The candidate option set Z(ωk) is defined as  
+The structured event ek provides a unified and traceable interface. 
+Explicit intents populate numeric targets, whereas vague intents popu-
+late a negotiation question ωk and, after user confirmation, a choice ζk 
+that determines direction and magnitude. When typek = none, all 
+payload fields remain empty, and the control layer proceeds with the 
+baseline MPC computation under the current profile pk, without 
+triggering preference updates or execution overrides. A numerical value 
+is populated into T⋆k or s⋆k only when the utterance presents it as the user's 
+requested current or future target. Measurements, historical or quoted 
+values, and candidate values mentioned in questions remain non- 
+executable and cannot populate these target fields.
+The resulting event is accepted only when it satisfies a predefined 
+schema, including field exclusivity, conditional emptiness rules, and 
+value bounds. When typek = explicit, exactly one numerical target must 
+be present, namely T⋆k for domaink = HVAC or s⋆k for domaink = EV, 
+while the vague payload fields (ωk,ζk) remain empty. When 
+typek = vague, the numeric target fields must be empty, ωk must be 
+present, while ζk can be empty to indicate a pending choice. When 
+typek = none, all payload fields remain empty. When the output violates 
+the schema, the system rejects the record and applies a conservative 
+handling rule, such as falling back to a safer parsing path or down-
+grading the output to a none-intent event with an empty payload. This 
+rule ensures that only contract-compliant records can enter the control 
+and learning layers.
+However, structural compliance alone does not establish that the 
+parsed semantics are correct. An event may pass the schema checks 
+while still containing an incorrect intent type, domain, adjustment di-
+rection, or numerical target. Therefore, to further evaluate whether the 
+language interface correctly recognizes user intent and fully recovers the 
+semantic information required for contract mapping, the parser-level 
+semantic fields generated before negotiation are evaluated 
+independently.
+For the k-th user utterance, the semantic fields generated by the 
+parser are compared with an expert-reviewed gold-standard parser re-
+cord. This reference record is constructed according to the intent tax-
+onomy defined in Section 3.1.2 and the contract rules described above. 
+Intent Accuracy and the recall-based negotiation-trigger metric follow 
+standard classification evaluation practice [21], while the construction 
+and review of the gold-standard records follow established corpus- 
+annotation reliability practice [22]. On this basis, Structured Event 
+Exact Match and a task-specific false direct-execution metric are further 
+defined to evaluate complete semantic-record agreement and erroneous 
+assignment of direct-execution semantics, respectively.
+Letck=
+ 
+typek, domaink, χk, dirk, T⋆k , s⋆k) denote the six-field parser 
+record evaluated for the k-th user utterance, where 
+χk∈{cheap, comfort, ∅}denotes the parsed preference category, and 
+dirk∈{cooler, warmer, unknown}denotes the parsed adjustment direc-
+tion. The optional audit field reasonk is excluded from semantic scoring. 
+Because the negotiation question ωk is generated through deterministic 
+mapping from the parsed semantic fields, and the confirmed option ζk 
+becomes available only after the user makes a selection, neither field is 
+included in the pre-negotiation parser-level evaluation.
+Intent Accuracy evaluates whether the parser correctly distinguishes 
+among the explicit, vague, and none intent types. Structured Event Exact 
+Match (EEM) evaluates whether all six parser-level semantic fields agree 
+with the corresponding gold-standard record. The two metrics are 
+defined as 
+Accintent = 1N∑Nk=1 I  ̂typek = typegk), EEM= 1N∑Nk=1 I ̂ck = cgk) (20) 
+Table 1 
+Fields of structured event ek from the interaction layer.
+Field Range Meaning Used When
+typek {explicit, vague, none} Intent Category Always
+domaink {HVAC, EV, ∅} Affected Subsystem Explicit or EV Vague
+ωk
+{costLevel, comfortDir, 
+coolLevel, 
+warmLevel, evLevel, ∅}
+Negotiation Question 
+Type Vague
+ζk Z(ωk)∪{∅}
+Confirmed Signed 
+Option Sets 
+Direction and 
+Magnitude
+Vague
+T⋆k Numeric or ∅ Explicit Temperature Target Explicit and HVAC
+s⋆k [0,1] or ∅ Explicit SOC Target Explicit and EV
+reasonk Text or ∅ Audit Note Optional
+Z(costLevel)={muchCheaper, cheaper, lessCheaper, muchLessCheaper},
+Z(comfortDir)={cooler, warmer},
+Z(coolLevel)={cooler, muchCooler},
+Z(warmLevel)={warmer, muchWarmer},
+Z(evLevel)={muchFaster, faster, slower, muchSlower}.
+(19) 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+9 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 10 ===
+Here, N denotes the total number of evaluated utterances, ̂(⋅)denotes 
+a field predicted by the parser, the superscript g denotes the corre-
+sponding gold-standard field, and I(⋅)is the indicator function. The 
+condition ̂ck = cgkholds only when all six scored fields match the gold- 
+standard record, including fields that are required to remain empty. 
+EEM therefore evaluates strict agreement at the complete-record level 
+rather than averaging field-level accuracies.
+According to the contract-routing rules defined above, only utter-
+ances recognized as vague proceed to the subsequent negotiation 
+pathway. Negotiation Trigger Recall (NTR) is therefore defined as a 
+class-specific recall metric that evaluates whether utterances requiring 
+negotiation in the gold-standard records are correctly recognized as 
+vague: 
+NTR=
+∑N
+k=1
+I
+ 
+typegk = vague∧ ̂typek = vague)
+∑N
+k=1
+I
+ 
+typegk = vague) (21) 
+A higher NTR indicates that fewer utterances requiring further 
+clarification and user confirmation are missed. In other words, vague 
+preference expressions are more consistently retained in the negotiation 
+pathway rather than being incorrectly classified as none or promoted to 
+direct execution.
+False Direct-Execution Rate (FDER) is further defined to evaluate 
+whether an utterance labelled as vague or none in the gold-standard 
+record is incorrectly assigned direct-execution semantics at the parser 
+level: 
+FDER=
+∑N
+k=1
+I
+[
+typegk∈{vague,none}∧  ̂typek= explicit∨̂T⋆k ∕= ∅∨̂s⋆k ∕= ∅)]
+∑N
+k=1
+I
+[
+typegk∈{vague,none}]
+(22) 
+A gold-standard vague or none utterance is counted as a false direct- 
+execution case when it is predicted as explicit, or when either the 
+temperature-target field or the SOC-target field is incorrectly populated. 
+Thus, even when the parser retains the vague intent label, an incorrectly 
+generated numerical target is still captured by FDER. This metric eval-
+uates the risk of erroneous direct-execution semantics in the parser 
+output and does not imply that the corresponding device action has 
+bypassed the subsequent contract checks or MPC constraints and been 
+physically executed.
+Routing Accuracy (RA) is additionally used to evaluate the final autho-
+rization result after structured-semantic formation. For the k-th utterance, 
+let ̂rk denote the final handling path produced by the evaluated configura-
+tion and rgk denote the corresponding path in the frozen expert-reference 
+record, where ̂rk, rgk∈{direct execution, negotiation, no action}. RA is 
+defined as: 
+RA= 1N∑Nk=1 I ̂rk = rgk) (23) 
+Accordingly, Intent Accuracy, EEM, NTR, and FDER evaluate 
+structured-semantic recovery at the parsing stage, whereas RA evaluates 
+whether the resulting semantic record is assigned to the correct final 
+handling path. These five metrics are used for the language-interface 
+evaluation in Study 2C.
+3.1.4. Dual-path handling: explicit execution and vague negotiation
+Based on the contract-constrained event ek in Section 3.1.3, the 
+HEMS adopts a dual-path orchestration policy that separates immediate 
+direct execution from negotiation-mediated adaptation while main-
+taining a unified learning interface for preference updating. In this 
+design, explicit intent is treated as a short-term executable correction, 
+whereas vague intent is treated as long-term preference evidence that 
+requires user confirmation before updating the preference profile. 
+Explicit intents correspond to concrete device targets. The system exe-
+cutes them immediately and applies a finite-duration execution lock to 
+preserve responsiveness. Vague intents always enter the negotiation 
+mechanism first, and preference updating starts only after user confir-
+mation. When typek = none, the event carries no actionable payload, pk 
+remains unchanged, and the control layer directly executes the baseline 
+MPC action under the current profile.
+Given ek, the execution mode is determined uniquely by the intent 
+type: 
+ρ(ek)=
+⎧
+⎨
+⎩
+ExplicitPath, typek = explicit,
+VagueNegotiationPath, typek = vague,
+DefaultMPCPath, typek = none.
+(24) 
+Explicit path: target grounding and bounded execution lock. For an 
+explicit intent, the HEMS first grounds the event payload into a device- 
+specific numerical target and then activates a finite-duration execution 
+lock, so that the user-stated action takes priority at the execution layer. 
+At the same time, the explicit target serves as a stronger supervised 
+update signal and is used to correct the relevant entries of the preference 
+profile in a direct yet bounded manner, producing an updated profile 
+that reflects the latest user instruction. The MPC layer then solves the 
+planning problem under the updated profile and produces umpck . During 
+execution, the system overrides only the action components associated 
+with the locked subsystem, while the remaining components continue to 
+follow MPC coordination.
+The execution lock is represented by the compact state 
+λk =(τk, ℓk, vk) (25) 
+where τk∈{HVAC, EV, none} denotes the currently locked subsystem, 
+ℓk∈ ℤ≥0 denotes the remaining number of lock steps, and vk denotes the 
+locked target value. The executed action is written as 
+uexeck = L  umpck , λk) (26) 
+where L(⋅) applies componentwise override when ℓk > 0 and τk ∕= none. 
+When τk = HVAC, the explicit temperature target T⋆k is converted into a 
+narrow thermostat switching band with fixed width bexec and then 
+clipped to the admissible temperature range to ensure execution feasi-
+bility. When τk = EV, the lock forces EV charging whenever the vehicle is 
+connected and the current SOC remains below the locked target. As time 
+advances, ℓk decreases step by step until it reaches zero, after which the 
+system returns to pure MPC execution. In the EV case, the lock may also 
+be released earlier once the target SOC has been reached.
+Vague path: mandatory negotiation and signed updates. For a vague 
+intent, the contract event provides a negotiation question type ωk and an 
+optional confirmed choice ζk. All vague intents enter the negotiation 
+path. The negotiation focuses on signed magnitude selection along a 
+preference axis, including both reinforcing and corrective levels, so that 
+the subsequent preference update is calibrated in both direction and 
+strength.
+When ζk = ∅, the event is in a pending state. The system then pre-
+sents a small set of interpretable candidate options defined by Z(ωk)
+and requests an explicit user selection. During this pending phase, the 
+preference profile remains unchanged and the current executed action is 
+temporarily held: 
+pk+1 = pk, uexect = uholdk , t∈{k, …, k+ ℓpendk   1} (27) 
+where uholdk denotes the last executed action before entering the pending 
+state, and ℓpendk denotes the temporary hold horizon. Once the user 
+confirms a level ζk∈ Z(ωk), the selected option is written back into the 
+event payload, the pending state is released, and the event becomes 
+eligible for bounded preference updating.
+To quantify the consequences of different candidate options, the 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+10 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 11 ===
+HEMS constructs a set of temporary profiles around the current profile. 
+For each candidate level ζ∈ Z(ωk), the system applies a bounded small 
+or large offset to the relevant entries of pk according to ωk and ζ, and 
+then clips the result to the admissible range, yielding the temporary 
+profile ̃p(ζ)k . The MPC layer then evaluates each temporary profile and 
+produces a candidate control plan: 
+u(ζ)k = MPC(̃p(ζ)k ), ζ∈ Z(ωk) (28) 
+These candidate plans are presented to the user in a concise and 
+contrastive form together with contextual signals such as the current 
+electricity price snapshot. After the user confirms ζk, the preference 
+update module applies a bounded update to pk based on (ωk, ζk, xk) with 
+direction and magnitude determined by the confirmed level. The control 
+layer then executes the MPC solution under the updated profile, so that 
+the negotiated choice is reflected in subsequent optimization and actu-
+ation. For an underspecified comfort request, the system may first use 
+ωk = comfortDir to determine the direction (‘cooler’ or ‘warmer’), and 
+then use ωk ∈{coolLevel, warmLevel} to determine the magnitude. For 
+vague EV urgency feedback, the system uses ωk = evLevel to negotiate 
+the service acceleration level and maps the confirmed result to a 
+bounded correction of the EV target entry in pk.
+3.1.5. Safety contract and auditability
+To ensure that natural-language interaction never bypasses the 
+control-theoretic safety envelope, the HEMS enforces a layered safety 
+contract spanning event admission, actuation eligibility, capability 
+isolation, and execution-time safeguards. At the interface level, only the 
+contract-constrained structured event ek defined in Section 3.1.3 is 
+allowed to enter the downstream routing, learning, and control pipeline. 
+Raw user text is not exposed to these modules.
+The first layer is a schema-validity gate that checks whether the 
+resulting event satisfies the contract and all field-level bounds: 
+g(ek)=
+{
+1, ekis schema compliant and within value bounds,
+0, otherwise (29) 
+If g(ek) = 0, the event is conservatively downgraded to a none-intent 
+record with an empty payload. This rule prevents malformed payloads, 
+incompatible field combinations, and out-of-range values from propa-
+gating into preference updates or device-level execution.
+The second layer distinguishes syntactic admissibility from opera-
+tional actionability. Because a vague intent may be valid while still 
+carrying an unconfirmed choice (ζk = ∅), the system introduces an 
+actuation-eligibility gate 
+a(ek)=
+⎧
+⎨
+⎩
+1, typek = explicit,
+1, typek = vague and ζk ∕= ∅,
+0, otherwise
+(30) 
+where a(ek) = 0 means that the system must not commit a new prefer-
+ence update or introduce a new intent-driven execution override. In 
+particular, when g(ek) = 1 but a(ek) = 0, a no-intent event simply follows 
+the baseline MPC policy under the current profile pk, whereas a pending 
+vague event follows the temporary hold mechanism in Section 3.1.4 
+until the interaction layer receives a confirmed option.
+The third layer enforces capability isolation at the orchestration 
+interface. The language-processing module is restricted to producing or 
+revising the event record and is never allowed to emit device commands 
+directly. The runtime exposes only a minimal allowlist of safe session 
+functions, such as reading the current snapshot, generating negotiation 
+options, applying confirmed feedback, setting or releasing temporary 
+holds, solving the MPC problem, and stepping the environment. This 
+interface design constrains the downstream action space to predefined 
+tool invocations and therefore limits the effect of prompt-level manip-
+ulation on physical actuation.
+The fourth layer keeps execution within the optimization and device 
+constraints. After an event passes the interface checks, all realized actions 
+are still filtered through the bounded control mechanism described 
+earlier: explicit commands are subject to finite-duration locks, vague in-
+teractions are subject to the temporary-hold policy, and newly generated 
+actions are produced only through the MPC layer. With bounded slack 
+variables (Section 2.5), the MPC problem can absorb limited service vi-
+olations while remaining within the designed safeguard envelope; if the 
+QP becomes infeasible or the solver fails to return a usable solution, the 
+system falls back to the deterministic safe policy in Section 2.5. During 
+pending vague negotiation, the system reuses the previously executed 
+admissible action uholdk over a short horizon, so the interaction layer never 
+injects unconstrained new commands. Negotiation options are also 
+generated in a bounded form: direction-disambiguation options (e.g., 
+ωk = comfortDir) are purely symbolic, whereas magnitude options (e.g., 
+ωk∈{coolLevel, warmLevel, costLevel, evLevel}) are instantiated only 
+through bounded profile perturbations followed by MPC evaluation and 
+therefore cannot produce actions outside the admissible control set.
+To support auditability and reproducibility, each interaction step 
+stores a structured audit record that allows post hoc inspection of both 
+planning and execution: 
+A k =
+(
+ek, xk, pk, umpck , λk, uholdk , ℓpendk , uexeck , metricsk
+)
+(31) 
+where λk denotes the explicit execution-lock state, 
+(
+uholdk , ℓpendk
+)
+denotes 
+the temporary pending-hold state, and metricsk summarizes key envi-
+ronment feedback such as step cost, indoor temperature, and EV SOC. 
+Because the record contains the admitted event, the control context, the 
+intermediate safeguard states, and the final executed action, it supports 
+fine-grained diagnosis of why a user request was accepted, deferred, 
+downgraded, or overridden. Optional metadata such as a user-facing 
+explanation note can be appended for interpretation and audit without 
+affecting routing or actuation.
+3.2. Contract-informed preference update (CIPU)
+Building on the contract-constrained event interface established in 
+Section 3.1, this study further proposes the Contract-Informed Prefer-
+ence Update (CIPU) mechanism to convert contract-compliant interac-
+tion events into online preference-profile updates. CIPU operates on the 
+learnable preference state pk defined in Eq. (17), and combines it with 
+the structured event ek and the runtime context xk to generate the 
+updated preference profile pk+1. Thus, the input of CIPU consists of the 
+current online preference profile, a contract-compliant interaction 
+event, and the runtime context, while its output is the updated prefer-
+ence profile. CIPU does not update the physical model, MPC solver, fixed 
+control-layer penalty coefficients, device constraints, or safety settings. 
+Through intent routing, bounded branch-specific updating, projection 
+onto an admissible parameter domain, and trust-region stabilization, 
+explicit feedback and confirmed vague feedback enter the same 
+preference-update process through different update pathways. This 
+design enables the system to continuously absorb interaction evidence 
+during long-term operation and provides the algorithmic basis for sub-
+sequent preference calibration and preference-drift re-tracking.
+3.2.1. Update operator and basic form
+CIPU follows the preference-profile definition in Eq. (17), where pk 
+contains the cost-related preference weight, comfort-center tempera-
+ture, EV target SOC, and comfort bandwidth. The parameterization of 
+the comfort interval follows the definitions in Section 2.4 and Section 
+3.1.1. Given the event ek, the current profile pk, and the runtime context 
+xk, one CIPU update step is written as 
+pk+1 = U Θ(pk, ek, xk) (32) 
+where U Θ denotes the CIPU update operator, and Θ denotes the set of 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+11 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 12 ===
+update parameters, including explicit-branch gains, vague-branch gains, 
+per-step update caps, projection-domain bounds, and the trust-region 
+radius.
+In Eq. (32), pk denotes the current online preference profile and 
+provides the baseline for the present incremental correction. The 
+contract-compliant event ek supplies the information needed to deter-
+mine update eligibility, branch selection, and the affected preference 
+coordinates, while xk provides the runtime context used to interpret 
+context-dependent evidence, particularly for confirmed vague feedback. 
+Specifically, typek determines whether an update is activated and 
+whether the explicit or vague branch is used; domaink and the event 
+payload identify the affected profile coordinates and the corresponding 
+update signal. None events and vague events without a confirmed option 
+leave the profile unchanged, whereas explicit events and confirmed 
+vague events enter their respective update branches.
+CIPU computes a pre-projection increment Δk from the event and the 
+context, and then forms a temporary profile, 
+̂pk+1 = pk+ Δk, Δk = ΔΘ(ek, xk, pk) (33) 
+where ΔΘ(⋅) denotes the branch-conditioned increment generator before 
+projection and stabilization. The temporary profile ̂pk+1 is then pro-
+cessed by projection and stabilization to obtain the final profile pk+1. 
+This formulation places explicit feedback and vague feedback in a uni-
+fied update framework while preserving the physical meaning, numer-
+ical bounds, and MPC compatibility of the preference profile.
+3.2.2. Branch-specific update mechanism
+CIPU first checks whether the event is eligible for updating according 
+to its intent type. A no-intent event provides no admissible evidence for 
+preference calibration, so the profile remains unchanged. A vague event 
+with an unconfirmed option is still in the negotiation stage and does not 
+commit a new profile update. Explicit intent events and vague intent 
+events with confirmed options enter the update branches. Accordingly, 
+the branch increment is defined as 
+Δk =
+⎧
+⎪⎪⎨
+⎪⎪⎩
+Δexpk , typek = explicit,
+Δvagk , typek = vague and ζk ∕= ∅,
+0, typek = none or(typek = vague and ζk = ∅)
+(34) 
+Eq. (34) is consistent with the structured event interface in Section 
+3.1.3 and the actuation-eligibility gate in Section 3.1.5. It prevents no- 
+intent utterances and unconfirmed vague feedback from directly per-
+turbing the long-term preference profile.
+For explicit intents, the user has provided a numerical target that can 
+be grounded at the device layer. CIPU treats such targets as stronger 
+supervised signals and applies direct but bounded correction to the 
+corresponding profile entries. For an HVAC explicit intent, the temper-
+ature target T⋆k is used to correct Tcomfk . For an EV explicit intent, the SOC 
+target s⋆k is used to correct stark . The explicit branch is written as 
+Δexpk =
+⎧
+⎪⎪⎪⎨
+⎪⎪⎪⎩
+αTclip
+(
+T⋆k   Tcomfk ,  δexpT , δexpT )eT, domaink = HVAC,
+αSclip
+ 
+s⋆k   stark ,  δexps , δexps )es, domaink = EV,
+0, otherwise
+(35) 
+Here, αT and αS are explicit-update gains, δ
+exp
+T and δ
+exp
+s are per-step 
+correction caps, and eT and es denote the coordinate directions associ-
+ated with Tcomfk and stark , respectively. This branch allows clear user in-
+structions to quickly correct the corresponding preference entries, while 
+the gain and clipping bounds limit the magnitude of each update step.
+For confirmed vague intents, the user has selected an interpretable 
+option ζk through negotiation. CIPU maps this feedback into a bounded 
+perturbation with a specific direction and magnitude according to the 
+negotiation question type ωk, the confirmed option ζk, and the runtime 
+context xk. For each coordinate j to be updated, the vague-branch 
+coordinate update is written as 
+Δvagj,k = clip  ηjσj(ωk, ζk)ξj  ek , xk),  Δj, Δj) (36) 
+where ηj is the vague-branch gain, σj(ωk, ζk) denotes the signed semantic 
+level determined by the confirmed option, ξj(ek,xk) denotes a bounded 
+evidence factor, and Δj denotes the per-step perturbation cap for that 
+coordinate.
+Different vague feedback types correspond to different updated co-
+ordinates. For cost-related feedback, namely ωk = costLevel, the update 
+mainly acts on the global cost-comfort trade-off entry, such as wcostk , and 
+may also affect the comfort bandwidth bk according to the chosen setting. 
+For comfort-related feedback, ωk∈{coolLevel, warmLevel, comfortDir}, 
+the update mainly acts on Tcomfk , with the direction determined by ‘cooler’ 
+or ‘warmer’ and the magnitude determined by the confirmed level. For EV- 
+related feedback, namely ωk = evLevel, the update acts on stark , representing 
+a service tendency toward faster or slower departure readiness.
+The vague branch can therefore be summarized as 
+Δvagk = ∑
+j∈ℐ(ωk)
+Δvagj,k ej (37) 
+where ℐ(ωk) denotes the set of profile coordinates associated with the 
+current negotiation question. This design allows global cost-comfort 
+trade-off feedback, comfort-adjustment tendencies, and EV service ur-
+gency to enter preference updating in a unified form, while the signed 
+semantic level, contextual evidence factor, and per-step cap restrict the 
+effect of transient language expressions on the long-term profile.
+3.2.3. Stabilization and algorithmic procedure
+After branch-specific updating, CIPU stabilizes the temporary profile 
+̂pk+1. The system first projects the temporary profile back to the ad-
+missible parameter domain C , so that all profile entries satisfy physical 
+ranges, user-service boundaries, and numerical bounds: 
+pprojk+1 = ΠC(̂pk+1) (38) 
+where ΠC denotes the projection operator onto the admissible param-
+eter domain. For effective vague updates, CIPU further imposes a trust- 
+region constraint to limit the per-step relative change of positive-valued 
+profile entries. Let qk collect the positive-valued profile entries to be 
+stabilized in log space. Then, 
+‖logqk+1  logqk‖∞ ≤ Δtr (39) 
+where Δtr is the trust-region radius. This constraint mainly limits the 
+relative variation of cost weights and other positive-valued entries under 
+vague updates, allowing the preference profile to evolve gradually while 
+suppressing large parameter jumps caused by a single vague feedback 
+event.
+Combining projection and trust-region stabilization, the final CIPU 
+output is expressed as 
+pk+1 = S Θ(ΠC(pk+1+ Δk), pk) (40) 
+where S Θ denotes the stabilization operator containing the trust-region 
+constraint. For explicit updates, this operator mainly performs boundary 
+projection. For vague updates, it performs both boundary projection and 
+relative-change stabilization.
+Specifically, the CIPU procedure is summarized as follows.
+Mechanistically, CIPU converts the contract-compliant interaction 
+events defined in Section 3.1 into stable preference updates. Explicit 
+feedback provides fast and local supervised correction, vague feedback 
+provides user-confirmed directional evidence, and the projection and 
+trust-region mechanisms constrain the update magnitude while preser-
+ving parameter feasibility. This design allows the system to continuously 
+absorb interaction evidence during long-term operation, gradually cor-
+rect initialization mismatch, and keep adjusting the profile when user 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+12 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 13 ===
+preferences change. The theoretical properties of this update mechanism 
+in terms of reference-profile approximation and preference-drift re- 
+tracking are analyzed in Section 3.3.
+3.3. Analytical properties of preference calibration and drift re-tracking
+CIPU continuously corrects the online preference profile based on 
+contract-compliant events, bounded branch-specific updates, 
+parameter-domain projection, and trust-region stabilization. Let pk 
+denote the online preference profile maintained by the system at time k, 
+and let p⋆ denote the reference preference profile used as the analysis 
+target within a given window. When the reference target changes over 
+time, p⋆k denotes the time-varying reference preference profile. The 
+analysis focuses on the distance between the online profile and the 
+reference preference profile, and examines whether CIPU can continu-
+ously reduce preference mismatch under a quasi-static preference and 
+pull the mismatch back after the reference preference profile changes.
+According to Eq. (17), the preference profile maintained by CIPU 
+contains four adaptive entries: the cost-related preference weight, the 
+comfort-center temperature, the EV target SOC, and the comfort band-
+width. Let Rw, RT, Rs, and Rb denote the admissible ranges of these en-
+tries within the parameter domain C . For any two preference profiles p 
+and q, the normalized L1 preference distance is defined over the four 
+adaptive preference entries as 
+D(p, q)= 14
+(
+|wcost  qw|
+Rw
++
+⃒⃒Tcomf   qT⃒⃒
+RT
++|star  qs|Rs +|b  qb|Rb
+)
+(41) 
+Here (qw, qT, qs, qb) are the four entries in q corresponding to (wcost, 
+Tcomf, star, b). This metric measures the average normalized absolute 
+deviation between the online preference profile and a target preference 
+profile. Fixed safety parameters, slack penalty coefficients, and nonne-
+gotiable device constraints are outside the online update scope of CIPU 
+and are therefore excluded from D(p, q).
+The following analysis is based on five conditions. First, the projec-
+tion step of CIPU keeps pk within the compact admissible domain C , and 
+all positive-valued entries remain strictly positive. Second, events 
+entering the update module satisfy the contract constraints and the 
+actuation-eligibility gate defined in Section 3.1; no-intent utterances 
+and unconfirmed vague intents do not trigger profile updates. Third, 
+explicit feedback provides bounded-noise supervised signals on the 
+corresponding coordinates and appears with nonzero probability when 
+persistent mismatch exists. Fourth, confirmed vague feedback is direc-
+tionally consistent with error reduction in expectation, and its single- 
+step effect is bounded by the clipping, projection, and trust-region 
+constraints in Eq. (36), Eq. (38), and Eq. (39). Fifth, the CIPU update 
+gains are sufficiently small so that each single-step update remains 
+controlled.
+3.3.1. Bounded approximation under a quasi-static preference
+Within an analysis window where the user's reference preference 
+profile is quasi-static, p⋆ is assumed to remain unchanged. CIPU is 
+driven jointly by the explicit branch and the confirmed vague branch. 
+The explicit branch treats a concrete temperature target or SOC target as 
+a stronger supervised signal and directly corrects the corresponding 
+coordinate. The vague branch converts the user-confirmed option into a 
+signed bounded perturbation and gradually corrects the cost-comfort 
+trade-off, comfort-adjustment tendency, and EV service target. Projec-
+tion and trust-region stabilization further constrain the updated profile 
+range and the single-step relative variation.
+For any profile coordinate i affected by valid feedback, define its 
+normalized error as di,k =|pi,k  p⋆i |Ri . Under the above conditions, the one- 
+step update of this coordinate satisfies the following expected contrac-
+tion relation: 
+E
+[
+di,k+1|F k
+]
+≤(1  ρi)di,k+ εi (42) 
+where F k denotes the interaction and operation history up to time k, 
+ρi∈(0, 1) denotes the average contraction strength of this coordinate 
+under valid feedback, and εi ≥ 0 collects residual disturbances caused by 
+explicit-target noise, vague semantic uncertainty, finite step size, and 
+clipping error. For coordinates unaffected by the current event, ρi = 0, 
+and their errors remain unchanged.
+Practically, di,k measures the normalized calibration error of prefer-
+ence coordinate i, namely, the deviation between its current and refer-
+ence values relative to the admissible range of that coordinate. The 
+parameter ρi represents the expected error-reduction effect of valid 
+feedback and is jointly influenced by feedback frequency, branch gain, 
+and directional reliability, whereas ϵi collects the residual effects of 
+parsing or expression uncertainty and bounded-update operations such 
+as finite step sizes, clipping, and projection. Accordingly, Eq. (42) states 
+that the expected next-step error is bounded by the uncorrected portion 
+(1-ρi)di,k plus the residual disturbance ϵi; it characterizes an expected 
+contraction trend rather than requiring the error to decrease after every 
+individual interaction.
+Proposition 1 (Bounded approximation under a quasi-static pref-
+erence). If the above conditions hold and p⋆ remains unchanged within 
+the analysis window, then there exist constants ρ∈(0, 1) and ε ≥ 0 such 
+that the normalized L1 preference distance after CIPU updating satisfies 
+E[D(pk+1, p⋆)|F k]≤(1  ρ)D(pk, p⋆)+ ε (43) 
+Eq. (43) shows that CIPU compresses the online preference-profile 
+error in expectation when valid interaction evidence continues to 
+appear and the feedback direction is reliable on average. Here, ρ is 
+determined jointly by the valid-feedback frequency, branch gains, and 
+directional consistency, while ε represents the residual error induced by 
+language parsing error, user-expression noise, and bounded updating. 
+The coordinate-level quantities ρi and ϵi in Eq. (42) are aggregated under 
+the normalized preference distance defined in Eq. (41) to obtain the 
+overall contraction factor ρ and residual term ϵ in Proposition 1.
+Iterating Eq. (43) for n steps yields 
+E[D(pk+n, p⋆)|F k]≤(1  ρ)nD(pk, p⋆)+ ερ(1  (1  ρ)n) (44) 
+Furthermore, 
+limsup
+n→∞
+E[D(pk+n, p⋆)|F k]≤ ερ (45) 
+Eq. (44) and Eq. (45) give the long-term error bound under a quasi- 
+static preference. More consistent language feedback, more stable event 
+parsing, and more reliable confirmation of vague options reduce the 
+residual disturbance ε. More frequent valid feedback and clearer update 
+directions increase the average contraction strength ρ. Thus, CIPU can 
+continuously correct initialization mismatch during operation and move 
+the online preference profile toward a bounded neighborhood of the 
+latent reference preference profile.
+Derivation. As defined in Section 3.2, each CIPU update first passes 
+through intent routing and actuation-eligibility checking. No-intent 
+events and unconfirmed vague events do not change the profile and 
+therefore do not introduce additional update noise. For explicit events, 
+CIPU uses a concrete temperature target or SOC target as a supervised 
+signal according to Eq. (35), and applies bounded correction to the 
+corresponding coordinate. When the explicit target is a bounded-noise 
+observation of the corresponding reference coordinate, the coordinate 
+error contracts in expectation. For confirmed vague events, CIPU gen-
+erates signed bounded increments according to Eq. (36) and Eq. (37). 
+Under directional consistency, these increments act in the direction of 
+reducing mismatch in expectation. The projection operation in Eq. (38)
+and the trust-region constraint in Eq. (39) keep the updated profile 
+within the admissible domain and limit the single-step relative variation 
+of positive-valued entries.
+Taking the normalized weighted sum of the coordinate-wise one-step 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+13 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 14 ===
+error relation in Eq. (42) according to the distance definition in Eq. (41), 
+and combining different event types by conditional expectation, gives 
+Eq. (43). Iterating Eq. (43) gives Eq. (44). Taking n → ∞ gives Eq. (45).
+3.3.2. Re-tracking under bounded preference drift
+In practical home operation, the user's reference preference profile 
+may drift due to seasonal conditions, price context, travel needs, or 
+changes in comfort tolerance. Let p⋆k denote the reference preference 
+profile at time k. The normalized drift magnitude between two consec-
+utive reference profiles is defined as 
+vk = D
+ 
+p⋆k+1, p⋆k) (46) 
+When vk = 0, the problem reduces to continuous calibration under a 
+quasi-static preference. When vk > 0, the change in reference preference 
+profile introduces an additional mismatch between the online profile 
+and the new reference preference profile. Based on the contraction 
+structure under a quasi-static preference, the following re-tracking 
+property is obtained.
+Proposition 2 (Re-tracking under bounded preference drift). If the 
+reference preference profile p⋆k changes over time and the single-step 
+drift magnitude vk is bounded, then the online profile error under 
+CIPU satisfies 
+E
+[
+D
+ 
+pk+1, p⋆k+1)|F k]≤(1  ρ)D  pk, p⋆k)+ ε+ vk (47) 
+Eq. (47) shows that the change in reference preference profile enters 
+the error recursion as an external disturbance term vk, while CIPU still 
+retains the contraction term (1  ρ)D
+ 
+pk, p⋆k). Therefore, a preference 
+change may cause a short-term increase in mismatch; as new user 
+feedback continues to enter the contract interface and update the profile 
+through CIPU, the error is pulled back into a bounded range determined 
+jointly by the residual disturbance and the drift magnitude.
+If the drift magnitude satisfies vk < v, then iterating Eq. (47) gives 
+E
+[
+D
+ 
+pk+n, p⋆k+n)|F k]≤(1  ρ)nD  pk, p⋆k)+ ε+ vρ (1  (1  ρ)n) (48) 
+For piecewise preference drift, the reference preference profile pro-
+duces a larger vk at the switching instant and then enters a new quasi- 
+static stage where vk approaches zero again. Eq. (48) shows that the 
+post-drift error bound consists of a decaying initial-mismatch term and a 
+disturbance-neighborhood term. When valid feedback continues to 
+appear after the drift, CIPU keeps moving the online profile toward the 
+new reference preference profile.
+Derivation. By the triangle inequality, 
+D
+ 
+pk+1, p⋆k+1)≤ D  pk+1, p⋆k)+ D  p⋆k, p⋆k+1) (49) 
+The first term on the right-hand side of Eq. (49) is controlled by the 
+quasi-static preference update relation in Proposition 1. The second term 
+is the single-step drift magnitude vk. Substituting Eq. (43) into Eq. (49)
+gives Eq. (47). Whenvk < v, iterating Eq. (47) gives Eq. (48). This result 
+shows that preference drift enters the error recursion as an external 
+disturbance, while subsequent valid CIPU updates continue to drive the 
+online profile toward the new reference preference profile.
+In summary, the theoretical properties of CIPU contain two parts. First, 
+under a quasi-static reference preference profile, contract-compliant 
+events and bounded updates allow the online preference profile to 
+continuously approach the latent reference preference profile and even-
+tually enter a bounded neighborhood controlled by the residual distur-
+bance. Second, after bounded changes in the reference preference profile, 
+CIPU continues to update the profile using new interaction evidence, so 
+that the normalized L1 preference distance decreases again after the drift 
+shock. These two properties characterize the preference calibration and 
+drift re-tracking capability of CIPU in long-horizon closed-loop operation.
+4. Experiments and discussion
+This section evaluates the proposed human-in-the-loop preference 
+calibration framework through controlled experiments. The experi-
+ments address three questions. First, under the same physical model, 
+operational constraints, and solver settings, can online interactive cali-
+bration further improve user alignment compared with fixed preference 
+initialization? Second, how do the major components of the language 
+interface contribute to structured-semantic recovery and final authori-
+zation, and what roles do intent-specific routing and contract-event 
+gating play in the closed-loop process? Third, when the role- 
+conditioned reference preference target changes during operation, can 
+the proposed method continue to use new natural-language feedback to 
+correct the online preference profile and reduce the mismatch to the 
+updated reference target?
+To answer these questions, three groups of experiments are con-
+ducted. Study 1 provides a benchmark comparison across three user 
+profiles and four control methods. Default MPC denotes a baseline 
+without user-specific calibration, using only default preference param-
+eters. Survey MPC denotes a static personalization method that obtains 
+an initial preference profile from a pre-operation questionnaire and 
+keeps it fixed during operation. GT-parameter MPC denotes an ideal 
+reference in which the controller directly uses the predefined reference 
+preference profile parameters. The proposed method starts from 
+questionnaire-based initialization and continuously updates the prefer-
+ence profile through runtime natural-language feedback and CIPU. This 
+comparison evaluates the overall advantage of online preference cali-
+bration over non-personalized control and one-shot personalized 
+initialization. Study 2 conducts mechanism ablations and language- 
+interface evaluation. Study 2 A compares Explicit-only, Vague-only, 
+and the full proposed method to analyze the complementary roles of 
+explicit feedback and vague feedback in preference calibration. Study 2B 
+removes the contract-based event gates to examine the effect of a 
+structured and verifiable interface on closed-loop stability, with 
+interaction-event logs further used to quantify interface mismatch after 
+gate removal. Study 2C conducts a component-level comparison on a 
+shared frozen benchmark to examine the contributions of LLM-based 
+semantic parsing, the current-control-intent semantic rule in the 
+prompt, structured-schema consistency, and deterministic final autho-
+rization. Study 3 introduces mid-horizon preference drift and examines 
+whether the system can keep absorbing interaction evidence and re- 
+track the user preference after drift shocks, including shifts from a 
+balanced preference toward cost-sensitive, comfort-sensitive, and multi- 
+stage preference patterns.
+All closed-loop experiments are conducted under a unified simula-
+tion environment and MPC execution framework. All compared closed- 
+loop methods share the same physical model, external data, operational 
+constraints, safety bounds, and solver settings. Their differences mainly 
+lie in preference initialization, interaction pathways, and preference- 
+update mechanisms. The building and device parameters, weather and 
+electricity-price data sources, user-profile settings, control parameters, 
+and experiment procedure are described in Section 4.1. The evaluation 
+metrics include electricity cost, energy consumption, normalized L1 
+preference distance, complaint count, and comfort-range ratio. Elec-
+tricity cost and energy consumption measure economic performance 
+and energy use. The normalized L1 preference distance, defined in Eq. 
+(41), quantifies the mismatch between the online preference profile and 
+the latent reference preference profile. Complaint count reflects the 
+frequency of user dissatisfaction feedback during closed-loop operation. 
+Comfort-range ratio measures the proportion of time during which the 
+indoor temperature stays within the user's reference comfort range. 
+Study 2C separately uses the language-interface metrics defined in 
+Section 3.1.3 to evaluate structured-semantic recovery and final 
+authorization. The calculation and interpretation of these metrics are 
+further specified in Section 4.1. Together, these experiments evaluate 
+the proposed method from three perspectives: overall performance, 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+14 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 15 ===
+mechanism attribution, and dynamic preference tracking.
+4.1. Experimental setup and evaluation metrics
+All closed-loop experiments use the 3R2C building thermal model, 
+HVAC execution model, EV charging dynamics model, and MPC 
+execution framework established in Section 2. The compared closed- 
+loop methods share the same physical model, external inputs, opera-
+tional constraints, safety bounds, prediction horizon, and solver settings. 
+Their differences mainly come from preference initialization, interaction 
+pathways, and online preference-updating mechanisms.
+The building thermal parameters are configured according to 
+German residential building typology standards [23]. The 3R2C model 
+includes the air-node thermal capacitance, the building thermal-mass 
+capacitance, and the heat-transfer coefficients between indoor air and 
+outdoors, between indoor air and thermal mass, and between thermal 
+mass and outdoors. These parameters describe the heat exchange among 
+indoor air, building thermal mass, and the outdoor environment. HVAC 
+parameters include the maximum heating thermal power, maximum 
+cooling thermal power, and the coefficients of performance in heating 
+and cooling modes [24]. EV parameters include battery capacity, 
+nominal charging power, and charging efficiency [25]. The EV-related 
+settings follow representative German household charging equipment 
+and low-voltage grid-connection requirements [26]. Table 2 summarizes 
+the building, HVAC, EV, controller-safety, and objective-bound settings.
+The controller safety settings are consistent with the soft-constrained 
+MPC formulation in Section 2.5. Indoor temperature is subject to hard 
+safety bounds, while slack variables are used to handle a small number 
+of potentially infeasible cases, with a fixed slack penalty coefficient 
+limiting safety-bound violations. This setup follows common feasibility- 
+protection practice in constrained MPC for building energy control [27]. 
+On the objective side, the comfort-bandwidth and cost-weight bounds 
+are fixed admissible intervals that cover the initial profiles mapped from 
+the questionnaire in Appendix A. The temperature-deviation penalty, 
+EV-service penalty, and smoothing penalty are fixed control-layer pa-
+rameters in all experiments. CIPU updates only the learnable preference- 
+profile entries defined in Eq. (17), namely the cost-related preference 
+weight, comfort-center temperature, EV target SOC, and comfort 
+bandwidth.
+The external inputs include weather data and time-varying elec-
+tricity prices. Weather data are taken from real German meteorological 
+data for 2025 [28], and electricity prices are taken from German elec-
+tricity market data for 2025 [29]. The raw data are processed through 
+missing-value handling, outlier cleaning, timestamp alignment, and 1 h 
+resampling before being passed to the simulator. The control interval 
+and simulation step are both set to 1 h, and both the MPC prediction 
+horizon and control horizon are set to 24 h. Each closed-loop experiment 
+window contains 720 time steps, corresponding to 30 days of operation. 
+January, April, and July are selected as representative winter, 
+transition-season, and summer scenarios.
+The user-side experiment follows a controlled role-play protocol. 
+Three volunteers respectively play a balanced user, a temperature- 
+sensitive user, and a cost-sensitive user. Motivated by user- 
+segmentation [30] and preference-modeling studies in residential en-
+ergy management, these role-conditioned user types are designed to 
+cover typical preference orientations, including balanced cost–comfort 
+trade-off, stronger thermal-comfort priority, and stronger cost-saving 
+tendency. Each user type is associated with a predefined reference 
+preference profile, which represents the preference target of that role in 
+the experiment. Before the experiment starts, each user obtains an 
+observable initial preference profile through a lightweight question-
+naire. The questionnaire items, deterministic parameter mapping, pre-
+defined reference profiles, and questionnaire-initialized profiles of the 
+three user types are given in Appendix A. During the experiment, par-
+ticipants provide natural-language feedback according to their assigned 
+roles and the runtime information shown in the dialogue interface, while 
+the numerical values of the reference profiles are not disclosed to them. 
+Survey MPC uses the questionnaire-initialized profile and keeps it fixed 
+during closed-loop operation. The proposed method starts from the same 
+questionnaire-initialized profile and continuously updates the prefer-
+ence profile through runtime structured interaction events and CIPU.
+The language layer uses a locally deployed open-source Qwen3-14B 
+model [31]. All LLM-based experiments use the same decoding config-
+uration, with temperature set to 0.0, top_p set to 0.95, top_k set to 20, 
+max_new_tokens set to 32,768, and thinking mode disabled by setting 
+enable_thinking = False. These settings remain fixed across user profiles, 
+seasonal scenarios, and LLM-based comparison methods to reduce 
+generation variability and maintain consistent structured semantic 
+parsing.
+The language interface is constrained by a fixed System Prompt and 
+User Prompt. The System Prompt specifies the task scope, intent-class 
+boundaries, semantic-field definitions, numerical-target admission 
+rules, and the prohibition against directly generating device-control 
+commands. The User Prompt provides the current user utterance and 
+relevant session context and requires the model to return the parsing 
+result in the predefined format. The complete System Prompt and User 
+Prompt are provided in Appendix C.
+Model outputs follow a fixed JSON-formatted structure consistent 
+with Section 3.1.3 and are checked for field exclusivity, conditional 
+emptiness, data types, and value bounds. Records that violate the schema 
+are rejected or conservatively downgraded. The language model only 
+converts user utterances into structured semantic records; it does not 
+directly generate device commands or bypass the contract gates and MPC 
+execution layer. In the dialogue interface, users can observe indoor 
+temperature, outdoor temperature, current electricity price, accumu-
+lated electricity cost, accumulated energy consumption, and EV status, 
+and then provide natural-language feedback based on these observations. 
+Table 2 
+Key building/device parameters and fixed safety/weight-bound settings used in 
+experiments.
+Subsystem Parameter description Symbol Unit Value
+Building 
+(3R2C)
+Air-node thermal 
+capacitance Ca
+kWh/ 
+◦C 0.176
+Building 
+(3R2C)
+Mass-node thermal 
+capacitance Cm
+kWh/ 
+◦C 6.300
+Building 
+(3R2C)
+Air-outdoor thermal 
+conductance Gao kW/◦C 0.091
+Building 
+(3R2C)
+Air-mass thermal 
+conductance Gam kW/◦C 1.050
+Building 
+(3R2C)
+Mass-outdoor thermal 
+conductance Gmo kW/◦C 0.078
+HVAC Maximum heating thermal power Qheatmax kW 8.00
+HVAC Maximum cooling thermal power Qcoolmax kW 6.00
+HVAC Heating coefficient of performance COPheat – 3.20
+HVAC Cooling coefficient of performance COPcool – 3.00
+EV Battery capacity Ecap kWh 70.00
+EV Nominal charging power Pch kW 11.00
+EV Charging efficiency ηch – 0.93
+Controller 
+safety
+Hard indoor- 
+temperature bounds
+[Thd,lo,Thd, 
+hi]
+◦C [18.00, 30.00]
+Controller 
+safety Slack bound caps [ξlo, ξhi] ◦C [0.10, 0.10]
+Controller 
+safety
+Slack-violation penalty 
+coefficient λslack – 60,000.00
+Objective 
+bounds
+Comfort-band width 
+bounds [bmin, bmax] ◦C [0.50, 3.00]
+Objective 
+bounds Cost weight bounds [wmincost, wmaxcost] – [0.50, 4.50]
+Objective 
+bounds
+Smoothness weight 
+(fixed) wsmooth – 0.08
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+15 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 16 ===
+The dialogue interface and runtime observability are provided in Ap-
+pendix B. Experimental records retain only control-related structured 
+events and necessary runtime logs, without personally identifiable in-
+formation. De-identified user utterances produced during the human-in- 
+the-loop experiments were archived for language-interface evaluation. 
+The resulting corpus contains 188 utterances, including 152 control- 
+relevant utterances and 36 no-current-control-intent utterances. Study 
+2C uses the complete corpus to evaluate the different language-interface 
+configurations under the same protocol.
+Study 2B uses the retained interaction-event logs from the closed- 
+loop experiments for interface-level auditing. Each logged event corre-
+sponds to a user utterance processed by the language interface and re-
+cords the parsed event fields, gate-related status, and downstream 
+handling result. The event-interface mismatch rate is computed only 
+over parsed interaction events, and silent MPC steps without user input 
+are excluded from the denominator [32].
+Study 2C uses an expert-reviewed language-interface benchmark 
+frozen before the component-level comparison. The benchmark contains 
+188 original user utterances produced during the human-in-the-loop 
+experiments. Each utterance is annotated, according to the intent 
+boundaries in Section 3.1.2 and the contract rules in Section 3.1.3, with 
+the structured semantic fields and the corresponding final handling path. 
+All evaluated configurations receive the same utterances and are evalu-
+ated against the same frozen expert-reference records; all LLM-based 
+configurations use the same base model and decoding configuration.
+All compared closed-loop control methods use the same MPC model, 
+constraints, forecast information, and solver settings, so that the closed- 
+loop performance differences mainly reflect preference initialization, 
+interaction pathways, and online preference updating mechanisms.
+The closed-loop experiments use five metrics: electricity cost, total 
+energy consumption, normalized L1 preference distance, complaint 
+count, and comfort-range ratio. Electricity cost and total energy con-
+sumption are computed from realized operating cost and accumulated 
+electricity use during closed-loop operation, respectively. Complaint 
+count denotes the number of interactions parsed as valid dissatisfaction 
+feedback, reflecting how often users need to actively express corrective 
+requests during operation [33]. Comfort-range ratio denotes the pro-
+portion of time steps in which indoor air temperature falls within the 
+corresponding reference comfort range, measuring the consistency be-
+tween control outcomes and the role-conditioned comfort target [34]. 
+The following studies report these metrics under different user profiles, 
+seasonal scenarios, or preference-drift patterns according to their 
+respective research purposes, with the statistical aggregation specified 
+in each study. In Study 2B, event-interface mismatch rate is additionally 
+reported as an event-level metric for the no-contract-gate ablation. 
+Study 2C uses the language-interface metrics defined in Section 3.1.3, 
+and its comparison results are reported in the corresponding subsection.
+4.2. Benchmark comparison across three user profiles
+Study 1 reports the benchmark comparison results. The proposed 
+method uses a fixed CIPU hyperparameter configuration in this study, 
+with η(HVAC)exp = 1.0, η(EV)exp = 1.0, ηcost = 0.16, and ηcomfort = 0.20 [35]. 
+The branch gain for EV vague feedback is set to 0.02 [36]. These pa-
+rameters remain unchanged across user profiles and seasonal windows, 
+with no user-specific retuning. The stabilization-related constants are 
+also fixed before the experiments and shared across all experiment 
+groups.
+Fig. 4 shows the overall performance of different methods in terms of 
+electricity cost, energy consumption, normalized L1 distance, complaint 
+count, and comfort-range ratio. Default MPC produces relatively high 
+preference distance and complaint count across different user profiles, 
+indicating that default preference parameters cannot adequately capture 
+user differences in comfort, economic preference, and service re-
+quirements. Survey MPC reduces the initial preference mismatch 
+through questionnaire-based initialization and therefore improves over 
+Default MPC. The proposed method further reduces preference distance 
+and complaint count relative to Survey MPC while maintaining good 
+cost and energy performance, showing that runtime feedback can 
+Fig. 4. Benchmark visualization for Study 1 across three user profiles.
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+16 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 17 ===
+continue to correct the residual mismatch after questionnaire initiali-
+zation. For the balanced user, the proposed method reduces electricity 
+cost, energy consumption, preference distance, and complaint count. 
+For the temperature-sensitive user, it achieves the highest comfort-range 
+ratio among practical methods and substantially reduces complaint 
+count. For the cost-sensitive user, it achieves the lowest electricity cost 
+and energy consumption among practical methods while maintaining a 
+high comfort-range ratio, indicating further calibration toward the user's 
+economic preference.
+Table 3 reports the detailed numerical results. For the balanced user, 
+compared with Survey MPC, the proposed method reduces electricity 
+cost from 220.91 EUR to 215.20 EUR, energy consumption from 
+2221.78 kWh to 2186.19 kWh, normalized L1 distance from 0.29 to 
+0.22, and complaint count from 67.67 to 18.00. For the temperature- 
+sensitive user, the proposed method reduces normalized L1 distance 
+from 0.21 to 0.14 and complaint count from 62.67 to 17.33, while 
+increasing the comfort-range ratio from 0.48 to 0.53. For the cost- 
+sensitive user, the proposed method reduces electricity cost from 
+179.31 EUR to 173.53 EUR, energy consumption from 1780.39 kWh to 
+1719.33 kWh, and complaint count from 68.00 to 15.33, while main-
+taining a comfort-range ratio of 0.76. Averaged across the three user 
+profiles, compared with Survey MPC, the proposed method further re-
+duces electricity cost by 2.43%, energy consumption by 1.68%, 
+normalized L1 distance by 22.50%, and complaint count by 74.46%, 
+while increasing the comfort-range ratio by 2.40%. These results indi-
+cate that online preference calibration can further correct residual 
+mismatch after one-shot questionnaire initialization and reduce 
+repeated dissatisfaction feedback during long-horizon operation.
+The main reason behind these results is that the initial preference 
+profile obtained from a questionnaire usually differs from the user's 
+latent reference preference profile. Questionnaire responses can only 
+reflect coarse preference judgments before operation, whereas the user's 
+actual comfort perception, willingness to save energy, travel needs, and 
+acceptance of control actions are jointly affected by outdoor weather, 
+electricity prices, indoor states, and temporary tasks during operation. 
+Default MPC lacks user-specific preference information and therefore 
+cannot adapt to such individual differences. Survey MPC improves the 
+starting point through questionnaire initialization, but its preference 
+profile remains fixed during closed-loop operation and cannot absorb 
+new preference evidence revealed by later feedback. The proposed 
+method converts user language feedback into structured update evi-
+dence through the contract-constrained event interface, and the 
+contract-event gates further check whether the parsed events satisfy the 
+required intent, domain, payload, and downstream-interface conditions 
+before they are used by downstream modules. CIPU then applies 
+bounded corrections to profile entries such as cost weight, comfort 
+center, comfort bandwidth, and EV target. In this way, the preference 
+profile can gradually move toward the user's expressed requirements 
+during operation. The balanced-user results show that this mechanism 
+can further refine the trade-off between economy and comfort. The 
+temperature-sensitive-user results show that continuous interaction 
+improves the expression of comfort preference. The cost-sensitive-user 
+results show that online calibration can further reduce operating cost 
+and energy use on top of an already cost-oriented initialization. Thus, 
+Study 1 shows that runtime human-in-the-loop preference calibration 
+continues to provide value beyond one-shot personalization.
+4.3. Study 2: mechanism ablations and language-interface evaluation
+Study 2 evaluates different components of the proposed framework 
+at the closed-loop mechanism and language-interface levels. To separate 
+the effects of different mechanisms, two closed-loop ablations are con-
+ducted under the same questionnaire initialization, simulator, seasonal 
+protocol, and control constraints. Study 2 A focuses on the intent-routing 
+design by comparing single-branch variants with the full dual-path 
+method to analyze the complementary roles of the explicit- and vague- 
+intent pathways in preference calibration. Study 2B removes the 
+contract-event gates from the full pipeline to evaluate the admission 
+checks applied before structured events enter preference updating and 
+control execution. In Study 2 A and Study 2B, all experiment groups use 
+the same three representative seasons and 720 hourly steps per season, 
+so the resulting performance differences can be attributed to the 
+removed mechanism rather than to changes in external conditions. 
+Study 2C conducts a component-level comparison on a shared frozen 
+benchmark to evaluate the contributions of LLM-based semantic 
+parsing, the current-control-intent semantic rule in the prompt, 
+structured-schema consistency, and deterministic final authorization.
+4.3.1. Study 2 a: intent-path ablation
+We first study whether the two intent pathways play complementary 
+roles in online calibration. The comparison includes Explicit-only, which 
+keeps only the branch handling direct and concrete requests; Vague-only, 
+which keeps only the branch handling indirect preference cues; and the 
+full proposed method, which combines both pathways. The figure below 
+visualizes how these variants differ in distance reduction, complaint 
+generation, and post-feedback state adjustment under the balanced-user 
+profile.
+Fig. 5 shows the dynamic behavior of the three methods under the 
+balanced user profile. The first row presents the trajectories of normal-
+ized L1 distance. The full method shows faster distance reduction and 
+lower terminal levels across the three seasonal scenarios, indicating that 
+combining explicit and vague feedback more effectively drives the on-
+line profile toward the user's reference preference profile. Explicit-only 
+can respond quickly to concrete requests, but its updates mainly focus 
+on specific targets and have limited ability to adjust long-term trade- 
+offs. Vague-only provides more continuous directional preference evi-
+dence, but lacks the strong local correction from explicit requests and is 
+therefore less stable for short-term mismatch repair.
+The local zoom-in windows in Fig. 5 further explain why complaints 
+are triggered and how they affect later operation. In the winter cost- 
+trigger window, the user expresses an energy-saving request under a 
+high electricity-price condition, while indoor temperature remains 
+Table 3 
+Benchmark comparison across three user profiles.
+User profile Method Cost (EUR) Energy (kWh) Normalized L1 distance Complaints Comfort-range ratio
+Balanced
+Default MPC 243.89 2490.07 0.54 87.33 0.30
+Survey MPC 220.91 2221.78 0.29 67.67 0.44
+GT-parameter MPC 199.26 2055.64 0.00 0.00 0.49
+Proposed method 215.20 2186.19 0.22 18.00 0.42
+Temperature 
+-sensitive
+Default MPC 260.14 2511.87 0.43 88.33 0.29
+Survey MPC 222.18 2215.97 0.21 62.67 0.48
+GT-parameter MPC 216.28 2234.54 0.00 2.33 0.41
+Proposed method 218.53 2208.46 0.14 17.33 0.53
+Cost 
+-sensitive
+Default MPC 280.06 2710.75 1.01 92.00 0.20
+Survey MPC 179.31 1780.39 0.30 68.00 0.75
+GT-parameter MPC 157.95 1527.87 0.00 0.00 0.77
+Proposed method 173.53 1719.33 0.26 15.33 0.76
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+17 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 18 ===
+within the acceptable comfort range. This indicates that the complaint is 
+mainly driven by economic pressure. In the summer heat-discomfort 
+window, the user reports that it is “still a bit hot” when indoor temper-
+ature has exceeded the reference comfort upper bound, while the elec-
+tricity price is not particularly high. This indicates that the complaint is 
+mainly caused by comfort mismatch. The transition-season comfort-re-
+covery window shows that, after user feedback enters the loop, indoor 
+temperature gradually moves back toward the reference comfort range 
+under subsequent control actions. These observations show that user 
+complaints are jointly triggered by operating state, electricity-price 
+context, and reference-preference mismatch, and that the full method 
+can convert such feedback into effective correction in later control.
+Table 4 reports the numerical results of Study 2 A. The full method 
+achieves the lowest electricity cost, energy consumption, normalized L1 
+distance, and complaint count, with values of 215.20 EUR, 2186.19 
+kWh, 0.22, and 18.00, respectively. Compared with Explicit-only, the full 
+method reduces electricity cost by 2.48%, energy consumption by 
+2.15%, normalized L1 distance by 21.43%, and complaint count by 
+59.40%. Compared with Vague-only, it reduces these four metrics by 
+1.70%, 1.16%, 18.52%, and 49.05%, respectively. These results indicate 
+that the explicit-intent path and the vague-intent path provide different 
+types of calibration information. When combined, the system can use 
+both the strong corrective signal from concrete requests and the long- 
+term directional evidence from vague feedback.
+The results of Study 2 A show that mixed-semantic feedback should 
+be handled through differentiated pathways. Explicit intents usually 
+contain concrete temperature or charging targets and are suitable for 
+fast local correction. Vague intents often express directional needs such 
+as saving more energy, improving comfort, or charging faster, and are 
+better suited for gradual long-term profile calibration after negotiation 
+and confirmation. When only one path is retained, the system either 
+lacks accumulated long-term preference direction or lacks fast repair for 
+concrete requests. The full method integrates both feedback types into 
+the same closed loop through the dual-path mechanism and converts 
+them into bounded preference updates in CIPU, leading to more stable 
+improvements in preference distance and complaint count.
+4.3.2. Study 2B: contract-event gate ablation
+Study 2B further examines the role of contract-event gating. This 
+study compares the full method with the No-contract-gate variant, in 
+which only the schema-validity gate and actuation-eligibility gate 
+defined in Section 3.1.5 are removed, while the language model, prompt 
+settings, structured parsing process, CIPU update rules, MPC model, and 
+simulation environment remain unchanged. This comparison therefore 
+isolates the admission checks applied before structured events enter 
+preference updating and control execution.
+The event–interface mismatch rate is computed from the interaction- 
+event logs of the No-contract-gate variant. Let Nevent denote the number 
+of parsed interaction events collected from the balanced-user Study 2B 
+experiment across the winter, transition-season, and summer runs, and 
+let Nmis denote the number of event-level records that fail at least one 
+downstream interface-consistency requirement. The mismatch rate is 
+defined as rmis = Nmis/Nevent × 100%. Each event is counted once in the 
+numerator.
+Table 5 reports the results of Study 2B. After contract-based event 
+gating is removed, the No-contract-gate event variant produces higher 
+electricity cost, energy consumption, normalized L1 distance, and 
+complaint count than the full method, with values of 239.14 EUR, 
+2246.67 kWh, 0.24, and 28.00, respectively. The corresponding values 
+of the full method are 215.20 EUR, 2186.19 kWh, 0.22, and 18.00. 
+Compared with the No-contract-gate variant, the full method reduces 
+Fig. 5. Ablation visualization for Study 2 A (intent-path ablation) on the balanced user profile.
+Table 4 
+Study 2 A results: intent-path ablation on the balanced user profile.
+Method Cost 
+(EUR)
+Energy 
+(kWh)
+Normalized 
+L1 distance
+Complaints Comfort- 
+range 
+ratio
+Explicit- 
+only 220.67 2234.22 0.28 44.33 0.43
+Vague-only 218.92 2211.76 0.27 35.33 0.44
+Proposed 
+method 215.20 2186.19 0.22 18.00 0.42
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+18 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 19 ===
+electricity cost by 10.01%, energy consumption by 2.69%, normalized 
+L1 distance by 8.33%, and complaint count by 35.71%. At the even-
+t–interface level, 31 out of 84 parsed interaction events collected from 
+the balanced-user Study 2B experiment across the winter, transition- 
+season, and summer runs fail at least one downstream interface- 
+consistency check, yielding an event–interface mismatch rate of 36.90%.
+These results show that contract-event gating directly affects the 
+quality of preference updating. In the log audit, event–interface 
+mismatch covers malformed event fields, missing or invalid payloads, 
+and premature use of events that have not yet satisfied the actuation- 
+eligibility condition. These mismatches introduce noisy update evi-
+dence and weaken CIPU's use of structured interaction records. The full 
+method filters these records through schema validation and actuation- 
+eligibility checking before preference updating or execution override, 
+thereby keeping the language-to-control interface verifiable and stable.
+Representative traces further clarify this calculation. For example, a 
+comfort-related utterance such as “I feel uncomfortable” is treated as 
+vague comfort feedback when the adjustment direction or magnitude 
+still needs confirmation. In the full method, this event is routed to 
+negotiation before profile updating or execution override. In the No- 
+contract-gate variant, the same type of feedback may be converted 
+into a directly handled event before satisfying the required interface 
+conditions, and the record is counted as an event–interface mismatch. A 
+cost-related utterance such as “the electricity cost is a bit high” follows 
+the same logic when it should provide cost–comfort preference evidence 
+but fails to enter the downstream interface in a contract-consistent form.
+4.3.3. Study 2C: component-level language-interface evaluation
+Study 2C conducts a component-level controlled comparison of the 
+language interface on the same frozen 188-utterance benchmark and 
+expert-reference records (see Table 6). All LLM-based configurations use 
+the same Qwen3-14B base model, decoding configuration, and input 
+utterances. Five configurations are evaluated: Rule-based, No-Current- 
+Control-Intent Prompt Rule, No-Schema-Consistency, LLM-Based Final 
+Authorization, and Proposed.
+Rule-based replaces LLM-based semantic parsing with keyword 
+matching, expression templates, and numerical matching rules while 
+retaining the same structured-event representation and downstream 
+authorization rules. No-Current-Control-Intent Prompt Rule retains the 
+same LLM, the remaining prompt rules, structured-schema constraints, 
+and deterministic authorization mechanism, while removing only the 
+rule that determines whether the current speaker expresses a valid 
+present or future control-related intent. No-Schema-Consistency retains 
+the complete LLM-based semantic parsing process and prompt-level 
+semantic rules while removing conditional emptiness, cross-field de-
+pendencies, field exclusivity, and domain-target consistency re-
+quirements. LLM-Based Final Authorization retains the complete 
+upstream semantic parsing and structured semantic records of Proposed, 
+but replaces deterministic final authorization with LLM-based selection 
+among direct execution, negotiation, and no action. Proposed retains the 
+complete prompt-level semantic rules, structured-schema consistency 
+constraints, and deterministic final authorization mechanism.
+Rule-based achieves 67.55% Intent Accuracy and EEM, 71.56% NTR, 
+12.41% FDER, and 67.55% RA. Its errors are mainly associated with 
+context-dependent distinctions between state information and requested 
+control targets. For example, “The air-conditioning panel still shows 
+24◦C; I am just mentioning it” reports the current state, whereas “Set the 
+air conditioner to 24.0◦C" specifies an explicit control target. This result 
+reflects the role of LLM-based semantic interpretation in distinguishing 
+open-form expressions with similar surface information but different 
+contextual meanings.
+No-Current-Control-Intent Prompt Rule reduces Intent Accuracy, 
+EEM, and RA to 87.23%, while NTR remains at 100.00% and FDER is 
+1.38%. The errors mainly involve state reports, historical descriptions, 
+resolved conditions, and third-party comments being interpreted as 
+current control-related intents. For example, “The car still has 40% 
+battery left; no need to do anything for now” contains an SOC value but 
+does not express a current control request. This result reflects the role of 
+the current-control-intent rule in defining the boundary between 
+contextual information and currently valid control-related intent.
+No-Schema-Consistency achieves 81.38% Intent Accuracy, 68.09% 
+EEM, 68.81% NTR, 23.45% FDER, and 81.38% RA. Removing condi-
+tional emptiness, field exclusivity, cross-field dependencies, and 
+domain-target consistency allows structured records to contain field 
+combinations that do not satisfy the predefined schema relationships. 
+For example, “Charge a bit faster” expresses a charging-direction pref-
+erence without specifying a unique SOC target, while “It is a little hot 
+now; make it cooler” expresses a cooling direction without specifying a 
+unique temperature target. This result reflects the role of schema con-
+sistency in forming internally consistent structured semantic records.
+LLM-Based Final Authorization retains 100.00% Intent Accuracy, 
+EEM, and NTR and 0.00% FDER, while RA decreases to 84.04%. Because 
+the upstream semantic parsing and structured records are unchanged 
+from the Proposed configuration, the decrease occurs at the final 
+authorization stage. For example, “It is a little hot now; make it cooler” 
+and “Charge faster now” are correctly identified as vague requests 
+without unique executable numerical targets and should enter negoti-
+ation, but LLM-based final authorization may assign a different handling 
+path. This result reflects the role of deterministic authorization in 
+maintaining consistent final routing.
+Proposed achieves 100.00% Intent Accuracy, EEM, NTR, and RA, 
+with an FDER of 0.00%. The 100% result was obtained on the present 
+controlled benchmark comprising utterances from three role-playing 
+volunteers, and its generalizability should therefore be understood 
+within the experimental conditions and range of user expressions rep-
+resented in this benchmark. Under the complete configuration, the 
+prompt-level semantic rules define the intent and field semantics, the 
+schema-consistency constraints maintain valid relationships among the 
+structured fields, and deterministic final authorization maps the 
+resulting semantic record to the corresponding handling path.
+Overall, the component-level comparisons distinguish the contribu-
+tions of different stages of the language-interface pipeline. Rule-based 
+evaluates LLM-based contextual semantic recovery from open-form 
+Table 5 
+Study 2B results: contract-event gate ablation on the balanced user profile.
+Method Cost (EUR) Energy(kWh) Normalized L1 distance Complaints Comfort-range ratio Mismatch rate (%)
+No-contract-gate 239.14 2246.67 0.24 28.00 0.41 36.90
+Proposed Method 215.20 2186.19 0.22 18.00 0.42 ​
+Table 6 
+Component-level language-interface comparison on the frozen 188-utterance 
+benchmark in Study 2C.
+Method Intent 
+Accuracy
+EEM NTR FDER RA
+Rule-based 67.55% 67.55% 71.56% 12.41% 67.55%
+No-Current- 
+Control-Intent 
+Prompt Rule
+87.23% 87.23% 100.00% 1.38% 87.23%
+No-Schema- 
+Consistency 81.38% 68.09% 68.81% 23.45% 81.38%
+LLM-Based Final 
+Authorization 100.00% 100.00% 100.00% 0.00% 84.04%
+Proposed 100.00% 100.00% 100.00% 0.00% 100.00%
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+19 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 20 ===
+expressions. No-Current-Control-Intent Prompt Rule evaluates the se-
+mantic boundary for valid current control intent. No-Schema- 
+Consistency evaluates the role of cross-field consistency in structured 
+semantic records. LLM-Based Final Authorization evaluates the contri-
+bution of deterministic authorization after structured-semantic forma-
+tion. The results therefore separate structured-semantic recovery from 
+final authorization under the same frozen benchmark.
+Taken together, Study 2 A and Study 2B examine the closed-loop 
+roles of intent-specific routing and contract-event gating, respectively, 
+while Study 2C separately evaluates the components of the language 
+interface on the shared frozen benchmark. These studies provide com-
+plementary evidence across different stages of the framework, from 
+structured-semantic recovery and final authorization to downstream 
+event admission and preference updating.
+4.4. Study 3: dynamic preference tracking on the balanced user profile
+Study 3 examines the re-tracking capability of online preference 
+calibration when the user's reference preference profile changes during 
+operation (see Table 7). The experiment starts from the balanced user 
+profile and considers three mid-horizon drift patterns: Balanced → Cost, 
+Balanced → Comfort, and Balanced → Cost → Comfort. The latent 
+reference preference profile in each stage is taken from the predefined 
+user profiles in Appendix A. The Balanced stage uses the latent reference 
+preference profile parameters of the balanced user, the Cost stage uses 
+those of the cost-sensitive user, and the Comfort stage uses those of the 
+temperature-sensitive user. In each pattern, the latent reference pref-
+erence profile is switched at predefined time steps, so that the system 
+experiences preference-target changes within the same closed-loop run. 
+This study examines whether, after preference switching, the controller 
+can use later natural-language feedback to correct the preference profile 
+and reduce the mismatch between the online profile and the new 
+reference preference profile.
+Fig. 6 shows the trajectories of normalized L1 distance under the 
+three preference-drift patterns. At each switching point, all methods are 
+affected by the drift shock, and the preference distance increases. The 
+recovery process after drift differs clearly across methods. Default MPC 
+and Survey MPC keep using their original preference settings after the 
+preference changes, so their distances remain at high levels after the 
+drift. The proposed method also shows a short-term distance increase 
+after drift, but then continues to update the profile using new interaction 
+feedback and shows a clear downward recovery. In the representative 
+winter trajectory, under Balanced → Cost, the final normalized L1 dis-
+tance of the proposed method is about 0.089, lower than 0.346 for 
+Survey MPC and 0.463 for Default MPC. Under Balanced → Comfort, the 
+corresponding values are 0.179, 0.270, and 0.521. Under the more 
+complex Balanced → Cost → Comfort pattern, the proposed method still 
+limits the final distance to 0.278, while Survey MPC and Default MPC 
+remain at 0.396 and 0.646, respectively. These trajectories show that 
+online calibration can reduce preference mismatch after drift, demon-
+strating the adaptability of a continuously updated profile.
+Fig. 7 further shows changes in feedback semantics and system re-
+sponses after preference drift. The phase-level complaint statistics 
+indicate that reference-profile switching changes the semantic compo-
+sition of user feedback. In the Balanced → Cost case, baseline-stage 
+complaints are more comfort-related, while complaints quickly shift 
+toward energy-saving requests after entering the cost-sensitive stage, 
+with 23 cost-saving complaints and 5 comfort-related complaints. In 
+Balanced → Comfort, complaints shift from 10 cooler complaints in the 
+baseline phase to 32 warmer complaints and 2 explicit HVAC requests in 
+the comfort-shift phase. In the cycle setting, the sequence becomes even 
+clearer as cooler → cost-saving → warmer. The local zoom-ins further 
+show that these complaints trigger actionable responses rather than 
+passive logging. In a cost complaint case, the short-window mean hourly 
+electricity cost drops from about 1.38 EUR/h before complaint to about 
+0.24 EUR/h after complaint. In a comfort complaint case, the mean 
+indoor temperature over the pre-complaint steps is about 23.40 ◦C, 
+below the new comfort-band lower bound of 26.05 ◦C, while the next- 
+step post-complaint temperature reaches 26.16 ◦C and re-enters the 
+updated comfort range. Therefore, preference drift changes both how 
+users complain and how the system responds.
+These results show that dynamic personalization depends on 
+whether the preference profile can keep being updated after deploy-
+ment. Survey MPC provides a better initial preference estimate than 
+default control, but when the user's reference preference profile 
+changes, its fixed profile gradually becomes outdated and keeps the 
+post-drift preference distance high. The proposed method continuously 
+receives natural-language feedback through the contract-constrained 
+interface and converts the new complaint semantics after drift into 
+bounded preference updates, allowing the system to move from the old 
+preference stage to the new one. The Balanced → Cost case shows that, 
+when the user shifts from balanced to cost-sensitive behavior, the system 
+can use energy-saving feedback to reduce economic mismatch. The 
+Balanced → Comfort case shows that, when the user shifts toward 
+stronger comfort needs, the system can adjust temperature preference 
+through comfort-related feedback. The multi-stage drift case further 
+shows that this mechanism can maintain re-tracking capability after 
+multiple preference switches. Runtime natural-language feedback can 
+correct initialization mismatch and can also provide new calibration 
+evidence after user preference changes, allowing the online preference 
+profile to move back toward the changed reference preference profile.
+4.5. Discussion
+The three studies indicate that the central challenge of personalized 
+HEMS control is the continuous maintenance of user-authorized 
+controllable boundaries during long-term operation. Questionnaire 
+initialization provides an initial preference profile, but it mainly reflects 
+the user's judgment before system operation. As weather, electricity 
+prices, travel schedules, and immediate comfort perception change, the 
+user's actual needs continue to emerge through runtime feedback. 
+Natural-language feedback therefore provides new calibration evidence 
+Table 7 
+Dynamic preference tracking on the balanced user profile.
+Drift pattern Method Pre-L1 Peak-L1 Recovery Residual Final-L1 Complaints Comfort ratio
+Balanced→Cost
+Default MPC 0.33 0.46 0.00 0.13 0.46 68.00 0.41
+Survey MPC 0.22 0.35 0.00 0.13 0.35 48.00 0.37
+Proposed method 0.09 0.22 0.11 0.02 0.10 38.00 0.43
+GT-parameter MPC 0.00 0.00 0.00 0.00 0.00 0.00 0.49
+Balanced→Comfort
+Default MPC 0.33 0.52 0.00 0.19 0.52 68.00 0.25
+Survey MPC 0.22 0.27 0.00 0.05 0.27 48.00 0.24
+Proposed method 0.08 0.41 0.23 0.10 0.18 44.00 0.22
+GT-parameter MPC 0.00 0.00 0.00 0.00 0.00 2.67 0.34
+Balanced→Cost→Comfort
+Default MPC 0.33 0.65 0.00 0.31 0.65 90.00 0.30
+Survey MPC 0.22 0.40 0.00 0.18 0.40 64.00 0.27
+Proposed method 0.11 0.45 0.16 0.18 0.29 48.00 0.36
+GT-parameter MPC 0.00 0.00 0.00 0.00 0.00 1.00 0.44
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+20 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 21 ===
+for the preference profile, enabling the system to update control-related 
+parameters beyond one-shot initialization. In this sense, personalization 
+in HEMS becomes a long-term closed-loop calibration process.
+This long-term calibration process requires a stable interface be-
+tween language feedback and control. Natural language can express 
+immediate requests, vague preferences, and context-dependent dissat-
+isfaction, but these expressions must be converted into structured evi-
+dence that downstream control modules can check and use. The 
+contract-constrained intent interface contains distinct functions for 
+contextual semantic recovery, prompt-level intent specification, 
+structured-record consistency, and final authorization. Study 2C sepa-
+rates these functions through component-level comparisons and shows 
+that different interface components affect different stages of language 
+processing and routing. Study 2B further shows that removing contract- 
+event gating increases inconsistencies between parsed records and 
+downstream preference-updating or control modules. Accordingly, the 
+language interface converts user expressions into structured semantic 
+evidence and determines the corresponding handling path, while the 
+event gates control whether the resulting records can enter downstream 
+preference updating and control execution.
+On top of this stable interface, mixed-semantic feedback must pre-
+serve different update meanings. Explicit intents usually contain con-
+crete temperature or charging targets and are suitable for fast local 
+correction. Vague intents express directional tendencies in cost, comfort, 
+or service urgency, and are more suitable for long-term preference 
+calibration after negotiation and confirmation. The intent-path ablation 
+results show that a single path can only use part of the feedback infor-
+mation, while the dual-path mechanism can absorb both concrete re-
+quests and vague tendencies. CIPU further converts these two types of 
+events into bounded profile updates, allowing short-term execution 
+needs and long-term preference calibration to coexist in the same HEMS 
+loop.
+The dynamic preference study further shows the value of preference 
+calibration during long-horizon operation. When the user shifts from a 
+balanced preference to a cost-sensitive or comfort-sensitive preference, 
+the semantics of feedback also change, and the system must adjust the 
+preference profile based on the new interaction evidence. Fixed-profile 
+methods continue to operate under outdated assumptions after prefer-
+ence drift, while online calibration converts post-drift language feed-
+back into new update signals and reduces the preference distance again. 
+This behavior is consistent with the theoretical analysis: preference drift 
+enters the error recursion as an external disturbance, and continuing 
+contract-compliant feedback drives the profile back toward the changed 
+reference preference profile.
+Overall, the experimental results show that the language interface, 
+CIPU, and MPC undertake semantic parsing, preference correction, and 
+constrained execution, respectively. Study 2C shows that LLM-based se-
+mantic parsing, the current-control-intent prompt rule, structured-schema 
+consistency, and deterministic final authorization contribute to different 
+stages of semantic recovery and routing. Study 2 A and Study 2B further 
+show that intent-path routing and contract-event gating affect how update 
+evidence is used and whether it is valid. Study 3 shows that, when the 
+reference preference changes, continuing language feedback provides new 
+calibration evidence and drives the preference profile to re-track the 
+changed target. Accordingly, changes in closed-loop performance mainly 
+depend on whether interaction evidence is accurately parsed, appropri-
+ately routed, and incorporated into preference updating in a bounded 
+manner, while MPC continues to maintain physical constraints and device 
+coordination under the updated preference parameters.
+Fig. 6. Dynamic preference tracking trajectories under three drift patterns on the balanced user profile.
+Fig. 7. Complaint-type distribution and post-complaint response outcomes under dynamic preference drift.
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+21 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 22 ===
+5. Conclusion
+This paper proposes a human-in-the-loop preference calibration 
+framework for home energy management. The framework converts 
+runtime natural-language feedback into contract-constrained structured 
+events, uses CIPU to continuously update the user preference profile, 
+and relies on MPC to coordinate multiple devices under safety con-
+straints. The paper first establishes the building thermal model, HVAC 
+model, EV charging model, and MPC execution mechanism for closed- 
+loop control. It then develops the contract-constrained intent inter-
+face, the explicit/vague dual-path handling mechanism, and the CIPU- 
+based online updating method. Finally, closed-loop benchmark com-
+parisons, mechanism ablations, a language-interface benchmark, and 
+dynamic preference studies are conducted to evaluate long-term user 
+alignment, the effectiveness of key mechanisms, structured language- 
+parsing capability, and preference-drift re-tracking. The results show 
+that runtime interaction feedback can further correct the preference 
+profile beyond one-shot questionnaire initialization, reduce long-term 
+preference mismatch and repeated complaints, and pull the online 
+profile back toward the reference preference profile after user prefer-
+ence changes. The component-level language-interface benchmark 
+further distinguishes the contributions of LLM-based semantic parsing, 
+the current-control-intent prompt rule, structured-schema consistency, 
+and deterministic final authorization. On the frozen 188-utterance 
+benchmark, the proposed interface achieves 100.00% Intent Accuracy, 
+EEM, NTR, and RA, with an FDER of 0.00%. The current validation is 
+mainly based on controlled simulation and role-play experiments. The 
+language-interface benchmark contains utterances from three role- 
+playing volunteers and therefore does not provide independent valida-
+tion across unseen users or broader natural-language distributions. 
+Larger participant cohorts, independent user corpora, and validation in 
+real household environments are required before broader conclusions 
+about linguistic generalizability can be drawn. In addition, the current 
+device scope mainly covers HVAC and EV charging, and the coordina-
+tion effect after adding more flexible household loads remains to be 
+further studied.
+Future work will proceed in two directions. First, long-term 
+deployment experiments will be conducted in real homes or prototype 
+systems to examine the stability of the framework under real user 
+feedback, device communication errors, and long-term operational 
+disturbances. Second, the human-in-the-loop LLM interaction mecha-
+nism will be further developed, and demand-response signals will be 
+incorporated into the home energy management loop, so that user 
+preferences, household-side flexibility, and grid-side regulation needs 
+can be expressed and coordinated within a unified framework.
+CRediT authorship contribution statement
+Zeqing Wu: Writing – review & editing, Writing – original draft, 
+Supervision, Methodology, Conceptualization. Yunfei Mu: Writing – 
+review & editing, Supervision, Project administration, Conceptualiza-
+tion. Jiarui Zhang: Visualization, Supervision, Methodology. Yue 
+Zhou: Validation, Supervision, Methodology. Hongjie Jia: Supervision, 
+Resources, Investigation, Conceptualization. Yanze Xu: Validation, 
+Supervision, Investigation, Conceptualization. Yilun Du: Validation, 
+Methodology, Investigation, Conceptualization.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgements
+This work was financially funded by the National Natural Science 
+Foundation of China-State Grid Joint Fund Key Program (Grant/Award 
+Number: U22B20105) and the National Science and Technology Major 
+Project of China (Project Number: 2026ZD0812003).
+Appendix A. Questionnaire and reference/observed preference profiles for three role-conditioned user types
+A.1. Questionnaire instrument
+This subsection presents the onboarding questionnaire shown to a user when the system has no initial preference estimate.
+Questionnaire Title: Home Comfort and Energy Preference Survey. To keep notation consistent with the main text, we denote the comfort center 
+temperature by Tcomfk , the comfort-band width by bk, and the EV target SOC by stark .
+1. What kind of indoor feeling do you like most? (maps to Tcomf0 ).
+A. Cooler. (Tcomf0 = 24.5); B. Slightly cool. (Tcomf0 = 25.0); C. Just right. (Tcomf0 = 25.5); D. Warmer. (Tcomf0 = 26.0).
+2. If the indoor feeling is a little different from what you like, will you feel uncomfortable right away? (maps to b0).
+A. Yes, even a little change is too much. (b0 = 0.9); B. A little uncomfortable. (b0 = 1.2); C. I can tolerate it for a while. (b0 = 2.0); D. Not much 
+difference for me. (b0 = 2.5).
+3. When you start to feel uncomfortable, what do you want the system to do? (maps to wtemp,0).
+A. Do not change things too often. (wtemp,0 = 20); B. No rush, fix it slowly. (wtemp,0 = 30); C. Fix it quickly. (wtemp,0 = 40); D. Fix it fast, as soon as 
+possible. (wtemp,0 = 60).
+4. When it comes to spending money on energy, which is closer to your idea? (maps to wcost,0).
+A. Comfort is most important, paying a bit more is fine. (wcost,0 = 0.6); B. I want a balance of comfort and cost. (wcost,0 = 1.5); C. I try to save when 
+possible. (wcost,0 = 2.2); D. Saving money is most important. (wcost,0 = 3.0).
+5. If you need to get the car ready for tomorrow, how important should that be for the system? (maps to wev,0).
+A. Most important, charge the car first. (wev,0 = 800); B. Very important, try to charge early. (wev,0 = 600); C. Somewhat important, do it if 
+convenient. (wev,0 = 400); D. Not important, do not bother too much for it. (wev,0 = 200).
+6. Before you go out tomorrow, how ready should the car be for you to feel okay? (maps to star0 ).
+A. Enough to use. (star0 = 0.60); B. Enough, plus a little extra. (star0 = 0.75); C. Quite full to feel safe. (star0 = 0.85); D. As full as possible. (star0 = 0.90).
+At onboarding, the user answers this questionnaire once, and the selected options are deterministically mapped to the observable initial user- 
+parameter setting for subsequent control and online adaptation.
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+22 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 23 ===
+A.2. Predefined reference and questionnaire-initialized user parameter settings for three role-conditioned user types
+In this study, we consider three user types: a balanced user, a temperature-sensitive user, and a cost-sensitive user. Following residential user- 
+segmentation and preference-modeling studies, these user-parameter settings are constructed by varying the comfort, cost, and EV-service entries, 
+so that the controlled experiments cover distinct but typical preference orientations. For each role-conditioned user type, we predefine (i) a reference 
+user-parameter setting used as the controlled evaluation target and (ii) a questionnaire response pattern that the corresponding role is likely to provide 
+at onboarding. The observed initial profile is then obtained by deterministic survey-to-parameter mapping. The six questionnaire-mapped parameters 
+jointly characterize the initial role-conditioned user setting. Consistent with Eq. (41), wcost, Tcomf, b, and star are treated as adaptive entries for CIPU 
+updating and normalized L1 preference-distance calculation, while wtemp and wev are retained as initialization parameters that reflect user-specific 
+differences in temperature-deviation and EV-service priorities.
+In the human-in-the-loop experiments, three volunteers respectively role-play these three user types. For all three user types, the smoothing weight 
+and slack penalty are fixed as wsmooth = 0.08 and λslack = 60,000.0. Hard safety limits and slack caps are also fixed as Thd,lo = 18, Thd,hi = 30, ξlo = 0.1, 
+andξ
+hi
+= 0.1. The admissible comfort-band interval is fixed as bmin = 0.5 and bmax = 3.0, covering the questionnaire option range in Question 2. The 
+admissible cost-weight interval is fixed as wmincost = 0.5 and wmaxcost = 4.5, covering the questionnaire option range in Question 4. These constants are not 
+determined by questionnaire mapping.
+User A: Balanced user. Questionnaire-initialized setting: Q1-B 
+(
+Tcomf0 = 25.0), Q2-B (b0 = 1.2), Q3-B (wtemp,0 = 30), Q4-B (wcost,0 = 1.5), Q5-B 
+(wev,0 = 600), Q6-B (star0 = 0.75).
+Predefined reference user-parameter setting: wcost = 1.6, wtemp = 32.0, wev = 580.0, Tcomf = 24.0, b = 1.5, star = 0.8.
+User B: Temperature-sensitive user. Questionnaire-initialized setting: Q1-B 
+(
+Tcomf0 = 25.0), Q2-B (b0 = 1.2), Q3-D (wtemp,0 = 60), Q4-A 
+(wcost,0 = 0.6), Q5-C (wev,0 = 400), Q6-B (star0 = 0.75).
+Predefined reference user-parameter setting: wcost = 0.8, wtemp = 62.0, wev = 380.0, Tcomf = 24.0, b = 1.2, star = 0.8.
+User C: Cost-sensitive user. Questionnaire-initialized setting: Q1-C 
+(
+Tcomf0 = 25.5), Q2-D (b0 = 2.5), Q3-A (wtemp,0 = 20), Q4-D (wcost,0 = 3.0), Q5- 
+D (wev,0 = 200), Q6-A (star0 = 0.60).
+Predefined reference user-parameter setting: wcost = 4.2, wtemp = 18.0, wev = 220.0, Tcomf = 24.0, b = 2.4, star = 0.7.
+Appendix B. Dialogue experiment interface and runtime observability
+This appendix documents the human–system dialogue experiment interface used in the closed-loop studies. All three volunteers participate in 
+dialogue-based experiments under the same interface and simulation environment.
+Fig. B1. Experiment interfaces: questionnaire (left) and dialogue (right).
+Appendix C. Complete system and user prompts
+Fig. C1 presents the complete System Prompt and User Prompt used by the proposed contract-constrained language interface. The System Prompt 
+specifies the task scope, intent boundaries, field semantics, numerical-target admission conditions, and output constraints. The User Prompt supplies 
+the current user utterance and runtime context and requests the corresponding structured parsing record. 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+23 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 24 ===
+Fig. C1. Complete System Prompt and User Prompt used in the proposed contract-constrained language interface.
+References
+[1] International Energy Agency. Electricity 2026. Paris: IEA; 2026. Available from, 
+https://www.iea.org/reports/electricity-2026 (accessed 1 Apr 2026).
+[2] International Energy Agency. Energy efficiency 2025. Paris: IEA; 2025. Available 
+from: https://www.iea.org/reports/energy-efficiency-2025 (accessed 1 Apr 2026).
+[3] U.S. Energy Information Administration. Electricity use in homes. Energy 
+Explained; updated 18 Dec. Available from, https://www.eia.gov/energyexplaine 
+d/use-of-energy/electricity-use-in-homes.php; 2023 (accessed 1 Apr 2026).
+[4] Xu Z, Wu H, Chen X, Wang Y, Yue Z. Building a natural language query and control 
+interface for IoT platforms. IEEE Access 2022;10:68655–68.
+[5] Liu Y, Ma J, Xing X, Liu X, Wang W. A home energy management system 
+incorporating data-driven uncertainty-aware user preference. Appl Energy 2022; 
+326:119911.
+[6] Ren K, Liu J, Wu Z, Liu X, Nie Y, Xu H. A data-driven DRL-based home energy 
+management system optimization framework considering uncertain household 
+parameters. Appl Energy 2024;355:122258.
+[7] Elehwany H, Markus A, Gunay B, Ouf M, Cotrufo N, Venne J-S, et al. Adaptive 
+thermostat preference learning using behaviour nudging and multi-armed bandits: 
+a field implementation. Energ Buildings 2026;355:117030.
+[8] Sha X, Ma Z, Sethuvenkatraman S, Li W. Online learning-enhanced data-driven 
+model predictive control for optimizing HVAC energy consumption, indoor air 
+quality and thermal comfort. Appl Energy 2025;383:125341.
+[9] Wu H, Shen C, He Z, Wang Y, Xu X. SCADA-NLI: a natural language query and 
+control interface for distributed systems. IEEE Access. 2021;9:78108–27.
+[10] Larson S, Mahendran A, Peper JJ, Clarke C, Lee A, Hill P, et al. An evaluation 
+dataset for intent classification and out-of-scope prediction. Hong Kong, China: 
+Association for Computational Linguistics; 2019. p. 1311–6.
+[11] Li Y, Ji M, Chen J, Wei X, Gu X, Tang J. A large language model-based building 
+operation and maintenance information query. Energ Buildings 2025;334:115515.
+[12] Chen S, Liang X, Liu Y, Li X, Jin X, Du Z. Customized large-scale model for human- 
+AI collaborative operation and maintenance management of building energy 
+systems. Appl Energy 2025;393:126169.
+[13] Zhou Y, Wang M. Empower pre-trained large language models for building-level 
+load forecasting. IEEE Trans Power Syst 2025;40:4220–32.
+[14] Zhang M, Liu M, Wang H, Wen Y, Luo AL, Zhang Y. Leveraging large language 
+model for generalization in building energy management. IEEE Transactions on 
+Smart Grid 2025;16:4712–25.
+[15] Etedadi F, Kelouwani S, Agbossou K, Henao N, Laurencelle F. Consensus and 
+sharing based distributed coordination of home energy management systems with 
+demand response enabled baseboard heaters. Appl Energy 2023;336:120833.
+[16] Langner F, Kovaˇcevi´c J, Spatafora L, Dietze S, Waczowicz S, Çakmak HK, et al. 
+Experimental evaluation of model predictive control and fuzzy logic control for 
+demand response in buildings. Appl Energy 2025;401:126666.
+[17] Lin YW, Lin YB, Wu YF, Shen PH. VoiceTalk: a no-code approach for creating voice- 
+controlled smart home applications. IEEE Open Journal of the Computer Society 
+2025;6:874–83.
+[18] Zhang J, Zhang C, Lu J, Zhao Y. Domain-specific large language models for fault 
+diagnosis of heating, ventilation, and air conditioning systems by labeled-data- 
+supervised fine-tuning. Appl Energy 2025;377:124378.
+[19] Antonesi G, Cioara T, Anghel I, Michalakopoulos V, Sarmas E, Toderean L. 
+A systematic review of transformers and large language models in the energy 
+sector: towards agentic digital twins. Appl Energy 2025;401:126670.
+[20] Zhang X, Cheng Y, Gui X, Zhao H, Zhao J, Yan J. Large language model-enhanced 
+home energy management with dynamic user preference elicitation and 
+hierarchical data-sharing. Appl Energy 2026;410:127540.
+[21] Sokolova M, Lapalme G. A systematic analysis of performance measures for 
+classification tasks. Inf Process Manag 2009;45:427–37.
+[22] Artstein R, Poesio M. Inter-coder agreement for computational linguistics. Comput 
+Linguist 2008;34:555–96.
+[23] Loga T, Diefenbach N, Stein B, Born R. TABULA—scientific report germany: further 
+development of the national residential building typology. Darmstadt, Germany: 
+Institut Wohnen und Umwelt GmbH; 2012. . Available from: https://episcope. 
+eu/fileadmin/tabula/public/docs/scientific/DE_TABULA_ScientificReport_IWU.pd 
+f (accessed 5 Apr 2026)..
+[24] Fraunhofer Institute for Solar Energy Systems ISE. Fraunhofer ISE Research Project 
+Completed: Heat Pumps Provide Climate-Friendly Heating in Existing Buildings. 
+Press release; 3 Nov 2025. Available from, https://www.ise.fraunhofer.de/en/ 
+press-media/press-releases/2025/fraunhofer-ise-research-project-completed-heat- 
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+24 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 25 ===
+pumps-provide-climate-friendly-heating-in-existing-buildings.html (accessed 2 Apr 
+2026).
+[25] Gnann T, Yu S, Stute J, Kühnbach M. The value of smart charging at home and its 
+impact on EV market shares – a German case study. Appl Energy 2025;380:124997.
+[26] Bundesnetzagentur. E-Mobilit¨at FAQ: Wallbox und Netzanschluss in der 
+Niederspannung. Bundesnetzagentur Verbraucherportal Energie. Available from, 
+https://www.bundesnetzagentur.de/DE/Vportal/Energie/E_Mobilitaet/_faq/Wall 
+box_table.html (accessed 5 Apr 2026).
+[27] Dhaliwal G, Gunay B, Beausoleil-Morrison I. Parametric analysis of model 
+predictive control for residential HVAC systems. Energ Buildings 2026;351: 
+116662.
+[28] Deutscher Wetterdienst. Climate data center (CDC) observations: Germany hourly 
+climate data (open data) [dataset]. DWD Open Data. Available from: https 
+://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/h 
+ourly/ (accessed 2 Apr 2026).
+[29] Bundesnetzagentur. SMARD: Download market data [dataset]. SMARD electricity 
+market data platform. Available from, https://www.smard.de/en/downloadcente 
+r/download-market-data (accessed 2 Apr 2026).
+[30] Afzalan M, Jazizadeh F. Residential loads flexibility potential for demand response 
+using energy consumption patterns and user segments. Appl Energy 2019;254: 
+113693.
+[31] Yang A, Li A, Yang B, Zhang B, Hui B, Zheng B, et al. Qwen3 technical report. CoRR 
+2025:abs/2505.09388. https://doi.org/10.48550/arXiv.2505.09388.
+[32] Zhang L, Chen Z. Opportunities of applying large language models in building 
+energy sector. Renew Sustain Energy Rev 2025;214:115558.
+[33] Zhang C, Zhang J, Lu J, Zhao Y. Large language models meet energy systems: 
+opportunities, challenges, and future perspectives. Appl Energy 2026;403:127076.
+[34] Zhou Y, Wang L, Fan H, Wang Y, Sun Y. Research on interaction between HEMS- 
+VPP and power system with high renewable energy penetration under net zero 
+emissions: operation strategy and economy viability boundary. Appl Energy 2025; 
+390:125773.
+[35] An Sihai, Qiu Jing, Lin Jiafeng, Yuan Zhe, Tian Weiyi, Yao Zongyu. A Review of 
+Human–AI Synergy in Smart Energy Management Concepts, Functions, 
+Applications, and Future Frontiers. Energy Internet 2026;3(1):5–22. https://doi. 
+org/10.1049/ein2.70021. https://ietresearch.onlinelibrary.wiley.com/doi/ 
+10.1049/ein2.70021. [Accessed 26 March 2026].
+[36] Li Danlin, Zhang Yuchen, Zhang Rui, Yang Ming, Li Yu, Wang Chuanqi, 
+Mishra Yateendra. A Data-Driven Multidimensional Profiling Framework for 
+Residential Electricity Users With Application to Load Forecasting. Energy Internet 
+2026;3(1):23–38. https://doi.org/10.1049/ein2.70017. https://ietresearch.onli 
+nelibrary.wiley.com/doi/10.1049/ein2.70017. [Accessed 9 March 2026].
+Z. Wu et al.                                                                                                                                                                                                                                      Applied Energy 427 (2027) 129073 
+25 
+Downloaded from https://iranpaper.ir

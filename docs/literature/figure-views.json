@@ -1,0 +1,2157 @@
+{
+  "la-upahem": {
+    "cover": "assets/la-upahem/card-cover.jpg",
+    "cover_figure": "2",
+    "views": {
+      "1": {
+        "image": "assets/la-upahem/figure-1.png",
+        "kind": "figure"
+      },
+      "2": {
+        "image": "assets/la-upahem/figure-2.png",
+        "kind": "figure"
+      },
+      "3": {
+        "image": "assets/la-upahem/figure-3.png",
+        "kind": "figure"
+      },
+      "4": {
+        "image": "assets/la-upahem/figure-4.png",
+        "kind": "figure"
+      },
+      "5": {
+        "image": "assets/la-upahem/figure-5.png",
+        "kind": "figure"
+      },
+      "6": {
+        "image": "assets/la-upahem/figure-6.png",
+        "kind": "figure"
+      },
+      "7": {
+        "image": "assets/la-upahem/figure-7.png",
+        "kind": "figure"
+      },
+      "8": {
+        "image": "assets/la-upahem/figure-8.png",
+        "kind": "figure"
+      },
+      "9": {
+        "image": "assets/la-upahem/figure-9.png",
+        "kind": "figure"
+      }
+    }
+  },
+  "article-02": {
+    "cover": "assets/huang/card-cover.jpg",
+    "cover_figure": "7",
+    "views": {
+      "1": {
+        "image": "assets/huang/figure-1.png",
+        "kind": "figure"
+      },
+      "2": {
+        "image": "assets/huang/figure-2.png",
+        "kind": "figure"
+      },
+      "3": {
+        "image": "assets/huang/figure-3.png",
+        "kind": "figure"
+      },
+      "4": {
+        "image": "assets/huang/figure-4.png",
+        "kind": "figure"
+      },
+      "5": {
+        "image": "assets/huang/figure-5.png",
+        "kind": "figure"
+      },
+      "6": {
+        "image": "assets/huang/figure-6.png",
+        "kind": "figure"
+      },
+      "7": {
+        "image": "assets/huang/figure-7.png",
+        "kind": "figure"
+      },
+      "8": {
+        "image": "assets/huang/figure-8.png",
+        "kind": "figure"
+      },
+      "9": {
+        "image": "assets/huang/figure-9.png",
+        "kind": "figure"
+      },
+      "10": {
+        "image": "assets/huang/figure-10.png",
+        "kind": "figure"
+      },
+      "11": {
+        "image": "assets/huang/figure-11.png",
+        "kind": "figure"
+      },
+      "12": {
+        "image": "assets/huang/figure-12.png",
+        "kind": "figure"
+      },
+      "13": {
+        "image": "assets/huang/figure-13.png",
+        "kind": "figure"
+      },
+      "14": {
+        "image": "assets/huang/figure-14.png",
+        "kind": "figure"
+      },
+      "15": {
+        "image": "assets/huang/figure-15.png",
+        "kind": "figure"
+      },
+      "16": {
+        "image": "assets/huang/figure-16.png",
+        "kind": "figure"
+      }
+    }
+  },
+  "article-03": {
+    "cover": "assets/article-03/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-03/view-1.png",
+        "kind": "figure",
+        "page": 3,
+        "source_box": [
+          312.851987,
+          587.865997,
+          553.651987,
+          723.977997
+        ]
+      },
+      "2": {
+        "image": "assets/article-03/page-05.png",
+        "kind": "page",
+        "page": 5
+      },
+      "3": {
+        "image": "assets/article-03/page-05.png",
+        "kind": "page",
+        "page": 5
+      },
+      "4": {
+        "image": "assets/article-03/page-06.png",
+        "kind": "page",
+        "page": 6
+      },
+      "5": {
+        "image": "assets/article-03/view-5.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          41.793997,
+          370.056006,
+          282.593997,
+          543.6080059999999
+        ]
+      },
+      "6": {
+        "image": "assets/article-03/page-08.png",
+        "kind": "page",
+        "page": 8
+      },
+      "7": {
+        "image": "assets/article-03/page-10.png",
+        "kind": "page",
+        "page": 10
+      },
+      "8": {
+        "image": "assets/article-03/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "9": {
+        "image": "assets/article-03/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "10": {
+        "image": "assets/article-03/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "11": {
+        "image": "assets/article-03/page-15.png",
+        "kind": "page",
+        "page": 15
+      },
+      "12": {
+        "image": "assets/article-03/page-15.png",
+        "kind": "page",
+        "page": 15
+      },
+      "C.13": {
+        "image": "assets/article-03/page-19.png",
+        "kind": "page",
+        "page": 19
+      }
+    }
+  },
+  "article-04": {
+    "cover": "assets/article-04/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-04/view-1.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          36.937,
+          48.398000000000025,
+          558.393,
+          285.02200000000005
+        ]
+      },
+      "2": {
+        "image": "assets/article-04/view-2.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          36.937,
+          467.73530000000005,
+          558.393,
+          723.6553
+        ]
+      },
+      "3": {
+        "image": "assets/article-04/view-3.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          35.2362,
+          48.41899999999998,
+          560.0042,
+          236.947
+        ]
+      },
+      "4": {
+        "image": "assets/article-04/view-4.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          35.1795,
+          462.4073,
+          560.0915,
+          723.6553
+        ]
+      },
+      "5": {
+        "image": "assets/article-04/view-5.png",
+        "kind": "figure",
+        "page": 9,
+        "source_box": [
+          35.1795,
+          462.5513,
+          560.0915,
+          723.6553
+        ]
+      },
+      "6": {
+        "image": "assets/article-04/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "7": {
+        "image": "assets/article-04/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "8": {
+        "image": "assets/article-04/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "9": {
+        "image": "assets/article-04/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "10": {
+        "image": "assets/article-04/view-10.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          302.883,
+          48.39300000000003,
+          561.395,
+          438.377
+        ]
+      },
+      "11": {
+        "image": "assets/article-04/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "12": {
+        "image": "assets/article-04/view-12.png",
+        "kind": "figure",
+        "page": 15,
+        "source_box": [
+          35.1228,
+          48.41100000000006,
+          560.1788,
+          365.243
+        ]
+      },
+      "13": {
+        "image": "assets/article-04/page-16.png",
+        "kind": "page",
+        "page": 16
+      },
+      "14": {
+        "image": "assets/article-04/view-14.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          33.4787,
+          421.06,
+          292.8467,
+          622.402
+        ]
+      },
+      "15": {
+        "image": "assets/article-04/view-15.png",
+        "kind": "figure",
+        "page": 17,
+        "source_box": [
+          34.38332,
+          198.88617,
+          559.96227,
+          350.96512
+        ]
+      },
+      "16": {
+        "image": "assets/article-04/page-17.png",
+        "kind": "page",
+        "page": 17
+      },
+      "17": {
+        "image": "assets/article-04/page-18.png",
+        "kind": "page",
+        "page": 18
+      },
+      "18": {
+        "image": "assets/article-04/page-18.png",
+        "kind": "page",
+        "page": 18
+      },
+      "19": {
+        "image": "assets/article-04/page-19.png",
+        "kind": "page",
+        "page": 19
+      },
+      "20": {
+        "image": "assets/article-04/view-20.png",
+        "kind": "figure",
+        "page": 19,
+        "source_box": [
+          302.827,
+          552.9062,
+          561.483,
+          714.0742
+        ]
+      },
+      "21": {
+        "image": "assets/article-04/page-20.png",
+        "kind": "page",
+        "page": 20
+      },
+      "22": {
+        "image": "assets/article-04/page-20.png",
+        "kind": "page",
+        "page": 20
+      },
+      "23": {
+        "image": "assets/article-04/page-21.png",
+        "kind": "page",
+        "page": 21
+      },
+      "24": {
+        "image": "assets/article-04/page-22.png",
+        "kind": "page",
+        "page": 22
+      },
+      "B1": {
+        "image": "assets/article-04/view-B1.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          150.38,
+          51.448999999999955,
+          444.94,
+          198.16899999999998
+        ]
+      },
+      "B2": {
+        "image": "assets/article-04/view-B2.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          144.597,
+          292.331,
+          444.677,
+          441.211
+        ]
+      }
+    }
+  },
+  "article-05": {
+    "cover": "assets/article-05/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-05/view-1.png",
+        "kind": "figure",
+        "page": 3,
+        "source_box": [
+          74.0142,
+          48.44601499999999,
+          521.2142,
+          314.44601500000005
+        ]
+      },
+      "2": {
+        "image": "assets/article-05/view-2.png",
+        "kind": "figure",
+        "page": 3,
+        "source_box": [
+          68.0614,
+          332.62599200000005,
+          527.2614,
+          466.32599200000004
+        ]
+      },
+      "3": {
+        "image": "assets/article-05/view-3.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          68.0614,
+          367.4864,
+          527.2614,
+          733.2364
+        ]
+      },
+      "4": {
+        "image": "assets/article-05/view-4.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          68.0614,
+          48.39896900000008,
+          527.2614,
+          449.99896900000005
+        ]
+      },
+      "5": {
+        "image": "assets/article-05/view-5.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          68.0614,
+          48.39599999999996,
+          527.2614,
+          538.4960000000001
+        ]
+      },
+      "6": {
+        "image": "assets/article-05/view-6.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          68.0614,
+          48.40000000000009,
+          527.2614,
+          510.15000000000003
+        ]
+      },
+      "7": {
+        "image": "assets/article-05/view-7.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          68.0614,
+          48.408000000000015,
+          527.2614,
+          348.00800000000004
+        ]
+      },
+      "8": {
+        "image": "assets/article-05/view-8.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          68.0614,
+          372.24300000000005,
+          527.2614,
+          610.043
+        ]
+      },
+      "9": {
+        "image": "assets/article-05/view-9.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          74.0142,
+          85.88293900000008,
+          521.2142,
+          697.6329390000001
+        ]
+      },
+      "10": {
+        "image": "assets/article-05/view-10.png",
+        "kind": "figure",
+        "page": 12,
+        "source_box": [
+          68.0614,
+          48.40100000000007,
+          527.2614,
+          491.101
+        ]
+      },
+      "11": {
+        "image": "assets/article-05/view-11.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          74.0142,
+          48.40599999999995,
+          521.2142,
+          652.5060000000001
+        ]
+      },
+      "12": {
+        "image": "assets/article-05/view-12.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          74.0142,
+          48.399061000000074,
+          521.2142,
+          658.799061
+        ]
+      },
+      "13": {
+        "image": "assets/article-05/view-13.png",
+        "kind": "figure",
+        "page": 17,
+        "source_box": [
+          74.0142,
+          83.86006099999997,
+          521.2142,
+          683.460061
+        ]
+      },
+      "14": {
+        "image": "assets/article-05/view-14.png",
+        "kind": "figure",
+        "page": 18,
+        "source_box": [
+          110.014,
+          48.396030999999994,
+          485.214,
+          365.696031
+        ]
+      },
+      "15": {
+        "image": "assets/article-05/view-15.png",
+        "kind": "figure",
+        "page": 19,
+        "source_box": [
+          68.0614,
+          48.432000000000016,
+          527.2614,
+          658.232
+        ]
+      },
+      "9-continued-p11": {
+        "image": "assets/article-05/view-9-continued-p11.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          74.0142,
+          48.441031000000066,
+          521.2142,
+          541.8410309999999
+        ]
+      },
+      "11-continued-p14": {
+        "image": "assets/article-05/view-11-continued-p14.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          74.0142,
+          48.407939000000056,
+          521.2142,
+          614.407939
+        ]
+      },
+      "11-continued-p15": {
+        "image": "assets/article-05/view-11-continued-p15.png",
+        "kind": "figure",
+        "page": 15,
+        "source_box": [
+          74.0142,
+          48.43799999999999,
+          521.2142,
+          613.388
+        ]
+      }
+    }
+  },
+  "article-06": {
+    "cover": "assets/article-06/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-06/view-1.png",
+        "kind": "figure",
+        "page": 9,
+        "source_box": [
+          28.716559999999994,
+          68.7701,
+          566.5594399999999,
+          373.22215
+        ]
+      },
+      "2": {
+        "image": "assets/article-06/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "3": {
+        "image": "assets/article-06/page-16.png",
+        "kind": "page",
+        "page": 16
+      },
+      "4": {
+        "image": "assets/article-06/page-17.png",
+        "kind": "page",
+        "page": 17
+      }
+    }
+  },
+  "article-07": {
+    "cover": "assets/article-07/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-07/view-1.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          28.716559999999994,
+          44.590565000000005,
+          566.5594399999999,
+          249.078805
+        ]
+      },
+      "2": {
+        "image": "assets/article-07/page-06.png",
+        "kind": "page",
+        "page": 6
+      },
+      "3": {
+        "image": "assets/article-07/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "4": {
+        "image": "assets/article-07/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "5": {
+        "image": "assets/article-07/page-08.png",
+        "kind": "page",
+        "page": 8
+      },
+      "6": {
+        "image": "assets/article-07/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "7": {
+        "image": "assets/article-07/page-10.png",
+        "kind": "page",
+        "page": 10
+      },
+      "A.1": {
+        "image": "assets/article-07/page-13.png",
+        "kind": "page",
+        "page": 13
+      },
+      "A.2": {
+        "image": "assets/article-07/page-14.png",
+        "kind": "page",
+        "page": 14
+      }
+    }
+  },
+  "article-08": {
+    "cover": "assets/article-08/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-08/view-1.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          63.159099,
+          48.62900100000002,
+          531.603099,
+          305.40200100000004
+        ]
+      },
+      "2": {
+        "image": "assets/article-08/view-2.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          34.642599,
+          49.210000000000036,
+          559.678599,
+          339.391
+        ]
+      },
+      "3": {
+        "image": "assets/article-08/view-3.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          35.6331,
+          448.6604,
+          558.8171,
+          733.2364
+        ]
+      },
+      "4": {
+        "image": "assets/article-08/view-4.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          44.166999,
+          427.9244,
+          550.502999,
+          733.2364
+        ]
+      },
+      "5": {
+        "image": "assets/article-08/view-5.png",
+        "kind": "figure",
+        "page": 18,
+        "source_box": [
+          35.152798999999995,
+          48.53100000000006,
+          560.027799,
+          337.40700000000004
+        ]
+      },
+      "6": {
+        "image": "assets/article-08/view-6.png",
+        "kind": "figure",
+        "page": 21,
+        "source_box": [
+          34.642599,
+          49.164999999999964,
+          559.678599,
+          201.39999999999998
+        ]
+      },
+      "7": {
+        "image": "assets/article-08/view-7.png",
+        "kind": "figure",
+        "page": 21,
+        "source_box": [
+          35.152798999999995,
+          226.60500000000002,
+          560.002799,
+          403.737
+        ]
+      },
+      "B1": {
+        "image": "assets/article-08/view-B1.png",
+        "kind": "figure",
+        "page": 23,
+        "source_box": [
+          35.152798999999995,
+          384.689,
+          559.3457989999999,
+          616.109
+        ]
+      },
+      "C1": {
+        "image": "assets/article-08/view-C1.png",
+        "kind": "figure",
+        "page": 24,
+        "source_box": [
+          35.152798999999995,
+          52.15499999999997,
+          559.392799,
+          414.39500000000004
+        ]
+      }
+    }
+  },
+  "article-09": {
+    "cover": "assets/article-09/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-09/view-1.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          159.394,
+          202.00892,
+          546.64446,
+          471.433
+        ]
+      },
+      "2": {
+        "image": "assets/article-09/view-2.png",
+        "kind": "figure",
+        "page": 20,
+        "source_box": [
+          159.394,
+          118.44516599999997,
+          507.345444,
+          348.152
+        ]
+      },
+      "3": {
+        "image": "assets/article-09/view-3.png",
+        "kind": "figure",
+        "page": 22,
+        "source_box": [
+          159.394,
+          351.31858,
+          507.35069999999996,
+          740.883
+        ]
+      },
+      "4": {
+        "image": "assets/article-09/view-4.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          159.394,
+          184.09839999999997,
+          507.34944,
+          436.638
+        ]
+      },
+      "5": {
+        "image": "assets/article-09/view-5.png",
+        "kind": "figure",
+        "page": 27,
+        "source_box": [
+          159.394,
+          554.1562,
+          566.28072,
+          731.8589999999999
+        ]
+      },
+      "6": {
+        "image": "assets/article-09/view-6.png",
+        "kind": "figure",
+        "page": 28,
+        "source_box": [
+          159.394,
+          64.86464000000001,
+          566.28072,
+          275.308
+        ]
+      },
+      "7": {
+        "image": "assets/article-09/view-7.png",
+        "kind": "figure",
+        "page": 29,
+        "source_box": [
+          159.394,
+          155.88019999999995,
+          566.28072,
+          333.58299999999997
+        ]
+      }
+    }
+  },
+  "article-10": {
+    "cover": "assets/article-10/card-cover.jpg",
+    "cover_figure": "2",
+    "views": {
+      "1": {
+        "image": "assets/article-10/page-04.png",
+        "kind": "page",
+        "page": 4
+      },
+      "2": {
+        "image": "assets/article-10/view-2.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          110.907,
+          50.00400000000002,
+          484.907,
+          372.16400000000004
+        ]
+      },
+      "3": {
+        "image": "assets/article-10/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "4": {
+        "image": "assets/article-10/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "5": {
+        "image": "assets/article-10/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "6": {
+        "image": "assets/article-10/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "7": {
+        "image": "assets/article-10/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "8": {
+        "image": "assets/article-10/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "9": {
+        "image": "assets/article-10/page-13.png",
+        "kind": "page",
+        "page": 13
+      },
+      "10": {
+        "image": "assets/article-10/page-13.png",
+        "kind": "page",
+        "page": 13
+      },
+      "11": {
+        "image": "assets/article-10/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "12": {
+        "image": "assets/article-10/page-14.png",
+        "kind": "page",
+        "page": 14
+      }
+    }
+  },
+  "article-11": {
+    "cover": "assets/article-11/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-11/view-1.png",
+        "kind": "figure",
+        "page": 2,
+        "source_box": [
+          302.54352,
+          548.5907,
+          566.5594399999999,
+          725.2994050000001
+        ]
+      },
+      "2": {
+        "image": "assets/article-11/page-04.png",
+        "kind": "page",
+        "page": 4
+      },
+      "3": {
+        "image": "assets/article-11/page-05.png",
+        "kind": "page",
+        "page": 5
+      },
+      "4": {
+        "image": "assets/article-11/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "5": {
+        "image": "assets/article-11/view-5.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          311.547997,
+          51.66897300000005,
+          552.3479970000001,
+          275.7649630000001
+        ]
+      },
+      "6": {
+        "image": "assets/article-11/page-10.png",
+        "kind": "page",
+        "page": 10
+      }
+    }
+  },
+  "article-12": {
+    "cover": "assets/article-12/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-12/view-1.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          119.992,
+          48.44498999999996,
+          475.272,
+          388.317
+        ]
+      },
+      "2": {
+        "image": "assets/article-12/view-2.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          119.992,
+          48.408000000000015,
+          475.272,
+          124.18399999999997
+        ]
+      },
+      "3": {
+        "image": "assets/article-12/view-3.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          119.992,
+          645.5957000000001,
+          475.272,
+          733.1797
+        ]
+      },
+      "4": {
+        "image": "assets/article-12/view-4.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          120.162,
+          48.41100000000006,
+          475.154,
+          185.24300000000005
+        ]
+      },
+      "5": {
+        "image": "assets/article-12/view-5.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          119.992,
+          48.4370100000001,
+          475.272,
+          192.61300000000006
+        ]
+      },
+      "6": {
+        "image": "assets/article-12/view-6.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          32.6283,
+          48.41799000000003,
+          563.7323,
+          390.01800000000003
+        ]
+      },
+      "7": {
+        "image": "assets/article-12/view-7.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          70.3858,
+          497.33238,
+          524.8818,
+          733.2364
+        ]
+      },
+      "8": {
+        "image": "assets/article-12/view-8.png",
+        "kind": "figure",
+        "page": 9,
+        "source_box": [
+          32.6283,
+          506.26039000000003,
+          563.7323,
+          733.2364
+        ]
+      },
+      "9": {
+        "image": "assets/article-12/view-9.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          119.992,
+          365.64701,
+          475.272,
+          516.1590000000001
+        ]
+      },
+      "10": {
+        "image": "assets/article-12/view-10.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          119.992,
+          543.8444,
+          475.272,
+          733.2364
+        ]
+      },
+      "11": {
+        "image": "assets/article-12/view-11.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          70.3858,
+          48.41201000000001,
+          524.8818,
+          435.372
+        ]
+      },
+      "12": {
+        "image": "assets/article-12/view-12.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          70.3858,
+          558.82038,
+          524.8818,
+          733.2364
+        ]
+      },
+      "13": {
+        "image": "assets/article-12/page-12.png",
+        "kind": "page",
+        "page": 12
+      },
+      "14": {
+        "image": "assets/article-12/view-14.png",
+        "kind": "figure",
+        "page": 12,
+        "source_box": [
+          32.6283,
+          328.5644,
+          563.7323,
+          733.2364
+        ]
+      },
+      "15": {
+        "image": "assets/article-12/view-15.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          70.4425,
+          444.6284,
+          524.79449,
+          733.2364
+        ]
+      },
+      "16": {
+        "image": "assets/article-12/view-16.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          301.58,
+          48.39598999999998,
+          563.40401,
+          195.164
+        ]
+      },
+      "17": {
+        "image": "assets/article-12/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "18": {
+        "image": "assets/article-12/view-18.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          32.6283,
+          458.59639,
+          563.7323,
+          733.2364
+        ]
+      },
+      "19": {
+        "image": "assets/article-12/view-19.png",
+        "kind": "figure",
+        "page": 15,
+        "source_box": [
+          70.3858,
+          48.39801,
+          524.8818,
+          573.022
+        ]
+      }
+    }
+  },
+  "article-13": {
+    "cover": "assets/article-13/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-13/view-1.png",
+        "kind": "figure",
+        "page": 2,
+        "source_box": [
+          38.6378,
+          527.14039,
+          556.6378,
+          733.2364
+        ]
+      },
+      "2": {
+        "image": "assets/article-13/view-2.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          110.638,
+          48.408000000000015,
+          484.63800000000003,
+          304.184
+        ]
+      },
+      "3": {
+        "image": "assets/article-13/view-3.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          80.5906,
+          48.441010000000006,
+          514.6386,
+          314.72900000000004
+        ]
+      },
+      "4": {
+        "image": "assets/article-13/view-4.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          38.6378,
+          530.6837,
+          556.6378,
+          733.1797
+        ]
+      },
+      "5": {
+        "image": "assets/article-13/view-5.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          80.5906,
+          48.42199000000005,
+          514.6386,
+          296.134
+        ]
+      },
+      "6": {
+        "image": "assets/article-13/view-6.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          38.6378,
+          48.42500000000007,
+          556.6378,
+          247.32100000000003
+        ]
+      },
+      "7": {
+        "image": "assets/article-13/view-7.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          38.6378,
+          48.431010000000015,
+          556.6378,
+          331.567
+        ]
+      },
+      "8": {
+        "image": "assets/article-13/view-8.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          80.5906,
+          485.52439000000004,
+          514.6386,
+          733.2364
+        ]
+      }
+    }
+  },
+  "article-14": {
+    "cover": "assets/article-14/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-14/view-1.png",
+        "kind": "figure",
+        "page": 6,
+        "source_box": [
+          61.485,
+          524.7802,
+          543.485,
+          724.7892
+        ]
+      },
+      "2": {
+        "image": "assets/article-14/view-2.png",
+        "kind": "figure",
+        "page": 9,
+        "source_box": [
+          61.485,
+          46.29200000000003,
+          543.485,
+          394.723
+        ]
+      },
+      "3": {
+        "image": "assets/article-14/view-3.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          309.573,
+          333.2712,
+          551.592,
+          724.7892
+        ]
+      },
+      "4": {
+        "image": "assets/article-14/view-4.png",
+        "kind": "figure",
+        "page": 15,
+        "source_box": [
+          58.650400000000005,
+          46.29200000000003,
+          546.6594,
+          327.42900000000003
+        ]
+      },
+      "5": {
+        "image": "assets/article-14/view-5.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          58.650400000000005,
+          46.29200000000003,
+          546.6594,
+          327.42900000000003
+        ]
+      },
+      "6": {
+        "image": "assets/article-14/view-6.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          58.650400000000005,
+          486.90880000000004,
+          546.6594,
+          713.7908
+        ]
+      },
+      "7": {
+        "image": "assets/article-14/page-17.png",
+        "kind": "page",
+        "page": 17
+      },
+      "8": {
+        "image": "assets/article-14/view-8.png",
+        "kind": "figure",
+        "page": 18,
+        "source_box": [
+          58.650400000000005,
+          46.29200000000003,
+          546.6594,
+          327.42900000000003
+        ]
+      }
+    }
+  },
+  "article-15": {
+    "cover": "assets/article-15/card-cover.jpg",
+    "cover_figure": "3",
+    "views": {
+      "1": {
+        "image": "assets/article-15/view-1.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          38.6378,
+          451.9724,
+          556.6378,
+          733.2364
+        ]
+      },
+      "2": {
+        "image": "assets/article-15/view-2.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          38.6378,
+          472.6313,
+          556.6378,
+          723.6553
+        ]
+      },
+      "3": {
+        "image": "assets/article-15/view-3.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          38.6378,
+          363.81383100000005,
+          556.6378,
+          704.549831
+        ]
+      },
+      "4": {
+        "image": "assets/article-15/view-4.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          38.6378,
+          48.42000000000007,
+          556.6378,
+          400.67600000000004
+        ]
+      }
+    }
+  },
+  "article-16": {
+    "cover": "assets/article-16/card-cover.jpg",
+    "cover_figure": "2",
+    "views": {
+      "1": {
+        "image": "assets/article-16/view-1.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          32.559998168,
+          65.34400244200003,
+          565.919983519,
+          632.304000916
+        ]
+      },
+      "2": {
+        "image": "assets/article-16/view-2.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          90.20399694800001,
+          104.78998816000001,
+          505.00398474,
+          604.553995728
+        ]
+      },
+      "3": {
+        "image": "assets/article-16/view-3.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          162.491001831,
+          381.32298840399994,
+          409.29100488200004,
+          687.642995728
+        ]
+      },
+      "4": {
+        "image": "assets/article-16/page-19.png",
+        "kind": "page",
+        "page": 19
+      },
+      "5": {
+        "image": "assets/article-16/page-23.png",
+        "kind": "page",
+        "page": 23
+      },
+      "6": {
+        "image": "assets/article-16/view-6.png",
+        "kind": "figure",
+        "page": 24,
+        "source_box": [
+          152.826003662,
+          210.537013429,
+          555.6259914540001,
+          484.217006104
+        ]
+      },
+      "7": {
+        "image": "assets/article-16/view-7.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          153.982001831,
+          142.25601342899995,
+          443.501990844,
+          497.056001221
+        ]
+      },
+      "8": {
+        "image": "assets/article-16/view-8.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          40.481,
+          507.36699939100004,
+          557.760998779,
+          597.926996949
+        ]
+      },
+      "9": {
+        "image": "assets/article-16/view-9.png",
+        "kind": "figure",
+        "page": 28,
+        "source_box": [
+          58.459,
+          267.832989625,
+          544.7790073240001,
+          457.992993287
+        ]
+      },
+      "10": {
+        "image": "assets/article-16/view-10.png",
+        "kind": "figure",
+        "page": 30,
+        "source_box": [
+          162.491001831,
+          255.537013429,
+          488.010990844,
+          593.057002442
+        ]
+      },
+      "11": {
+        "image": "assets/article-16/view-11.png",
+        "kind": "figure",
+        "page": 33,
+        "source_box": [
+          25.818998320999995,
+          53.39898315499988,
+          563.498990996,
+          498.92998901399994
+        ]
+      }
+    }
+  },
+  "article-17": {
+    "cover": "assets/article-17/card-cover.jpg",
+    "cover_figure": "graphical-abstract",
+    "views": {
+      "graphical-abstract": {
+        "image": "assets/article-17/view-graphical-abstract.png",
+        "kind": "figure",
+        "page": 1,
+        "source_box": [
+          48.162197,
+          187.49298899999997,
+          347.858211,
+          487.189003
+        ]
+      },
+      "1": {
+        "image": "assets/article-17/page-04.png",
+        "kind": "page",
+        "page": 4
+      },
+      "2": {
+        "image": "assets/article-17/page-06.png",
+        "kind": "page",
+        "page": 6
+      },
+      "3": {
+        "image": "assets/article-17/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "4": {
+        "image": "assets/article-17/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "5": {
+        "image": "assets/article-17/page-10.png",
+        "kind": "page",
+        "page": 10
+      },
+      "6": {
+        "image": "assets/article-17/page-11.png",
+        "kind": "page",
+        "page": 11
+      },
+      "7": {
+        "image": "assets/article-17/view-7.png",
+        "kind": "figure",
+        "page": 13,
+        "source_box": [
+          55.4189,
+          94.57503499999996,
+          554.266861,
+          615.598991
+        ]
+      },
+      "8": {
+        "image": "assets/article-17/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "9": {
+        "image": "assets/article-17/view-9.png",
+        "kind": "figure",
+        "page": 15,
+        "source_box": [
+          62.39209700000001,
+          94.59400199999993,
+          547.272071,
+          684.594002
+        ]
+      },
+      "10": {
+        "image": "assets/article-17/page-16.png",
+        "kind": "page",
+        "page": 16
+      },
+      "11": {
+        "image": "assets/article-17/page-17.png",
+        "kind": "page",
+        "page": 17
+      }
+    }
+  },
+  "article-18": {
+    "cover": "assets/article-18/card-cover.jpg",
+    "cover_figure": "GA",
+    "views": {
+      "GA": {
+        "image": "assets/article-18/view-GA.png",
+        "kind": "figure",
+        "page": 1,
+        "source_box": [
+          145.4978333,
+          462.66516379999996,
+          449.7778164,
+          604.2251636
+        ]
+      },
+      "1": {
+        "image": "assets/article-18/page-03.png",
+        "kind": "page",
+        "page": 3
+      },
+      "2": {
+        "image": "assets/article-18/page-05.png",
+        "kind": "page",
+        "page": 5
+      },
+      "3": {
+        "image": "assets/article-18/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "4": {
+        "image": "assets/article-18/page-07.png",
+        "kind": "page",
+        "page": 7
+      },
+      "5": {
+        "image": "assets/article-18/page-13.png",
+        "kind": "page",
+        "page": 13
+      },
+      "6": {
+        "image": "assets/article-18/page-15.png",
+        "kind": "page",
+        "page": 15
+      },
+      "7": {
+        "image": "assets/article-18/page-19.png",
+        "kind": "page",
+        "page": 19
+      }
+    }
+  },
+  "article-19": {
+    "cover": "assets/article-19/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-19/view-1.png",
+        "kind": "figure",
+        "page": 2,
+        "source_box": [
+          34.189099,
+          504.166401,
+          291.78909899999996,
+          733.206401
+        ]
+      },
+      "2": {
+        "image": "assets/article-19/view-2.png",
+        "kind": "figure",
+        "page": 3,
+        "source_box": [
+          34.642599,
+          585.3364,
+          559.622599,
+          733.2364
+        ]
+      },
+      "3": {
+        "image": "assets/article-19/view-3.png",
+        "kind": "figure",
+        "page": 4,
+        "source_box": [
+          62.6189,
+          48.81200000000001,
+          532.6188999999999,
+          201.39999999999998
+        ]
+      },
+      "4": {
+        "image": "assets/article-19/view-4.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          120.19199900000001,
+          49.00503100000003,
+          475.019999,
+          372.443031
+        ]
+      },
+      "5": {
+        "image": "assets/article-19/view-5.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          62.6189,
+          49.08299999999997,
+          531.6589,
+          264.443
+        ]
+      },
+      "6": {
+        "image": "assets/article-19/view-6.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          35.152798999999995,
+          289.004,
+          559.920799,
+          444.55600000000004
+        ]
+      },
+      "7": {
+        "image": "assets/article-19/view-7.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          34.642599,
+          469.093,
+          559.678599,
+          678.9250000000001
+        ]
+      },
+      "8": {
+        "image": "assets/article-19/view-8.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          35.152798999999995,
+          49.280001000000084,
+          560.064799,
+          350.41600100000005
+        ]
+      },
+      "9": {
+        "image": "assets/article-19/view-9.png",
+        "kind": "figure",
+        "page": 17,
+        "source_box": [
+          34.642599,
+          399.720431,
+          559.666599,
+          733.236431
+        ]
+      }
+    }
+  },
+  "article-20": {
+    "cover": "assets/article-20/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-20/view-1.png",
+        "kind": "figure",
+        "page": 5,
+        "source_box": [
+          161.77700244099998,
+          589.756996339,
+          482.13698779199996,
+          741.156990235
+        ]
+      },
+      "2": {
+        "image": "assets/article-20/view-2.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          162.18900244099999,
+          109.96801159699999,
+          552.148993896,
+          296.048013428
+        ]
+      },
+      "3": {
+        "image": "assets/article-20/view-3.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          161.364002441,
+          449.95198108,
+          417.824009154,
+          701.911987793
+        ]
+      },
+      "4": {
+        "image": "assets/article-20/view-4.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          161.364002441,
+          66.22600305200001,
+          508.244007323,
+          265.26599633800004
+        ]
+      },
+      "5": {
+        "image": "assets/article-20/view-5.png",
+        "kind": "figure",
+        "page": 11,
+        "source_box": [
+          92.672996948,
+          120.98699206599997,
+          501.653007934,
+          329.506996338
+        ]
+      },
+      "6": {
+        "image": "assets/article-20/view-6.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          161.364002441,
+          320.216999695,
+          516.584003661,
+          492.377003357
+        ]
+      },
+      "7": {
+        "image": "assets/article-20/view-7.png",
+        "kind": "figure",
+        "page": 23,
+        "source_box": [
+          161.364002441,
+          223.34800305199997,
+          426.763996337,
+          373.42800488299997
+        ]
+      },
+      "8": {
+        "image": "assets/article-20/view-8.png",
+        "kind": "figure",
+        "page": 25,
+        "source_box": [
+          161.77700244099998,
+          333.530003968,
+          468.277002441,
+          463.990003052
+        ]
+      },
+      "9": {
+        "image": "assets/article-20/view-9.png",
+        "kind": "figure",
+        "page": 26,
+        "source_box": [
+          160.952002441,
+          67.58899206700005,
+          501.712012206,
+          202.72899145600002
+        ]
+      },
+      "10": {
+        "image": "assets/article-20/view-10.png",
+        "kind": "figure",
+        "page": 27,
+        "source_box": [
+          160.952002441,
+          520.2019963390001,
+          538.851996337,
+          699.802002442
+        ]
+      },
+      "11": {
+        "image": "assets/article-20/view-11.png",
+        "kind": "figure",
+        "page": 28,
+        "source_box": [
+          162.601002441,
+          594.376011597,
+          518.421009765,
+          762.5760085449999
+        ]
+      },
+      "12": {
+        "image": "assets/article-20/view-12.png",
+        "kind": "figure",
+        "page": 32,
+        "source_box": [
+          77.672996948,
+          106.24700732500003,
+          516.593010375,
+          354.307004883
+        ]
+      }
+    }
+  },
+  "article-21": {
+    "cover": "assets/article-21/card-cover.jpg",
+    "cover_figure": "4",
+    "views": {
+      "1": {
+        "image": "assets/article-21/page-02.png",
+        "kind": "page",
+        "page": 2
+      },
+      "2": {
+        "image": "assets/article-21/page-08.png",
+        "kind": "page",
+        "page": 8
+      },
+      "3": {
+        "image": "assets/article-21/page-08.png",
+        "kind": "page",
+        "page": 8
+      },
+      "4": {
+        "image": "assets/article-21/view-4.png",
+        "kind": "figure",
+        "page": 10,
+        "source_box": [
+          35.1795,
+          48.39600000000007,
+          560.0915,
+          310.36400000000003
+        ]
+      },
+      "5": {
+        "image": "assets/article-21/view-5.png",
+        "kind": "figure",
+        "page": 12,
+        "source_box": [
+          35.1795,
+          411.2873,
+          560.0915,
+          723.6553
+        ]
+      },
+      "6": {
+        "image": "assets/article-21/view-6.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          35.1795,
+          506.75930000000005,
+          560.0915,
+          723.6553
+        ]
+      },
+      "7": {
+        "image": "assets/article-21/view-7.png",
+        "kind": "figure",
+        "page": 18,
+        "source_box": [
+          96.975,
+          498.7724,
+          498.33500000000004,
+          733.2364
+        ]
+      },
+      "8": {
+        "image": "assets/article-21/view-8.png",
+        "kind": "figure",
+        "page": 19,
+        "source_box": [
+          64.3197,
+          444.1964,
+          530.9117,
+          733.2364
+        ]
+      },
+      "9": {
+        "image": "assets/article-21/page-23.png",
+        "kind": "page",
+        "page": 23
+      },
+      "10": {
+        "image": "assets/article-21/view-10.png",
+        "kind": "figure",
+        "page": 24,
+        "source_box": [
+          35.1795,
+          502.9484,
+          560.0915,
+          733.2364
+        ]
+      }
+    }
+  },
+  "article-22": {
+    "cover": "assets/article-22/card-cover.jpg",
+    "cover_figure": "B.3",
+    "views": {
+      "1": {
+        "image": "assets/article-22/page-05.png",
+        "kind": "page",
+        "page": 5
+      },
+      "B.1": {
+        "image": "assets/article-22/page-16.png",
+        "kind": "page",
+        "page": 16
+      },
+      "B.2": {
+        "image": "assets/article-22/page-16.png",
+        "kind": "page",
+        "page": 16
+      },
+      "B.3": {
+        "image": "assets/article-22/view-B-3.png",
+        "kind": "figure",
+        "page": 19,
+        "source_box": [
+          137.0,
+          83.8605808000001,
+          475.0099792,
+          265.34400000000005
+        ]
+      }
+    }
+  },
+  "article-23": {
+    "cover": "assets/article-23/card-cover.jpg",
+    "cover_figure": "1",
+    "views": {
+      "1": {
+        "image": "assets/article-23/view-1.png",
+        "kind": "figure",
+        "page": 3,
+        "source_box": [
+          32.6283,
+          552.69528,
+          294.45231,
+          723.6553
+        ]
+      },
+      "2": {
+        "image": "assets/article-23/view-2.png",
+        "kind": "figure",
+        "page": 7,
+        "source_box": [
+          65.2268,
+          435.8444,
+          261.09880999999996,
+          733.2364
+        ]
+      },
+      "3": {
+        "image": "assets/article-23/view-3.png",
+        "kind": "figure",
+        "page": 8,
+        "source_box": [
+          301.58,
+          568.46839,
+          563.25999,
+          733.2364
+        ]
+      },
+      "4": {
+        "image": "assets/article-23/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "5": {
+        "image": "assets/article-23/page-09.png",
+        "kind": "page",
+        "page": 9
+      },
+      "6": {
+        "image": "assets/article-23/view-6.png",
+        "kind": "figure",
+        "page": 12,
+        "source_box": [
+          70.3291,
+          482.93238,
+          524.96911,
+          733.2364
+        ]
+      },
+      "7": {
+        "image": "assets/article-23/view-7.png",
+        "kind": "figure",
+        "page": 14,
+        "source_box": [
+          119.935,
+          48.41798000000006,
+          475.35901,
+          253.21800000000007
+        ]
+      },
+      "8": {
+        "image": "assets/article-23/page-14.png",
+        "kind": "page",
+        "page": 14
+      },
+      "9": {
+        "image": "assets/article-23/view-9.png",
+        "kind": "figure",
+        "page": 16,
+        "source_box": [
+          80.5339,
+          523.19569,
+          514.7258899999999,
+          733.1797
+        ]
+      },
+      "10": {
+        "image": "assets/article-23/view-10.png",
+        "kind": "figure",
+        "page": 18,
+        "source_box": [
+          301.58,
+          575.01529,
+          563.54802,
+          723.6553
+        ]
+      }
+    }
+  }
+}

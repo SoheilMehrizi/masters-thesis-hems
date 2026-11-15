@@ -1,0 +1,410 @@
+{
+  "id": "article-23",
+  "title": {
+    "en": "Digital twins in renewable energy systems A comprehensive review of",
+    "fa": "مرور جامعTwinدر انرژی تجدیدپذیر"
+  },
+  "short_title": "Digital Twins in renewable energy",
+  "sections": [
+    {
+      "id": "questions",
+      "title": {
+        "en": "Stated research questions and scope",
+        "fa": "پرسش صریح و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Mbasso et al., Energy Strategy Reviews 61 (2025), 101814. Questions concern DT concepts and architecture, lifecycle applications across solar/wind/hydro/hybrid systems, enabling technologies and their integration, barriers to dependable deployment, and research priorities. The paper is a cross-sector review, not a new residential control or diagnosis experiment.",
+          "fa": "Mbasso وهمکاران،۲۰۲۵. پرسش‌ها مفاهیم و معماریTwin، کاربرد چرخه‌عمر خورشیدی/بادی/آبی/ترکیبی، فناوری و ترکیب، موانع استقرار قابل‌اعتماد و اولویت آینده‌اند. مرور چندبخشی است، نه آزمون کنترل خانه.",
+          "pages": [
+            1,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Search and classification",
+        "fa": "جست‌وجو و طبقه‌بندی"
+      },
+      "paragraphs": [
+        {
+          "en": "The PRISMA-guided search covers publications from January 2014 to April 2024. IEEE Xplore, ScienceDirect, SpringerLink and Web of Science were queried during January–April 2024, including journal articles, conferences, technical reports and industry white papers. Screening evaluates relevance, technical depth and contribution; the text reports a curated 156-source corpus. Its description of peer-reviewed sources should be read alongside the explicit inclusion of industry material.",
+          "fa": "بازه انتشارژانویه۲۰۱۴تا آوریل۲۰۲۴ است. جست‌وجویIEEE،ScienceDirect،SpringerLink وWoS درژانویه–آوریل۲۰۲۴، مقاله، کنفرانس، گزارش و سندصنعتی را شامل می‌شود. مجموعه۱۵۶منبع با معیار ارتباط و عمق فنی گزارش شده؛ عبارت داوری‌شده باید کنار ورود سندصنعتی خوانده شود.",
+          "pages": [
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "methodology",
+      "title": {
+        "en": "Technical synthesis",
+        "fa": "ترکیب فنی"
+      },
+      "paragraphs": [
+        {
+          "en": "The taxonomy links energy type, lifecycle stage and functional role. Physical models, sensors and communication, digital modeling, analytics and decision support form layered Twins. AI, IoT, cloud/edge computing and big-data infrastructure enable monitoring, diagnosis, predictive maintenance and optimization. Equations illustrate model families and future hybrid designs; they are not evidence of one newly calibrated shared model.",
+          "fa": "طبقه‌بندی نوع انرژی، مرحله چرخه‌عمر و نقش را پیوند می‌دهد. مدل فیزیکی، حسگر/ارتباط، مدل دیجیتال، تحلیل و تصمیم لایه‌هایTwinاند. AI،IoT،ابر/لبه وکلان‌داده پایش،تشخیص،نگهداری وبهینه‌سازی را ممکن می‌کنند؛ معادله نمونه، مدل مشترک کالیبره جدید نیست.",
+          "pages": [
+            3,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Case evidence and reported benefits",
+        "fa": "شاهد موردی و منفعت گزارش‌شده"
+      },
+      "paragraphs": [
+        {
+          "en": "The paper synthesizes published cases rather than conducting a common train/test or controlled deployment experiment. The abstract cites up to 25% downtime reduction and 10–20% energy-yield improvement for deployments such as GE Digital Wind Farm and Huawei solar systems. These are secondary, case-dependent claims, not pooled causal estimates or a benefit guaranteed for CityLearn. Table 5 retains the named case contexts.",
+          "fa": "موردهای منتشرشده ترکیب شده‌اند، نه آزمون کنترل‌شده مشترک. چکیده کاهش توقف تا۲۵٪ و افزایش بازده۱۰–۲۰٪ برای نمونه صنعتی می‌گوید. این ادعای ثانویه وابسته به مورد است، نه اثر علّی تجمیعی یا تضمینCityLearn؛ زمینه درجدول۵ حفظ می‌شود.",
+          "pages": [
+            1,
+            14,
+            15,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Limitations and staged roadmap",
+        "fa": "محدودیت و نقشه راه"
+      },
+      "paragraphs": [
+        {
+          "en": "Table 6 identifies fidelity, heterogeneous/noisy asynchronous data, absent standardization, cybersecurity and computational demand. The roadmap prioritizes hybrid high-fidelity asset models in 1–2 years; interoperable and secure ecosystems in 3–5 years; and network-scale climate-aware intelligence in 6–10 years. These are proposed priorities, not experimentally verified deployment timelines.",
+          "fa": "جدول۶ وفاداری مدل، داده ناهمگن/نویزدار/ناهمزمان، نبود استاندارد، امنیت و محاسبه را مانع می‌داند. نقشه راه۱–۲سال مدل دقیق،۳–۵سال اکوسیستم امن/همکار و۶–۱۰سال هوش شبکه/اقلیم را پیشنهاد می‌کند؛ زمان‌بندی اثبات‌شده تجربی نیست.",
+          "pages": [
+            17,
+            18
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "It supplies lifecycle and Twin-architecture context and documents practical barriers that could invalidate claims of reliable online adaptation.",
+      "fa": "زمینه چرخه‌عمر و معماریTwin و موانع عملی ادعای سازگاری آنلاین قابل‌اعتماد را می‌دهد.",
+      "pages": [
+        9,
+        17
+      ]
+    },
+    "contribution": {
+      "en": "Its contribution is a cross-sector taxonomy, enabling-technology map, case-study overview and staged research roadmap.",
+      "fa": "طبقه‌بندی چندبخشی، نگاشت فناوری، مرور مورد و نقشه راه مرحله‌ای می‌دهد.",
+      "pages": [
+        10,
+        12,
+        15,
+        18
+      ]
+    },
+    "employment": {
+      "en": "Use the fidelity and data-quality categories to specify what the Operational and Reference Twins represent and what uncertainty we test. Consult original case sources before transferring reported savings or maintenance benefits.",
+      "fa": "مقوله وفاداری/کیفیت داده برای مشخصاتTwinعملیاتی ومرجع و عدم‌قطعیت آزمون استفاده شود؛ قبل انتقال منفعت به منبع اصلی رجوع کنیم.",
+      "pages": [
+        15,
+        17
+      ]
+    },
+    "baseline": {
+      "en": "No single executable method is offered as a mandatory baseline. Use as supporting theory and source discovery; evaluate candidate original methods only if their observations, fault scope and decision task match.",
+      "fa": "روش اجرایی واحد برای خط‌مبنای اجباری ندارد؛ پشتیبان نظری و کشف منبع است و روش اصلی فقط در تطابق وظیفه نامزد شود.",
+      "pages": [
+        15,
+        17
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Mixed academic and industrial sources and heterogeneous case definitions limit pooled benefit claims. A taxonomy or architecture does not itself prove fault identifiability, safe intervention or an autonomous Twin synchronization guarantee.",
+      "fa": "منبع علمی/صنعتی مختلط و تعریف ناهمگن مورد، ادعای منفعت تجمیعی را محدود می‌کند. معماری اثبات تشخیص‌پذیری، مداخله ایمن یا تضمین همگامی نیست.",
+      "pages": [
+        6,
+        15,
+        17
+      ]
+    },
+    {
+      "en": "Figure 9’s caption repeats a sector-distribution label even though the graphic shows challenge severity; its data and the text also differ on whether every score exceeds 8. The report retains these source inconsistencies.",
+      "fa": "عنوان شکل۹ توزیع بخش است ولی تصویر شدت چالش را دارد؛ ادعای همه بیش‌از۸ نیز با۸٫۰ ناسازگار است.این ناسازگاری منبع حفظ شده.",
+      "pages": [
+        16
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "The text reports 156 sources over 2014–April 2024; headline downtime and yield gains remain secondary case claims. No common new controller experiment is performed.",
+      "fa": "۱۵۶منبع۲۰۱۴تا آوریل۲۰۲۴ گزارش شده؛ سود توقف/بازده ادعای ثانویه موردی است و آزمون کنترل‌گر جدید ندارد.",
+      "pages": [
+        1,
+        6,
+        15
+      ]
+    }
+  ],
+  "bibliography_start_page": 19,
+  "coverage_notes": {
+    "en": "Source text, original figure/table pages and bibliography inspected. Original source-page views preserve the complete graphics when individual crops are uncertain. Printed values only; no curve digitization. Project relevance and baseline recommendations are explicitly reviewer assessments. Supplementary material not supplied with the local PDF is not claimed reviewed.",
+    "fa": "متن،صفحات شکل/جدول وکتاب‌نامه بررسی شده‌اند.نمای صفحه اصلی تصویر کامل را درمرزبرش نامطمئن حفظ می‌کند.فقط عدد چاپ‌شده ثبت و منحنی تخمین زده نشده است.نقش پروژه وخط‌مبنا ارزیابی مستقل مرورگر است.پیوست بیرونی موجودنبوده،مطالعه‌شده ادعا نمی‌شود."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Physical and digital Twin architecture",
+        "fa": "سیستم فیزیکی،نمایش دیجیتال و مبادله داده را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Shows the physical system, digital representation and information exchange. It motivates distinguishing a synchronized Twin from an isolated offline model.",
+        "fa": "سیستم فیزیکی،نمایش دیجیتال و مبادله داده را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Shows the physical system, digital representation and information exchange. It motivates distinguishing a synchronized Twin from an isolated offline model.",
+        "fa": "سیستم فیزیکی،نمایش دیجیتال و مبادله داده را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "caption": {
+        "en": "PRISMA-style flow",
+        "fa": "جریان انتخاب مجموعه طبق متن۱۵۶منبع است؛ عدد مبهم تخمین زده نمی‌شود."
+      },
+      "explanation": {
+        "en": "Documents search and screening for the review corpus, reported as 156 sources in the text. Retain source labels rather than estimating unclear chart counts.",
+        "fa": "جریان انتخاب مجموعه طبق متن۱۵۶منبع است؛ عدد مبهم تخمین زده نمی‌شود."
+      },
+      "data": {
+        "en": "Documents search and screening for the review corpus, reported as 156 sources in the text. Retain source labels rather than estimating unclear chart counts.",
+        "fa": "جریان انتخاب مجموعه طبق متن۱۵۶منبع است؛ عدد مبهم تخمین زده نمی‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 8,
+      "caption": {
+        "en": "Chronology of DT applications",
+        "fa": "تحول زمانی کاربردTwin است؛ رشد،اثبات بلوغ عملیاتی نیست."
+      },
+      "explanation": {
+        "en": "Shows progression of DT use over the review period. Chronological growth is descriptive, not proof of operational maturity.",
+        "fa": "تحول زمانی کاربردTwin است؛ رشد،اثبات بلوغ عملیاتی نیست."
+      },
+      "data": {
+        "en": "Shows progression of DT use over the review period. Chronological growth is descriptive, not proof of operational maturity.",
+        "fa": "تحول زمانی کاربردTwin است؛ رشد،اثبات بلوغ عملیاتی نیست."
+      }
+    },
+    {
+      "id": "4",
+      "page": 9,
+      "caption": {
+        "en": "Conceptual renewable-energy Twin",
+        "fa": "توابع فیزیک،داده/مدل و کاربرد را چندبخشی مرتب می‌کند."
+      },
+      "explanation": {
+        "en": "Organizes physical, data/model and application functions. It is a cross-sector architecture rather than a calibrated home-energy model.",
+        "fa": "توابع فیزیک،داده/مدل و کاربرد را چندبخشی مرتب می‌کند."
+      },
+      "data": {
+        "en": "Organizes physical, data/model and application functions. It is a cross-sector architecture rather than a calibrated home-energy model.",
+        "fa": "توابع فیزیک،داده/مدل و کاربرد را چندبخشی مرتب می‌کند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "caption": {
+        "en": "Enabling technologies and Twin functions",
+        "fa": "AI،IoT،ابر/لبه وکلان‌داده به نقشTwin وصل‌اند؛ اثر حاشیه‌ای عددی نیست."
+      },
+      "explanation": {
+        "en": "Maps AI, IoT, cloud/edge and big data onto core functions. Arrows indicate architectural support, not measured marginal benefits.",
+        "fa": "AI،IoT،ابر/لبه وکلان‌داده به نقشTwin وصل‌اند؛ اثر حاشیه‌ای عددی نیست."
+      },
+      "data": {
+        "en": "Maps AI, IoT, cloud/edge and big data onto core functions. Arrows indicate architectural support, not measured marginal benefits.",
+        "fa": "AI،IoT،ابر/لبه وکلان‌داده به نقشTwin وصل‌اند؛ اثر حاشیه‌ای عددی نیست."
+      }
+    },
+    {
+      "id": "6",
+      "page": 12,
+      "caption": {
+        "en": "Applications by sector and lifecycle",
+        "fa": "طبقه‌بندی بر پایه نوع انرژی و طراحی،بهره‌برداری،نگهداری وپایان عمر است."
+      },
+      "explanation": {
+        "en": "Classifies renewable-energy Twins by technology and design, operation, maintenance or end-of-life stage. This is the review taxonomy.",
+        "fa": "طبقه‌بندی بر پایه نوع انرژی و طراحی،بهره‌برداری،نگهداری وپایان عمر است."
+      },
+      "data": {
+        "en": "Classifies renewable-energy Twins by technology and design, operation, maintenance or end-of-life stage. This is the review taxonomy.",
+        "fa": "طبقه‌بندی بر پایه نوع انرژی و طراحی،بهره‌برداری،نگهداری وپایان عمر است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 14,
+      "caption": {
+        "en": "Sector distribution of implementations",
+        "fa": "توزیع بخش در منابع انتخابی است، نه سهم کل استقرار واقعی."
+      },
+      "explanation": {
+        "en": "Displays the reviewed distribution across renewable sectors. Counts reflect the selected literature and not population-level deployment shares.",
+        "fa": "توزیع بخش در منابع انتخابی است، نه سهم کل استقرار واقعی."
+      },
+      "data": {
+        "en": "Displays the reviewed distribution across renewable sectors. Counts reflect the selected literature and not population-level deployment shares.",
+        "fa": "توزیع بخش در منابع انتخابی است، نه سهم کل استقرار واقعی."
+      }
+    },
+    {
+      "id": "8",
+      "page": 14,
+      "caption": {
+        "en": "Distribution by selected case studies",
+        "fa": "توزیع موردهای منتخب است؛ ناهمگنی دارایی و معیار مانع رتبه مشترک است."
+      },
+      "explanation": {
+        "en": "Summarizes the cases used for comparison. Their different assets and evaluation definitions prevent a uniform controller ranking.",
+        "fa": "توزیع موردهای منتخب است؛ ناهمگنی دارایی و معیار مانع رتبه مشترک است."
+      },
+      "data": {
+        "en": "The pie chart explicitly prints Solar PV 45%, wind 30%, hydro 15% and hybrid 10%, based on documented case studies. These are the source’s selected-case proportions, not global deployment shares.",
+        "fa": "نمودار صریحاً خورشیدی۴۵٪،بادی۳۰٪،آبی۱۵٪ و ترکیبی۱۰٪ دارد؛ نسبت موردهای مستند است، نه کل استقرار جهانی."
+      }
+    },
+    {
+      "id": "9",
+      "page": 16,
+      "caption": {
+        "en": "Renewable-energy implementation distribution",
+        "fa": "عنوان چاپی دوباره توزیع بخش است؛ زمینه اصلی حفظ و نتیجه عددی متمایز اختراع نشده."
+      },
+      "explanation": {
+        "en": "Despite the repeated sector-distribution caption, the actual graphic ranks deployment challenges on a 1–10 severity scale. The surrounding text describes real-world cases and expert judgment; no formal uncertainty interval is supplied.",
+        "fa": "باوجود عنوان تکراری توزیع بخش، نمودار واقعی شدت چالش استقرار در مقیاس۱تا۱۰ است؛ متن به مورد واقعی و داوری خبره اشاره دارد و فاصله عدم‌قطعیت ندارد."
+      },
+      "data": {
+        "en": "Printed severity values: computational demand 9.2; cybersecurity 8.7; lack of standardization 8.0; data heterogeneity/quality 9.0; model accuracy/fidelity 8.5. The text says all exceed 8 although standardization is labeled exactly 8.0.",
+        "fa": "عدد چاپی:محاسبه۹٫۲،امنیت۸٫۷،نبوداستاندارد۸٫۰،داده۹٫۰،وفاداری۸٫۵.متن می‌گوید همه بیش از۸اند ولی استاندارد دقیقاً۸٫۰است."
+      }
+    },
+    {
+      "id": "10",
+      "page": 18,
+      "caption": {
+        "en": "Strategic research roadmap",
+        "fa": "اولویت فنی کوتاه/میان/بلندمدت با هدف سیاست انرژی پیوند دارد؛ پیش‌بینی تأییدشده نیست."
+      },
+      "explanation": {
+        "en": "Links short-, medium- and long-term technical priorities with energy-policy goals. It is a proposed roadmap rather than a validated adoption forecast.",
+        "fa": "اولویت فنی کوتاه/میان/بلندمدت با هدف سیاست انرژی پیوند دارد؛ پیش‌بینی تأییدشده نیست."
+      },
+      "data": {
+        "en": "Links short-, medium- and long-term technical priorities with energy-policy goals. It is a proposed roadmap rather than a validated adoption forecast.",
+        "fa": "اولویت فنی کوتاه/میان/بلندمدت با هدف سیاست انرژی پیوند دارد؛ پیش‌بینی تأییدشده نیست."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 5,
+      "title": {
+        "en": "Prior DT reviews",
+        "fa": "حوزه انرژی،چرخه‌عمر و ادغام مرور قبلی مقایسه می‌شود."
+      },
+      "summary": {
+        "en": "Compares energy focus, lifecycle coverage and technology integration to motivate this review.",
+        "fa": "حوزه انرژی،چرخه‌عمر و ادغام مرور قبلی مقایسه می‌شود."
+      }
+    },
+    {
+      "id": "2",
+      "page": 10,
+      "title": {
+        "en": "DT applications across renewable sectors",
+        "fa": "نوع تجدیدپذیر به کاربرد چرخه‌عمر نگاشت می‌شود."
+      },
+      "summary": {
+        "en": "Maps renewable sources onto lifecycle-stage applications.",
+        "fa": "نوع تجدیدپذیر به کاربرد چرخه‌عمر نگاشت می‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 10,
+      "title": {
+        "en": "Enabling technology roles",
+        "fa": "نقش فناوری درTwin با مثال بیان می‌شود."
+      },
+      "summary": {
+        "en": "Describes how AI, IoT and computational infrastructure support Twin functions with examples.",
+        "fa": "نقش فناوری درTwin با مثال بیان می‌شود."
+      }
+    },
+    {
+      "id": "4",
+      "page": 15,
+      "title": {
+        "en": "Lifecycle application classification",
+        "fa": "طراحی،پایش،نگهداری و پایان عمر با منبع خلاصه‌اند."
+      },
+      "summary": {
+        "en": "Summarizes design, monitoring, maintenance and end-of-life uses with representative sources.",
+        "fa": "طراحی،پایش،نگهداری و پایان عمر با منبع خلاصه‌اند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 15,
+      "title": {
+        "en": "Selected case-study outcomes",
+        "fa": "منفعت موردی ثانویه است؛ کاهش توقف۲۵٪ و افزایش بازده۱۰–۲۰٪ باید با منبع اصلی بماند."
+      },
+      "summary": {
+        "en": "Case-dependent operational benefits are secondary evidence; headline downtime reduction up to 25% and yield gains 10–20% must retain original case attribution.",
+        "fa": "منفعت موردی ثانویه است؛ کاهش توقف۲۵٪ و افزایش بازده۱۰–۲۰٪ باید با منبع اصلی بماند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 17,
+      "title": {
+        "en": "Deployment challenges",
+        "fa": "ریشه وفاداری،داده،استاندارد،امنیت و محاسبه به اثر عملی پیوند دارد."
+      },
+      "summary": {
+        "en": "Links fidelity, data quality, standards, security and compute roots to manifestations and operational implications.",
+        "fa": "ریشه وفاداری،داده،استاندارد،امنیت و محاسبه به اثر عملی پیوند دارد."
+      }
+    }
+  ]
+}

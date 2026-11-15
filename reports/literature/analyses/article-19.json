@@ -1,0 +1,414 @@
+{
+  "id": "article-19",
+  "title": {
+    "en": "A systematic review of transformers and large language models in the energy sector, twards agentic digital twins",
+    "fa": "مرور ترنسفورمر، مدل زبانی وTwinعامل‌محور"
+  },
+  "short_title": "Transformers, LLMs and agentic Twins",
+  "sections": [
+    {
+      "id": "questions",
+      "title": {
+        "en": "Stated review objectives",
+        "fa": "اهداف صریح مرور"
+      },
+      "paragraphs": [
+        {
+          "en": "Antonesi et al., Applied Energy 401 (2025), 126670. The objectives are to identify Transformer-based energy-efficiency use cases, analyze large-scale AI in energy management and optimization, and identify challenges and research directions. Agentic Digital Twins are a proposed direction; the paper does not test a newly implemented agentic controller.",
+          "fa": "Antonesi و همکاران،۲۰۲۵. هدف‌ها شناسایی کاربرد ترنسفورمر در بهره‌وری انرژی، تحلیل مدل بزرگ در مدیریت و بهینه‌سازی و تعیین چالش و مسیر آینده است. Twinعامل‌محور پیشنهاد مفهومی است؛ کنترل‌گر جدیدی آزموده نشده.",
+          "pages": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Search and synthesis method",
+        "fa": "روش جست‌وجو و ترکیب شواهد"
+      },
+      "paragraphs": [
+        {
+          "en": "The PRISMA-guided search uses Web of Science Topic queries during February–April 2025. It targets 2021–2025 English articles/proceedings from Elsevier, IEEE, ACM and Wiley in computer-science-related categories. Transformer, LLM, generative AI and foundation-model terms are combined with grid, forecasting, efficiency and management terms. The authors manually remove electrical-transformer and model-energy-consumption false positives.",
+          "fa": "جست‌وجوی PRISMA در WoS طی فوریه تا آوریل۲۰۲۵ است؛ مقاله/کنفرانس انگلیسی۲۰۲۱–۲۰۲۵ از چهار ناشر و رده علوم رایانه را هدف می‌گیرد. ابهام ترانسفورماتور الکتریکی و مصرف انرژی خود مدل دستی حذف می‌شود.",
+          "pages": [
+            4
+          ]
+        },
+        {
+          "en": "The flow reports 8,550 raw records, 7,270 after deduplication, 1,492 after initial filtering and 99 included papers. Table 1 prints year-dependent citation thresholds under its exclusion-criteria heading; retain the printed wording rather than silently resolving its ambiguous presentation. Tables 3–6 classify forecasting architecture; Table 7 classifies LLM applications.",
+          "fa": "جریان۸۵۵۰ رکورد،۷۲۷۰ یکتا،۱۴۹۲ پس از پالایش اولیه و۹۹ مقاله نهایی است. جدول۱ آستانه استناد سالانه را زیر عنوان حذف چاپ کرده؛ ابهام آن نباید بی‌صدا اصلاح شود. جدول۳–۶ معماری پیش‌بینی و۷ کاربرد زبانی را طبقه‌بندی می‌کند.",
+          "pages": [
+            4,
+            5,
+            6,
+            10,
+            11,
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "methodology",
+      "title": {
+        "en": "Technical content and implementation relevance",
+        "fa": "محتوای فنی و ارتباط پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "The review distinguishes Transformer models, LLMs and foundation models. Forecasting designs include temporal attention, spatial/graph structure, multimodal image–weather inputs, probabilistic outputs and domain adaptation. LLM applications include retrieval, code generation, scheduling support and operational explanation. The agentic-Twin proposal places foundation-model capabilities across sensing, modeling, simulation and decision phases; it does not provide a validated household fault-diagnosis implementation.",
+          "fa": "مدل ترنسفورمر، زبانی و بنیادی تفکیک می‌شوند. توجه زمانی/گراف مکانی، ورودی تصویر–هوا، خروجی احتمالی و انتقال دامنه در پیش‌بینی مرور می‌شوند. کاربرد زبانی شامل بازیابی، تولید کد، زمان‌بندی و توضیح است. معماریTwin پیشنهادی است، نه تشخیص خطای خانگی اعتبارسنجی‌شده.",
+          "pages": [
+            2,
+            3,
+            8,
+            9,
+            12,
+            14,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments, baselines and results",
+        "fa": "آزمایش، خط‌مبنا و نتیجه"
+      },
+      "paragraphs": [
+        {
+          "en": "No common train/test split, original controller experiment or pooled head-to-head benchmark is conducted. The 99-paper corpus and bibliometric distributions are review results. Reported performance of cited forecasting methods belongs to those primary studies with their own data and baselines; it must not be relabeled as an experiment by Antonesi et al. The review finds limited concrete energy-domain foundation-model evidence despite strong promises.",
+          "fa": "تقسیم داده مشترک، آزمون کنترل‌گر یا محک یکسان اجرا نشده. مجموعه۹۹ مقاله و توزیع کتاب‌سنجی نتیجه مرورند. عملکرد روش‌های استنادی به مطالعه اصلی تعلق دارد. شواهد عملی مدل بنیادی در انرژی با وجود وعده‌ها محدود گزارش می‌شود.",
+          "pages": [
+            1,
+            5,
+            6,
+            7,
+            8,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated challenges and future work",
+        "fa": "چالش و مسیر آینده نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors identify hallucination, factual and instruction inconsistency, cybersecurity and privacy threats, computational latency, data quality, generalization and interpretability. RAG, critique and symbolic validation can mitigate problems but introduce retrieval errors and overhead. Human oversight remains relevant; conceptual agentic Twins require domain-grounded action constraints and operational validation.",
+          "fa": "توهم، ناسازگاری دستور/واقعیت، امنیت/حریم، تأخیر محاسبه، کیفیت داده، تعمیم و تفسیرپذیری مطرح‌اند. بازیابی، نقد و اعتبارسنجی نمادین خطا را کم ولی خطا/سربار جدید ایجاد می‌کنند. نظارت انسان و اعتبارسنجی عملی لازم‌اند.",
+          "pages": [
+            15,
+            16,
+            17,
+            18
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "This is a direct agentic-Twin novelty-collision reference and a map of existing energy-domain LLM applications. It helps prevent claiming the broad combination of LLMs and Twins as our new contribution.",
+      "fa": "مرجع مستقیم همپوشانیTwinعامل‌محور است و مانع ادعای نوآوری صرف ترکیب LLM وTwin می‌شود.",
+      "pages": [
+        17,
+        18
+      ]
+    },
+    "contribution": {
+      "en": "It contributes a taxonomy, a traceable 99-paper corpus and specific failure mechanisms for foundation models in energy decisions.",
+      "fa": "طبقه‌بندی، مجموعه۹۹ مقاله و سازوکارهای شکست مدل بنیادی در تصمیم انرژی را می‌دهد.",
+      "pages": [
+        4,
+        6,
+        15,
+        16
+      ]
+    },
+    "employment": {
+      "en": "Use the taxonomy to document agent/tool boundaries and to locate original forecasting and safety sources. Evaluate our diagnostic actions and recovery outcomes separately; the review does not supply an SCM or an active-probing algorithm.",
+      "fa": "برای مرزبندی عامل/ابزار و یافتن منبع اصلی پیش‌بینی و ایمنی به‌کار رود؛ SCM و الگوریتم کاوش فعال ارائه نمی‌کند.",
+      "pages": [
+        16,
+        17
+      ]
+    },
+    "baseline": {
+      "en": "No review-level algorithm needs implementation as a baseline. Select primary methods only after checking their task, observations and code; any such baseline remains a candidate requiring project selection.",
+      "fa": "خود مرور الگوریتم خط‌مبنا ندارد. روش اصلی پس از بررسی وظیفه، مشاهده و کد تنها نامزد مقایسه است.",
+      "pages": [
+        10,
+        14,
+        17
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Publisher, category, full-text access and citation restrictions can bias coverage. A conceptual architecture and bibliometric prevalence do not establish a safe or effective causal controller.",
+      "fa": "محدودیت ناشر، رده، دسترسی و استناد می‌تواند پوشش را سوگیر کند؛ معماری مفهومی اثبات کنترل علّی ایمن نیست.",
+      "pages": [
+        4,
+        17
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Search flow: 8,550 records → 7,270 unique → 1,492 filtered → 99 included. Elsevier accounts for 77% of included publications as reported.",
+      "fa": "جریان جست‌وجو۸۵۵۰←۷۲۷۰←۱۴۹۲←۹۹؛ سهم Elsevier برابر۷۷٪ گزارش شده است.",
+      "pages": [
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  ],
+  "bibliography_start_page": 19,
+  "coverage_notes": {
+    "en": "Source text, original figure/table pages and bibliography inspected. Original source-page views preserve the complete graphics when individual crops are uncertain. Printed values only; no curve digitization. Project relevance and baseline recommendations are explicitly reviewer assessments. Supplementary material not supplied with the local PDF is not claimed reviewed.",
+    "fa": "متن،صفحات شکل/جدول وکتاب‌نامه بررسی شده‌اند.نمای صفحه اصلی تصویر کامل را درمرزبرش نامطمئن حفظ می‌کند.فقط عدد چاپ‌شده ثبت و منحنی تخمین زده نشده است.نقش پروژه وخط‌مبنا ارزیابی مستقل مرورگر است.پیوست بیرونی موجودنبوده،مطالعه‌شده ادعا نمی‌شود."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 2,
+      "caption": {
+        "en": "Model taxonomy",
+        "fa": "مدل ترنسفورمر، زبانی و بنیادی را مفهومی تفکیک می‌کند."
+      },
+      "explanation": {
+        "en": "Separates Transformer models, LLMs and foundation models. Inclusion relationships are conceptual rather than measured performance.",
+        "fa": "مدل ترنسفورمر، زبانی و بنیادی را مفهومی تفکیک می‌کند."
+      },
+      "data": {
+        "en": "Separates Transformer models, LLMs and foundation models. Inclusion relationships are conceptual rather than measured performance.",
+        "fa": "مدل ترنسفورمر، زبانی و بنیادی را مفهومی تفکیک می‌کند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 3,
+      "caption": {
+        "en": "Vanilla Transformer for grid prediction",
+        "fa": "جریان تعبیه ورودی، توجه و پیش‌بینی را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Shows input embeddings, attention and forecasting flow. This is an architectural explanation, not a new trained model result.",
+        "fa": "جریان تعبیه ورودی، توجه و پیش‌بینی را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Shows input embeddings, attention and forecasting flow. This is an architectural explanation, not a new trained model result.",
+        "fa": "جریان تعبیه ورودی، توجه و پیش‌بینی را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "3",
+      "page": 4,
+      "caption": {
+        "en": "Fine-tuning for smart-grid management",
+        "fa": "سازگارکردن مدل زبانی با دامنه شبکه را نشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Shows domain adaptation of language models; specific adaptation methods are compared in the accompanying literature, not one new experiment.",
+        "fa": "سازگارکردن مدل زبانی با دامنه شبکه را نشان می‌دهد."
+      },
+      "data": {
+        "en": "Shows domain adaptation of language models; specific adaptation methods are compared in the accompanying literature, not one new experiment.",
+        "fa": "سازگارکردن مدل زبانی با دامنه شبکه را نشان می‌دهد."
+      }
+    },
+    {
+      "id": "4",
+      "page": 5,
+      "caption": {
+        "en": "PRISMA selection flow",
+        "fa": "جریان۸۵۵۰،۷۲۷۰،۱۴۹۲ و۹۹؛ عنوان۲۰۰۰با روش۲۰۲۰ ناسازگار است."
+      },
+      "explanation": {
+        "en": "The text reports 8,550 raw records, 7,270 unique, 1,492 initially filtered and 99 included. The caption prints PRISMA 2000 while the method refers to PRISMA 2020; preserve the source inconsistency.",
+        "fa": "جریان۸۵۵۰،۷۲۷۰،۱۴۹۲ و۹۹؛ عنوان۲۰۰۰با روش۲۰۲۰ ناسازگار است."
+      },
+      "data": {
+        "en": "The text reports 8,550 raw records, 7,270 unique, 1,492 initially filtered and 99 included. The caption prints PRISMA 2000 while the method refers to PRISMA 2020; preserve the source inconsistency.",
+        "fa": "جریان۸۵۵۰،۷۲۷۰،۱۴۹۲ و۹۹؛ عنوان۲۰۰۰با روش۲۰۲۰ ناسازگار است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 7,
+      "caption": {
+        "en": "Publication year and publisher distributions",
+        "fa": "بیشتر مقاله‌ها۲۰۲۳–۲۰۲۵ و سهمElsevier طبق متن۷۷٪ است."
+      },
+      "explanation": {
+        "en": "Most included papers are from 2023–2025; Elsevier represents 77% as stated in the text. These counts reflect the restricted search corpus.",
+        "fa": "بیشتر مقاله‌ها۲۰۲۳–۲۰۲۵ و سهمElsevier طبق متن۷۷٪ است."
+      },
+      "data": {
+        "en": "The pie chart explicitly prints annual counts 2021: 2, 2022: 6, 2023: 22, 2024: 33, 2025: 36, totaling 99. The text reports Elsevier 77%; unlabeled publisher bars are not estimated.",
+        "fa": "شمار چاپی سال:۲۰۲۱دو،۲۰۲۲شش،۲۰۲۳بیست‌ودو،۲۰۲۴سی‌وسه،۲۰۲۵سی‌وشش؛جمع۹۹.متنElsevierرا۷۷٪می‌داند؛ستون بی‌برچسب تخمین نشده."
+      }
+    },
+    {
+      "id": "6",
+      "page": 7,
+      "caption": {
+        "en": "Access, publication medium and quartile",
+        "fa": "نوع دسترسی، رسانه و چارک مجله در مجموعه انتخابی را دارد؛ عدد حدس زده نشده."
+      },
+      "explanation": {
+        "en": "Describes access type, publication medium and journal quartiles within the included corpus. No unprinted chart values are estimated.",
+        "fa": "نوع دسترسی، رسانه و چارک مجله در مجموعه انتخابی را دارد؛ عدد حدس زده نشده."
+      },
+      "data": {
+        "en": "Printed labels: 99 articles; 27 open access; 72 subscription based; five conference proceedings; 94 journal articles; 80 Q1 and 13 Q2 journal entries. The source totals are retained without reassigning an unreported quartile.",
+        "fa": "برچسب چاپی۹۹مقاله،۲۷آزاد،۷۲اشتراکی،۵کنفرانس،۹۴مجله،۸۰چارک۱و۱۳چارک۲است؛چارک گزارش‌نشده حدس زده نمی‌شود."
+      }
+    },
+    {
+      "id": "7",
+      "page": 7,
+      "caption": {
+        "en": "Articles per journal",
+        "fa": "توزیع مجله، فراوانی نشر را نشان می‌دهد، نه کیفیت الگوریتم."
+      },
+      "explanation": {
+        "en": "Shows concentration of the included literature by journal. Publication frequency does not establish algorithm quality.",
+        "fa": "توزیع مجله، فراوانی نشر را نشان می‌دهد، نه کیفیت الگوریتم."
+      },
+      "data": {
+        "en": "Printed counts: Applied Energy 10; Energy and Buildings 10; Renewable Energy 8; Energy 7; Expert Systems with Applications 5; IEEE Access 5; International Journal of Electrical Power & Energy Systems 4; Computers & Electrical Engineering, Energy Reports, IEEE Transactions on Instrumentation and Measurement, and Knowledge-Based Systems each 3.",
+        "fa": "عدد چاپی:Applied Energy وEnergy and Buildings هر۱۰،Renewable Energy هشت،Energy هفت،Expert Systems وIEEE Access هر۵،IJEPE چهار،چهارمجله دیگر هر۳است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 8,
+      "caption": {
+        "en": "Country distribution",
+        "fa": "توزیع کشور مقاله‌هاست، نه اعتبارسنجی جغرافیایی کنترل‌گر."
+      },
+      "explanation": {
+        "en": "Maps the country distribution of included articles. It is bibliometric evidence, not geographic validation of an energy controller.",
+        "fa": "توزیع کشور مقاله‌هاست، نه اعتبارسنجی جغرافیایی کنترل‌گر."
+      },
+      "data": {
+        "en": "Maps the country distribution of included articles. It is bibliometric evidence, not geographic validation of an energy controller.",
+        "fa": "توزیع کشور مقاله‌هاست، نه اعتبارسنجی جغرافیایی کنترل‌گر."
+      }
+    },
+    {
+      "id": "9",
+      "page": 17,
+      "caption": {
+        "en": "Agentic Digital Twin architecture",
+        "fa": "قابلیت مدل بنیادی روی مراحل مدیریت انرژی نگاشت شده؛ معماری مفهومی است."
+      },
+      "explanation": {
+        "en": "Maps foundation-model capabilities onto energy-management phases. This is the central conceptual novelty-collision diagram; no household intervention experiment validates it here.",
+        "fa": "قابلیت مدل بنیادی روی مراحل مدیریت انرژی نگاشت شده؛ معماری مفهومی است."
+      },
+      "data": {
+        "en": "Maps foundation-model capabilities onto energy-management phases. This is the central conceptual novelty-collision diagram; no household intervention experiment validates it here.",
+        "fa": "قابلیت مدل بنیادی روی مراحل مدیریت انرژی نگاشت شده؛ معماری مفهومی است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Inclusion and exclusion criteria",
+        "fa": "معیار زبان،سال،ناشر،رده،استناد و دسترسی را دارد."
+      },
+      "summary": {
+        "en": "English 2021–2025 articles/proceedings, four selected publishers, computer-science categories, citation and access restrictions. The placement of citation thresholds under exclusion is retained as printed.",
+        "fa": "معیار زبان،سال،ناشر،رده،استناد و دسترسی را دارد."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "title": {
+        "en": "Search-process counts",
+        "fa": "جمع۸۵۵۰،۱۴۹۲ و۹۹ درگروه واژه‌هاست."
+      },
+      "summary": {
+        "en": "The rows total 8,550 raw results, 1,492 after initial inclusion and 99 final papers, across Transformer and large-model keyword groups.",
+        "fa": "جمع۸۵۵۰،۱۴۹۲ و۹۹ درگروه واژه‌هاست."
+      }
+    },
+    {
+      "id": "3",
+      "page": 10,
+      "title": {
+        "en": "Electricity-demand Transformer designs",
+        "fa": "معماری توجه و رمزگذار/رمزگشا در تقاضای برق مقایسه می‌شود."
+      },
+      "summary": {
+        "en": "Compares encoder/decoder, attention and architectural extensions for reviewed electricity-demand methods. This is an architecture catalog, not a standardized performance table.",
+        "fa": "معماری توجه و رمزگذار/رمزگشا در تقاضای برق مقایسه می‌شود."
+      }
+    },
+    {
+      "id": "4",
+      "page": 11,
+      "title": {
+        "en": "Thermal-demand Transformer designs",
+        "fa": "ورودی و معماری پیش‌بینی تقاضای حرارتی را فهرست می‌کند."
+      },
+      "summary": {
+        "en": "Catalogs input representation, encoder/decoder and attention extensions for thermal-energy prediction.",
+        "fa": "ورودی و معماری پیش‌بینی تقاضای حرارتی را فهرست می‌کند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 11,
+      "title": {
+        "en": "Wind-power Transformer designs",
+        "fa": "ورودی،توجه و تغییر معماری پیش‌بینی باد را مقایسه می‌کند."
+      },
+      "summary": {
+        "en": "Contrasts wind forecasting input, attention and architectural additions across the cited studies.",
+        "fa": "ورودی،توجه و تغییر معماری پیش‌بینی باد را مقایسه می‌کند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 13,
+      "title": {
+        "en": "Solar-irradiance Transformer designs",
+        "fa": "نمایش تصویر/هوا و توسعه چندوجهی و شناسه منبع اصلی را دارد."
+      },
+      "summary": {
+        "en": "Includes image/weather representations and multimodal extensions; primary-study identifiers are preserved in the source table.",
+        "fa": "نمایش تصویر/هوا و توسعه چندوجهی و شناسه منبع اصلی را دارد."
+      }
+    },
+    {
+      "id": "7",
+      "page": 14,
+      "title": {
+        "en": "Energy-domain LLM applications",
+        "fa": "حوزه،مدل،تنظیم و وظیفه را دارد؛ راه رسیدن به منبع اصلی است."
+      },
+      "summary": {
+        "en": "Lists domain, model, fine-tuning and tasks; use as a route to original sources rather than a shared empirical baseline.",
+        "fa": "حوزه،مدل،تنظیم و وظیفه را دارد؛ راه رسیدن به منبع اصلی است."
+      }
+    }
+  ]
+}

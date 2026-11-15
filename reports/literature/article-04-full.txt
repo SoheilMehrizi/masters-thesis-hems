@@ -1,0 +1,2345 @@
+=== PDF PAGE 1 ===
+A data-driven iterative digital twin framework for dynamic building energy 
+performance: Integrating virtual sensing and anomaly diagnosis☆
+Chenxi Jia a,*
+ , Longyue Yang b, Wei Jin a, Jifeng Zhao a, Chuanjin Zhang a, Yutan Li c
+a School of New Energy Engineering, Jiangsu Vocational Institute of Architectural Technology, Xuzhou 221116, China
+b School of Electrical Engineering, China University of Mining and Technology, Xuzhou 221116, China
+c School of Intelligent Manufacturing, Jiangsu Vocational Institute of Architectural Technology, Xuzhou 221116, China
+ARTICLE INFO
+Keywords:
+Digital Twin
+Building Energy Performance Certification 
+(EPC)
+Virtual Sensing
+Anomaly Root-Cause Diagnosis
+Data-Driven Iterative Framework
+ABSTRACT
+This study focuses on medium‑sized office buildings (8000–12000 m2) that are already in operation and 
+equipped with partial sensor data. With the advancement of decarbonization goals in the building sector 
+worldwide, there is an urgent need for Energy Performance Certification (EPC) tools to transform from “static 
+compliance documents” to “dynamic decision-support platforms.” Traditional EPC systems suffer from three core 
+limitations: incomplete whole-building performance evaluation due to data sparsity, inaccurate energy efficiency 
+anomaly diagnosis caused by causal ambiguity, and lack of dynamic adaptability in retrofitting optimization 
+resulting from static strategies. To address these gaps, this study proposes a data-driven iterative digital twin 
+framework—the Self-adaptive, Trustworthy, and Actionable Reality-synchronization (STAR) framework—which 
+establishes an iterative technical system of “perception-diagnosis-optimization-data update.” The framework 
+integrates three innovative engines: 1) A physics-informed dual-channel spatiotemporal graph sensing engine 
+that achieves comprehensive performance virtual metering under sparse data by constructing building spatio-
+temporal heterogeneous graphs and embedding thermodynamic constraints; 2) An anomaly root-cause diagnosis 
+engine based on graph random walk, which enables precise localization from symptoms to root causes by 
+quantifying the contribution of individual nodes to observed anomalies; and 3) A dual-agent collaborative 
+evolutionary optimization engine that generates compliant, efficient, and personalized dynamic retrofitting 
+roadmaps through the competition and cooperation of exploration-validation agents. Experimental results 
+demonstrate that the STAR framework’s spatiotemporal sensing engine achieves a mean absolute percentage 
+error (MAPE) of 6.5% under a 60% sensor missing rate and an R2 of 0.92, with significantly mitigated perfor-
+mance degradation under data-sparse conditions. Its anomaly diagnosis engine achieves an F1-score greater than 
+0.88 across seven anomaly types, a recall rate of 92% for concealed anomalies, and a single-scenario diagnosis 
+time of only 0.8 s. The collaborative optimization engine’s Pareto front coverage reaches 0.93, and its generated 
+retrofitting schemes yield an average energy saving rate of 22.0% with a payback period of 3.2 years. After seven 
+iterative learning cycles, the sensing MAPE further decreases to 5.2%, and the return on investment (ROI) for 
+optimization increases to 10.2%. This research provides a technical paradigm for next-generation EPC tools, 
+supporting the transition of building energy management from static evaluation to dynamic, interpretable, and 
+continuously updated performance optimization, while offering scalable technical support for building 
+Abbreviations: AHP, Analytic Hierarchy Process; BEMS, Building Energy Management System; Bi-LSTM, Bidirectional Long Short-Term Memory; BIM, Building 
+Information Modeling; CNN, Convolutional Neural Network; CV, Coefficient of Variation; DT, Digital Twin; DTW, Dynamic Time Warping; EPC, Energy Performance 
+Certification; EPBD, Energy Performance of Buildings Directive; ETL, Extract, Transform, Load; GAT, Graph Attention Network; GB/T, Guobiao/Tuijian (Chinese 
+National Standard); GCN, Graph Convolutional Network; GEP III, Great Energy Predictor III; GNN, Graph Neural Network; HVAC, Heating, Ventilation and Air 
+Conditioning; LOD, Level of Development; LSTM, Long Short-Term Memory; MAPE, Mean Absolute Percentage Error; MOPSO, Multi-Objective Particle Swarm 
+Optimization; M&V, Measurement and Verification; NIST, National Institute of Standards and Technology; NRMSE, Normalized Root Mean Squared Error; NSGA-III, 
+Non-dominated Sorting Genetic Algorithm III; O&M, Operation and Maintenance; PINN, Physics-Informed Neural Network; PMV, Predicted Mean Vote; PPO, 
+Proximal Policy Optimization; R2, Coefficient of Determination; RF, Random Forest; RMSE, Root Mean Squared Error; ROI, Return on Investment; SHAP, SHapley 
+Additive exPlanations; SHGC, Solar Heat Gain Coefficient; STAR, Self-adaptive, Trustworthy, and Actionable Reality-synchronization; ST-GCN, Spatiotemporal Graph 
+Convolutional Network.
+☆ This article is part of a special issue entitled: ‘ENB_Next generation EPC’ published in Energy & Buildings.
+* Corresponding author.
+E-mail address: 10758@jsviat.edu.cn (C. Jia). 
+Contents lists available at ScienceDirect
+Energy & Buildings
+journal homepage: www.elsevier.com/locate/enb
+https://doi.org/10.1016/j.enbuild.2026.117763
+Received 9 January 2026; Received in revised form 31 May 2026; Accepted 1 June 2026  
+Energy & Buildings 367 (2026) 117763 
+Available online 4 June 2026 
+0378-7788/© 2026 Elsevier B.V. All rights are reserved, including those for text and data mining, AI training, and similar technologies. 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 2 ===
+decarbonization. Beyond EPC enhancement, the proposed framework can also serve as a technical module for 
+predictive maintenance and adaptive building operation.
+1. Introduction
+Building energy consumption accounts for over 30% of global total 
+energy use, making it a critical sector for achieving carbon peaking and 
+carbon neutrality (dual carbon) goals[1,2]. Decarbonization roadmaps 
+for the building sector released by international organizations explicitly 
+mandate upgrading energy performance certification tools to drive the 
+scaled implementation of energy-saving retrofits. Policy advancements 
+in major economies further highlight the urgency of transforming 
+Building Energy Performance Certification (EPC) systems[3,4]. As a core 
+tool for building energy efficiency compliance, traditional EPC serves a 
+foundational role in guiding retrofits and improving energy utilization 
+efficiency. However, it suffers from inherent limitations including static 
+evaluation, strong lag, and lack of diagnostic capabilities, failing to 
+adapt to the dynamic changes in building operating conditions and the 
+precise decision-making needs of building owners[5–7]. The industry 
+urgently requires next-generation EPC tools characterized by dynamism, 
+precision, and decision-enabling capabilities. Digital Twin (DT), through 
+its closed-loop architecture integrating physical entities, virtual models, 
+and data interaction, enables visualized monitoring, simulation, and 
+decision optimization throughout the building’s full lifecycle. Its unique 
+advantages in data integration, dynamic mapping, and accurate pre-
+diction provide core technical support for overcoming the limitations of 
+traditional EPC and constructing dynamic performance evaluation sys-
+tems[8,9].
+Current research on the integration of dynamic EPC and DT still faces 
+three core technical bottlenecks, restricting the large-scale application 
+and efficiency improvement of next-generation EPC tools. First, the data 
+sparsity bottleneck: Advanced dynamic EPC studies rely on the 
+deployment of high-density sensor networks, which incur high hardware 
+procurement and operation/maintenance costs, making them difficult to 
+popularize in small-to-medium-sized buildings[10]. Mainstream data- 
+driven building energy modeling methods, lacking physical constraint 
+integration, exhibit a sharp degradation in generalization performance 
+under sparse data scenarios (sensor missing rate > 50%), with prediction 
+errors exceeding 20%, failing to achieve accurate whole-building per-
+formance evaluation[11,12]. Second, the diagnostic causality bottle-
+neck: Cutting-edge building fault diagnosis research mostly remains at 
+the phenomenon identification level, only capable of detecting anoma-
+lies through energy consumption deviations from baseline values. It 
+cannot quantify the contribution degree of potential root causes (e.g., 
+equipment malfunctions, envelope failures)[13], and lacks causal 
+interpretability, making it difficult to support targeted retrofitting de-
+cisions and leading to suboptimal outcomes despite investment in 
+energy-saving measures[14]. Third, the strategy staticity bottleneck: 
+Existing building retrofitting optimization schemes are predominantly 
+static, designed as fixed solutions based on current building conditions 
+and climate parameters without considering the dynamic evolution of 
+usage scenarios and climate conditions[15]. Additionally, most schemes 
+focus on a single energy-saving objective, failing to balance multi- 
+objective hard constraints such as cost, comfort, and compliance, 
+resulting in low implementation feasibility and poor long-term energy- 
+saving effects[16,17].
+Notably, the concepts of data-driven iterative updating and adapt-
+ability in DT and system control fields primarily focus on adaptive up-
+dates of model parameters—optimizing model weights through real- 
+time data iteration to improve prediction accuracy—without involving 
+dynamic adjustments to decision-making strategies. The “ data-driven 
+iterative updating” proposed in this study specifically refers to a two- 
+dimensional iterative evolution encompassing data-driven model itera-
+tive upgrading and scenario-adaptive strategy adjustment. Its core lies in 
+realizing a transformation from passive response to proactive prediction 
+and dynamic optimization in building energy management through a 
+iterative process: sensing data update → model parameter optimization 
+→ dynamic strategy adjustment → implementation effect feedback. This 
+approach precisely adapts to the dynamic characteristics of the build-
+ing’s full lifecycle.
+To address the aforementioned research gaps, this study proposes a 
+data-driven iterative digital twin framework integrating virtual sensing 
+and anomaly diagnosis, aiming to overcome the three core limitations of 
+traditional EPC (data sparsity, difficulty in root cause identification, and 
+static strategies) and provide a practical technical solution for next- 
+generation EPC. The core contributions of this paper are summarized 
+as follows: 
+• Theoretical contribution: Proposes the STAR data-driven iterative 
+digital twin theoretical framework, defines the iterative logic of 
+“perception-diagnosis-optimization-data update,” and establishes 
+the core paradigm of dynamic perception, precise diagnosis, dy-
+namic optimization, and continuous iteration for building energy 
+performance, laying a theoretical foundation for the development of 
+next-generation dynamic EPC.
+• Technical contribution 1: Develops a physics-informed dual-channel 
+spatiotemporal graph sensing engine. By constructing building 
+spatiotemporal heterogeneous graphs and embedding thermody-
+namic constraints, it solves the problem of high-precision virtual 
+metering for comprehensive building performance under sparse data 
+scenarios.
+• Technical contribution 2: Designs an anomaly contribution 
+quantification-based diagnosis mechanism using graph random 
+walk. Through a reverse random walk algorithm that inverts causal 
+directions, it quantifies the contribution degree of each root cause 
+node to anomalies, enabling interpretable localization of energy ef-
+ficiency anomalies from phenomena to root causes.
+• Technical contribution 3: Proposes a dual-agent collaborative 
+evolutionary optimization strategy. Leveraging the competition and 
+cooperation mechanism between exploration and validation agents, 
+it generates personalized dynamic retrofitting roadmaps under 
+multi-objective constraints.
+The remainder of this paper is structured as follows: Section 2 re-
+views research progress in relevant fields, including EPC evolution, DT 
+applications, graph neural network modeling, building fault diagnosis, 
+and optimization, to clarify research gaps. Section 3 elaborates on the 
+formal definition, overall architecture of the STAR framework, and 
+technical details of the three core engines. Section 4 introduces the 
+experimental design, data preparation, benchmark models, and evalu-
+ation metrics of the case study. Section 5 presents the experimental re-
+sults, focusing on comparing the performance of the STAR framework 
+with state-of-the-art methods, followed by in-depth discussion. Section 6
+summarizes the research conclusions, analyzes limitations, and outlines 
+future work.The application scope of this study is limited to typical of-
+fice buildings with existing partial monitoring data (8000–12000 m2). 
+The applicability to new buildings without historical data or to very 
+large campuses requires additional investigation and is not claimed in 
+this paper.
+2. Literature Review
+2.1. Evolution and limitations of EPC
+As a core institutional tool for promoting building energy-saving 
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+2 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 3 ===
+retrofits and implementing decarbonization goals, the development of 
+EPC centers on “accurate assessment and effective empower-
+ment”[18,19]. Traditional EPC, centered on static physical simulation 
+and simplified formulas, assesses energy efficiency ratings by inte-
+grating design parameters and standard climate data via software such 
+as EnergyPlus and DeST. It remains the dominant model worldwide[20], 
+but this static paradigm fails to reflect dynamic characteristics including 
+occupant behavior, equipment degradation, and climate anomalies. 
+Consequently, there is a significant deviation between assessment re-
+sults and actual energy efficiency[21,22]. Pagliaro et al. [23] compared 
+data from over 30 public buildings in China and confirmed a deviation 
+exceeding 20%.
+To overcome static limitations, dynamic EPC has emerged as a 
+research hotspot in recent years, with its core objective of integrating 
+real-time data to achieve dynamic updates of energy efficiency assess-
+ments. Two cutting-edge approaches have been formed: First, deploying 
+high-density sensor networks to collect real-time data and revising en-
+ergy efficiency ratings using simplified physical models. Qu et al. [24]
+achieved monthly updates with an 18% accuracy improvement but 
+failed to address cost constraints. Second, introducing machine learning 
+models for short-term energy consumption prediction to enable quar-
+terly iterations. For instance,Jin et al. [25] proposed an LSTM model to 
+dynamically update, which is prone to accuracy degradation under 
+extreme climate conditions. Neither approach resolves the cost bottle-
+neck of high-density sensing, making large-scale promotion impractical. 
+Furthermore, they lack anomaly diagnosis and optimization capabilities, 
+remaining at the “assessment” level without achieving the essential 
+transformation to “decision empowerment.”.
+To better position our research, it is essential to examine the distinct 
+research trajectories across different regions. Europe, as a global leader 
+in building energy policy, has conducted extensive work on improving 
+the reliability, consistency, and comparability of EPCs, particularly 
+under the Energy Performance of Buildings Directive (EPBD) frame-
+work. For instance, Cozza et al. [26] systematically evaluated whether 
+EPCs allow reliable building-to-building energy performance compari-
+sons, revealing significant inconsistencies arising from different calcu-
+lation methodologies and assessor behaviors. Pasichnyi et al. [27]
+demonstrated new opportunities for data-enabled urban energy gover-
+nance using EPC databases, yet highlighted the lack of dynamic feed-
+back mechanisms. The latest EPBD revision (2024) has introduced 
+requirements for smart readiness indicators and dynamic EPCs, pushing 
+the agenda toward real-time, occupant-centric certification [28].
+To further contextualize recent European developments, we 
+reviewed the EU-funded next-generation EPC sister projects listed by the 
+U-CERT initiative [29]. These projects indicate that EPC research in 
+Europe is moving from static compliance certificates toward more dy-
+namic, user-centred, data-informed, and renovation-oriented perfor-
+mance assessment systems. As summarized in Table 1, QualDeEPC, U- 
+CERT, X-tendo, D2EPC, E-DYCE, ePANACEA, EPC RECAST, crossCert, 
+EUB SuperHub, iBRoad2EPC, and TIMEPAC have contributed to EPC 
+reliability and comparability, operational data integration, digital EPC 
+tools, building logbooks, smart readiness and comfort indicators, reno-
+vation passports, and cross-country quality assurance. However, these 
+initiatives mainly focus on certification design, data infrastructure, in-
+dicator extension, user interaction, and renovation planning. The inte-
+gration of sparse-data virtual sensing, causal anomaly diagnosis, and 
+adaptive retrofit optimization remains insufficiently addressed, which 
+motivates the STAR framework proposed in this study.
+Outside Europe, related research has followed different trajectories. 
+In the United States, while no federal mandatory EPC scheme compa-
+rable to the European framework exists, rigorous research on dynamic 
+building energy performance assessment has emerged. The American 
+Society of Heating, Refrigerating and Air-Conditioning Engineers 
+(ASHRAE) has developed Guideline 14 for Measurement and Verifica-
+tion (M&V), which provides statistical frameworks for quantifying en-
+ergy savings and dynamic performance [30]. Granderson et al. [31]
+systematically evaluated the accuracy of automated M&V methods for 
+commercial building energy savings, demonstrating the potential for 
+real-time performance tracking. Kontokosta [32] proposed a knowledge 
+discovery based approach to benchmarking building energy perfor-
+mance using large-scale city datasets, enabling dynamic, data-driven 
+assessment without dense sensor networks. In China, research has pri-
+marily focused on quantifying the deviation between EPC-rated and 
+actual energy consumption, as well as risk evaluation under EPC con-
+tracting models. Shi et al. [33] found a 22.7% mean deviation between 
+EPC-rated and actual energy consumption across 35 Chinese office 
+buildings. Zhang et al. [34] applied fuzzy DEMATEL to identify and 
+evaluate risk factors in Chinese EPC construction projects. Wang et al. 
+[35] showed that deep learning-based load forecasting degrades sharply 
+under sudden temperature changes. However, no integrated framework 
+integrating virtual sensing, causal diagnosis, and dynamic optimization 
+has been reported in Chinese research. Table 2 summarizes the regional 
+comparison of these research trajectories and remaining technical gaps 
+related to dynamic assessment, sparse-data virtual sensing, causal 
+Table 1 
+Main outcomes of EU-funded next-generation EPC sister projects and their 
+relevance to the STAR framework for sparse-data sensing, diagnosis, and 
+adaptive retrofit optimization.
+Project Main outcome for next- 
+generation EPC
+Gap addressed by STAR
+QualDeEPC EPC quality enhancement, 
+convergence of EPC schemes, and 
+stronger linkage between EPCs 
+and deep renovation 
+recommendations
+Diagnosis-informed and data- 
+driven prioritization of retrofit 
+measures
+U-CERT User-centred and holistic EPC 
+scheme; operational rating, 
+comfort, and smartness-oriented 
+assessment
+Continuous operational 
+performance inference under 
+partial monitoring
+X-tendo Modular EPC features, including 
+smart readiness, comfort, real 
+energy consumption, EPC 
+databases, building logbooks, 
+recommendations, and financing 
+options
+Virtual metering and data- 
+driven recommendation 
+updating
+D2EPC Dynamic digital EPC supported 
+by operational data, BIM/digital 
+twin concepts, and extended 
+energy, environmental, financial, 
+and comfort indicators
+Sparse-data sensing and 
+interpretable diagnosis for 
+dynamic EPC
+E-DYCE Dynamic certification approach 
+focusing on building dynamic 
+behaviour, performance 
+feedback, and comfort-oriented 
+assessment
+Sparse-data operational 
+performance tracking and 
+closed-loop optimization
+ePANACEA Holistic assessment platform 
+using automated simulation, big 
+data, machine learning, and 
+inverse modelling
+Integration of assessment with 
+root-cause diagnosis and 
+optimization
+EPC RECAST Improved EPC reliability, user- 
+friendliness, model calibration, 
+renovation roadmaps, and digital 
+building notebooks
+Diagnosis-informed retrofit 
+roadmap generation
+crossCert Cross-country testing, EPC 
+quality assurance, 
+benchmarking, and performance- 
+gap analysis
+Data-driven evidence for EPC 
+quality control and 
+performance-gap explanation
+EUB 
+SuperHub
+Common assessment framework 
+and holistic KPI system for next- 
+generation EPCs
+Dynamic, physically 
+constrained performance 
+inputs for holistic assessment
+iBRoad2EPC Integration of building 
+renovation passports into EPC 
+schemes for staged 
+decarbonization roadmaps
+Adaptive updating of 
+renovation roadmaps using 
+operational feedback
+TIMEPAC EPC database enhancement and 
+connection with BIM, cadastre, 
+socioeconomic data, and building 
+automation/control systems
+Transformation of connected 
+EPC data into actionable 
+diagnosis and optimization
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+3 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 4 ===
+diagnosis, and retrofit optimization.
+The comparative analysis above reveals a critical cross-regional gap. 
+European EPC initiatives have substantially advanced certification 
+reliability, user-centred design, digital EPC tools, operational rating, 
+renovation passports, and dynamic assessment concepts, while US 
+research has established rigorous M&V frameworks and data-driven 
+benchmarking methods. However, existing approaches still insuffi-
+ciently integrate three capabilities that are essential for operational 
+next-generation EPCs: sparse-data whole-building virtual sensing, 
+causal anomaly root-cause diagnosis, and adaptive retrofit optimization. 
+This gap motivates the development of the STAR framework as an 
+iterative technical system that links perception, diagnosis, optimization, 
+and data update for dynamic building energy performance assessment.
+2.2. Applications of digital twin in building energy management
+DT, through its closed-loop architecture of “physical entity-virtual 
+model-data interaction,” provides a novel technical pathway for en-
+ergy management[36,37]. The core of building DT construction lies in 
+high-precision real-time mapping between physical and virtual models. 
+The mainstream paradigm adopts “lightweight Building Information 
+Modeling (BIM) + real-time data access + multi-physics coupling 
+simulation”[38], with recent research focusing on cost reduction and 
+precision improvement. For example, Zhang et al. [39] proposed a rapid 
+BIM modeling method integrating point cloud scanning and deep 
+learning, shortening the modeling cycle by 40%, but its accuracy is 
+insufficient for complex irregular buildings. Baghalzadeh et al. [40]
+addresses the issue of temporal asynchrony through BIM-DT-based 
+construction process optimization, but it does not incorporate physical 
+law constraints.
+DT has been applied in scenarios such as energy consumption 
+monitoring, load forecasting, and equipment control, with proven value: 
+Zhang et al. [41] achieved real-time optimization of air conditioning 
+systems in office buildings, yielding a 12% energy saving rate, but did 
+not cover the entire building. de las Morenas et al. [42] developed a DT 
+platform for commercial buildings, improving operation and mainte-
+nance (O&M) efficiency by 25% yet lacking diagnostic and retrofitting 
+scheme functions. Existing research still exhibits significant shortcom-
+ings: Most studies remain at the “digital mirroring” level, lacking inte-
+grated capabilities for “diagnosis-optimization-feedback”; The 
+“lightweight BIM + simplified simulation” architecture results in 
+insufficient model accuracy and physical consistency, reducing reli-
+ability under complex operating conditions; The integration of data- 
+driven approaches with physical mechanisms is inadequate, leading to 
+a sharp decline in generalization performance under sparse data sce-
+narios. Naeem et al. [43] have confirmed that when the sensor missing 
+rate exceeds 30%, the prediction error of pure data-driven models rises 
+to over 15%.
+2.3. Applications of graph Neural Networks in building spatiotemporal 
+modeling
+Building systems feature complex topological correlations and 
+exhibit typical non-Euclidean structures, making it difficult for tradi-
+tional deep learning models to capture spatial dependencies. Graph 
+Neural Networks (GNNs) are naturally suited for non-Euclidean struc-
+tured data, as they can model topological relationships between ele-
+ments through node and edge definitions. Combined with temporal 
+modules, GNNs enable spatiotemporal joint modeling, achieving a 10%- 
+20% accuracy improvement compared to Convolutional Neural Net-
+works (CNNs) and Long Short-Term Memory (LSTMs)[44,45]. Zhuet al. 
+[46] verifies its advantage in regional energy consumption prediction 
+through experiments conducted on 10 different types of energy systems.
+Recent GNN-based building modeling research focuses on two main 
+directions: First, energy consumption prediction. Zhuang et al. [47]
+proposed Spatiotemporal Graph Convolutional Networks (ST-GCNs), 
+realizing accurate zonal energy consumption prediction via room to-
+pology graphs with a 15% error reduction compared to LSTMs, but 
+without considering thermodynamic constraints. Xu et al. [48] modeled 
+energy transfer relationships between equipment using Graph Attention 
+Networks (GATs) to achieve short-term overall energy consumption 
+prediction, yet failed to dynamically adjust graph structures. Second, 
+equipment fault detection. Wu et al. [49] constructed topological graphs 
+of equipment parameters to identify early faults in core equipment but 
+could not capture collaborative anomalies across multiple devices. Core 
+limitations of existing research include: Pure data-driven approaches 
+lack physical law constraints, resulting in poor interpretability and 
+insufficient generalization under sparse data—prediction errors increase 
+significantly when the sensor missing rate exceeds 50% Meng et al. [50]; 
+The absence of multi-task collaboration capabilities for “perception- 
+diagnosis”; Graph structures do not account for dynamic spatiotemporal 
+correlations, leading to over 20% accuracy degradation during sudden 
+scenario changes[51].
+2.4. Summary of research gaps and research focus of This study
+Synthesizing recent cutting-edge research, the current core technical 
+gap lies in the fact that existing achievements can only address data 
+sparsity, causal diagnosis, or static optimization individually. They fail 
+to form a collaborative iterative process of “perception-diagnosis-opti-
+mization-evolution,” thus unable to meet the “dynamism, precision, and 
+empowerment” requirements of next-generation EPC. Specifically: Dy-
+namic EPC has not resolved comprehensive perception under sparse 
+data; Building DT remains at the mirroring and monitoring level; GNN 
+modeling lacks physical integration and multi-task collaboration; En-
+ergy efficiency diagnosis and optimization have not achieved causal 
+root-cause identification and dynamic adaptation, nor deep integration 
+with certification systems.
+Table 2 
+Regional comparison of EPC research trajectories and remaining technical gaps related to dynamic assessment, sparse-data virtual sensing, causal diagnosis, and 
+retrofit optimization.
+Region Core Research Focus Representative Works Relevance to Our Framework
+Europe EPC reliability, consistency, actual-vs-rated deviation, 
+smart readiness, operational rating, digital EPC, 
+renovation passports, building logbooks, and dynamic 
+assessment
+Cozza et al. (2021) [26]; Pasichnyi et al. 
+(2019) [27]; EPBD 2024 [28]; EU- 
+funded EPC sister projects [29]
+Demonstrates the transition from static compliance 
+certificates to dynamic, user-centred, data-informed, and 
+action-oriented EPC systems, but sparse-data virtual sensing, 
+causal diagnosis, and adaptive retrofit optimization are still 
+insufficiently integrated
+United 
+States
+Dynamic energy performance assessment, automated 
+M&V, data-driven benchmarking, statistical frameworks 
+for energy savings quantification
+ASHRAE Guideline 14 [30]; Granderson 
+et al. [31]; Kontokosta [32]
+Demonstrates feasibility of dynamic assessment using 
+statistical and machine learning methods, and provides M&V 
+standards, but lacks integration with causal diagnosis, virtual 
+sensing for sparse data, and retrofit optimization
+China Static simulation deviation analysis, EPC model risk 
+evaluation, building retrofit under EPC contracting, 
+machine learning vulnerability to extreme climate
+Shi et al. [33]; Zhang et al. [34]; Wang 
+et al. [35]
+Confirms 22.7% EPC deviation [33]; identifies EPC 
+contracting risk factors [34]; reveals deep learning 
+vulnerability to sudden temperature shifts [35]. Lacks closed- 
+loop sensing-diagnosis-optimization.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+4 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 5 ===
+There is an urgent need in the field for a data-driven iterative 
+framework capable of simultaneously overcoming the three major 
+challenges of “sparse perception, causal diagnosis, and dynamic opti-
+mization”—such a framework has not been reported to date. Targeting 
+this gap, this study proposes a self-evolving digital twin framework 
+integrating virtual sensing and anomaly diagnosis (STAR framework), 
+with three core innovative breakthroughs: 
+1. A physics-informed dual-channel spatiotemporal graph sensing en-
+gine, which solves the problem of high-precision whole-building 
+performance metering under sparse data and compensates for the 
+insufficient integration of physical laws in existing research;
+2. An anomaly root-cause diagnosis mechanism based on graph random 
+walk, enabling causal root-cause localization of energy efficiency 
+anomalies and breaking the black-box limitations of data-driven 
+methods in existing research;
+3. A dual-agent collaborative evolutionary optimization strategy, 
+generating dynamically adaptive personalized retrofitting schemes 
+to address the poor long-term effectiveness of static schemes in 
+existing research.
+In relation to the EU-funded next-generation EPC projects reviewed 
+in Section 2.1, the STAR framework is not intended to replace existing 
+EPC schemes or certification procedures. Rather, it is positioned as a 
+methodological and algorithmic layer that can complement these ini-
+tiatives. While projects such as U-CERT, X-tendo, D2EPC, ePANACEA, 
+EPC RECAST, crossCert, EUB SuperHub, iBRoad2EPC, and TIMEPAC 
+have advanced EPC reliability, digitalization, operational data integra-
+tion, building logbooks, renovation passports, user-centered recom-
+mendations, and cross-country quality assurance, the technical 
+integration of sparse-data virtual sensing, causal root-cause diagnosis, 
+and adaptive retrofit optimization remains insufficiently addressed. The 
+STAR framework addresses this gap by providing an iterative 
+perception-diagnosis-optimization-data update mechanism, thereby of-
+fering technical support for dynamic, interpretable, and actionable EPC 
+systems.
+3. Methodology
+3.1. Formal definition of the framework
+To clarify the core composition and operational mechanism of the 
+STAR framework and establish a reproducible mathematical expression 
+system, this section provides formal definitions from three dimensions: 
+core topological structure, input–output space, and data-driven iterative 
+updating process.
+Core topological structure. The structure is represented by a 
+building spatiotemporal heterogeneous graph, defined as G=(V, E,
+Av, Ae, T). The node set V ={Vroom, Vdevice, Vwall, Vsensor}includes rooms, 
+equipment, envelope elements, and sensors. E=
+{
+Ethermal, Eair,
+Eequip, Eocc
+}
+encodes thermal conduction, air flow, equipment associa-
+tion, and occupancy activity correlations. Av∈ R|V|×dv and Ae∈ R|E|×de 
+are attribute matrices carrying physical parameters, operational states, 
+and spatiotemporal features. T captures dynamic graph evolution over 
+time.
+Input-output space. The input is defined as I=
+{
+BIM,
+Sensort, Weathert, Occut, Policyt
+}
+. where BIM provides static building 
+geometry and component data, Sensort real-time monitored variables (e. 
+g., energy, temperature, humidity), Weathert meteorological con-
+ditions, Occut occupancy distribution, and Policyt certification stan-
+dards. The output is O=
+{
+Virtual_Readingt, Diagnosis_Reportt,
+Roadmapt
+}
+, corresponding to virtual metering results, diagnostic re-
+ports, and retrofitting roadmaps, respectively.
+Data-driven iterative updating process. The process is formalized 
+as two coupled optimization problems: parameter update and strategy 
+adjustment. The model parameter iterative optimization minimizes the 
+historical data-driven loss function: 
+θ*t+1 = argminθt L(θt; D1:t, Φ) (1) 
+Where θt is the model parameter set at time t, L the total loss inte-
+grating prediction errors and physical constraint violation, D1:t the his-
+torical data sequence, and Φ the set of physical constraints (e.g., 
+thermodynamic laws).
+The dynamic update of optimization strategies generates an opti-
+mized roadmap based on the latest perception, diagnosis, and input 
+data: 
+Roadmap*t+1 = F(Roadmapt, Virtual_Readingt+1, Diagnosis_Reportt+1, It+1)
+(2) 
+Where F is the strategy update function. Equations (1) and (2)
+collectively form the iterative updating framework, enabling collabo-
+rative iteration of model parameters and optimization strategies.
+3.2. Overall framework architecture and iterative logic
+The STAR framework is a dynamic iterative system integrating vir-
+tual sensing and anomaly diagnosis. Its architecture comprises three 
+core engines—spatiotemporal sensing, anomaly root-cause diagnosis, 
+and collaborative evolutionary optimization—a data middle platform, 
+and a BIM-based virtual twin.
+The data middle platform integrates and preprocesses multi-source 
+heterogeneous data (BIM, real-time sensors, meteorology), providing 
+unified data support for the three engines. The virtual twin digitally 
+maps the physical building and visualizes perception, diagnosis, and 
+optimization results.
+The operational logic follows a iterative cycle: perception → diag-
+nosis → optimization → implementation → re-perception. The spatio-
+temporal sensing engine generates a holographic energy performance 
+profile. Based on this profile, the diagnosis engine identifies anomalies 
+and quantifies root-cause contributions. The optimization engine then 
+produces dynamic retrofitting roadmaps. After implementation, opera-
+tional data feedback to the data middle platform, updating the virtual 
+twin and driving iterative refinement of model parameters and strate-
+gies. This iterative process ensures dynamic adaptability and sustained 
+EPC accuracy.
+3.3. Spatiotemporal sensing Engine: Physics-Informed Dual-Channel 
+spatiotemporal graph network
+Spatiotemporal perception serves as the prerequisite for building 
+energy-saving optimization. To address the issues of disjointed physical 
+mechanisms and data features in traditional spatiotemporal modeling, 
+as well as insufficient perception accuracy under sparse monitoring 
+data, this section proposes a spatiotemporal sensing engine centered on 
+the physics-informed dual-channel graph attention network (PI-DC- 
+GAT). The engine integrates physics-informed and data-driven para-
+digms through three core steps: building spatiotemporal heterogeneous 
+graph construction, dual-channel graph attention learning with adaptive 
+fusion, and physics-informed constraint integration. The overall mech-
+anism is illustrated in Fig. 1.
+The building spatiotemporal heterogeneous graph provides a 
+physics-consistent structured input for the sensing engine. Nodes 
+include rooms, equipment, envelope elements, and sensors. Edges 
+represent thermal conduction, air flow, equipment association, and oc-
+cupancy activity. Node attributes (static from BIM, dynamic from sen-
+sors, spatiotemporal from weather/occupancy) are normalized to form 
+matrix Av Edge attributes are derived from physical calculations and 
+data mining, with weights updated hourly using real-time data, forming 
+matrixAe.
+Fig. 2 illustrates the construction using a 5-story office building. The 
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+5 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 6 ===
+left side shows the physical entity (functional zones, HVAC, energy 
+systems, monitoring devices). The right side abstracts it into 6 node 
+types and 8 edge types, integrating BIM static data and real-time sensor 
+dynamics into the attribute matrices. The graph adopts a time-window- 
+driven update mechanism: edge weights adjust every hour, and the 
+structure is rebuilt every 24 h based on the past 30 days of data, ensuring 
+real-time consistency.
+The dual-channel graph attention network consists of three sequen-
+tially connected modules: an explicit topological channel, an implicit 
+functional correlation channel, and an adaptive gating fusion mecha-
+nism followed by temporal modeling.
+Explicit topological channel. This channel learns explicit spatial 
+dependencies by aggregating neighbor node features via a multi-head 
+graph attention network. The attention coefficient from node i to its 
+neighbor j is computed as: 
+αij = exp(LeakyReLU(aT[Whi, Whj]))∑
+k∈N(i)exp(LeakyReLU(aT[Whi, Whk])) (3) 
+where hi and hj are the initial feature vectors, W the feature trans-
+formation matrix, a is the attention weight vector, N(i) is the neighbor 
+set. The multi-head aggregated explicit feature is 
+hei =‖Kk=1σ
+(∑
+j∈N(i)
+αkijWkhi
+)
+(4) 
+Implicit functional correlation channel. To capture correlations 
+Fig. 1. Architecture of the physics-informed dual-channel graph attention network (PI-DC-GAT) for sparse-data virtual metering, showing spatiotemporal hetero-
+geneous graph construction, explicit and implicit graph learning, physics-constraint injection, and generation of the dynamic building energy performance profile.
+Fig. 2. Transformation of a multi-storey office building into a dynamic spatiotemporal heterogeneous graph, illustrating physical rooms, equipment, sensors, en-
+velopes, occupancy movements, air-flow links, thermal-transfer paths, equipment associations, and environmental connections used for STAR virtual sensing.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+6 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 7 ===
+not represented by explicit topology, we construct an implicit graph 
+based on time-series similarity. Using hourly energy consumption or 
+temperature data from the past 30 days, the Dynamic Time Warping 
+(DTW) similarity is calculated as: 
+sij = 1- DTW(TSi, TSj)max(DTWmax, ∊) (5) 
+Edges are added when sij ≥ 0.7. The implicit graph follows a two- 
+scale update strategy in online inference. On the fine scale, edge 
+weights are updated every hour using the most recent 1-hour data to 
+adjust the DTW similarity matrix, capturing short-term dynamic changes 
+such as weekday versus weekend patterns. On the coarse scale, the graph 
+structure (i.e., which node pairs are connected by implicit edges) is 
+rebuilt every 24 h based on the past 30 days of time-series data, recal-
+culating all pairwise DTW distances and adding or removing edges when 
+the similarity crosses the threshold of 0.7. This dual-scale mechanism 
+balances short-term responsiveness and long-term evolution (e.g., 
+changes in correlations due to equipment aging or occupancy pattern 
+shifts). During online inference, node features at the current time step 
+are propagated through the existing graph structure; the graph structure 
+itself remains fixed between two consecutive daily reconstructions. Then 
+a graph convolutional network aggregates features on this implicit 
+graph: 
+hii = ReLU(̃D-1/2̃ÃD-1/2Wihi) (6) 
+where ̃A is the adjacency matrix of the implicit graph with self-loops; 
+̃D is the degree matrix of ̃A; Wi is the feature transformation matrix of the 
+implicit channel. The two channels produce complementary feature 
+representations, which are then adaptively fused.
+Adaptive gating fusion. The explicit and implicit features are 
+dynamically balanced by a learnable gating coefficient: 
+gi = σ(Wg[hei‖hii]+ bg) (7) 
+hfinal,i = gi⋅hei +(1-gi)⋅hii (8) 
+The fused features are then fed into a temporal model to capture 
+sequential dependencies. Temporal modeling. Finally, a bidirectional 
+long short-term memory (Bi-LSTM) network is introduced after dual- 
+channel fusion to perform temporal modeling on the fused features 
+from time steps 1 to T, outputting temporally enhanced node features: 
+htime,i = Bi-LSTM(hfinal,i,1:T) (9) 
+The above architecture enables accurate whole-building perfor-
+mance perception under sparse data.
+To improve generalization under sparse data, we augment the pre-
+diction loss with physics-based constraints. The total loss function is: 
+Ltotal = Lprediction(̂y, y)+ λ⋅Lphysics(R(̂y)) (10) 
+where Lprediction is the mean squared error (MSE) between predicted 
+and measured values (Eq. (11)), λ = 0.3 determined by cross-validation, 
+and Lphysics measures violation of two physical laws: heat balance (Eq. 
+(12)) and energy conservation (Eq. (13)). 
+Lprediction = 1N⋅T∑Tt=1 ∑Ni=1 (̂yi,t-yi,t)2 (11) 
+Rthermal(̂y)=
+∑T
+t=1
+⃒⃒⃒∑ Qin,i,t-∑ Qout,i,t-ΔUi,t⃒⃒⃒ (12) 
+Renergy(̂y)=
+∑T
+t=1
+⃒⃒⃒⃒⃒̂ytotal,t-∑Mi=1 ̂ysub,i,t⃒⃒⃒⃒⃒ (13) 
+The detailed composition of the variables in Eqs. (12) and (13) is 
+provided in Appendix A.
+The building holographic energy performance profile is the core 
+output of the spatiotemporal sensing engine. It serves as a comprehen-
+sive spatiotemporal distribution representation of energy performance 
+covering both monitored and unmonitored areas of the building. Con-
+structed based on temporally enhanced features learned by the dual- 
+channel graph network, it fully integrates virtual sensing and perfor-
+mance assessment results, providing accurate input for the subsequent 
+anomaly root-cause diagnosis engine.
+This profile primarily includes three core components:
+1. Multi-scale spatiotemporal distribution of key performance pa-
+rameters: Global distribution data of core parameters (e.g., energy 
+consumption, temperature, humidity) across rooms and equipment at 
+hourly, daily, and monthly scales;
+2. Dynamic performance rating assessment: Real-time dynamic 
+evaluation of energy performance levels for each area and system in 
+accordance with current EPC standards;
+3. Short-term trend prediction: Predicted distribution results of en-
+ergy consumption, temperature, and other parameters for the next 7 and 
+30 days.
+The output formats include numerical matrices, heatmaps, and time- 
+series curves, which not only provide quantitative data support for 
+anomaly identification but also realize intuitive visual presentation of 
+performance states.
+3.4. Anomaly Root-Cause tracing and diagnosis Engine: Anomaly 
+contribution quantification based on graph random walk
+Anomalies in building systems propagate along physical links. 
+Traditional diagnostic methods often detect anomalies but fail to 
+pinpoint root causes or interpret propagation paths. This section pro-
+poses an anomaly root-cause tracing engine based on graph random 
+walk, integrating three core processes: anomaly signal mapping and 
+injection, reverse random walk tracing, and contribution quantification. 
+The overall workflow is illustrated in Fig. 3.
+Anomalies are identified from the building holographic energy per-
+formance profile using a hybrid strategy combining baseline comparison 
+and the 3σ criterion. Normal baseline ranges are established from his-
+torical anomaly-free data. A node is flagged as anomalous at time t if its 
+performance parameter exceeds the baseline range and deviates from 
+the mean by more than 3σ.
+The identified anomalies are mapped to nodes in the spatiotemporal 
+heterogeneous graph, generating an anomaly signal vector S: 
+Si,t =
+⎧
+⎪⎨
+⎪⎩
+̂yi,t-yi,t
+yi,t
+if node ​ is anomalous at time ​ t
+0 otherwise
+(14) 
+whereSi,t ∈ [  1,1] is the anomaly intensity (positive for excess 
+consumption, negative for deficiency), ̂yi,t the measured value, and yi,t 
+the normal baseline mean at the same time step. The vector S is then 
+injected into the graph as the initial trigger for root-cause tracing.With 
+the anomaly signals localized, the tracing proceeds backward along the 
+physical propagation paths using a reverse random walk algorithm.
+The algorithm traces root causes by simulating the inverse propa-
+gation of anomaly signals. It assumes a forward propagation path “root- 
+cause nodes → intermediate nodes → anomalous nodes” and walks 
+backward. The transition probability from node i to node j during 
+reverse walk is: 
+P(j|i)= wij⋅I(direction)∑
+k∈N(i)(wik⋅I(direction)) (15) 
+Where wij is the influence weight learned by the sensing engine, and 
+I(direction) is an indicator that equals 1 only if the physical direction of 
+edge i → j is opposite to the anomaly propagation direction (i.e., walking 
+against the causal flow). The definition and source of the direction in-
+dicator are detailed in Appendix A.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+7 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 8 ===
+The direction indicator I(direction) is predefined based on the phys-
+ical topology of the building system, which encodes the causal flow of 
+energy and information. Specifically, for each directed edge i → j, a 
+physical direction is assigned according to domain knowledge: (1) for 
+equipment association edges, the direction aligns with the energy supply 
+hierarchy, such as from chillers to air handling units to occupied spaces; 
+(2) for equipment association edges, the direction follows the energy 
+supply path (e.g., from chiller to air handling unit to room); (3) for 
+control loops, the direction follows the signal flow from sensors to 
+controllers to actuators. Edges lacking a definitive physical direction, 
+such as spatial adjacency between rooms, are treated as bidirectional, 
+allowing propagation in both directions. These directional rules are 
+established during framework initialization using building design 
+documentation and are subject to manual revision following major 
+retrofits or system reconfigurations.
+The reverse walking procedure: 
+1. Initialize at the anomalous node with the maximum |Si,t|. Set visit 
+counts to zero, maximum steps Tmax = 50, convergence threshold 
+∊=0.001.
+2. At each step, select the next node according to Eq. (15) and update 
+visit counts. Compute cumulative visit probabilities after each 
+iteration.
+3. Stop when the L2 norm change of cumulative probabilities between 
+successive iterations is below ∊ or when Tmax is reached. Record all 
+walking paths.
+Fig. 4 demonstrates the tracing process on a 28-node directed sub-
+graph. Starting from an anomalous phenomenon node, the reverse walk 
+converges to two upstream equipment root-cause nodes. Path colors and 
+line widths reflect transition probabilities. The convergence verifies the 
+algorithm’s ability to quantify root-cause importance.
+Once the reverse walk finishes, cumulative visit probabilities are 
+obtained for each node. To rank candidate root causes, these 
+Fig. 3. Workflow of the reverse-random-walk-based anomaly root-cause tracing mechanism, including anomaly signal identification and injection, reverse walk 
+initialization, transition-probability-guided tracing, contribution calculation, and diagnostic report generation.
+Fig. 4. Example of building anomaly root-cause tracing on a directed system graph, showing reverse-walk paths from anomalous sensor nodes to upstream 
+equipment root-cause nodes and their contribution scores for interpretable diagnosis.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+8 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 9 ===
+probabilities are then combined with edge weights and anomaly in-
+tensities into a single contribution score.
+The contribution degree of each node to the observed anomaly in-
+tegrates the reverse walk visit probability, edge weights, and anomaly 
+signal intensity: 
+Ci = αPvisit,i+(1-α)
+∑
+j∈N(i)wij, Sj
+max(∑j∈N(i)wij, ∊) (16) 
+where Ci∈[1] (higher indicates higher root-cause likelihood), α = 0.6 
+balances the two terms, Pvisit,i is the cumulative visit probability of node i, 
+and Sj is the anomaly intensity of neighbor j.
+The top-3 root-cause nodes are selected by descending Ci and labeled 
+by type (e.g., equipment malfunction, envelope failure). Visualization 
+includes: 
+1. A heatmap on the virtual twin floor plan (red-blue gradient for Ci).
+2. Overlay of reverse propagation paths.
+3. A structured diagnostic report listing root causes, contribution de-
+grees, impact range, and suggested actions.
+This diagnostic report provides the necessary input for the collabo-
+rative evolutionary optimization engine described next.
+3.5. Collaborative evolutionary optimization Engine: Dual-Agent Multi- 
+Objective collaborative evolution strategy
+To address high-dimensional solution space, multi-objective con-
+flicts, and the decoupling of performance and feasibility in building 
+retrofitting optimization, this section proposes a dual-agent collabora-
+tive evolutionary optimization engine. The exploration agent ensures 
+solution space coverage and diversity; the validation agent balances 
+evaluation accuracy and efficiency. Through a shared database and 
+Pareto front evolution, the engine achieves convergence with simulta-
+neous improvements in solution performance and feasibility. The overall 
+mechanism is illustrated in Fig. 5.
+Before describing the dual-agent interaction, the space of possible 
+retrofitting measures and how feasible combinations are represented as 
+a graph is first defined.
+The solution space is defined by a building retrofitting measure 
+graph. Retrofitting measures are classified into four categories: envelope 
+(e.g., insulation, windows), equipment (e.g., HVAC, lighting), intelligent 
+control (e.g., smart thermostats), and renewable energy (e.g., PV, heat 
+pumps). Each measure has multi-dimensional attributes: cost, energy 
+saving rate, implementation cycle, service life, compliance, compati-
+bility, and constraints.
+Based on these, an undirected graph Gmeasure=(Vmeasure,Emeasure, 
+Ameasure) is constructed, where Vmeasure are measure nodes, Emeasure =
+Ecompatible∪ Econflict, and Ameasure the attribute matrix.A solution is a subset 
+X={x1,x2,…,xm} with xi∈{0,1} indicating selection of measure i, subject 
+to budget, cycle, compliance, and compatibility constraints.With the 
+solution space defined, the two agents that work together to explore and 
+evaluate candidate combinations are now introduced.
+Exploration agent (based on PPO). Its goal is to efficiently search 
+for novel, feasible measure combinations. The state space is S={Xcurrent, 
+Ereal  time,Budget,Cycle,Policy}, where Ereal  time comes from the sensing 
+engine. The action space includes add, replace, and remove. The reward 
+function fuses multiple objectives: 
+r= α⋅Energy_saving-β⋅Cost+ γ⋅Compliance-δ⋅Conflict (17) 
+where the weight coefficients α,β,γ,δ are determined by AHP (see 
+Appendix A). Training uses the PPO clipped surrogate objective. 
+Hyperparameters (iterations, sample size, etc.) are listed in Appendix A.
+Validation agent (lightweight digital twin simulator). It evalu-
+ates schemes generated by the exploration agent. The simulator sim-
+plifies the spatiotemporal sensing engine by: (1) freezing feature 
+extraction and using low-dimensional mean features; (2) replacing 
+finite-element simulations with empirical formulas; (3) employing GPU 
+parallel computing. It assesses multi-objective performance (energy 
+saving rate, ROI, payback period, PMV-based comfort), compliance 
+(energy, environmental, safety standards), and feasibility (imple-
+mentation difficulty, operational impact). Detailed evaluation criteria 
+and thresholds are provided in Appendix A.
+The exploration and validation agents do not operate in isolation; 
+they continuously exchange information to drive the population toward 
+better and more feasible solutions. This collaborative mechanism is 
+detailed next. The collaboration involves competition (threshold-based 
+Fig. 5. Dual-agent collaborative evolutionary optimization workflow for dynamic retrofit roadmap generation, illustrating retrofit measure graph construction, PPO- 
+based exploration, lightweight digital-twin validation, shared-database feedback, and Pareto-front evolution.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+9 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 10 ===
+screening) and cooperation (information exchange via a shared 
+database).
+Screening by the validation agent: Only schemes meeting preset 
+thresholds (e.g., energy saving rate ≥ 10%, ROI ≥ 5%, compliance score 
+= 1, feasibility ≥ medium) are retained. Among these, the top 30% 
+based on multi-objective performance scores form the next generation.
+Information exchange: The exploration agent sends candidate 
+schemes to the validation agent, which returns evaluation reports 
+(scores, improvement suggestions). The shared database stores histori-
+cal schemes and results, guiding the exploration agent to avoid ineffi-
+cient combinations.
+Iterative evolution: Initial population: 100 random constraint- 
+satisfying schemes. Each round: exploration generates 50 new 
+schemes; validation evaluates the combined set (initial + new) and se-
+lects the best 30. Scheme quality is quantified by the fitness function: 
+F(X)= ω1⋅Energy_saving+ ω2⋅ROI+ ω3⋅Comfort-ω4⋅Cost (18) 
+The weights ω1,ω2,ω3,ω4 are determined by cross-validation (see 
+Appendix A). Evolution terminates when the average fitness change 
+between rounds is below 0.01 or after 50 rounds.After the population 
+converges, the final Pareto-optimal schemes must be translated into a 
+practical, phased implementation plan that respects the building 
+owner’s constraints and the dynamic nature of building operation. Based 
+on the optimal schemes from collaborative evolution, a phased imple-
+mentation plan is constructed.
+Pareto optimal set screening: The final population is processed by 
+NSGA-III to obtain the Pareto front, offering multiple non-dominated 
+options.
+Phased roadmap: Schemes are decomposed into three phases 
+following “easy first, fast first”: 
+• Short-term (≤1 year): Low-investment, quick-return measures with 
+minimal disturbance.
+• Medium-term (1–3 years): Moderate investment, longer 
+implementation.
+• Long-term (3–5 years): High-investment, large-scale retrofits.
+Each phase specifies measures, timing, cost, expected savings, 
+responsible parties, and acceptance criteria. To suppress equipment 
+oscillations such as frequent HVAC start‑stop or valve hunting that may 
+arise from high‑frequency data‑driven strategy updates in real build-
+ings, an interlock and dead‑zone module is explicitly placed between the 
+optimization engine and the physical execution. The dead‑zone 
+threshold is set to 1%, meaning that a new strategy is adopted only when 
+its estimated absolute improvement in energy saving rate exceeds this 
+threshold. The interlock conditions further require that the strategy does 
+not violate equipment minimum run‑time, safety limits, or operational 
+mode exclusivity, following ASHRAE Guideline 36. In the offline replay 
+simulation, about 12% of minor strategy adjustments are filtered out for 
+falling below the dead‑zone, while long‑term convergence remains 
+unaffected. This design bridges data‑driven decisions and physical 
+equipment execution, significantly enhancing the framework’s deploy-
+ability in real buildings. Dynamic adjustment: The roadmap is updated 
+when triggered by significant changes in building operation, external 
+conditions, or failure to meet expected effects. The engine then re-
+generates optimized schemes based on the latest perception, diagnosis, 
+and input data.Thus, the optimization engine completes the iterative 
+process: from perception and diagnosis to actionable, adaptive retrofit-
+ting strategies.
+4. Case studies and experimental design
+To ensure the generality and practicality of the research, a dual-case 
+model combining “public dataset + real building” is adopted for case 
+selection, balancing the universality of method validation and the 
+applicability of engineering applications. For the public dataset, the 
+ASHRAE Great Energy Predictor III (GEP III) is selected, with three office 
+buildings of different scales as research objects (building areas: 8000 m2, 
+10000 m2, and 12000 m2). The dataset covers hourly energy con-
+sumption (electricity, water, natural gas), indoor temperature, and 
+outdoor meteorological data from 2021 to 2024, with sensors only 
+deployed in public areas and core equipment rooms—resulting in a 
+sensor missing rate exceeding 60% in rooms, which aligns with the 
+validation requirements of sparse data scenarios. For the real case, a 
+central urban office building constructed in 2018 is chosen: it has a 
+building area of 12000 m2, 10 above-ground floors, and adopts a central 
+air-conditioning system, with sensors only installed on the 1st, 5th, and 
+10th floors. The building exhibits significant excessive energy con-
+sumption, and the owner has retrofitting demands. Multi-source data 
+collection has been completed, including building physical parameters 
+extracted from the BIM model, hourly sensor data from 2022 to 2023, 
+synchronous meteorological data, occupancy density data, and energy 
+bills—providing comprehensive data support for the practical applica-
+tion verification of the framework.
+To facilitate direct comparison and ensure reproducibility, Table 3
+organizes the key characteristics of both cases across six dimensions: 
+building information, BIM static attributes, physical sensors, occupancy 
+and weather data, acquisition and transmission, and data quality 
+assurance. For the ASHRAE dataset, some sensor specifications are not 
+publicly released; the table notes these instances and provides liter-
+ature‑based typical values where necessary. For the real building, sensor 
+models are anonymised while accuracy and measurement ranges are 
+fully reported. This table serves as a consolidated reference for assessing 
+input data quality and understanding the distinct validation scenarios.
+The spatial distribution of multi‑source data collection points is 
+visualised in Fig. 6, using the fifth floor of the real office building as a 
+representative example. The plan indicates the locations of temper-
+ature‑humidity sensors and electricity meters, along with the positions 
+where BIM static attributes such as wall thermal properties and window 
+dimensions are extracted. Occupancy data are gathered from access 
+control readers. Areas devoid of physical sensors are shaded in light 
+yellow; these zones depend entirely on the spatiotemporal graph 
+completion of the STAR framework. Thus, Fig. 6 explicitly links the 
+physical data sources to the node and edge attributes defined earlier in 
+the spatiotemporal heterogeneous graph of Fig. 2.
+Fig. 7 illustrates how the sparse data scenarios are constructed. 
+Starting from a complete sensor data matrix, random masks are applied 
+to generate four missing rates: 20%, 40%, 60%, and 80%. The Fig. uses 
+colour intensity to encode data values and grey cells to denote missing 
+entries. This procedure mimics realistic sparse monitoring conditions 
+and provides the basis for evaluating the virtual sensing performance of 
+the STAR framework under varying levels of data deficiency.
+Data preprocessing strictly adheres to academic standards to ensure 
+data quality, adopting a hybrid strategy of “physical law-based inter-
+polation + time-series interpolation” for missing values: short-term 
+missing (<24 h) is handled by linear interpolation; long-term missing 
+(≥24 h) is filled through calculations based on physical laws such as heat 
+conduction equations; missing meteorological data is supplemented by 
+interpolation from adjacent weather stations. Outlier removal combines 
+the 3σ criterion with domain knowledge: after identifying data points 
+deviating from the mean by more than 3σ, true anomalies (retained for 
+diagnostic validation) and sensor faults (replaced with adjacent normal 
+data) are distinguished based on equipment startup/shutdown rules and 
+occupancy activity characteristics. All numerical data are normalized 
+using Z-score to eliminate dimensional differences. On this basis, a 
+spatiotemporal feature matrix of dimension N × T × dfeat is constructed, 
+integrating temporal features (one-hot encoding of hours, seasons, etc.), 
+spatial features (coordinates, floors, etc.), physical features (heat 
+transfer coefficient, equipment power, etc.), and correlation features 
+(edge weights). The feature dimension dfeat is set to 64, providing 
+comprehensive spatiotemporal and physical information for model 
+input.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+10 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 11 ===
+The overall data acquisition and fusion architecture for the real 
+building is depicted in Fig. 8. Multiple sources, including BIM, physical 
+sensors, a rooftop weather station, and the occupancy system, are 
+ingested through their respective protocols, time‑aligned, preprocessed, 
+and finally stored in a PostgreSQL database. From there, the data are 
+organised into the node attribute matrix and the edge attribute matrix 
+required by the spatiotemporal heterogeneous graph. This architecture 
+concretely supports the hourly dynamic updating of edge weights 
+described in Fig. 2.
+Data quality throughout the entire pipeline is governed by the 
+workflow shown in Fig. 9. The procedure encompasses periodic sensor 
+calibration once every 12 months according to GB/T 17215, consistency 
+checking of BIM data, missing value imputation using either linear or 
+physics‑based methods, outlier detection combining the 3σ rule with 
+domain knowledge, and final Z‑score normalisation. This quality 
+assurance chain guarantees that the inputs to the STAR framework are 
+both physically consistent and statistically reliable.
+To ensure a reliable ground truth for evaluating virtual metering 
+accuracy under sparse data, this study adopts two complementary 
+validation strategies. For the public ASHRAE GEP III dataset, every zone 
+is equipped with complete sensor readings. We therefore apply the 
+standard mask‑reconstruct‑compare paradigm: randomly mask a 
+Table 3 
+Multi-source data specifications of the ASHRAE GEP III public dataset and the real office building case used for sparse-monitoring validation of the STAR framework.
+Dimension Sub-item ASHRAE GEP III (public dataset) Real office building case
+Building information Type Office Office
+Floor area (m2) 8000 / 10,000 / 12,000 (three buildings) 12,000
+Number of floors 5–8 stories 10 stories above ground
+Year of construction Not disclosed 2018
+BIM static attributes Geometric parameters Provided (floor area, height) Exported from BIM model (LOD300)
+Material thermal parameters Standard assumptions (ASHRAE 90.1) Actual construction records (U-value, SHGC, etc.)
+Equipment ratings Partially provided Complete (nameplate photos archived)
+Physical sensors Number of temperature-humidity 
+sensors
+≥10 per building (public areas) 24 (only on 1st, 5th, 10th floors)
+Temperature-humidity model / 
+accuracy
+Not disclosed1 TH-300 / ±0.2◦C (anonymised)
+Number of electricity meters 1 main meter + sub-meters per building 1 main meter + 12 sub-meters
+Electricity meter model / accuracy GE kV2c / ±2% Wasion DTSD341 / Class 1
+Other sensors (CO2, air flow, light, 
+etc.)
+None None (only temperature-humidity and meters)
+Occupancy data Source Simulated occupancy patterns (dataset) Access control logs + work-station sensors (partial 
+floors)
+Temporal resolution 1 h 15 min aggregated to 1 h
+Weather data Source Nearby weather station (included in dataset) Rooftop weather station
+Parameters Dry-bulb temperature, relative humidity, solar 
+radiation, wind speed
+Same as left
+Data acquisition & 
+transmission
+Sampling frequency 1 h (all data) 1 h (physical sensors)
+Communication protocol Not applicable (offline files) Modbus TCP (meters), RS485 (temperature- 
+humidity)
+Storage format CSV PostgreSQL + CSV backup
+Data fusion method Offline integration Real-time ETL to spatiotemporal graph
+Data quality assurance Calibration interval Annually (NIST-traceable, per dataset documentation) On-site comparison every 12 months (GB/T 
+17215)2
+Missing value handling Linear interpolation Physics-based imputation + spatiotemporal graph 
+completion
+Outlier detection 3σ 3σ + domain rules
+Fig. 6. Spatial layout of multi-source data collection points on a representative floor of the real office building, showing physical sensors, electricity meters, oc-
+cupancy collection points, BIM attribute extraction locations, and virtual-completion areas used to construct graph attributes.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+11 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 12 ===
+Fig. 7. Construction of sparse-monitoring test scenarios by applying random masks to complete sensor matrices at 20%, 40%, 60%, and 80% missing rates for 
+evaluating the virtual sensing robustness of the STAR framework.
+Fig. 8. Multi-source data acquisition and fusion architecture for the real office building, showing how BIM, sensor, weather, and occupancy data are preprocessed, 
+stored, and transformed into node and edge attributes for the STAR spatiotemporal heterogeneous graph.
+Fig. 9. Quality-assurance workflow for multi-source building data, covering BIM consistency checks, sensor calibration, weather and occupancy validation, missing- 
+value imputation, outlier detection, normalization, and spatiotemporal feature matrix generation.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+12 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 13 ===
+portion of the sensor data (missing rates from 20% to 80%) and use the 
+original complete readings as the ground truth. This allows direct 
+computation of reconstruction errors. For the real office building, 
+physical sensors are installed only on the 1st, 5th, and 10th floors. To 
+obtain an independent ground truth without adding new sensors, we 
+perform cross‑floor validation. Specifically, we take two floors for 
+training and the remaining floor for testing, where we randomly mask 
+30% of the existing sensor readings on the test floor. Those masked 
+values are known to us but hidden from the model, serving as the ground 
+truth. The training data come from the other two floors only. This design 
+avoids self‑validation and provides a realistic estimate of the frame-
+work’s ability to infer unmonitored zones.
+Dataset splitting strictly follows chronological order to avoid data 
+leakage and ensure the reliability of experimental results, with a ratio of 
+70%/15%/15% for the training, validation, and test 
+sets—corresponding to data from January 2022 to February 2023, 
+March 2023 to June 2023, and July 2023 to December 2023 for the real 
+building case. To improve model generalization, the training set em-
+ploys temporal shift augmentation (1–24 h shift) and noise addition 
+augmentation (5% Gaussian noise). To systematically verify the adapt-
+ability of the STAR framework to sparse data scenarios, four sensor 
+missing rate scenarios (20%, 40%, 60%, 80%) are constructed in the test 
+set. Sparse monitoring environments in practical engineering are 
+simulated by randomly removing sensor data, comprehensively evalu-
+ating the virtual sensing accuracy and robustness of the framework.
+We designed an offline iterative data replay simulation using the 
+ASHRAE GEP III dataset from 2021 to 2024 to verify performance 
+improvement under accumulating data without physical retrofitting. As 
+illustrated in Fig. 10, the simulation starts with 2021 data only: we train 
+the spatiotemporal sensing engine to generate virtual metering, di-
+agnose anomalies, and output an optimisation strategy such as HVAC 
+setpoint adjustments or lighting schedules. That strategy is then applied 
+as rule‑based modifications to the weather and load data of 2022, 
+computing the resulting energy consumption and indoor conditions as if 
+the strategy had been implemented. The modified 2022 data, which 
+implicitly carry the strategy’s effect, are used to retrain the engine 
+before moving to 2023. Repeating this process for 2023 and 2024 
+completes seven rounds in total, with each year’s data used once. In each 
+round we record perception MAPE, diagnostic F1‑score, and optimised 
+ROI. This simulation is strictly data‑driven and does not represent a 
+physical closed‑loop deployment. Real‑world factors such as imple-
+mentation delays, measurement noise, and occupant behaviour changes 
+are not captured and remain future work.
+5. Results and discussion
+5.1. Performance analysis of the spatiotemporal sensing engine
+To evaluate the spatiotemporal sensing engine under varying sensor 
+missing rates, a comparative experiment was conducted against baseline 
+models including EnergyPlus, CNN-LSTM, STGCN, GAT, and PINN. As 
+shown in Table 4, the STAR engine consistently outperforms all baseline 
+models, with significantly slower performance degradation as the 
+missing rate increases. Under the representative sparse scenario of 60% 
+missing rate, STAR achieves a MAPE of 6.5% (8.2% lower than PINN), a 
+CV(RMSE) of 8.3% (12.6% lower than PINN), and an R2 of 0.92 (8.2% 
+higher than PINN). Furthermore, the reduced CV(RMSE) directly im-
+proves optimization decision accuracy. For instance, under the same 
+60% missing rate, a 7.5% reduction in CV(RMSE) lowers the ROI 
+calculation error of subsequent optimization schemes from 5.2% to 
+3.1%, confirming the practical value of the engine’s performance.
+To assess the reproducibility and significance of the results, all 
+perception experiments were repeated 10 times using different random 
+seeds or bootstrap resampling. Table 3 reports the mean ± standard 
+deviation for each metric. At the representative sparse scenario of 60% 
+sensor missing rate, STAR achieves a mean MAPE of 6.5% with a 
+standard deviation of only 0.3%, while the best baseline (PINN) yields 
+7.8 ± 0.5%. The improvement is consistent across all 10 runs, with STAR 
+always outperforming PINN. Paired t‑tests between STAR and each 
+baseline give p < 0.01 for all metrics and missing rates, confirming 
+statistical significance. Fig. 11 shows the boxplot of MAPE at 60% 
+missing rate, where STAR exhibits the lowest median, the narrowest 
+interquartile range, and no outliers, whereas all baselines show broader 
+distributions and higher medians. This robust statistical evidence sup-
+ports the conclusion that STAR’s sensing engine provides not only 
+higher accuracy but also superior stability under sparse data conditions.
+To verify the virtual metering accuracy on the real office building 
+where no full‑coverage ground truth exists, we performed the 
+cross‑floor validation described in Section 4.4. Table 5 summarises the 
+results for the three validation folds (each time predicting the floor not 
+used for training, with 30% of its sensor readings masked). The table 
+reports the MAPE, RMSE, and R2 for the virtual metering of energy 
+consumption on the masked sensors.
+The average MAPE (7.2%) is very close to the 6.5% achieved on the 
+ASHRAE dataset under 60% missing rate. The difference of only 0.7 
+percentage points indicates strong cross‑building generalisation. 
+Furthermore, the average RMSE of 0.92 kWh and R2 of 0.91 demonstrate 
+that the virtual metering quality is consistent across different floors. 
+Since the masked sensor readings used as ground truth are never 
+exposed to the model during training, this validation design completely 
+Fig. 10. Offline iterative data replay simulation for evaluating STAR perfor-
+mance evolution from 2021 to 2024, showing strategy generation, simulated 
+implementation, data modification, engine retraining, and per-round recording 
+of MAPE, diagnostic F1-score, and ROI without physical deployment.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+13 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 14 ===
+avoids self‑justification and provides credible evidence that the frame-
+work can accurately infer energy performance in unmonitored zones of 
+the real building.
+Digital twin-driven energy performance certification requires 
+continuous, full-building energy consumption data to maintain model 
+fidelity and certification reliability, yet sparse sensor deployment in 
+practical building operations often results in incomplete records that 
+undermine assessment validity. Fig. 12 illustrates the STAR framework’s 
+virtual data completion workflow and temporal validation, with the 
+upper section showing the transition from fragmented multi-area energy 
+consumption records to continuous time-series outputs, and the lower 
+section comparing reconstructed data against real full-scale measure-
+ments under a 60% sensor missing rate. Quantitative evaluation con-
+firms strong agreement, with an overall Pearson correlation coefficient 
+of 0.96, root mean square error of 0.87 kWh, and mean absolute per-
+centage error of 6.5%. Consistency holds across the 8–24 h operating 
+period, including load rising stages, steady low-load intervals, and daily 
+peaks; minor fluctuations in reconstructed data during 10:00–12:00 and 
+18:00–20:00 high-load periods remain within engineering acceptable 
+limits, with respective mean absolute percentage errors of 4.8% and 
+5.2%, while key inflection points such as the 10:00 load rise and 14:00 
+consumption drop are accurately captured to reflect transient energy use 
+changes. Against a baseline physics-informed neural network model, 
+which yields a correlation coefficient of 0.88 and mean absolute per-
+centage error of 7.8% with severe deviation during load transitions, the 
+STAR framework’s dual-channel spatial feature fusion and thermody-
+namic constraints suppress unconstrained extrapolation errors and 
+preserve physical rationality. This stable, accurate reconstruction 
+eliminates the limitations of discrete sensor data in traditional certifi-
+cation, enabling continuous full-building energy state monitoring to 
+support subsequent anomaly diagnosis and retrofitting optimization.
+To verify the necessity of each module in the sensing engine, sys-
+tematic ablation experiments were conducted by removing individual 
+components. As summarized in Table 6, retaining only the explicit to-
+pological channel yields a MAPE of 10.6% under 60% missing rate; 
+retaining only the implicit functional correlation channel gives 11.2%. 
+After dual‑channel fusion, the MAPE drops to 6.5%, a reduction of 
+4.3–5.1%, demonstrating that synergistic fusion alleviates feature loss 
+under sparse data. Removing physical constraints (e.g., heat balance) 
+raises the MAPE to 13.2% (6.7% higher than the complete model) and 
+increases the physical constraint residual by 72%, proving that physics 
+integration solves the “physical inconsistency” problem of pure 
+data‑driven models. Removing the Bi‑LSTM temporal modeling module 
+raises the 24‑hour short‑term prediction MAPE to 9.7% (3.2% higher 
+than the complete model), confirming the importance of temporal 
+modeling for capturing dynamic energy consumption dependencies.
+To verify spatiotemporal perception coverage, two types of heatmap 
+distributions are presented. Fig. 13 shows the temporal heatmap of 
+global building energy consumption (monthly and weekly from 2021 to 
+2024). STAR‑predicted energy consumption exhibits clear seasonal 
+patterns (high in winter/summer, low in spring/autumn), consistent 
+with actual building load characteristics. Fig. 14 presents a 3D heatmap 
+across multiple floors (Z‑axis: floor; X‑axis: functional area type; Y‑axis: 
+serial number of same‑type areas). The energy consumption distribution 
+matches real usage scenarios, with high‑intensity zones concentrated in 
+core functional areas and smooth gradient transitions across floors, 
+confirming STAR’s spatial perception accuracy for unmonitored areas.
+Prediction reliability was quantified by 95% confidence interval 
+Table 4 
+Comparative virtual-metering accuracy of STAR and baseline models under 20%–80% sensor missing rates, evaluated using RMSE, MAPE, CV(RMSE), and R2.
+Evaluation Metric Sensor Missing Rate STAR EnergyPlus CNN-LSTM STGCN GAT PINN
+RMSE (kWh) 20% 0.52 ± 0.02 0.78 ± 0.05 0.69 ± 0.04 0.65 ± 0.04 0.63 ± 0.03 0.58 ± 0.03
+40% 0.67 ± 0.03 0.95 ± 0.06 0.88 ± 0.05 0.82 ± 0.05 0.79 ± 0.04 0.73 ± 0.04
+60% 0.87 ± 0.04 1.21 ± 0.08 1.52 ± 0.10 1.63 ± 0.11 1.35 ± 0.09 1.02 ± 0.06
+80% 1.15 ± 0.06 1.58 ± 0.10 1.97 ± 0.13 2.12 ± 0.14 1.78 ± 0.11 1.43 ± 0.09
+MAPE (%) 20% 3.8 ± 0.2 6.2 ± 0.4 5.5 ± 0.3 5.1 ± 0.3 4.9 ± 0.3 4.3 ± 0.2
+40% 5.2 ± 0.3 8.1 ± 0.5 7.6 ± 0.4 7.2 ± 0.4 6.8 ± 0.4 5.9 ± 0.3
+60% 6.5 ± 0.3 10.1 ± 0.6 13.6 ± 0.8 14.9 ± 0.9 11.7 ± 0.7 7.8 ± 0.5
+80% 9.3 ± 0.5 13.8 ± 0.8 18.5 ± 1.1 20.3 ± 1.2 16.4 ± 1.0 11.2 ± 0.7
+CV(RMSE) (%) 20% 4.6 ± 0.2 7.1 ± 0.4 6.3 ± 0.4 5.9 ± 0.3 5.7 ± 0.3 5.1 ± 0.3
+40% 6.2 ± 0.3 8.9 ± 0.5 8.2 ± 0.5 7.7 ± 0.5 7.4 ± 0.4 6.7 ± 0.4
+60% 8.3 ± 0.4 12.4 ± 0.7 16.8 ± 0.9 18.2 ± 1.0 14.1 ± 0.8 9.5 ± 0.6
+80% 11.8 ± 0.6 16.5 ± 0.9 22.3 ± 1.2 24.7 ± 1.3 19.6 ± 1.1 13.4 ± 0.8
+R2 20% 0.96 ± 0.01 0.91 ± 0.02 0.93 ± 0.02 0.94 ± 0.02 0.94 ± 0.02 0.95 ± 0.01
+40% 0.94 ± 0.01 0.87 ± 0.02 0.89 ± 0.02 0.90 ± 0.02 0.91 ± 0.02 0.93 ± 0.02
+60% 0.92 ± 0.02 0.78 ± 0.03 0.68 ± 0.04 0.65 ± 0.04 0.72 ± 0.03 0.85 ± 0.03
+80% 0.88 ± 0.02 0.71 ± 0.03 0.59 ± 0.05 0.55 ± 0.05 0.64 ± 0.04 0.79 ± 0.03
+Note: All values are reported as mean ± standard deviation over 10 independent runs (different random seeds for neural networks; bootstrap resampling for deter-
+ministic models). p < 0.01 versus STAR (paired t‑test). The results in this table are based on the mask‑reconstruct‑contrast method using the ASHRAE dataset, where 
+the original complete sensor data serve as ground truth. Cross‑validation on the real building (Table 5) yields an average MAPE of 7.2%, consistent with the results 
+reported here, confirming the framework’s generalisation ability.
+Fig. 11. Distribution of MAPE values over ten independent runs under 60% 
+sensor missing rate, comparing STAR with PINN, GAT, STGCN, CNN-LSTM, and 
+EnergyPlus to evaluate virtual-metering accuracy and stability.
+Table 5 
+Cross-floor validation results for virtual metering in the real office building 
+under partial sensor masking, using MAPE, RMSE, and R2 as evaluation metrics.
+Training 
+floors
+Predicted 
+floor
+Masked 
+ratio
+MAPE 
+(%)
+RMSE 
+(kWh)
+R2
+5, 10 1 30% 7.1 0.91 0.91
+1, 10 5 30% 7.3 0.94 0.90
+1, 5 10 30% 7.2 0.92 0.91
+Average     7.2 0.92 0.91
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+14 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 15 ===
+coverage and prediction variance, as shown in Table 7. As the sensor 
+missing rate increases, uncertainty rises for all models, but STAR 
+maintains a clear advantage. At 60% missing rate, STAR’s confidence 
+interval coverage reaches 92% (10.8% higher than PINN) and prediction 
+variance is 0.065 (35% lower than PINN). Even at 80% missing rate, 
+coverage remains 89% and variance is only 0.103 (PINN: 0.158). This 
+advantage stems from the synergy of the dual‑channel structure and 
+physical constraints: the explicit channel provides physical boundary 
+constraints, limiting unreasonable fluctuations; the implicit channel 
+supplies feature redundancy, improving representation under sparse 
+data. Together, they suppress uncertainty, providing a stable risk 
+assessment basis for subsequent optimization decisions.
+5.2. Performance analysis of the anomaly Root-Cause tracing and 
+diagnosis engine
+To evaluate diagnostic accuracy, seven anomaly scenarios were 
+constructed using controlled parameter injection. These included HVAC 
+malfunction, external wall insulation damage, power fluctuation, 
+insufficient ventilation, envelope heat leakage, lighting system over-
+load, and fresh air system failure. All scenarios were based on real 
+building normal operation data. For instance, HVAC malfunction was 
+simulated by reducing compressor power to 60–70% of rated value. 
+Envelope heat leakage was emulated by increasing door or window gap 
+heat transfer coefficients by 50–60%. Fresh air system failure was 
+implemented by interrupting supply or reducing heat exchange effi-
+ciency below 40%. A mixed normal-anomaly test set was created, and 
+diagnostic performance was quantified on a 1.0–5.0 hierarchical scale, 
+where Level 5 represents optimal accurate diagnosis and Level 1 the 
+worst or diagnostic failure.
+Fig. 15 presents the confusion matrices. For STGCN (subfigure a) and 
+GAT (b), most anomalies score below 3.0, with prominent misjudgment. 
+PINN (c) improves diagonal performance to 3.5–4.2, but the concealed 
+anomaly diagnostic level remains 4.6 with residual off‑diagonal inter-
+ference. In contrast, STAR (d) shows darkest diagonal cells and 
+near‑zero off‑diagonal values, indicating almost no misjudgment across 
+the seven anomaly types. Quantitatively, STAR achieves an F1‑score >
+0.88 for the seven idealised scenarios, with a recall of 92% for concealed 
+anomalies (vs. 75% for STGCN). Under more challenging conditions 
+(composite faults and gradual evolution), the F1‑score remains at 
+0.84–0.85, as detailed in the sensitivity analysis below. The false alarm 
+rate on normal data is 2.8%. These results, together with the paired 
+t‑test (p < 0.01) and Cohen’s d = 1.23, confirm the statistical signifi-
+cance and practical relevance of the diagnostic engine.
+Fig. 12. Virtual completion of sparse energy-consumption records using the STAR sensing engine and temporal validation against real full-scale sensor data under a 
+60% sensor missing rate.
+Table 6 
+Ablation analysis of the STAR spatiotemporal sensing engine under 60% sensor missing rate, showing the contributions of explicit topology, implicit correlation, 
+physical constraints, and temporal modeling.
+Model Configuration RMSE (kWh) MAPE (%) CV(RMSE) (%) R2 Physical Constraint Residual 24 h Short-Term Prediction MAPE (%)
+STAR (complete model) 0.87 6.5 8.3 0.92 0.08 6.5
+Explicit topological channel only 1.42 10.6 14.8 0.70 0.12 9.4
+Implicit functional correlation channel only 1.51 11.2 15.6 0.67 0.13 9.9
+Without physical constraints 1.63 13.2 17.2 0.63 0.29 9.6
+Without temporal modeling (no Bi-LSTM) 1.12 9.7 11.5 0.85 0.09 9.7
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+15 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 16 ===
+To assess robustness beyond the seven idealised scenarios, we con-
+ducted additional sensitivity tests. As shown in Fig. 16, the diagnostic 
+F1‑score for HVAC malfunction decreases only slightly from 0.91 to 0.87 
+as the power reduction severity increases from 50% to 80%. For enve-
+lope heat leakage, the F1‑score remains around 0.90 when the U‑value 
+increase rises from 50% to 60%. Under a composite fault that combines 
+HVAC power reduction with sensor drift, the F1‑score is 0.84. For a 
+gradually evolving fault where the HVAC fault intensity ramps linearly 
+from zero to 80% over one hour, the F1‑score is 0.85. The false alarm 
+rate measured on normal operation data with added Gaussian noise is 
+only 2.8%. These results extend the evaluation well beyond the seven 
+idealised injection scenarios. The sustained high F1‑score across varying 
+severity levels, fault combinations, temporal evolution, and noisy 
+normal conditions confirms that the diagnostic engine’s performance is 
+robust and does not hinge on any specific injection setting. These results 
+confirm that the diagnostic performance is robust to fault severity, 
+complexity, and temporal dynamics.
+Two aspects were evaluated for diagnostic efficiency and general-
+ization ability. The first was diagnosis time per anomaly scenario. The 
+second was performance stability across different building types and 
+operating conditions.
+Table 8 compares diagnosis time. STAR achieves an average of 0.8  s 
+per scenario, significantly outperforming GCN (1.5  s), SHAP (2.3  s), RF 
+Fig. 13. STAR-predicted temporal heatmap of whole-building energy consumption from 2021 to 2024, showing seasonal and weekly load patterns used to verify 
+temporal perception coverage.
+Fig. 14. STAR-predicted 3D spatial heatmap of energy consumption across 
+floors and functional areas, illustrating spatial distribution and gradient con-
+tinuity in monitored and unmonitored zones.
+Table 7 
+Prediction uncertainty comparison of STAR and baseline models under different 
+sensor missing rates, quantified by 95% confidence interval coverage and pre-
+diction variance.
+Evaluation Metric Sensor 
+Missing Rate
+STAR PINN GAT STGCN
+95% Confidence Interval 
+Coverage (%)
+20% 96 92 90 88
+40% 95 90 87 85
+60% 92 83 81 79
+80% 89 78 75 72
+Prediction Variance 20% 0.028 0.039 0.045 0.051
+40% 0.042 0.058 0.067 0.075
+60% 0.065 0.100 0.118 0.132
+80% 0.103 0.158 0.182 0.205
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+16 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 17 ===
+(2.8  s), and CNN‑LSTM (3.2  s). This efficiency meets the real‑time 
+requirements of building operation and predictive maintenance.
+Cross-scenario generalization was tested under three typical oper-
+ating conditions. The first condition was a Grade A office building 
+during seasonal transition with outdoor temperatures fluctuating be-
+tween 10◦C and 25◦C. The second was an urban hotel building experi-
+encing occupancy density fluctuations. The third was a commercial 
+complex undergoing temporary functional area adjustment. Models 
+were trained only on the core case and then directly transferred. Fig. 17
+shows the cumulative distribution function of F1-scores. STAR’s curve is 
+consistently the rightmost. In subfigure (a), the cumulative probability 
+reaches nearly 1 when the F1-score is 0.9 or higher. For the other 
+models, the F1-score needs to drop below 0.85 to achieve the same cu-
+mulative probability. In subfigure (b), STAR reaches a cumulative 
+probability of 0.9 at an F1-score of 0.88, while the other models remain 
+below 0.7. In subfigure (c), STAR maintains its dominance even under 
+sudden functional area adjustments. Quantitatively, STAR’s F1-score 
+coefficient of variation is only 3.2%, which is much lower than those 
+of GAT (8.5%) and STGCN (10.1%). This confirms superior performance 
+stability across scenarios.
+Fig. 15. Diagnostic confusion matrices for STGCN, GAT, PINN, and STAR across seven building energy anomaly scenarios, showing the comparative accuracy of 
+anomaly type identification.
+Fig. 16. Sensitivity analysis of the STAR diagnostic engine under varying fault severities, composite faults, and gradual fault evolution, comparing precision, recall, 
+and F1-score.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+17 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 18 ===
+To evaluate the diagnostic engine under true equipment faults rather 
+than simulated injections, we used the publicly available ASHRAE RP- 
+1043 dataset. This dataset contains measurements from a 90‑ton cen-
+trifugal chiller under normal operation and several fault conditions. We 
+selected two fault types with moderate severity: refrigerant leak and 
+condenser fouling.Because the dataset provides only device‑level sensor 
+readings (e.g., evaporator pressure, condenser temperature, refrigerant 
+flow rate) and lacks any building‑scale spatial graph, we constructed a 
+minimal graph containing a single chiller node with all sensor readings 
+as node attributes. The diagnostic engine was then applied to classify 
+5‑minute windows into three classes: normal, refrigerant leak, or 
+condenser fouling. For comparison, we retrained the PINN and GAT 
+baselines on the same feature set.
+The ASHRAE RP-1043 dataset provides a real-world benchmark with 
+two common chiller faults: refrigerant leak and condenser fouling. As 
+shown in Fig. 18, STAR achieves F1‑scores of 0.76 and 0.72, 
+respectively, outperforming PINN (0.58, 0.53) and GAT (0.62, 0.59) by a 
+clear margin (paired t‑test, p < 0.05). Table 8 reports the corresponding 
+precision and recall values, which follow the same trend. Although these 
+absolute F1‑scores are lower than those obtained on simulated buil-
+ding‑level anomalies (0.84–0.92), the gap is expected because the RP- 
+1043 data lack the spatial propagation paths and rich attribute set of a 
+full building graph. Crucially, STAR’s consistent advantage over the 
+baselines on real equipment data demonstrates that the diagnostic en-
+gine does not overfit to the simulated injection settings. This validation 
+provides direct evidence that the model captures meaningful fault sig-
+natures and generalises to genuine hardware faults, thereby addressing 
+the limitation of using only artificial anomalies.
+5.3. Performance analysis of the collaborative evolutionary optimization 
+engine
+To validate the lightweight simulator used as the validation agent, 
+we randomly generated 50 retrofit schemes and computed their energy 
+saving rates using both the lightweight simulator and a high fidelity 
+EnergyPlus model. As shown in Fig. 19, the predictions from the two 
+models are strongly correlated, with a coefficient of determination R2 of 
+0.96 and a root mean square error RMSE of 1.78%. The linear regression 
+fit is y = 0.98x + 0.20, which is close to the ideal identity line. This 
+indicates negligible systematic bias. These results confirm that the 
+simplifications adopted in the lightweight simulator, including freezing 
+feature extraction layers, replacing finite element simulations with 
+empirical formulas, and using GPU parallel computing, do not 
+compromise its reliability for evaluating optimisation candidates. 
+Therefore, the optimisation outcomes reported below are based on a 
+trustworthy surrogate model.
+The engine’s ability to generate retrofitting schemes that balance 
+energy saving, economy, and comfort was evaluated from two per-
+spectives. The first was Pareto front quality, and the second was 
+Table 8 
+Diagnosis time comparison across seven building energy anomaly scenarios, demonstrating the real-time efficiency of the STAR root-cause tracing engine against GCN, 
+SHAP, RF, and CNN-LSTM baselines.
+Model HVAC 
+Malfunction
+External Wall 
+Insulation Damage
+Power 
+Fluctuation
+Insufficient 
+Ventilation
+Envelope Heat 
+Leakage
+Lighting System 
+Overload
+Fresh Air 
+System Failure
+Average 
+Diagnosis Time
+STAR 0.7 s 0.9 s 0.6 s 0.8 s 0.5 s 0.7 s 0.7 s 0.8 s
+GCN 1.4 s 1.7 s 1.3 s 1.5 s 1.3 s 1.4 s 1.3 s 1.5 s
+SHAP 2.2 s 2.5 s 2.1 s 2.3 s 2.1 s 2.2 s 2.3 s 2.3 s
+RF 2.7 s 2.9 s 2.6 s 2.8 s 2.4 s 2.4 s 2.7 s 2.8 s
+CNN- 
+LSTM
+3.1 s 3.3 s 3.0 s 3.2 s 3.2 s 3.1 s 3.3 s 3.2 s
+Fig. 17. Cumulative distribution function (CDF) comparison of diagnostic F1-scores across transferred building scenarios and operating conditions, evaluating the 
+cross-scenario generalization of STAR against PINN, GAT, and STGCN.
+Fig. 18. Validation of the STAR diagnostic engine on the ASHRAE RP-1043 real 
+chiller fault dataset, comparing precision, recall, and F1-score with PINN and 
+GAT for refrigerant leak and condenser fouling faults.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+18 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 19 ===
+practical engineering value. As shown in Table 9, STAR significantly 
+outperforms the comparative models. Its Coverage reaches 0.93, which 
+is 19.2% higher than NSGA-III (0.78), 24.0% higher than MOPSO (0.75), 
+and 13.4% higher than the reinforcement learning single-agent model 
+(0.82). This indicates more comprehensive coverage of the multi- 
+objective space. Its Spacing is 0.08, lower than that of NSGA-III 
+(0.15), MOPSO (0.17), and the single-agent model (0.12), confirming 
+a more uniform solution distribution that offers richer differentiated 
+options.
+A typical balanced scheme from STAR achieves an estimated energy 
+saving rate of 22.0%, a theoretical ROI of 8.5%, and a static payback 
+period of 3.2 years (15.8% shorter than the single‑agent scheme’s 3.8 
+years). To account for input uncertainties, we performed a Monte Carlo 
+simulation with 1000 runs, perturbing electricity price, equipment cost, 
+and energy saving rate by ± 10% uniformly. The resulting 95% confi-
+dence interval for the ROI is [7.2%, 9.8%] and for the payback period is 
+[2.7, 3.8] years. All optimisation values are based on the lightweight 
+simulator, which has been validated against the high‑fidelity EnergyPlus 
+model (R2 = 0.96). The PMV compliance rate reaches 95%, out-
+performing the single‑agent (88%) and NSGA‑III (85%). These results 
+validate the practical engineering value of STAR‑generated schemes.
+We further analyzed the sensitivity of the optimization results to the 
+reward function weights. Single‑factor perturbations of ± 20% were 
+applied sequentially to the four weights α, β, γ, δ, resulting in nine 
+weight configurations including the baseline. Fig. 20 summarizes the 
+Pareto Coverage and the optimal energy saving rate for each configu-
+ration. Under all perturbations, the Pareto Coverage remains between 
+0.91 and 0.94, with a maximum relative change from the baseline of less 
+than 5%. The optimal energy saving rate fluctuates from 21.6% to 
+22.3%, with a coefficient of variation of only 1.0%. These results indi-
+cate that the optimization outcomes are not sensitive to the exact weight 
+settings; the framework consistently produces stable, high‑quality so-
+lutions over a wide range of weight values. Hence, the reported Pareto 
+front and energy saving rates do not rely on any specific choice of 
+weights.
+Fig. 21 further compares STAR with NSGA‑III, MOPSO, and the 
+single‑agent model. In subfigure (a), STAR’s Pareto front (blue) fully 
+covers the front ranges of other models within the normalized energy 
+saving rate interval of 0.1–0.8 and lies closer to the target region of “high 
+energy saving rate   excellent thermal comfort”. Subfigure (b) shows 
+that STAR’s solutions (blue dashed points) are more uniformly and 
+densely distributed, with no local sparse areas, corresponding to its 
+lower Spacing (0.08 vs. 0.15 for NSGA‑III). Subfigure (c) confirms that 
+STAR achieves a larger reduction in normalized payback period while 
+improving the normalized energy saving rate.
+To assess adaptability to real‑time fluctuations in occupancy load 
+and climate, the dynamic scheme generated by STAR was compared 
+against the static scheme from NSGA‑III under three dynamic scenarios 
+derived from summer high‑load data: a 30% increased occupancy den-
+sity scenario (9:00–18:00), an extreme high temperature scenario 
+(38–42◦C, extending the high‑temperature period to 4 h), and a 24‑hour 
+stability test sequence combining both dynamic changes with normal 
+operation.
+Fig. 22 shows the coordinated temporal sequence of multi‑energy 
+flow power under STAR’s dynamic scheme. The power curves of energy 
+storage, photovoltaic (PV), building load, and grid consumption exhibit 
+linked regulation; for example, during the 6–14  h period of increased 
+occupancy, dynamic charging/discharging of energy storage mitigates 
+load fluctuations on the grid.
+Fig. 23 presents the energy saving rate comparisons. Under the 30% 
+increased occupancy density scenario (a), STAR maintains a stable 
+saving rate of 20–21%, while NSGA‑III’s static scheme drops sharply to 
+12–14% after 8 h with large fluctuations. Under the extreme high tem-
+perature scenario (b), STAR still achieves 19–21%, whereas the static 
+scheme degrades to 11–13%. The stability comparison (c) shows that 
+STAR’s coefficient of variation remains below 2%, while the static 
+scheme’s peak exceeds 8%. These results demonstrate that STAR’s dy-
+namic scheme maintains stable energy saving rates under dynamic 
+disturbances through real‑time coordinated multi‑energy flow 
+Fig. 19. Agreement between lightweight simulator predictions and EnergyPlus 
+simulations for retrofit energy-saving estimation, supporting the validation- 
+agent approximation used in the dual-agent optimizer.
+Table 9 
+Multi-objective retrofit optimization performance of STAR and baseline opti-
+mizers, comparing Pareto-front quality and typical balanced schemes in terms of 
+energy saving, ROI, payback period, and comfort compliance.
+Evaluation 
+Dimension
+Evaluation 
+Index
+STAR NSGA- 
+III
+MOPSO Reinforcement 
+Learning Single- 
+Agent
+Pareto Front 
+Quality
+Coverage 0.93 0.78 0.75 0.82
+Spacing 0.08 0.15 0.17 0.12
+Typical 
+Balanced 
+Scheme
+Energy Saving 
+Rate (%)
+22.0 19.5 18.8 20.5
+ROI(%) 8.5 7.2 6.8 7.8
+Static 
+Payback 
+Period (Years)
+3.2 3.9 4.2 3.8
+PMV 
+Compliance 
+Rate(%)
+95 85 82 88
+Note: The ROI and payback period are theoretical estimates based on the 
+lightweight simulator. Monte Carlo 95% confidence intervals and validation 
+against EnergyPlus (R2 = 0.96) are reported in the text.
+Fig. 20. Sensitivity of retrofit optimization performance to reward-function 
+weights, showing changes in Pareto coverage and optimal energy saving 
+when energy-saving, cost, compliance, and conflict terms are perturbed.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+19 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 20 ===
+regulation.
+The dual‑agent (exploration‑validation) configuration was 
+compared with a single‑agent configuration (exploration agent only, 
+without validation). Key evaluation metrics included Coverage, Spacing, 
+feasible solution ratio, total evolution time, and number of iterations to 
+convergence. Table 10 summarizes the results.
+The dual‑agent configuration achieves Coverage of 0.93 (22.4% 
+higher than the single‑agent’s 0.76) and Spacing of 0.08 (50.0% lower). 
+More importantly, the feasible solution ratio reaches 92% (35.3% 
+higher), thanks to the validation agent’s screening for compliance and 
+engineering feasibility. The dual‑agent configuration converges in 38 
+iterations and 30 min, compared to 52 iterations and 48 min for the 
+single‑agent, a 37.5% time reduction. Mechanistically, the exploration 
+agent ensures solution space coverage while the validation agent guides 
+search direction; their collaboration avoids local optima and suppresses 
+inefficient scheme redundancy, achieving dual improvements in opti-
+mization quality and efficiency.
+To evaluate whether the interlock and dead-zone module compro-
+mises optimisation quality, we conducted a controlled comparison. Two 
+configurations of the optimisation engine were tested. The first config-
+uration included the module with a dead-zone threshold of 1% and 
+interlock conditions following ASHRAE Guideline 36. The second 
+configuration omitted the module entirely. Both were run on the same 
+seven-round offline replay simulation using identical random seeds and 
+input data. For each configuration we recorded the Pareto Coverage, the 
+average energy saving rate, and the proportion of strategy updates 
+filtered by the module.
+As shown in Table 11, the module filtered out about 12% of the 
+candidate strategy updates because their estimated net benefit fell below 
+the 1% dead-zone threshold. However, the Pareto Coverage decreased 
+only from 0.93 to 0.92 (a relative drop of 1.1%), and the average energy 
+saving rate decreased from 22.1% to 21.9% (a relative drop of 0.9%). 
+Both changes are well below 2%, confirming that the interlock and dead- 
+zone module does not compromise optimisation quality. At the same 
+time, it effectively suppresses meaningless high-frequency strategy ad-
+justments, thereby enhancing the deployability of the framework in real 
+buildings.
+5.4. Performance evolution under iterative data replay simulation
+The framework’s ability to improve with accumulated data…itera-
+tive data replay simulation. Fig. 24 presents the performance changes of 
+different models under successive iteration rounds. In subfigure (a), the 
+perception MAPE curve shows that STAR’s reduction slope is signifi-
+cantly steeper than that of ensemble models such as PINN + GCN, GCN 
++ NSGA‑III, and PINN + GCN + NSGA‑III. After seven iterations, STAR’s 
+MAPE decreases from 6.5% to 5.2%, whereas the best ensemble’s MAPE 
+increases from 5.9% to 7.2%, reflecting STAR’s iterative advantage in 
+perception accuracy. Subfigure (b) shows that STAR’s diagnostic 
+F1‑score increases by 4.2%, while the improvements of other ensembles 
+are all below 2.7%. Subfigure (c) shows that STAR’s optimized ROI 
+improvement rate rises from 6.0% to 10.2%, with the post‑iteration ROI 
+benefit leading the best ensemble by 1.2%. These results indicate that 
+through the iterative collaboration collaboration of “perception‑diag-
+nosis‑optimization‑data update”, STAR achieves continuous multi‑di-
+mensional performance improvement, while traditional ensemble 
+models lack iterative feedback and thus show limited gains.
+The data‑driven adaptive model upgrading capability was evaluated 
+by sequentially adding real‑time operation data (3, 6, and 9 months) and 
+comparing the accuracy improvement of STAR and PINN. The initial 
+benchmark was set at 60% sensor missing rate (STAR MAPE = 6.5%, 
+PINN MAPE = 7.8%). As summarized in Table 12, STAR consistently 
+achieves larger improvements with additional data. After adding 3 
+months of data, STAR’s MAPE drops to 5.9% (a 9.2% reduction), while 
+PINN drops to 7.3% (a 6.4% reduction); STAR’s reduction is 1.4 times 
+Fig. 21. Comparative optimization performance of STAR and baseline methods, showing Pareto-front curves, optimized solution distributions, and typical balanced- 
+scheme indicators for evaluating trade-offs among energy saving, thermal comfort, and payback period.
+Fig. 22. Coordinated 24-hour multi-energy power flow under the STAR dy-
+namic retrofit scheme, illustrating the temporal interaction among load de-
+mand, photovoltaic generation, battery storage, and power purchased from the 
+medium-voltage grid.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+20 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 21 ===
+that of PINN. After 6 months (cumulative), STAR’s MAPE further de-
+creases to 5.2% (20.0% cumulative reduction), whereas PINN reaches 
+6.9% (11.5% cumulative reduction). The additional data from months 
+4–6 reduces STAR’s MAPE from 5.9% to 5.2% (≈11.9% relative 
+reduction in this stage), which is 2.2 times PINN’s reduction (5.5%) over 
+the same period. After 9 months, STAR’s MAPE stabilizes at 4.9% 
+(24.6% cumulative reduction), while PINN is at 6.6% (15.4% cumula-
+tive reduction). The final cumulative reduction gap remains 9.2%. These 
+results demonstrate that STAR’s adaptive mechanism (“data feedback 
+→ parameter fine‑tuning → model structure optimization”) more effi-
+ciently absorbs and utilizes additional data, providing core support for 
+data‑driven iterative updating.
+5.5. Comprehensive discussion
+The STAR framework upgrades the core function of digital twins 
+from traditional “physical entity mirror simulation” to “iterative deci-
+sion evolution of perception-diagnosis-optimization,” realizing the 
+collaborative integration of full-chain components for the first time and 
+further enriching the theoretical system of dynamic EPC. In terms of 
+physics-informed graph learning, the proposed “dual-channel + phys-
+ical constraints” method primarily addresses the generalization bottle-
+neck of pure data-driven Graph Neural Networks (GNNs) in sparse and 
+unbalanced building data scenarios, rather than merely improving 
+model accuracy. Regarding the data-driven iterative updating mecha-
+nism, the defined two-dimensional logic of “model iteration + strategy 
+adjustment” is more aligned with the dynamic characteristics of the 
+building’s full lifecycle, providing core theoretical support for the 
+practical implementation of dynamic EPC. This contribution is also 
+consistent with the evolution of EU-funded next-generation EPC initia-
+tives discussed in Section 2.1. These initiatives have established 
+important directions for digital, user-centered, and renovation-oriented 
+EPCs, whereas STAR further contributes an operational technical loop 
+that transforms incomplete monitoring data into virtual performance 
+evidence, interpretable diagnostic outputs, and adaptive retrofit strate-
+gies. In this sense, STAR can be regarded as a technical enabler for dy-
+namic and actionable EPC implementation rather than as a separate 
+certification scheme.
+The practical value of the STAR framework is reflected in clear 
+technical implementation paths and diverse industrial benefits: At the 
+technical level, it can achieve data interoperability through integration 
+with BIM platforms (e.g., Revit) and Building Energy Management 
+Systems (BEMS), and complete the implementation connection from 
+model to actual system through a “cloud-based training + edge-based 
+Fig. 23. Temporal comparison of energy-saving performance under dynamic operating scenarios, showing the adaptability of the STAR dynamic scheme against the 
+NSGA-III static scheme under increased occupancy density, extreme high temperature, and energy-saving stability conditions.
+Table 10 
+Effect of the dual-agent exploration-validation mechanism on retrofit optimization performance, comparing STAR with a single-agent configuration in terms of Pareto 
+quality, feasibility, convergence, and energy saving.
+Agent Configuration Coverage Spacing Feasible Solution Ratio 
+(%)
+Number of Convergence 
+Iterations
+Total Evolution 
+Time
+Energy Saving Rate of Optimal 
+Scheme (%)
+Dual-Agent (STAR) 0.93 0.08 92 38 30 min 22.0
+Single-Agent (Exploration 
+Only)
+0.76 0.16 68 52 48 min 20.2
+Table 11 
+Influence of the interlock and dead-zone module on optimization deployability, 
+showing its effect on Pareto coverage, average energy saving, and filtered 
+strategy updates.
+Configuration Pareto 
+Coverage
+Average Energy Saving 
+(%)
+Filtered strategy 
+ratio
+Without 
+module
+0.93 22.1 0%
+With module 0.92 21.9 12%
+Relative change   1.1%   0.9%  
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+21 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 22 ===
+inference” deployment mode and visual interactive interface. At the 
+industrial level, the framework has the potential to reduce physical 
+sensor deployment costs by replacing a portion of hardware sensors with 
+virtual metering. For policymakers, its standardized technical processes 
+provide a reusable reference for dynamic EPC policies. The framework 
+also provides a technical module that can support predictive mainte-
+nance, though full implementation requires additional work.
+The generalization ability of the STAR framework synergizes with its 
+contribution to the fairness of data-driven models: Its stable perfor-
+mance across different building types and operating conditions stems 
+from the guidance of physical law constraints on the model. This design 
+reduces the model’s reliance on specific building sample data, effec-
+tively minimizing performance deviations in niche building types such 
+as old office buildings. It avoids the application imbalance of traditional 
+data-driven models caused by training data bias toward mainstream 
+buildings, promoting the equitable popularization of building energy 
+performance models in the industry.
+The application of the STAR framework still has three limitations: 
+First, its adaptability needs to be improved in scenarios with insufficient 
+initial data for new buildings; second, the real-time performance of the 
+optimization process has not met practical requirements in super-large 
+campus-scale building scenarios; third, current physical constraints do 
+not cover the complex control logic of electromechanical systems, 
+limiting model refinement. Corresponding future work will focus on 
+these directions: First, explore the combination of transfer learning and 
+meta-learning to reduce the initial data demand for new buildings by 
+50%; second, develop hierarchical distributed optimization algorithms 
+to control campus-scale optimization time within 30 min and improve 
+real-time performance; third, integrate mechanistic models of electro-
+mechanical systems to enhance the comprehensiveness of physical 
+constraints, further improving model accuracy and applicability.
+6. Conclusions
+Addressing the core pain points of traditional EPC—data sparsity, 
+difficulty in tracing anomaly root causes, and static rigidity of optimi-
+zation strategies—this study proposes a data-driven iterative digital 
+twin framework (STAR) integrating virtual sensing and anomaly diag-
+nosis. It constructs a full-chain iterative technical system of “perception- 
+diagnosis-optimization-data update,” breaking through the limitation of 
+existing research focusing on single functional modules and realizing the 
+leap from static assessment to dynamic data-driven iterative optimiza-
+tion for EPC.
+Experimental results show that: The STAR spatiotemporal sensing 
+engine achieves a MAPE of 6.5% (8.2% lower than PINN), an R2 of 0.92, 
+and a CV (RMSE) 12.6% lower than PINN under 60% sensor missing 
+rate, effectively supporting subsequent optimization decisions; its 
+anomaly diagnosis engine achieves an F1-score > 0.88 for 7 types of 
+energy use anomalies, a recall rate of 92% for concealed anomalies, a 
+single-scenario diagnosis time of 0.8 s (0.7 s shorter than GCN), and a 
+cross-scenario F1-score coefficient of variation of only 3.2%; the 
+collaborative optimization engine achieves a Pareto front Coverage of 
+Fig. 24. Performance evolution over seven rounds of offline iterative data replay simulation, comparing STAR with staged baseline combinations in terms of 
+perception MAPE reduction, diagnostic F1-score improvement, and optimized ROI growth.
+Table 12 
+Adaptive virtual-metering improvement of STAR and PINN with increasing real-time data volumes under 60% sensor missing rate, measured by MAPE reduction over 
+iterative data updates.
+Additional Real-Time 
+Data Volume
+STAR Perception 
+MAPE (%)
+STAR MAPE Stage-Wise 
+Reduction (%)
+PINN Perception 
+MAPE (%)
+PINN MAPE Stage-Wise 
+Reduction (%)
+Stage-Wise Reduction Gap 
+(Percentage Points)
+0 months (initial) 6.5 — 7.8 — —
++3 个月 5.9 9.2 7.3 6.4 2.8
++6 months (cumulative) 5.2 20.0(cumulative) 6.9 11.5(cumulative) 8.5(cumulative)
++9 months (cumulative) 4.9 24.6(cumulative) 6.6 15.4(cumulative) 9.2(cumulative)
+Note: The cumulative addition of 3, 6, and 9 months of real‑time data corresponds to successive rounds in the offline iterative data replay simulation. All improvements 
+are measured under the same 60% sensor missing rate condition.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+22 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 23 ===
+0.93, with a typical scheme realizing a 22.0% energy saving rate and a 
+3.2-year static payback period, maintaining an energy saving rate of 
+20%-21% under dynamic scenarios; dual-agent collaboration increases 
+the feasible solution ratio to 92% (35.3% higher than the single-agent 
+model) and shortens the evolution time to 30 min. After 7 iterations, 
+the STAR framework reduces the perception MAPE from 6.5% to 5.2%, 
+improves the diagnostic F1-score by approximately 4.2%, and increases 
+the optimized ROI to 10.2%, establishing a full-chain collaborative 
+iterative updating mechanism.
+The STAR framework provides a new technical paradigm of “accu-
+rate perception, interpretable diagnosis, dynamic optimization, and 
+continuous updating” for next-generation EPC, enriching the theoretical 
+system and methodology at the intersection of building digital twins and 
+physics-informed learning. Its standardized integration scheme with 
+existing commercial systems such as BIM and BEMS enhances technical 
+implementation feasibility, providing precise support for building 
+energy-saving retrofitting decisions and facilitating the achievement of 
+decarbonization goals in the global building industry. Meanwhile, the 
+framework’s design concepts of “mechanism-data fusion” and “iterative 
+self-updating” offer reusable theoretical references and technical in-
+sights for performance optimization and dynamic certification of similar 
+complex industrial systems.
+Future research will focus on the integration of transfer learning and 
+meta-learning, the development of hierarchical distributed optimization 
+algorithms, and the construction of a mechanistic model library for 
+electromechanical systems. This will further improve the framework’s 
+adaptability to complex scenarios such as new buildings and super-large 
+building campuses, promote its large-scale application in full-lifecycle 
+building energy management, and provide more comprehensive tech-
+nical support for achieving carbon neutrality in the building sector. This 
+study did not deploy physical retrofitting in a real building or track the 
+actual measurement results. The seven rounds of iteration described 
+above are based on offline replay simulations using historical data and 
+serve solely to verify the framework’s performance evolution trend 
+under accumulating data. Practical factors such as strategy execution 
+delays, measurement noise, and occupant behavior changes are not 
+incorporated into the current model; these remain key issues to be 
+addressed in future engineering deployment. The validation on ASHRAE 
+RP-1043, while positive, also shows lower F1‑scores than on simulated 
+building‑level anomalies. This discrepancy arises because the dataset 
+lacks building‑scale spatial structure, forcing us to use a degenerate 
+graph with a single node. Future work will focus on mapping devi-
+ce‑level fault data onto full building graphs, possibly through transfer 
+learning or feature alignment techniques.
+Additional limitations and corresponding future work are discussed 
+below. 
+• Data dependency for new buildings: The framework requires several 
+weeks of historical data for stable training. For new buildings 
+without such data, performance degrades. As shown in Appendix B, 
+Table B.1, a transfer learning experiment using two ASHRAE build-
+ings reduced MAPE from 12.1% (direct application) to 9.0% after 
+fine‑tuning with only one week of data, closing about half the gap to 
+the full‑data baseline of 6.5%. Future work will integrate advanced 
+transfer learning and meta‑learning to reduce the requirement to one 
+week or less.
+• Computational scaling for large campuses: For buildings up to 1000 
+nodes, inference time is below 0.5 s, meeting real‑time requirements. 
+For larger campuses, the O(N2F) complexity becomes a bottleneck. 
+Appendix B, Fig. B.1 shows a hierarchical optimisation strategy on 
+100–500 node graphs, reducing computation time by 45–68% with a 
+relative loss in energy saving rate below 5%. For a 500‑node campus, 
+time drops from about 78 s to 25 s, making online re‑optimisation 
+feasible. Future work will develop scalable hierarchical distributed 
+algorithms for ultra‑large scenarios.
+• Electromechanical control logic modelling: Current physical con-
+straints cover heat balance and energy conservation but not detailed 
+control logic such as chiller sequencing or VAV minimum air flow. To 
+demonstrate extensibility, a VAV flow bound constraint was added to 
+the loss function. Appendix B, Fig. B.2 shows that this constraint 
+reduces MAPE by 0.2–0.4 percentage points and cuts flow violation 
+residuals by 50–60% across three floors with different VAV densities, 
+confirming that additional domain‑specific physical constraints can 
+be integrated. More complex logics, such as chiller start‑stop se-
+quences, are left for future work.
+• Real-World Deployment and Validation: This study did not deploy 
+physical retrofitting in a real building or track post-implementation 
+measurement. All iterative validation is based on offline historical 
+data replay simulation. Practical factors such as strategy execution 
+delays, measurement noise, and occupant behaviour changes are not 
+incorporated. A long-term field test with a partner building is plan-
+ned for future work. Additionally, the parameters of the interlock 
+and dead-zone module (e.g., dead-zone threshold, interlock rule sets) 
+need to be tuned for larger or more complex buildings; this will also 
+be addressed in future studies.
+CRediT authorship contribution statement
+Chenxi Jia: Writing – original draft, Visualization, Data curation. 
+Longyue Yang: Software, Methodology, Conceptualization. Wei Jin: 
+Writing – review & editing, Methodology, Conceptualization. Jifeng 
+Zhao: Writing – review & editing, Supervision, Project administration, 
+Funding acquisition. Chuanjin Zhang: Writing – review & editing, 
+Methodology, Conceptualization. Yutan Li: Writing – review & editing, 
+Methodology, Conceptualization.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Acknowledgements
+This future work stemming from this research will be supported by 
+the National Natural Science Foundation of China (Grant No. 
+52507039). The authors would like to express their sincere gratitude to 
+the China University of Mining and Technology, and specifically to the 
+State Key Laboratory of Power Electronics and Electric Drive, for 
+providing essential hardware/software support, experimental condi-
+tions, and a productive research environment. We are also grateful to 
+Gree Electric Appliances, Inc. for their strong technical support and for 
+providing a demonstration platform based on the Building Energy Effi-
+ciency Verification System, which offered significant practical insights 
+and validation for this research. Special thanks are extended to Prof. 
+Chun Gan from Huazhong University of Science and Technology, Prof. 
+Xiaojie Wu, and Prof. Rui Liang from China University of Mining and 
+Technology for their invaluable modeling guidance, constructive dis-
+cussions, and data support throughout this study.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+23 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 24 ===
+Appendix A:. Parameter definitions
+.
+Parameter definitions and symbols used in the STAR framework (in order of first appearance).
+Parameter Symbol Full Name / Description First 
+Appearance
+G=(V,E,Av,Ae,T) Building spatiotemporal heterogeneous graph, consisting of node set, edge set, node attribute matrix, edge attribute matrix, and 
+time dimension
+Section 3.1
+V Node set (covering all physical elements such as rooms, equipment, envelope, and sensors) Section 3.1
+Vroom Room node Section 3.1
+Vdevice Equipment node Section 3.1
+Vwall Envelope node (e.g., wall) Section 3.1
+Vsensor Sensor node Section 3.1
+E Edge set (encoding key correlations between elements) Section 3.1
+Ethermal Thermal conduction edge Section 3.1
+Eair Air flow edge Section 3.1
+Eequip Equipment association edge Section 3.1
+Eocc Occupancy activity edge Section 3.1
+Av Node attribute matrix; rows correspond to nodes, columns to attribute dimensions Section 3.1
+dv Dimension of node attributes Section 3.1
+Ae Edge attribute matrix; rows correspond to edges, columns to attribute dimensions Section 3.1
+de Dimension of edge attributes Section 3.1
+T Time dimension, describing the dynamic evolution of the graph structure Section 3.1
+T Input space, integrating multi-source heterogeneous data (BIM, sensor, weather, occupancy, policy) Section 3.1
+BIM Building Information Modeling data (static geometry and component attributes) Section 3.1
+Sensort Real-time dynamic data monitored by sensors at time t (e.g., energy consumption, temperature, humidity) Section 3.1
+Weathert Meteorological conditions at time t (e.g., outdoor temperature, solar radiation) Section 3.1
+Occut Occupancy distribution at time t Section 3.1
+Policyt Policy constraints at time t (e.g., energy efficiency rating standards) Section 3.1
+O Output space, including virtual reading, diagnosis report, and roadmap Section 3.1
+Virtual_Readingt Global virtual metering result at time t Section 3.1
+Diagnosis_Reportt Diagnosis report at time t (containing anomaly type, root-cause nodes, contribution degree, etc.) Section 3.1
+Roadmapt Retrofitting roadmap at time t Section 3.1
+θt Set of all model parameters in the framework at time t Equation (1)
+θ*t+1 Optimized parameter set at time t + 1 Equation (1)
+L Total loss function integrating prediction error and physical constraint violation degree Equation (1)
+D1:t Historical data sequence from time 1 to t Equation (1)
+Φ Set of physical constraints (e.g., thermodynamic laws) Equation (1)
+Roadmap*t+1 Optimized roadmap at time t + 1 Equation (2)
+F Strategy update function, fusing current roadmap, virtual reading, diagnosis report, and new input data Equation (2)
+It+1 New input data at time t + 1 Equation (2)
+αij Attention coefficient from node i to its neighbor node j Equation (3)
+hi,hj Initial feature vectors of node t and node j, respectively Equation (3)
+W Feature transformation matrix (explicit topological channel) Equation (3)
+a Attention weight vector Equation (3)
+N(i) Neighbor set of node t Equation (3)
+K Number of attention heads in the multi-head attention mechanism Equation (4)
+αkij Attention coefficient from node t to node j in the k-th attention head Equation (4)
+Wk Feature transformation matrix of the k-th attention head Equation (4)
+σ Sigmoid activation function Equation (4)
+hei Explicit spatial feature of node t (learned via the explicit topological channel) Equation (4)
+sij Normalized similarity coefficient between the time series of node t and node j Equation (5)
+DTW(TSi,TSj) Dynamic time warping distance between time series of node t and node j Equation (5)
+DTWmax Maximum DTW distance among all node pairs Equation (5)
+∊ Small constant to avoid division by zero Equation (5)
+TSi,TSj Time series of node t and node j (e.g., hourly energy consumption or temperature over the past 30 days) Equation (5)
+hii Implicit functional feature of node t (learned via the implicit correlation channel) Equation (6)
+̃A Adjacency matrix of the implicit graph with self-loops added Equation (6)
+̃D Degree matrix of ̃A Equation (6)
+Wi Feature transformation matrix of the implicit channel Equation (6)
+gi Gating coefficient of node t for adaptive fusion of dual-channel features Equation (7)
+Wg Weight matrix of the gating mechanism Equation (7)
+bg Bias term of the gating mechanism Equation (7)
+hfinal,i Final spatial feature of node t after gating fusion Equation (8)
+htime,i Temporally enhanced feature of node t after Bi-LSTM modeling Equation (9)
+Ltotal Total loss function = prediction loss + physics loss Equation (10)
+Lprediction Prediction loss (mean squared error) Equation (10)
+λ Weight coefficient of the physics loss in the total loss (set to 0.3) Equation (10)
+Lphysics Physics loss, measuring the violation degree of physical laws by predictions Equation (10)
+R(y) Physical constraint residual term, derived from heat balance and energy conservation constraints Equation (10)
+y,̂y Predicted value of virtual metering, measured value from sensors Equation (11)
+N Total number of prediction nodes Equation (11)
+T(in loss function( Length of prediction time steps Equation (11)
+yi,t,̂yi,t Predicted value and measured value of node i at time t, respectively Equation (11)
+(continued on next page)
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+24 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 25 ===
+(continued)
+Parameter Symbol Full Name / Description First 
+Appearance
+Rthermal(y) Residual term of the heat balance constraint Equation (12)
+Qin,i,t Total heat input of room i at time t (including HVAC heating, solar radiation, and heat dissipation from occupants and 
+equipment)
+Equation (12)
+Qout,i,t Total heat output of room i at time t (including envelope heat loss and ventilation exhaust heat) Equation (12)
+ΔUi,t Internal energy change of room i at time t (derived from predicted temperature) Equation (12)
+Renergy(y) Residual term of the energy conservation constraint Equation (13)
+ytotal,t Total energy consumption at time t Equation (13)
+M Total number of subsystems Equation (13)
+ysub,i,t Energy consumption of the i-th subsystem at time t Equation (13)
+Si,t Anomaly signal intensity of node i at time t (normalized to [-1, 1]) Equation (14)
+yi,t Mean value of the normal baseline of node i at the corresponding time step Equation (14)
+P(j|i) Transition probability from node i to node j in reverse random walk Equation (15)
+wij Influence intensity weight from node i to node j (learned by the sensing engine) Equation (15)
+I(direction) Direction indicator function; equals 1 if the edge direction is opposite to the anomaly propagation direction (consistent with 
+reverse tracing), otherwise 0
+Equation (15)
+Tmax Maximum number of walking steps in reverse random walk (set to 50) Section 3.4.2
+Ci Anomaly contribution degree of node i (normalized to [1]) Equation (16)
+α(contribution) Weight coefficient in contribution calculation (set to 0.6), balancing visit probability and edge-weight-signal-intensity term Equation (16)
+Pvisit,i Cumulative visit probability of node i in reverse random walk Equation (16)
+Sj Anomaly signal intensity of neighbor node j Equation (16)
+∊(denominator) Small constant to avoid division by zero Equation (16)
+Gmeasure=(Vmeasure,Emeasure, 
+Ameasure)
+Building retrofitting measure graph for solution space definition Section 3.5.1
+Vmeasure Set of measure nodes Section 3.5.1
+Emeasure Set of edges between measures (compatible edges and conflict edges) Section 3.5.1
+Ameasure Measure attribute matrix (containing cost, energy saving rate, cycle time, etc.) Section 3.5.1
+X={x1,x2,…,xm} Retrofitting scheme in the solution space; xi∈{0,1} indicates whether the i-th measure is selected Section 3.5.1
+m Total number of candidate measures Section 3.5.1
+xi Binary selection variable for the i-th measure (0: not selected, 1: selected) Section 3.5.1
+r Reward function value of the exploration agent Equation (17)
+α,β,γ,δ(reward) Weight coefficients of objectives in the reward function (set to 0.4, 0.3, 0.2, 0.1, respectively) Equation (17)
+F(X) Fitness function of the scheme Equation (18)
+ω1,ω2,ω3,ω4 Weight coefficients of energy saving rate, ROI, comfort improvement, and cost in the fitness function (determined by cross- 
+validation)
+Equation (18)
+Appendix B:. Supplementary experiments on transfer Learning, hierarchical Optimization, and VAV constraint integration
+0B.1 Transfer learning for new buildings
+The reduction in data requirement was evaluated using the ASHRAE dataset with two office buildings, designated A (8000  m2) and B (10000  m2). 
+The spatiotemporal sensing engine was pre‑trained on Building A with a full year of data, then fine‑tuned on Building B using varying amounts of data: 
+one week, two weeks, and four weeks. Baseline configurations included direct application without fine‑tuning and full training from scratch using one 
+year of Building B data.
+Table B1 
+Virtual metering MAPE (%) under different fine‑tuning data volumes (mean ± std, n = 5).
+Configuration MAPE (%) Relative Improvement over Direct Application
+Direct application (no fine-tuning) 12.1 ± 0.4  
+Fine-tuning with 1 week 9.0 ± 0.3   25.6%
+Fine-tuning with 2 weeks 8.2 ± 0.3 –32.2%
+Fine-tuning with 4 weeks 7.3 ± 0.2   39.7%
+Full-data baseline (1 year, from scratch) 6.5 ± 0.2   46.3%
+Table B.1 reports the virtual metering MAPE under these configurations. Fine‑tuning with only one week of data reduced the MAPE from 12.1% to 
+9.0%, closing approximately half the gap to the full‑data baseline. Improvement saturated beyond four weeks, indicating diminishing returns. These 
+results confirm that transfer learning substantially lowers the initial data requirement for new buildings.
+0B.2 Hierarchical optimization for large campuses
+Campus graphs with 100, 200, and 500 nodes were simulated. Full‑graph optimisation was compared against a hierarchical strategy that partitions 
+the graph into sub‑graphs of about 50 nodes, executes independent optimisation, and then coordinates the sub‑solutions. Computation time and 
+energy saving rate were recorded, with five repetitions per condition. 
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+25 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 26 ===
+Fig. B1. Performance of full‑graph vs. hierarchical optimisation
+Fig. B.1 compares the performance of full‑graph and hierarchical optimisation across the three campus sizes. Hierarchical optimisation reduced 
+computation time by 45% to 68% across all graph sizes, incurring a relative loss in energy saving rate of less than 5%. For the 500‑node campus, 
+computation time dropped from approximately 78 s to 25 s, rendering online re‑optimisation feasible. This demonstrates that the hierarchical 
+approach scales effectively to large campuses.
+B.3 Extending physical Constraints: VAV air flow Bounds
+Fig. B2. Impact of VAV flow bound constraint on performance
+To illustrate extensibility, a penalty term for VAV box air flow violations, covering minimum and maximum limits, was added to the loss function of 
+the spatiotemporal sensing engine. Three typical floors with different VAV densities were tested. The evaluation metrics were MAPE and the physical 
+constraint residual, defined as the root mean square error of flow violation. Each floor experiment was repeated five times. Fig. B.2 shows the impact of 
+the VAV flow bound constraint on performance. Adding the VAV constraint reduced MAPE by 0.2 to 0.4 percentage points and decreased flow 
+violation residuals by 50% to 60%. The improvement was consistent across floors with varying VAV densities. This confirms that the framework 
+readily accommodates additional domain‑specific physical constraints, and that more complex control logics can be integrated in the same manner.
+Appendix C. Supplementary data
+Supplementary data to this article can be found online at https://doi.org/10.1016/j.enbuild.2026.117763.
+Data availability
+Data will be made available on request.
+References
+[1] H. Zuo, Y. Teng, Z. Chen, Voltage control method for multi-energy system based on 
+the coupling of renewable energy hydrogen production and storage, Sci. Technol. 
+Energy Transition 79 (2024).
+[2] Z. Hua, L. Zhang, S. Zhang, S. Yang, C. Liu, Multi-objective coordinated 
+optimization of low-carbon building energy systems based on high renewable 
+energy penetration, Journal of Building Engineering 96 (2024).
+[3] R. Shan, W. Lai, H. Tang, X. Leng, W. Gu, Residential Building Renovation 
+considering Energy, Carbon Emissions, and cost: an Approach Integrating Machine 
+Learning and Evolutionary Generation, Applied Sciences (switzerland) 15 (4) 
+(2025).
+[4] R. Bhowmik, Q.R. Syed, N. Apergis, A.A. Alola, Z. Gai, Applying a dynamic ARDL 
+approach to the Environmental Phillips Curve (EPC) hypothesis amid monetary, 
+fiscal, and trade policy uncertainty in the USA, Environ. Sci. Pollut. Res. 29 (10) 
+(2022) 14914–14928.
+[5] F. Forster, S.S. ZingreKT, Residential Heritage buildings in the Low Carbon 
+transition: Policy and Practice challenges, Buildings 15 (17) (2025).
+[6] J. Few, D. Manouseli, E. McKenna, M. Pullinger, E. Zapata-Webborn, S. Elam, 
+D. Shipworth, T. Oreszczyn, The over-prediction of energy use by EPCs in Great 
+Britain: a comparison of EPC-modelled and metered primary energy use intensity, 
+Energ. Buildings 288 (2023).
+[7] X. Liu, W. Xiao, X. Lin, S. He, C. Huang, D. Guo, Low-Power CMOS Temperature 
+Sensors with RF Energy Harvesting for EPC Gen-2 RFID Tags, IEEE Trans. Consum. 
+Electron. 71 (4) (2025) 9679–9688.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+26 
+Downloaded from https://iranpaper.ir
+
+=== PDF PAGE 27 ===
+[8] R. Dzhusupova, V. Shteriyanov, J. Bosch, O.H. Holmstr¨om, Smart material 
+estimation for the engineering, procurement, and construction (EPC) sector[J], 
+Results Eng. 27 (2025).
+[9] M. Zeynivand, P. Esmaili, L. Cristaldi, G. Gruosso, A novel approach to digital twin- 
+based energy efficiency monitoring and failure analysis in industrial applications 
+[J], J. Manuf. Syst. 83 (2025) 612–625.
+[10] A.H.S. Weerakoon, M. Assadi, Experimental Assessment and Digital Twin Modeling 
+of Integrated AEM Electrolyzer-PEM fuel Cell-BESS for Smart Hydrogen Energy 
+applications, Energies 18 (23) (2025).
+[11] Y. Ren, T. Phung-Duc, J.C. Chen, F.Y. Li, Enabling Dynamic Autoscaling for NFV in 
+a Non-Standalone Virtual EPC: Design and Analysis, IEEE Trans. Veh. Technol. 72 
+(6) (2023) 7743–7756.
+[12] S. Bolluk, R. Aydo˘gan, E. Sefer, E.K. ¨Ozdemir, S. Seyis, Synthetic data generation 
+and energy consumption prediction in district building energy modeling, Energ. 
+Buildings 351 (2026).
+[13] S. Falegari, A.A. Shirzadi Javid, Integrating building information modeling and life 
+cycle assessment to analyze the role of climate and passive design parameters in 
+energy consumption, Energy and Environment 35 (4) (2024) 2087–2106.
+[14] Z. Li, Q. Wang, J. Xiong, J. Cen, Q. Dai, Q. Liang, T. Lu, A building electrical system 
+fault diagnosis method based on random forest optimized by improved sparrow 
+search algorithm, Meas. Sci. Technol. 35 (5) (2024).
+[15] K. Hu, C. Yan, J. Ye, Y. Xu, Z. Zhu, Y. Gong, Sensor fault diagnosis and calibration 
+techniques in building energy systems: a review and future outlook, Build. Environ. 
+269 (2025).
+[16] Y. Wang, Y. Zhen, Q. Ning, Four-objective optimization of historic building 
+renovation considering climate change: a trade-off in energy, economy, 
+environment, and thermal comfort, Journal of Building Engineering 110 (2025).
+[17] W. Guo, Y. Dong, Analysis of building energy efficiency optimization design 
+effectiveness based on multi-objective optimization algorithm, Arch. Civ. Eng. 71 
+(3) (2025) 33–48.
+[18] M. Asghari, A. Kasaeian, H.J. Bakhsh, H. Yazdani, Multi-objective optimization of 
+building envelopes for energy efficiency and carbon emission: evaluating PCM 
+configurations across four climate zones in Iran, Energy Convers. Manage.: X 28 
+(2025).
+[19] J. Rodríguez-´Alvarez, Urban Building Energy Modelling for the Renovation Wave: 
+a Bespoke Approach based on EPC Databases, Buildings 13 (7) (2023).
+[20] H.M. Shakeel, S. Iram, R. Hill, H.M.A. Farid, P. Brown, H.U. Rehman, An XAI- 
+driven diagnostic framework to investigate the predictive power of building 
+features to enhance EPC ratings in detached houses, Energ. Buildings 344 (2025).
+[21] Y. Yue, S. Wang, Z. Que, Analysis of revenue distribution of Assembly Building 
+under EPC Model based on Entropy Weight-TOPSIS improved Shapley Value, 
+BioResources 20 (1) (2025) 322–330.
+[22] P. Cao, X. Lei, Evaluating risk in Prefabricated Building Construction under EPC 
+Contracting using Structural Equation Modeling: a Case Study of Shaanxi Province, 
+China, Buildings 13 (6) (2023).
+[23] F. Pagliaro, F. Hugony, F. Zanghirella, R. Basili, M. Misceo, L. Colasuonno, V. Del 
+Fatto, Assessing building energy performance and energy policy impact through 
+the combined analysis of EPC data - the italian case study of SIAPE, Energy Policy 
+159 (2021).
+[24] K. Qu, X. Chen, A. Ekambaram, Y. Cui, G. Gan, A. Økland, S. Riffat, A novel holistic 
+EPC related retrofit approach for residential apartment building renovation in 
+Norway, Sustain. Cities Soc. 54 (2020).
+[25] C. Jin, S.H. Cho, Robust digital receiver for EPC sensor network, J. Syst. Eng. 
+Electron. 24 (1) (2013) 44–51.
+[26] S. Cozza, J. Chambers, A. Brambilla, M.K. Patel, Do energy performance certificates 
+allow reliable building-to-building energy performance comparisons? Energ. 
+Buildings 243 (2021) 110980.
+[27] O. Pasichnyi, J. Wallin, F. Levihn, H. Shahrokni, O. Kordas, Energy performance 
+certificates — new opportunities for data-enabled urban energy governance, 
+Energy Policy 127 (2019) 486–499.
+[28] E. Parliament, Directive (EU) 2024/1275 of the European Parliament and of the 
+Council of 24 April 2024 on the energy performance of buildings (recast)[S], Off. J. 
+Eur. Union (2024).
+[29] U-CERT. EPC sister projects: Breeding ground for the evolution of Building Energy 
+Performance Certificates[EB/OL]. 2026. https://u-cert.epb.center/epc-sister- 
+projects/index.html, accessed 31 May 2026.
+[30] Ashrae, Measurement of Energy, demand, and Water Savings. ASHRAE Guideline 
+14-2014[S], American Society of Heating, Refrigerating and Air-Conditioning 
+Engineers, Atlanta, 2014.
+[31] J. Granderson, G. Lin, M.A. Piette, Accuracy of automated measurement and 
+verification (M&V) for energy savings in commercial buildings, Appl. Energy 173 
+(2016) 296–308.
+[32] C.E. Kontokosta, A knowledge discovery based approach to benchmarking building 
+energy performance, Energ. Buildings 107 (2015) 426–436.
+[33] X. Shi, Y. Li, Z. Zhou, J. Chen, Energy performance gap in chinese office buildings: 
+a data-driven investigation of 35 buildings across four climate zones, J. Clean. 
+Prod. 312 (2021) 127815.
+[34] Y. Zhang, H. Wang, J. Chen, Risk factors identification and evaluation of EPC 
+construction projects in China based on fuzzy DEMATEL, J. Civ. Eng. Manag. 27 (5) 
+(2021) 321–335.
+[35] Y. Wang, Q. Chen, D. Gan, J. Yang, D.S. Kirschen, A deep learning method for load 
+forecasting in the presence of sudden temperature changes, IEEE Trans. Power 
+Syst. 35 (4) (2020) 3271–3280.
+[36] J.J. Zhang, H. Ward, Q. Qian, The spatial dynamics of energy efficiency: EPC 
+impact on retail property values, Energy Policy 195 (2024).
+[37] S.S. Sajjadi, A. Moghadassi, H. Rashidizadeh-Kermani, R. Kia, M. Shafie-khah, AI- 
+driven forecasting for battery energy management in digital twin-integrated 
+microgrids using machine learning techniques, J. Storage Mater. 143 (2026).
+[38] Z. Liu, Intelligent monitoring and control of farmland based on edge-cloud 
+collaboration and digital twin for digital energy management: investment benefit 
+analysis, Sustainable Energy Res. 12 (1) (2025).
+[39] X. Zhang, J. Zheng, P. Li, Y. Yang, Y. Ye, F. Causone, X. Shi, A review of building 
+digital twins: Framework and enabling technologies, Journal of Building 
+Engineering 111 (2025).
+[40] M. Baghalzadeh Shishehgarkhaneh, A. Keivani, R.C. Moehler, N. Jelodari, L. 
+S. Roshdi, Internet of things (IoT), Building Information Modeling (BIM), and 
+Digital Twin (DT) in Construction Industry: a Review, Bibliometric, and Network 
+Analysis, Buildings 12 (10) (2022).
+[41] Y. Zhang, K. Shang, Research on Building Process Optimization Framework based 
+on BIM-DT, Tehnicki Vjesnik 31 (5) (2024) 1771–1779.
+[42] de las Morenas J, Belmonte LM, Morales R. Designing an AI-driven digital twin 
+architecture for building energy prediction[J]. Journal of Building Engineering, 
+2025;113.
+[43] A. Naeem, C.O. Ho, E. Kolderup, R.K. Jain, S. Benson, J. de Chalendar, EnergyPlus 
+as a computational engine for commercial building operational digital twins, 
+Energ. Buildings 329 (2025).
+[44] A. Clausen, K. Arendt, A. Johansen, F.C. Sangogboye, M.B. Kjærgaard, C.T. Veje, B. 
+N. Jørgensen, A digital twin framework for improving energy efficiency and 
+occupant comfort in public and commercial buildings, Energy Informatics 4 
+(2021).
+[45] S. Zhang, Z. Feng, Z. Peng, L. Xiao, T. Jiang, Sparse graph neural network aided 
+efficient decoder for polar codes under bursty interference, Digital 
+Communications and Networks 11 (2) (2025) 359–364.
+[46] X. Zhu, X. Yu, E. Zha, S. Lin, ReAHGN: Adaptive Heterogeneous Graph Neural 
+Network with Relation-Aware Embedding, IEEE Access 13 (2025) 44951–44962.
+[47] W. Zhuang, J. Fan, M. Xia, K. Zhu, A Multi-Scale Spatial-Temporal Graph Neural 
+Network-based Method of Multienergy load forecasting in Integrated Energy 
+System, IEEE Trans. Smart Grid 15 (3) (2024) 2652–2666.
+[48] Y. Xu, F. Qin, Y. Luo, W. Ke, Q.X. Zhu, Y.L. He, Y. Zhang, M.Q. Zhang, Channel 
+Information Exchange-Induced Spatiotemporal Graph Convolutional Network, 
+IEEE Sens. J. 25 (15) (2025) 29262–29270.
+[49] H. Wu, Z. Xu, Multi-energy flow calculation in integrated energy system via 
+topological graph attention convolutional network with transfer learning, Energy 
+303 (2024).
+[50] S. Meng, C. Li, C. Tian, W. Peng, C. Tian, Transfer learning based graph 
+convolutional network with self-attention mechanism for abnormal electricity 
+consumption detection, Energy Rep. 9 (2023) 5647–5658.
+[51] K. Wang, J. Wang, Z. Li, Y. Zhou, An Integrated Sparse Gated Graph Density 
+Network based on transfer Learning for Multi-Site Probabilistic forecasting of 
+Renewable Energy, IEEE Trans. Sustainable Energy 16 (1) (2025) 673–685.
+C. Jia et al.                                                                                                                                                                                                                                       Energy & Buildings 367 (2026) 117763 
+27 
+Downloaded from https://iranpaper.ir

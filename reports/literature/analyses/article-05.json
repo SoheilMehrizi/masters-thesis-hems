@@ -1,0 +1,503 @@
+{
+  "id": "article-05",
+  "title": {
+    "en": "Agentic fault detection and diagnosis for building HVAC systems using AI agent, ontology, and diagnosis rules",
+    "fa": "تشخیص عامل‌محور با هستی‌شناسی و قواعد"
+  },
+  "short_title": "AFDD agent + ontology + rules",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Problem, questions and claims",
+        "fa": "مسئله، پرسش‌ها و ادعاها"
+      },
+      "paragraphs": [
+        {
+          "en": "Jiteng Li et al., Building and Environment 289 (2026),114104. AFDD integrates an AI agent, Brick/control ontology and generalized diagnosis rules to reduce manual information extraction and generate interpretable FDD/O&M reports. No numbered hypothesis or research-question list is explicit.",
+          "fa": "Jiteng Li و همکاران، ۲۰۲۶. عامل هوشمند، هستی‌شناسی Brick/کنترل و قواعد تعمیم‌یافته برای استخراج اطلاعات و گزارش تشخیص/نگهداری قابل فهم ادغام شده‌اند. فهرست صریح پرسش یا فرضیه شماره‌دار ندارد.",
+          "pages": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Ontology and executable rule workflow",
+        "fa": "هستی‌شناسی و گردش‌کار قواعد"
+      },
+      "paragraphs": [
+        {
+          "en": "Brick describes equipment/points/locations; control ontology adds setpoint, controller, actuator, plant and sensor with formal relations. The tool loads ontology, queries relations (e.g.SP​ARQL), imports operational data/thresholds and executes rules for actuator, sensor, load, other-loop plant and setpoint. LangChain integrates Python scripts and an Open AI-backed agent; ontology and diagnosis rules remain engineering inputs.",
+          "fa": "Brick تجهیزات/نقاط/مکان‌ها و هستی‌شناسی کنترل پنج جزء نقطه تنظیم، کنترل‌گر، محرک، فرایند و حسگر را توصیف می‌کند. بارگذاری، پرس‌وجوی روابط، ورود داده/آستانه و اجرای قواعد انجام می‌شود. Python با LangChain و عامل مبتنی بر OpenAI ترکیب شده؛ قواعد و هستی‌شناسی ورودی مهندسی‌اند.",
+          "pages": [
+            3,
+            7,
+            9,
+            20
+          ]
+        },
+        {
+          "en": "Supply-air loop flags residual beyond±1°C. A virtual-sensor MLP predicts supply-air temperature from return chilled-water and mixed-air temperatures, assumed fault-free. Training uses June 2022,80/20 split, batch 32,20 epochs, two hidden layers 128–64, Adam/MSE; reported RMSE.32°C. Valve thresholds 95%/35%, load 19 kW and chilled-water 6–8°C ground the diagnostic rules.",
+          "fa": "باقیمانده±۱درجه در حلقه هوای رفت بررسی می‌شود. MLP دمای رفت را از دو حسگر فرضاً سالم پیش‌بینی می‌کند؛ آموزش ژوئن۲۰۲۲ با تقسیم۸۰/۲۰، دسته۳۲،۲۰دوره، لایه۱۲۸–۶۴ و Adam/MSE است؛ RMSE برابر۰٫۳۲درجه. آستانه شیر۹۵/۳۵٪، بار۱۹کیلووات و آب سرد۶–۸درجه استفاده شده است.",
+          "pages": [
+            9,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Application and diagnostic cases",
+        "fa": "کاربرد و موارد آزمون"
+      },
+      "paragraphs": [
+        {
+          "en": "The 160 m² real office/meeting space has water-source heat pump and VAV HVAC,21 sensors and one-minute acquisition via RS-485. Cases test ontology information retrieval, ontology extension for a new chilled-water loop, one-hour/day supply-air diagnoses, week-long O&M suggestions and an August 2025 field demonstration. There is no matched independent-algorithm baseline table.",
+          "fa": "دفتر واقعی۱۶۰مترمربعی با پمپ حرارتی آب‌منبع و VAV،۲۱حسگر و داده یک‌دقیقه‌ای RS-485 بررسی شده است. موارد شامل بازیابی هستی‌شناسی، توسعه حلقه آب سرد، تشخیص ساعتی/روزانه، پیشنهاد هفتگی نگهداری و نمایش میدانی اوت۲۰۲۵ است. جدول رقابت همسان الگوریتم مستقل ندارد.",
+          "pages": [
+            8,
+            9,
+            16,
+            18,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Reported fault counts and latency",
+        "fa": "تعداد خطا و تأخیر گزارش‌شده"
+      },
+      "paragraphs": [
+        {
+          "en": "One-hour examples diagnose 58/60 fault points (57 chilled-water,1 load),60/60 load faults, or 22/60 fault points in another interval. A 660-point day yields 648 faults:7 sensor,407 load and 234 chilled-water. Week-long 4429 records yield 2973 faulty and 1456 healthy; fault groups 26 sensor/38 actuator/1260 load/1373 other-loop/276 setpoint. These are rule-output counts in reported cases, not a general calibrated accuracy estimate.",
+          "fa": "مثال ساعتی۵۸از۶۰ نقطه خطا با۵۷آب سرد و۱بار، مثال دیگر۶۰از۶۰بار و بازه دیگر۲۲از۶۰ است. روز۶۶۰نقطه‌ای۶۴۸خطا شامل۷حسگر،۴۰۷بار و۲۳۴آب سرد دارد. هفته۴۴۲۹رکورد با۲۹۷۳خطا و۱۴۵۶سالم گزارش شده است. این‌ها تعداد خروجی قواعد موردی‌اند، نه تخمین عمومی دقت کالیبره.",
+          "pages": [
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "en": "The authors report 473.3 s to diagnose 660 records, and separately 43.87 s per data point when arguing one-minute real-time operation. They also attribute apparent sensor faults to virtual-model uncertainty and omit sensor faults from O&M suggestions.",
+          "fa": "نویسندگان۴۷۳٫۳ثانیه برای۶۶۰رکورد و جداگانه۴۳٫۸۷ثانیه برای هر نقطه هنگام بحث اجرای یک‌دقیقه‌ای گزارش می‌کنند. خطاهای ظاهری حسگر به عدم‌قطعیت مدل مجازی نسبت داده شده و از پیشنهاد نگهداری حذف می‌شوند.",
+          "pages": [
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author future work and scope",
+        "fa": "کار آینده و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "Authors claim interpretable automated diagnosis and reduced expertise burden, but future work explicitly targets automatic generation of ontologies/rules from drawings/specifications and integration with Digital Twin services for prediction, diagnosis and calibration. Recommendations are generated; closed-loop corrective execution/recovery is not quantitatively evaluated.",
+          "fa": "تشخیص قابل فهم و کاهش نیاز به تخصص ادعا می‌شود؛ اما تولید خودکار قواعد/هستی‌شناسی از نقشه و ادغام خدمات Twin برای پیش‌بینی/تشخیص/کالیبراسیون کار آینده است. پیشنهاد تولید می‌شود و اجرای اصلاح و بازیابی حلقه‌بسته ارزیابی کمی نشده است.",
+          "pages": [
+            20
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "A close agentic-diagnosis comparator demonstrates why an agent plus diagnostic rules is existing prior art.",
+      "fa": "مقایسه نزدیک تشخیص عامل‌محور است و وجود پیشینه عامل همراه قواعد را نشان می‌دهد.",
+      "pages": [
+        3,
+        20
+      ]
+    },
+    "contribution": {
+      "en": "Provides a control-loop ontology and explicit fault-rule pipeline useful for tool interfaces and an interpretable diagnostic baseline.",
+      "fa": "هستی‌شناسی حلقه و زنجیره قواعد صریح برای رابط ابزار و خط‌مبنای تشخیص قابل تفسیر می‌دهد.",
+      "pages": [
+        3,
+        7,
+        9
+      ]
+    },
+    "employment": {
+      "en": "Adapt rule execution behind deterministic tools; map our HVAC/command/preference evidence to a small explicit ontology and log each rule’s required observations. Preserve model-error ambiguity instead of labeling every residual a sensor fault.",
+      "fa": "اجرای قواعد در ابزار قطعی اقتباس شود؛ شاهدهای HVAC/فرمان/ترجیح به هستی‌شناسی کوچک و نیاز مشاهده هر قاعده نگاشت شوند. ابهام خطای مدل حفظ شود.",
+      "pages": [
+        9,
+        20
+      ]
+    },
+    "baseline": {
+      "en": "High-priority adapted rule-based agentic FDD baseline for the overlapping diagnostic task. We need not reconstruct the full office ontology; compare under identical telemetry and action access, with explicit un observable cases.",
+      "fa": "خط‌مبنای پیشنهادی با اولویت بالای FDD قاعده‌ای عامل‌محور برای وظیفه مشترک است. بازسازی هستی‌شناسی کامل اداری لازم نیست؛ تله‌متری/دسترسی یکسان و حالت مشاهده‌ناپذیر صریح باشد.",
+      "pages": [
+        7,
+        8
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "“No misjudgment” should be read against case counts and the stated virtual-sensor uncertainty; it is not evidence of general diagnostic certainty. The two latency numbers use unclear denominators and should not be converted into a throughput claim without clarification. A user’s API key does not alone establish data privacy.",
+      "fa": "ادعای بدون اشتباه باید کنار شمارش موردی و عدم‌قطعیت حسگر مجازی خوانده شود، نه قطعیت عمومی. مخرج دو عدد تأخیر روشن نیست و نباید از آن‌ها نرخ پردازش نتیجه گرفت. داشتن کلید شخصی API به‌تنهایی حریم خصوصی را اثبات نمی‌کند.",
+      "pages": [
+        20
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Day:648/660 rule-flagged faults; week:2973/4429. MLP RMSE.32°C.",
+      "fa": "روز:۶۴۸/۶۶۰ و هفته:۲۹۷۳/۴۴۲۹ نقطه علامت‌خورده؛ RMSE مدل۰٫۳۲درجه.",
+      "pages": [
+        9,
+        19,
+        20
+      ]
+    }
+  ],
+  "bibliography_start_page": 21,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Fig. 1. Framework and composition of the AFDD. Fig. 2. Ontology for building energy systems and control logic. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104",
+        "fa": "AFDDعامل،هستی‌شناسی وقاعده راازابزار تشخیص پیوند می‌دهد."
+      },
+      "explanation": {
+        "en": "AFDD connects AI agent, ontology and generalized FDD rules through a diagnostic tool.",
+        "fa": "AFDDعامل،هستی‌شناسی وقاعده راازابزار تشخیص پیوند می‌دهد."
+      },
+      "data": {
+        "en": "Architecture diagram; no independent accuracy measurement.",
+        "fa": "نمودارمعماری است؛اندازه‌گیری مستقل دقت نیست."
+      }
+    },
+    {
+      "id": "2",
+      "page": 3,
+      "caption": {
+        "en": "Fig. 2. Ontology for building energy systems and control logic. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  3",
+        "fa": "هستی‌شناسی روابط تجهیز/نقطه/مکان واجزای حلقه کنترل را ترکیب می‌کند."
+      },
+      "explanation": {
+        "en": "Ontology combines equipment, point/location relationships and control-loop entities.",
+        "fa": "هستی‌شناسی روابط تجهیز/نقطه/مکان واجزای حلقه کنترل را ترکیب می‌کند."
+      },
+      "data": {
+        "en": "Setpoint, controller, actuator, plant, sensor are explicit concepts.",
+        "fa": "نقطه تنظیم،کنترل‌گر،محرک،فرایندوحسگرمفهوم صریح‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 4,
+      "caption": {
+        "en": "Fig. 3. Pseudocode for generalized FDD rules. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  4",
+        "fa": "شبه‌کد باقیمانده راازقواعدحسگر،محرک،بار،حلقه دیگرو تنظیم عبورمی‌دهد."
+      },
+      "explanation": {
+        "en": "Pseudocode routes residuals through sensor, actuator, load, other-loop and setpoint rules.",
+        "fa": "شبه‌کد باقیمانده راازقواعدحسگر،محرک،بار،حلقه دیگرو تنظیم عبورمی‌دهد."
+      },
+      "data": {
+        "en": "Deterministic diagnosis logic is engineering input, not learned causal discovery.",
+        "fa": "منطق تشخیص قطعی ورودی مهندسی است،نه کشف علّی آموخته‌شده."
+      }
+    },
+    {
+      "id": "4",
+      "page": 5,
+      "caption": {
+        "en": "Fig. 4. Schematic diagram and control principle for the target HVAC system. Table 2  Specifications of the main equipment and sensors.",
+        "fa": "نقشه ومنطق کنترل پمپ حرارتی،VAVونقاط پایش رامشخص می‌کند."
+      },
+      "explanation": {
+        "en": "HVAC schematic and control principles locate the water-source heat pump, VAV and monitoring points.",
+        "fa": "نقشه ومنطق کنترل پمپ حرارتی،VAVونقاط پایش رامشخص می‌کند."
+      },
+      "data": {
+        "en": "160 m²real building;21 sensors are listed in Table 2.",
+        "fa": "ساختمان واقعی۱۶۰مترمربع و۲۱حسگردرجدول۲است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 5. Brick schema for the target HVAC system. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  6",
+        "fa": "Brickنمونه‌شده تجهیزفیزیکی رابه نقطه ومکان نگاشت می‌کند."
+      },
+      "explanation": {
+        "en": "Instantiated Brick schema maps physical equipment to points and locations.",
+        "fa": "Brickنمونه‌شده تجهیزفیزیکی رابه نقطه ومکان نگاشت می‌کند."
+      },
+      "data": {
+        "en": "Graph labels ground later queries; no posterior probability is encoded.",
+        "fa": "برچسب گراف مبنای پرس‌وجوست؛احتمال پسین ندارد."
+      }
+    },
+    {
+      "id": "6",
+      "page": 7,
+      "caption": {
+        "en": "Fig. 6. Ontology-based semantic representation of multiple control loops. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  7",
+        "fa": "پنج مدل معنایی حلقه زنجیره تنظیم–محرک–فرایند–حسگرراحفظ می‌کنند."
+      },
+      "explanation": {
+        "en": "Five control-loop semantic models preserve the setpoint–actuator–plant–sensor chain.",
+        "fa": "پنج مدل معنایی حلقه زنجیره تنظیم–محرک–فرایند–حسگرراحفظ می‌کنند."
+      },
+      "data": {
+        "en": "Relations enable retrieval and rule selection, not intervention guarantees.",
+        "fa": "روابط بازیابی وانتخاب قاعده رامیسرمی‌کند،نه تضمین مداخله."
+      }
+    },
+    {
+      "id": "7",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 7. The example for the diagnosis rule for the supply air temperature control loop. Fig. 8. System architecture for the application of the AFDD. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104",
+        "fa": "مثال هوای رفت،آستانه وآزمون حسگرمجازی رابه پنج نوع خطااعمال می‌کند."
+      },
+      "explanation": {
+        "en": "Supply-air example applies explicit thresholds and virtual-sensor checks to five fault families.",
+        "fa": "مثال هوای رفت،آستانه وآزمون حسگرمجازی رابه پنج نوع خطااعمال می‌کند."
+      },
+      "data": {
+        "en": "Residual±1°C, valve 95/35%, load 19 kW, chilled water 6–8°Cappear in accompanying rules.",
+        "fa": "باقیمانده±۱درجه،شیر۹۵/۳۵٪،بار۱۹کیلووات وآب۶–۸درجه درقواعدمتن است."
+      }
+    },
+    {
+      "id": "8",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 8. System architecture for the application of the AFDD. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  8",
+        "fa": "معماری کاربرد عامل/ابزار/هستی‌شناسی رابهBMSوگزارش متصل می‌کند."
+      },
+      "explanation": {
+        "en": "Application architecture links agent/FDD tool and ontology to live BMS data/reporting.",
+        "fa": "معماری کاربرد عامل/ابزار/هستی‌شناسی رابهBMSوگزارش متصل می‌کند."
+      },
+      "data": {
+        "en": "Reported integration uses Python and LangChain; does not establish autonomous repair.",
+        "fa": "ادغامPython/LangChainگزارش شده؛ترمیم خودکار اثبات نشده."
+      }
+    },
+    {
+      "id": "9",
+      "page": 10,
+      "caption": {
+        "en": "Fig. 9. The information extraction for the ontology. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  10",
+        "fa": "تصاویر استخراج اطلاعات تجهیز/حلقه ازهستی‌شناسی با زبان رانشان می‌دهند."
+      },
+      "explanation": {
+        "en": "Screen shots show natural-language extraction of equipment/control-loop information from ontology.",
+        "fa": "تصاویر استخراج اطلاعات تجهیز/حلقه ازهستی‌شناسی با زبان رانشان می‌دهند."
+      },
+      "data": {
+        "en": "Source interaction examples are retained; not a benchmark of all possible queries.",
+        "fa": "مثال تعامل منبعحفظ شده؛معیارتمام پرسش‌های ممکن نیست."
+      }
+    },
+    {
+      "id": "10",
+      "page": 12,
+      "caption": {
+        "en": "Fig. 10. Automatic extension for the supply chilled water temperature control loop. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  12",
+        "fa": "درخواست کاربرهستی‌شناسی حلقه دمای آب رفت سردراگسترش می‌دهد."
+      },
+      "explanation": {
+        "en": "A user request extends the ontology for a supply chilled-water temperature loop.",
+        "fa": "درخواست کاربرهستی‌شناسی حلقه دمای آب رفت سردراگسترش می‌دهد."
+      },
+      "data": {
+        "en": "Missing controller/actuator/setpoint/plant facts are requested before TTL construction.",
+        "fa": "پیش ازTTLاطلاعات مفقودکنترل‌گر/محرک/تنظیم/فرایندپرسیده می‌شود."
+      }
+    },
+    {
+      "id": "11",
+      "page": 13,
+      "caption": {
+        "en": "Fig. 11. The diagnosis result for the supply air temperature control loop using one hour of data. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  13",
+        "fa": "گزارش ساعتی مواردآب سرد،بار،شیرونقطه تنظیم راتفکیک می‌کند."
+      },
+      "explanation": {
+        "en": "One-hour diagnostic reports distinguish chilled-water, load, valve and setpoint cases.",
+        "fa": "گزارش ساعتی مواردآب سرد،بار،شیرونقطه تنظیم راتفکیک می‌کند."
+      },
+      "data": {
+        "en": "Text examples 58/60,60/60 and 22/60 fault points; do not equate every 60 point interval.",
+        "fa": "مثال‌ها۵۸/۶۰،۶۰/۶۰و۲۲/۶۰نقطه خطادارند؛بازه‌هایکی نیستند."
+      }
+    },
+    {
+      "id": "12",
+      "page": 16,
+      "caption": {
+        "en": "Fig. 12. The diagnosis result for the supply air temperature control loop using one day of data. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  16",
+        "fa": "گزارش روزانه خروجی قواعد حلقه هوای رفت راتجمیع می‌کند."
+      },
+      "explanation": {
+        "en": "One-day report aggregates rule outputs for the supply-air control loop.",
+        "fa": "گزارش روزانه خروجی قواعد حلقه هوای رفت راتجمیع می‌کند."
+      },
+      "data": {
+        "en": "660 records:648 fault,12 normal;7 sensor,407 load,234 chilled-water.",
+        "fa": "۶۶۰رکورد:۶۴۸خطاو۱۲سالم؛۷حسگر،۴۰۷بارو۲۳۴آب سرد."
+      }
+    },
+    {
+      "id": "13",
+      "page": 17,
+      "caption": {
+        "en": "Fig. 13. Suggestions on operation and maintenance for the AFDD. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  17",
+        "fa": "پیشنهادنگهداری تنظیم محرک،بار،تجهیز،نقطه تنظیم،پیشگیری وآموزش راپوشش می‌دهد."
+      },
+      "explanation": {
+        "en": "O&M suggestions cover actuator tuning, load management, plant maintenance, setpoints, prevention and training.",
+        "fa": "پیشنهادنگهداری تنظیم محرک،بار،تجهیز،نقطه تنظیم،پیشگیری وآموزش راپوشش می‌دهد."
+      },
+      "data": {
+        "en": "These are generated recommendations; actual recovery after execution is not measured.",
+        "fa": "این‌هاپیشنهادتولیدی‌اند؛بازیابی واقعی پس ازاجراندازه‌گیری نشده."
+      }
+    },
+    {
+      "id": "14",
+      "page": 18,
+      "caption": {
+        "en": "Fig. 14. Running time of different diagnostic data amount. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  18",
+        "fa": "زمان اجرا باحجم رکوردتشخیص تغییرمی‌کند."
+      },
+      "explanation": {
+        "en": "Runtime changes with diagnostic record volume.",
+        "fa": "زمان اجرا باحجم رکوردتشخیص تغییرمی‌کند."
+      },
+      "data": {
+        "en": "Text reports 473.3 s for 660 records and separately 43.87 s per point; denominator ambiguity flagged.",
+        "fa": "متن۴۷۳٫۳ثانیه برای۶۶۰رکوردوجدا۴۳٫۸۷برای نقطه دارد؛ابهام مخرج مشخص شده."
+      }
+    },
+    {
+      "id": "15",
+      "page": 19,
+      "caption": {
+        "en": "Fig. 15. Application of supply air temperature control loop using the AFDD. J. Li et al.                                                                                                                                                                                                                                         Building and Environment 289 (2026) 114104  19",
+        "fa": "رابطمیدانی باچراغ وضعیت تشخیص اجزای حلقه هوای رفت رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Field interface uses indicator lights to display current diagnosis for supply-air loop entities.",
+        "fa": "رابطمیدانی باچراغ وضعیت تشخیص اجزای حلقه هوای رفت رانشان می‌دهد."
+      },
+      "data": {
+        "en": "August 2025 demonstration reports.8°Cresidual below 1°Cthreshold; not longitudinal validation.",
+        "fa": "نمایش اوت۲۰۲۵باقیمانده۰٫۸درجه زیرآستانه۱راگزارش می‌کند؛اعتبارسنجی بلندمدت نیست."
+      }
+    },
+    {
+      "id": "9-continued-p11",
+      "page": 11,
+      "caption": {
+        "en": "Figure 9, continued source page",
+        "fa": "ادامه شکل9 درصفحه11"
+      },
+      "explanation": {
+        "en": "Screen shots show natural-language extraction of equipment/control-loop information from ontology.",
+        "fa": "تصاویر استخراج اطلاعات تجهیز/حلقه ازهستی‌شناسی با زبان رانشان می‌دهند."
+      },
+      "data": {
+        "en": "Continuation of Figure 9; read with its preceding page and the figure-specific counts above.",
+        "fa": "ادامه شکل9؛همراه صفحه پیشین وتعدادهای مشخص همان شکل خوانده شود."
+      }
+    },
+    {
+      "id": "11-continued-p14",
+      "page": 14,
+      "caption": {
+        "en": "Figure 11, continued source page",
+        "fa": "ادامه شکل11 درصفحه14"
+      },
+      "explanation": {
+        "en": "One-hour diagnostic reports distinguish chilled-water, load, valve and setpoint cases.",
+        "fa": "گزارش ساعتی مواردآب سرد،بار،شیرونقطه تنظیم راتفکیک می‌کند."
+      },
+      "data": {
+        "en": "Continuation of Figure 11; read with its preceding page and the figure-specific counts above.",
+        "fa": "ادامه شکل11؛همراه صفحه پیشین وتعدادهای مشخص همان شکل خوانده شود."
+      }
+    },
+    {
+      "id": "11-continued-p15",
+      "page": 15,
+      "caption": {
+        "en": "Figure 11, continued source page",
+        "fa": "ادامه شکل11 درصفحه15"
+      },
+      "explanation": {
+        "en": "One-hour diagnostic reports distinguish chilled-water, load, valve and setpoint cases.",
+        "fa": "گزارش ساعتی مواردآب سرد،بار،شیرونقطه تنظیم راتفکیک می‌کند."
+      },
+      "data": {
+        "en": "Continuation of Figure 11; read with its preceding page and the figure-specific counts above.",
+        "fa": "ادامه شکل11؛همراه صفحه پیشین وتعدادهای مشخص همان شکل خوانده شود."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Relationships in the ontology. Relationship Definition Domain Range is Located In The subject location encapsulates equipment or points Location Equipment/Point",
+        "fa": "جدول1:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 1 provides: Relationships in the ontology. Relationship Definition Domain Range is Located In The subject location encapsulates equipment or points Location Equipment/Point. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول1داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "title": {
+        "en": "Specifications of the main equipment and sensors. Name Model Quantity Specification Water source heat pump WPWE 080 1 Rated power: 4.8 kW; Cooling capacity: 19 kW; Heating capacity: 29.5 kW",
+        "fa": "جدول2:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 2 provides: Specifications of the main equipment and sensors. Name Model Quantity Specification Water source heat pump WPWE 080 1 Rated power: 4.8 kW; Cooling capacity: 19 kW; Heating capacity: 29.5 kW. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول2داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 9,
+      "title": {
+        "en": "Knowledge engineering for the practical application. Application Classification Prompt inputs Central",
+        "fa": "جدول3:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 3 provides: Knowledge engineering for the practical application. Application Classification Prompt inputs Central. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول3داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    }
+  ]
+}

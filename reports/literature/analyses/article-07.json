@@ -1,0 +1,381 @@
+{
+  "id": "article-07",
+  "title": {
+    "en": "Agentic AI home energy management system: A large language model framework for residential load scheduling",
+    "fa": "هماهنگ‌سازی عامل‌محور مدیریت انرژی خانه"
+  },
+  "short_title": "Agentic AI HEMS orchestration",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Research problem and scope",
+        "fa": "مسئله و دامنه"
+      },
+      "paragraphs": [
+        {
+          "en": "El Makroum, Zwickl-Bernhard and Kranzl, Results in Engineering 29 (2026),109857. The study asks whether open-source LLMs can orchestrate residential appliance scheduling from natural language through tool use. It evaluates scheduling optimality, multi-appliance coordination and analytical-query handling; no numbered formal hypotheses are stated.",
+          "fa": "El Makroum و همکاران،۲۰۲۶. امکان هماهنگ‌سازی زمان‌بندی وسایل از زبان طبیعی با ابزار و مدل باز بررسی می‌شود. بهینگی، هماهنگی چندوسیله‌ای و پرسش تحلیلی ارزیابی می‌شوند؛ فرضیه رسمی شماره‌دار ندارد.",
+          "pages": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Orchestrator, specialists and numerical tool",
+        "fa": "هماهنگ‌گر، متخصص‌ها و ابزار عددی"
+      },
+      "paragraphs": [
+        {
+          "en": "One ReAct orchestrator uses six tools: electricity prices, EV calendar constraints, window sums, specialist delegation, scheduling and finish. Three single-turn specialist agents cover washing machine, dishwasher and EV. Deterministic exhaustive window-sum analysis evaluates 96 fifteen-minute price slots; an LLM selects/communica tes structured recommendations. No few-shot demonstrations or fine-tuning are used.",
+          "fa": "یک هماهنگ‌گر ReAct شش ابزار قیمت، تقویم EV، مجموع پنجره، واگذاری، زمان‌بندی و پایان دارد. سه متخصص تک‌نوبتی لباس‌شویی، ظرف‌شویی و EV را پوشش می‌دهند. ابزار قطعی پنجره قیمت۹۶گام پانزده‌دقیقه‌ای را بررسی و مدل پیشنهاد ساختاریافته ارائه می‌کند. مثال کم‌نمونه و تنظیم دقیق استفاده نشده است.",
+          "pages": [
+            4,
+            5
+          ]
+        },
+        {
+          "en": "ENTSO-E live Austrian prices and Google Calendar title/time fields enter the workflow. The calendar demonstration uses weekday working hours 08:00–18:00. Appliance power/durations are 2 kW/120 min,1.8 kW/90 min,7.4 kW/360 min. schedule_appliance validates indices and emits a 96-element binary schedule. Appendix B gives the MILP benchmark formulation; Git Hub code and prompts are reported available.",
+          "fa": "قیمت زنده اتریش ENTSO-E و عنوان/زمان Google Calendar ورودی‌اند؛ مثال تقویم روزکاری۸تا۱۸ است. توان/مدت وسایل۲کیلووات/۱۲۰دقیقه،۱٫۸/۹۰ و۷٫۴/۳۶۰ است. ابزار زمان‌بندی آرایه دودویی۹۶تایی می‌سازد. MILP در پیوست B و کد/پرامپت در GitHub گزارش شده‌اند.",
+          "pages": [
+            4,
+            5,
+            12,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Models, trials and comparisons",
+        "fa": "مدل‌ها، اجراها و مقایسه"
+      },
+      "paragraphs": [
+        {
+          "en": "Llama-3.3-70 B, Qwen-3-32 B, GPT-OSS-120 B use temperature 0 with five runs per scenario/model. All 75 runs occur on 14 October 2025 for next-day prices:15 single-appliance,15 multi-appliance and 45 analytical queries across baseline/minimal-guidance/explicit-workflow prompts. MILP supplies optimal start-time reference.",
+          "fa": "سه مدل Llama-3.3-70B،Qwen-3-32B وGPT-OSS-120B با دمای صفر و پنج اجرا در هر سناریو/مدل آزموده شده‌اند.۷۵اجرا در۱۴اکتبر۲۰۲۵ شامل۱۵تک‌وسیله،۱۵چندوسیله و۴۵پرسش تحلیلی در سه سطح راهنماست. MILP مرجع زمان بهینه است.",
+          "pages": [
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": {
+        "en": "Optimality, coordination and overhead",
+        "fa": "بهینگی، هماهنگی و سربار"
+      },
+      "paragraphs": [
+        {
+          "en": "All models are 5/5 optimal for washing machine only. For three appliances Llama succeeds 5/5 with all appliances optimal,9 iterations,32883 tokens and 14.7 s. Qwen schedules all three 1/5; in that run EV is not optimal. GPT-OSS succeeds 0/5 and generally stops after washing machine. Qwen metrics 31.4 s/35401 tokens are conditional on its one completed run; GPT-OSS metrics are from four partial runs.",
+          "fa": "همه مدل‌ها در لباس‌شویی۵/۵بهینه‌اند. Llama در سه وسیله۵/۵،۹تکرار،۳۲۸۸۳توکن و۱۴٫۷ثانیه دارد. Qwen فقط۱/۵هر سه را زمان‌بندی می‌کند و EV همان اجرا بهینه نیست. GPT-OSS صفر/۵است. زمان۳۱٫۴ثانیه Qwen فقط مربوط به اجرای کامل آن و آمار GPT مربوط به اجراهای ناقص است.",
+          "pages": [
+            5,
+            6
+          ]
+        },
+        {
+          "en": "Analytical price queries require explicit workflow guidance for consistent tool selection. The paper reports infrastructure dependence on high-throughput inference and discusses the energy/token overhead of LLM coordination. This demonstrates tool orchestration on a small scheduling task, not direct solution of thermally coupled HVAC control.",
+          "fa": "پرسش تحلیلی قیمت برای انتخاب ابزار پایدار به راهنمای صریح گردش‌کار نیاز دارد. وابستگی به استنتاج سریع و سربار انرژی/توکن مطرح است. نتیجه، هماهنگی ابزار در زمان‌بندی کوچک است و کنترل حرارتی به‌هم‌پیوسته را اثبات نمی‌کند.",
+          "pages": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated limitations and future work",
+        "fa": "محدودیت‌ها و آینده نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Only three appliance types, one household/day and 75 trials; no thermal loads, adaptive learning or long-term field validation. Calendar and cheapest-price windows did not conflict, so deadline–cost tradeoffs were not tested. Security testing used synthetic development inputs; physical device safeguards and independent red-teaming remain necessary. Authors propose hybrid optimization, broader markets/seasons and longitudinal pilots.",
+          "fa": "سه وسیله، یک خانه/روز و۷۵اجرا؛ بار حرارتی، یادگیری تطبیقی و اعتبارسنجی بلندمدت ندارد. تقویم و پنجره کم‌هزینه تعارض نداشتند و مصالحه مهلت/هزینه آزموده نشد. امنیت فقط ورودی مصنوعی توسعه است؛ ایمنی دستگاه و تیم قرمز مستقل لازم است. روش ترکیبی و آزمون گسترده آینده‌اند.",
+          "pages": [
+            11,
+            12
+          ]
+        }
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "An executable hierarchical LLM-HEMS precedent for our topology/control comparison; it prevents claiming orchestration alone as novelty.",
+      "fa": "پیشینه اجرایی HEMS سلسله‌مراتبی برای مقایسه توپولوژی/کنترل ماست و نوآوری صرف هماهنگ‌سازی را محدود می‌کند.",
+      "pages": [
+        4,
+        12
+      ]
+    },
+    "contribution": {
+      "en": "Concrete tool contracts, single-turn specialists, termination flow and per-run coordination/token/latency metrics.",
+      "fa": "قرارداد ابزار، متخصص تک‌نوبتی، پایان گردش‌کار و معیار هماهنگی/توکن/تأخیر فراهم می‌کند.",
+      "pages": [
+        4,
+        6
+      ]
+    },
+    "employment": {
+      "en": "Reuse the orchestration pattern and structured schedules behind our safety gateway; align devices and forecasts to Alameda and instrument partial/failed runs. Do not assume an independent shiftable-load optimum solves coupled HVAC/battery/EV scheduling.",
+      "fa": "الگوی هماهنگی و برنامه ساختاریافته پشت دروازه ایمنی اقتباس شود؛ دستگاه/پیش‌بینی با Alameda تطبیق و شکست‌های جزئی ثبت شوند. بهینه مستقل بار انتقال‌پذیر را حل‌کننده HVAC/باتری/EV وابسته فرض نکنیم.",
+      "pages": [
+        4,
+        11
+      ]
+    },
+    "baseline": {
+      "en": "High-priority adapted agentic scheduling baseline. Match common devices/task/evidence and keep MILP as numerical benchmark. Exact original three-appliance reproduction is optional and separate from our main causal contribution.",
+      "fa": "خط‌مبنای اقتباسی زمان‌بندی عامل‌محور با اولویت بالاست. وظیفه/دستگاه/شاهد مشترک و MILP مرجع باشد. بازتولید دقیق سه وسیله اختیاری و جدا از سهم علّی اصلی است.",
+      "pages": [
+        5,
+        12
+      ]
+    }
+  },
+  "critical": [
+    {
+      "en": "Reported optimality relies on an exhaustive numerical window tool. The experiment does not show unaided LLM numerical optimization. Five-run, one-day model success rates should not be generalized into universal model rankings.",
+      "fa": "بهینگی به ابزار عددی جست‌وجوی کامل پنجره متکی است و بهینه‌سازی عددی مستقل مدل را نشان نمی‌دهد. رتبه مدل در پنج اجرا/یک روز عمومی نیست.",
+      "pages": [
+        4,
+        5,
+        12
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "Single appliance:100% all models. Three appliances: Llama 100%, Qwen 20%, GPT-OSS 0% scheduling completion.",
+      "fa": "تک‌وسیله:۱۰۰٪همه؛ تکمیل سه وسیله:Llama۱۰۰٪،Qwen۲۰٪،GPT-OSSصفر٪.",
+      "pages": [
+        5,
+        6
+      ]
+    }
+  ],
+  "bibliography_start_page": 15,
+  "coverage_notes": {
+    "en": "Main text, appendices, figure and table source pages, and biblio graphy reviewed. Figure/table images retain exact original values. Only explicitly printed numerical results are trans cr i bed; plotted curves are not digitized. Project-role recommendations are separate reviewer judgments.",
+    "fa": "متن، پیوست‌ها، صفحات شکل و جدول و کتاب‌نامه مرور شده‌اند. تصاویر منبع مقادیر اصلی را حفظ می‌کنند. فقط اعداد صریح چاپ‌شده ثبت و منحنی‌ها تخمین زده نشده‌اند. پیشنهاد نقش در پروژه، قضاوت مستقل مرورگر است."
+  },
+  "figures": [
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "Fig. 1. Agentic AI HEMS Architecture: A central orchestrator agent coordinates three specialist load agents using the ReAct pattern, leveraging external APIs for  price and calendar data, and committing optimized schedules to smart home devices. evaluate all valid time windows and identify the minimum-cost sched-",
+        "fa": "هماهنگ‌گرReActبه سه متخصص تک‌نوبتی وابزاربیرونی واگذارمی‌کند."
+      },
+      "explanation": {
+        "en": "The central ReAct orchestrator delegates to three single-turn load specialists and external tools.",
+        "fa": "هماهنگ‌گرReActبه سه متخصص تک‌نوبتی وابزاربیرونی واگذارمی‌کند."
+      },
+      "data": {
+        "en": "Six orchestrator tools serve three appliances. Numerical window search is deterministic.",
+        "fa": "شش ابزار وسه وسیله؛جست‌وجوی عددی پنجره قطعی است."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "caption": {
+        "en": "Fig. 2. MILP-optimal multi-appliance scheduling for 15 October 2025 using real Austrian day-ahead prices. The red shaded region indicates the most expensive 3-h  slot (6:30-9:30 AM), which serves as the validation benchmark for the analytical query evaluation. All three appliances are scheduled during the low-price overnight  period, with the EV charger starting at 00:15, washing machine at 02:30, and dishwasher at 02:45, minimizing total electricity cost by avoiding the high-price",
+        "fa": "برنامهبهینهMILPسه وسیله راباقیمت اتریش هم‌ترازمی‌کند."
+      },
+      "explanation": {
+        "en": "MILP-optimal next-day schedules align the three appliances with Austrian prices.",
+        "fa": "برنامهبهینهMILPسه وسیله راباقیمت اتریش هم‌ترازمی‌کند."
+      },
+      "data": {
+        "en": "EV starts at 00:15, washing machine at 02:30 and dishwasher at 02:45; the expensive window is 06:30–09:30 on 15 October 2025.",
+        "fa": "شروعEV۰۰:۱۵،لباس‌شویی۰۲:۳۰،ظرف‌شویی۰۲:۴۵؛پنجره گران۰۶:۳۰–۰۹:۳۰."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "caption": {
+        "en": "Fig. 3. Scheduling performance metrics across single-appliance (a) and multi-appliance (b) scenarios. (a) All models achieve 100% optimality with similar computa- tional requirements for single-appliance coordination, with token consumption varying by approximately 20% (13,122 to 15,792). (b) Multi-appliance coordination  reveals substantial scaling: token consumption increases by a factor of 2.5 (32,883 vs 13,122 for Llama-3.3), while GPT-OSS exhibits reduced resource usage (19,385",
+        "fa": "توکن،زمان وتکرار،هماهنگی تک‌وچندوسیله رامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "Tokens, execution time and iterations compare single- and multi-appliance coordination.",
+        "fa": "توکن،زمان وتکرار،هماهنگی تک‌وچندوسیله رامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Llama uses 13,122 tokens / 4.8 s for one appliance and 32,883 tokens / 14.7 s for three. Other models use conditional run denominators in Table 4.",
+        "fa": "Llamaتک۱۳۱۲۲توکن/۴٫۸ثانیه؛چند۳۲۸۸۳/۱۴٫۷؛مخرجسایرمدل‌هامشروطاست."
+      }
+    },
+    {
+      "id": "4",
+      "page": 7,
+      "caption": {
+        "en": "Fig. 4. Abbreviated ReAct traces from multi-appliance scheduling runs. Both models receive identical user requests and follow the same initial steps (iterations  1–4). At iteration 5, Llama-3.3-70 B continues delegating to the dishwasher agent, while GPT-OSS-120 B terminates prematurely after scheduling only the washing  machine, skipping both the dishwasher and EV charger despite having retrieved the calendar constraint for EV scheduling.",
+        "fa": "ردReActهماهنگی موفقLlamaوشکستGPT-OSSرابرایدرخواستیکسانمقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "ReAct traces contrast successful Llama orchestration and failed GPT-OSS coordination for the same request.",
+        "fa": "ردReActهماهنگی موفقLlamaوشکستGPT-OSSرابرایدرخواستیکسانمقایسه می‌کند."
+      },
+      "data": {
+        "en": "These are example delegation and termination traces, not aggregate success rates.",
+        "fa": "رد،مثالواگذاری/پایان است،نه نرخموفقیتتجمیعی."
+      }
+    },
+    {
+      "id": "5",
+      "page": 8,
+      "caption": {
+        "en": "Fig. 5. Model performance comparison across single and multi-appliance scheduling scenarios. All three models achieve 100% success for single-appliance coor- dination, but only Llama-3.3 maintains this performance in multi-appliance contexts. Qwen-3 successfully schedules washing machine and dishwasher but fails EV  coordination, while GPT-OSS only attempts washing machine scheduling.",
+        "fa": "موفقیتوخروجی هر وسیله شکافهماهنگی چندوسیله رانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "Success rates and per-appliance outcomes expose the multi-device coordination gap.",
+        "fa": "موفقیتوخروجی هر وسیله شکافهماهنگی چندوسیله رانشان می‌دهد."
+      },
+      "data": {
+        "en": "Single-appliance success is 100% for every model; multi-appliance completion is 100% for Llama, 20% for Qwen and 0% for GPT-OSS.",
+        "fa": "تک‌وسیلههمه۱۰۰٪؛تکمیلچند:Llama۱۰۰٪،Qwen۲۰٪،GPTصفر٪."
+      }
+    },
+    {
+      "id": "6",
+      "page": 9,
+      "caption": {
+        "en": "Fig. 6. Multi-dimensional model performance comparison for multi-appliance scheduling. All metrics are normalized against Llama-3.3-70 B as the baseline (higher  values indicate better performance). Qwen-3 achieves 20% success with comparable per-appliance token eﬃciency but substantially slower execution (31.4 s vs  14.7 s).",
+        "fa": "رادارموفقیت،سرعتوبازده منبعنرمال‌شدهنسبتبهLlamaرامقایسه می‌کند."
+      },
+      "explanation": {
+        "en": "The radar compares normalized success, speed and resource efficiency against Llama.",
+        "fa": "رادارموفقیت،سرعتوبازده منبعنرمال‌شدهنسبتبهLlamaرامقایسه می‌کند."
+      },
+      "data": {
+        "en": "Normalized scores must be read with the partial-run denominators and original metrics in Table 4.",
+        "fa": "امتیازنرمالنباید میانگیناجرایناقصراپنهانکند؛مخرجاصلیجدول۴است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 10,
+      "caption": {
+        "en": "Fig. 7. Impact of progressive prompt engineering on analytical query performance. All models required explicit workﬂow guidance to achieve consistent success,  with GPT-OSS-120 B demonstrating earlier responsiveness to minimal guidance compared to Llama-3.3-70 B and Qwen-3-32 B. overhead. Beyond scheduling optimization, the conversational interface",
+        "fa": "پرامپت تدریجی انتخابابزارپرسشتحلیلی رابدون/باراهنمایکم/صریحمی‌سنجد."
+      },
+      "explanation": {
+        "en": "Progressive prompts test analytical-query tool selection with no, minimal and explicit guidance.",
+        "fa": "پرامپت تدریجی انتخابابزارپرسشتحلیلی رابدون/باراهنمایکم/صریحمی‌سنجد."
+      },
+      "data": {
+        "en": "There are 45 analytical trials across three prompt stages. Authors report explicit workflow guidance is needed for consistent performance.",
+        "fa": "۴۵آزمونتحلیلی درسه‌مرحله؛متننیازبهراهنمایصریحرابرایپایداریگزارشمی‌کند."
+      }
+    },
+    {
+      "id": "A.1",
+      "page": 13,
+      "caption": {
+        "en": "Fig. A.1. Web-based interface for agentic AI HEMS evaluation. Users interact through natural language requests without technical conﬁguration, with example  prompts organized by complexity (Single Appliance, Multiple Appliances, Natural Language Variations). Results in Engineering 29 (2026) 109857",
+        "fa": "رابطوبدرخواستزمان‌بندی زبانی ومثال تعاملرانشان می‌دهد."
+      },
+      "explanation": {
+        "en": "The web interface accepts natural-language scheduling requests and shows example interactions.",
+        "fa": "رابطوبدرخواستزمان‌بندی زبانی ومثال تعاملرانشان می‌دهد."
+      },
+      "data": {
+        "en": "This is a user-interface example, not a user-acceptance study.",
+        "fa": "مثالرابطاست،نه مطالعهپذیرشکاربر."
+      }
+    },
+    {
+      "id": "A.2",
+      "page": 14,
+      "caption": {
+        "en": "Fig. A.2. Analytics dashboard for system performance monitoring. The Run Details view enables detailed analysis of orchestrator decisions and actions for each  execution, including ReAct iteration traces, tool invocations, and specialist agent coordination sequences. Appendix B.  MILP optimization formulation",
+        "fa": "داشبوردتحلیل،کنشو مصرفمنبعهر اجرایهماهنگ‌گررا آشکارمی‌کند."
+      },
+      "explanation": {
+        "en": "The analytics dashboard exposes run-level orchestrator actions and resource use.",
+        "fa": "داشبوردتحلیل،کنشو مصرفمنبعهر اجرایهماهنگ‌گررا آشکارمی‌کند."
+      },
+      "data": {
+        "en": "Run details support auditing; this interface adds no new experimental trials.",
+        "fa": "نمایاجرایجزئیممیزیراپشتیبانی می‌کند؛آزمایشجدیدنیست."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 3,
+      "title": {
+        "en": "Summary of LLM-based energy system applications, outlining their key architectural distinctions.  Ref Approach LLM Role Output Key Distinction Zhang et al. [15] EV charging DSM with RAG Generates optimization code for",
+        "fa": "جدول1:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 1 provides: Summary of LLM-based energy system applications, outlining their key architectural distinctions.  Ref Approach LLM Role Output Key Distinction Zhang et al. [15] EV charging DSM with RAG Generates optimization code for. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول1داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "title": {
+        "en": "Appliance speciﬁcations for system evaluation.   Appliance  Power Rating (kW)  Duration (minutes)  Timeslots (15-min)  Washing Machine (WM)  2.0  120  8",
+        "fa": "جدول2:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 2 provides: Appliance speciﬁcations for system evaluation.   Appliance  Power Rating (kW)  Duration (minutes)  Timeslots (15-min)  Washing Machine (WM)  2.0  120  8. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول2داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 6,
+      "title": {
+        "en": "Three-appliance scheduling performance",
+        "fa": "عملکردزمان‌بندی سه وسیله"
+      },
+      "summary": {
+        "en": "The original three-appliance scheduling performance are retained with all rows and units in the source view. The report discusses selected numerical comparisons in context.",
+        "fa": "عملکردزمان‌بندی سه وسیلهبه‌همراه تمام سطرها وواحدها درصفحه اصلی حفظ شده است؛مقایسه عددی منتخب درگزارش توضیح داده می‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 5,
+      "title": {
+        "en": "Single-appliance scheduling performance (washing machine only).   Model  WM Optimal  Avg Iterations  Avg Tokens  Avg Time (s)  Llama-3.3-70 B  5/5 (100%)  4.0  13,122  4.8",
+        "fa": "جدول3:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 3 provides: Single-appliance scheduling performance (washing machine only).   Model  WM Optimal  Avg Iterations  Avg Tokens  Avg Time (s)  Llama-3.3-70 B  5/5 (100%)  4.0  13,122  4.8. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول3داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "title": {
+        "en": "Analytical query performance across experimental stages.   Stage  Model  Tool Used  Correct  Avg Iter.  Avg Tokens  Avg Time (s)  Baseline  Llama-3.3-70 B  0/5 (0%)  0/5 (0%)  3.8  13,152  3.6",
+        "fa": "جدول5:داده‌ها ومقایسه‌های منبع"
+      },
+      "summary": {
+        "en": "Table 5 provides: Analytical query performance across experimental stages.   Stage  Model  Tool Used  Correct  Avg Iter.  Avg Tokens  Avg Time (s)  Baseline  Llama-3.3-70 B  0/5 (0%)  0/5 (0%)  3.8  13,152  3.6. Preserve the complete printed rows, units, conditions and footnotes in the source view; selected relevant numerical results are explained in this report.",
+        "fa": "جدول5داده‌های اصلی رابه‌همراه واحد،شرط وپانویس ارائه می‌کند؛اعدادمرتبط دربخش نتایج توضیح داده شده‌اند وتمام سطرهادرنمایمنبع حفظ شده‌اند."
+      }
+    }
+  ]
+}

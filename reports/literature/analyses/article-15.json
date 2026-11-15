@@ -1,0 +1,457 @@
+{
+  "id": "article-15",
+  "short_title": "Rezaei / Evidence to agentic architecture",
+  "title": {
+    "en": "From systematic evidence to agentic architectures: A systematic review and framework for large language model–driven smart grids",
+    "fa": "از شواهد نظام‌مند تا معماری‌های عامل‌محور: مرور و چارچوب شبکه هوشمند مبتنی بر مدل زبانی"
+  },
+  "bibliography_start_page": 24,
+  "coverage_notes": {
+    "en": "Review of the supplied 26-page PDF, including its four numbered figures, fifteen tables, review method, conceptual workflow, author limitations and full bibliography. Figures are displayed as original source pages with surrounding context; numerical graph coordinates are not estimated. This paper presents evidence synthesis and a conceptual architecture, not a newly validated end-to-end HEMS.",
+    "fa": "مرور PDF ارائه‌شده در ۲۶ صفحه شامل چهار شکل، پانزده جدول، روش مرور، گردش مفهومی، محدودیت نویسندگان و کتاب‌نامه است. تصاویر صفحه اصلی با بافت پیرامون نمایش داده شده و مختصات نمودار تخمین زده نمی‌شود. این مقاله ترکیب شواهد و معماری مفهومی است و سامانه HEMS تازه اعتبارسنجی‌شده ارائه نمی‌کند."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, research questions & hypothesis status",
+        "fa": "مشخصات، پرسش‌ها و وضعیت فرضیه"
+      },
+      "paragraphs": [
+        {
+          "en": "Zahra Rezaei, Mohammad Amin Amini and Yaser Mike Banad. Energy and AI 25 (2026),100853. The three explicit questions ask how AI/ML evolved toward LLM intelligence, which functional LLM roles and gaps exist, and which architectural patterns and challenges inform trustworthy agentic grids. There is no numbered experimental hypothesis set.",
+          "fa": "زهرا رضایی، محمدامین امینی و یاسر مایک بناد؛ Energy and AI جلد ۲۵، سال ۲۰۲۶. سه پرسش صریح درباره تحول AI/ML به مدل زبانی، نقش‌ها و شکاف‌های مدل و الگوهای معماری و چالش‌های شبکه عامل‌محور قابل اعتماد هستند. فرضیه آزمایشی شماره‌دار وجود ندارد.",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Systematic review method & evidence extraction",
+        "fa": "روش مرور نظام‌مند و استخراج شواهد"
+      },
+      "paragraphs": [
+        {
+          "en": "The search covers Scopus, Web of Science, IEEE Xplore and ScienceDirect, with a 2019–2026 window and executable queries in Table1. Search dates are 15–16 January2026. It retains technically substantive English full texts, removes duplicate versions and excludes reviews during eligibility to focus the synthesis on primary evidence. Some recent preprints/early-access works are admitted despite the abstract’s description of a peer-reviewed corpus.",
+          "fa": "جست‌وجو در Scopus، Web of Science، IEEE Xplore و ScienceDirect با بازه ۲۰۱۹ تا ۲۰۲۶ و تاریخ ۱۵ و ۱۶ ژانویه ۲۰۲۶ انجام شده است. پرس‌وجوها در جدول۱ آمده‌اند. متون انگلیسی فنی حفظ، نسخه‌های تکراری حذف و مرورها در ارزیابی صلاحیت کنار گذاشته می‌شوند. برخی پیش‌چاپ‌ها نیز با وجود توصیف چکیده از آثار داوری‌شده وارد شده‌اند.",
+          "pages": [
+            3
+          ]
+        },
+        {
+          "en": "The review reports 123 initial records,81 after initial screening and61 in final synthesis. Quality assessment considers topical/technical/architectural relevance, methodological clarity, validation and reproducibility. Coding captures LLM role, agent behavior, tools, semantic grounding, Twin integration, governance and primary/secondary layer placement. Consensus checking is described; limitations later state primary screening/extraction by one researcher with subset agreement Cohen κ=.82.",
+          "fa": "مرور ۱۲۳ رکورد اولیه،۸۱ پس از غربال نخست و۶۱ اثر نهایی گزارش می‌کند. کیفیت با ارتباط موضوعی/فنی/معماری، وضوح روش، اعتبارسنجی و بازتولید سنجیده می‌شود. کدگذاری نقش مدل، رفتار عامل، ابزار، معنای زمینه، دوقلو و حکمرانی را ثبت می‌کند. بررسی توافق توصیف شده؛ محدودیت‌ها غربال و استخراج اصلی توسط یک فرد و توافق زیرمجموعه با کاپای۰٫۸۲ را بیان می‌کنند.",
+          "pages": [
+            4,
+            6,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": {
+        "en": "Taxonomy, proposed architecture & implementation boundaries",
+        "fa": "رده‌بندی، معماری و مرز پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "The role taxonomy distinguishes interface, reasoner and agent. The six-layer synthesis covers physical/data acquisition, processing/context abstraction, LLM cognitive reasoning, multi-agent coordination, tool-augmented execution and cross-layer feedback/governance. Twin simulation and engineering validation bound proposed actions. The authors explicitly call this an author-level synthesis rather than a system implemented by any single reviewed study.",
+          "fa": "رده‌بندی نقش‌ها شامل رابط، استدلال‌گر و عامل است. ترکیب شش‌لایه شامل دریافت داده فیزیکی، پردازش/زمینه، استدلال مدل، هماهنگی چندعاملی، اجرای ابزارمحور و بازخورد/حکمرانی میان‌لایه‌ای است. شبیه‌سازی دوقلو و اعتبارسنجی مهندسی پیشنهاد کنش را محدود می‌کنند. نویسندگان این را ترکیب مفهومی خود و نه سامانه پیاده‌شده یک مطالعه می‌نامند.",
+          "pages": [
+            6,
+            7,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "en": "The illustrative renewable-generation scenario follows data acquisition, context construction, forecast/optimization tool requests, coordination, Twin checks and human oversight. Generated outputs are decision hypotheses before engineering validation, not independently executable control commands. It provides workflow responsibilities, not executable APIs, a fitted causal graph or a numerical controller specification.",
+          "fa": "سناریوی نمونه تولید تجدیدپذیر از دریافت داده، ساخت زمینه، درخواست پیش‌بینی/بهینه‌سازی، هماهنگی، آزمون دوقلو و نظارت انسانی می‌گذرد. خروجی پیش از اعتبارسنجی مهندسی فرض تصمیم است و فرمان کنترل مستقل نیست. مسئولیت گردش کار ارائه می‌شود، نه API اجرایی، گراف علّی برازش‌شده یا مشخصات عددی کنترل‌گر.",
+          "pages": [
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Evidence, comparisons & absence of new controller experiments",
+        "fa": "شواهد، مقایسه‌ها و نبود آزمایش کنترل‌گر جدید"
+      },
+      "paragraphs": [
+        {
+          "en": "This is not a new controller benchmark. There are no original seed-based HEMS trials, train/test controller splits or measured recovery-time comparisons for the proposed architecture. Table5 compares representative architectures qualitatively; Tables9–15 synthesize physical data, reasoning, coordination, tools, semantics, Twins and governance literature. The renewable scenario illustrates operational responsibility rather than demonstrating field performance.",
+          "fa": "این اثر معیار آزمایش کنترل‌گر تازه نیست. آزمون HEMS با بذر، تقسیم آموزش/آزمون کنترل‌گر یا مقایسه زمان بازیابی اندازه‌گیری‌شده برای معماری پیشنهادی ارائه نشده است. جدول۵ معماری‌ها را کیفی و جدول‌های۹ تا۱۵ منابع داده، استدلال، هماهنگی، ابزار، معنا، دوقلو و حکمرانی را ترکیب می‌کنند. سناریوی تجدیدپذیر مسئولیت عملیاتی را توضیح می‌دهد و عملکرد میدانی را ثابت نمی‌کند.",
+          "pages": [
+            9,
+            14,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        },
+        {
+          "en": "The proposed architecture is assessed as a design synthesis. Heterogeneity prevents quantitative meta-analysis. Therefore reported results of individual reviewed studies cannot be treated as a pooled performance result or an improvement achieved by this architecture.",
+          "fa": "معماری در قالب ترکیب طراحی ارزیابی می‌شود. ناهمگونی مانع فراتحلیل کمی است؛ بنابراین نتایج مطالعات مرورشده نتیجه تجمیعی یا بهبود حاصل از این معماری محسوب نمی‌شوند.",
+          "pages": [
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated value, limitations & research gaps",
+        "fa": "ارزش، محدودیت‌ها و شکاف‌های بیان‌شده"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors emphasize traceability from evidence to role taxonomy and architecture, numerical tools rather than standalone LLM decision making, and governance embedded across layers. Open challenges include numerical reliability, hallucinations, latency, scalability, semantic grounding, cybersecurity, standard evaluation and institutional constraints.",
+          "fa": "نویسندگان ردیابی شواهد تا رده‌بندی/معماری، ابزار عددی به‌جای تصمیم‌گیری مستقل مدل و حکمرانی میان‌لایه‌ای را برجسته می‌کنند. قابلیت اتکای عددی، توهم، تأخیر، مقیاس‌پذیری، زمینه معنایی، امنیت و ارزیابی استاندارد از چالش‌ها هستند.",
+          "pages": [
+            15,
+            16,
+            22,
+            23,
+            24
+          ]
+        },
+        {
+          "en": "Explicit limitations: primary screening/extraction by a single researcher, selective depth-oriented61-study corpus, heterogeneous metrics preventing meta-analysis, and no empirical end-to-end validation. Future work includes efficient domain models, federated reasoning, robust agent protocols, large-scale Twins, formal verification and real-world testing.",
+          "fa": "محدودیت‌های صریح: غربال/استخراج اصلی تک‌پژوهشگر، انتخاب پیکره۶۱تایی برای عمق، ناهمگونی معیار و نبود اعتبارسنجی تجربی سرتاسری. مدل دامنه کارآمد، استدلال فدرال، پروتکل مقاوم عامل، دوقلوی بزرگ‌مقیاس، راستی‌آزمایی رسمی و آزمون واقعی پیشنهاد شده‌اند.",
+          "pages": [
+            24
+          ]
+        }
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "The central outputs are a61-study qualitative synthesis, a three-role taxonomy and six-layer conceptual architecture. These are review/design outputs; no numerical energy-saving or intervention-recovery effect is demonstrated for the complete proposed stack.",
+      "fa": "خروجی اصلی ترکیب کیفی۶۱مطالعه، رده‌بندی سه‌نقشی و معماری مفهومی شش‌لایه است. این‌ها خروجی مرور/طراحی‌اند؛ اثر عددی صرفه‌جویی یا بازیابی برای کل معماری نشان داده نشده است.",
+      "pages": [
+        1,
+        24
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "PRISMA study-selection flow",
+        "fa": "گردش انتخاب PRISMA"
+      },
+      "explanation": {
+        "en": "The study-selection diagram links the initial123 records to the61-study final synthesis; the surrounding text records81 after first screening. Counts describe literature selection, not experimental participants.",
+        "fa": "شکل۱۲۳رکورد اولیه را به۶۱اثر نهایی وصل می‌کند و متن۸۱اثر پس از غربال نخست را بیان می‌کند. شمارش مربوط به انتخاب منابع است، نه شرکت‌کننده آزمایش."
+      },
+      "data": {
+        "en": "Explicit text counts:123 initial,81 first-stage retained,61 included. Do not infer unprinted exclusion breakdowns.",
+        "fa": "شمار صریح متن:۱۲۳اولیه،۸۱حفظ‌شده نخست و۶۱نهایی؛ جزئیات حذف چاپ‌نشده استنباط نمی‌شود."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Keyword co-occurrence and density maps",
+        "fa": "نقشه هم‌رخدادی و چگالی کلیدواژه"
+      },
+      "explanation": {
+        "en": "Panels visualize the bibliometric research landscape; the text distinguishes this broad bibliometric corpus from the refined61-study review subset. Network proximity does not establish causal dependence or implementation effectiveness.",
+        "fa": "پنل‌ها چشم‌انداز کتاب‌سنجی را نمایش می‌دهند؛ متن پیکره کتاب‌سنجی گسترده را از زیرمجموعه۶۱تایی جدا می‌کند. نزدیکی شبکه وابستگی علّی یا اثربخشی پیاده‌سازی نیست."
+      },
+      "data": {
+        "en": "No unlabeled edge weights, coordinates or cluster sizes are estimated.",
+        "fa": "وزن یال، مختصات و اندازه خوشه بدون برچسب تخمین زده نمی‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 10,
+      "caption": {
+        "en": "Operational interpretation of the six-layer architecture",
+        "fa": "تفسیر عملیاتی معماری شش‌لایه"
+      },
+      "explanation": {
+        "en": "Shows information and decision flow from acquisition through reasoning, coordination, tools and validation, with cross-layer governance. It is a proposed workflow, not a measured causal model.",
+        "fa": "جریان داده و تصمیم از دریافت تا استدلال، هماهنگی، ابزار و اعتبارسنجی با حکمرانی میان‌لایه‌ای نمایش داده می‌شود. این گردش پیشنهادی است و مدل علّی اندازه‌گیری‌شده نیست."
+      },
+      "data": {
+        "en": "Conceptual diagram; no numerical experiment data.",
+        "fa": "نمودار مفهومی است و داده عددی آزمایش ندارد."
+      }
+    },
+    {
+      "id": "4",
+      "page": 11,
+      "caption": {
+        "en": "From model-centric AI to agentic intelligence",
+        "fa": "از هوش مدل‌محور تا عامل‌محور"
+      },
+      "explanation": {
+        "en": "Synthesizes physical infrastructure, semantic context, cognitive reasoning, agent roles, tool execution and feedback/governance. Read with the implementation and maturity limits of Tables6–8.",
+        "fa": "زیرساخت، زمینه معنایی، استدلال، نقش عامل، ابزار و بازخورد/حکمرانی را ترکیب می‌کند؛ باید همراه محدودیت پیاده‌سازی و بلوغ جدول‌های۶تا۸ خوانده شود."
+      },
+      "data": {
+        "en": "Six-layer design abstraction; no timing or accuracy values are inferred.",
+        "fa": "انتزاع طراحی شش‌لایه است؛ زمان یا دقت از آن استنباط نمی‌شود."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 3,
+      "title": {
+        "en": "Search strategies and queries",
+        "fa": "راهبرد و پرس‌وجوی جست‌وجو"
+      },
+      "summary": {
+        "en": "Four databases, query fields, publication filters,2019–2026 period and January2026 search dates.",
+        "fa": "چهار پایگاه، میدان پرس‌وجو، فیلتر،بازه۲۰۱۹تا۲۰۲۶ و تاریخ ژانویه۲۰۲۶."
+      }
+    },
+    {
+      "id": "2",
+      "page": 6,
+      "title": {
+        "en": "Quality assessment",
+        "fa": "ارزیابی کیفیت"
+      },
+      "summary": {
+        "en": "Criteria cover topical, technical, architectural, methodological, validation and reproducibility information.",
+        "fa": "معیارها ارتباط موضوعی/فنی/معماری،روش،اعتبارسنجی و بازتولید را پوشش می‌دهند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 6,
+      "title": {
+        "en": "Structured coding dimensions",
+        "fa": "ابعاد کدگذاری"
+      },
+      "summary": {
+        "en": "Fields include LLM/agent role, tool use, semantics,Twin integration,governance,validation and layer placement.",
+        "fa": "فیلدها نقش مدل/عامل، ابزار،معنا،دوقلو،حکمرانی،اعتبارسنجی و جایگاه لایه‌اند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 7,
+      "title": {
+        "en": "Evidence-extraction framework",
+        "fa": "چارچوب استخراج شواهد"
+      },
+      "summary": {
+        "en": "Standardizes extracted evidence to connect individual studies to synthesis and architecture.",
+        "fa": "شواهد را برای اتصال مطالعه منفرد به ترکیب و معماری استاندارد می‌کند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 9,
+      "title": {
+        "en": "Representative architecture comparison",
+        "fa": "مقایسه معماری‌های نماینده"
+      },
+      "summary": {
+        "en": "Qualitative comparison of existing approaches and limitations; not a matched experiment.",
+        "fa": "مقایسه کیفی رویکردها و محدودیت‌ها است و آزمایش همسان نیست."
+      }
+    },
+    {
+      "id": "6",
+      "page": 14,
+      "title": {
+        "en": "Operational roles and outputs",
+        "fa": "نقش‌ها و خروجی عملیاتی"
+      },
+      "summary": {
+        "en": "Maps the renewable-management scenario across layers and validation responsibilities.",
+        "fa": "سناریوی مدیریت تجدیدپذیر را به لایه و مسئولیت اعتبارسنجی نگاشت می‌کند."
+      }
+    },
+    {
+      "id": "7",
+      "page": 15,
+      "title": {
+        "en": "Architecture maturity",
+        "fa": "بلوغ معماری"
+      },
+      "summary": {
+        "en": "Qualitative evidence maturity, not formal technology-readiness levels or demonstrated stack performance.",
+        "fa": "بلوغ کیفی شواهد است،نه سطح رسمی آمادگی فناوری یا عملکرد ثابت‌شده کل سامانه."
+      }
+    },
+    {
+      "id": "8",
+      "page": 15,
+      "title": {
+        "en": "Bounded autonomy and governance",
+        "fa": "خودمختاری محدود و حکمرانی"
+      },
+      "summary": {
+        "en": "Defines engineering checks and human oversight before control execution.",
+        "fa": "کنترل مهندسی و نظارت انسانی پیش از اجرا را مشخص می‌کند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 17,
+      "title": {
+        "en": "Physical/data literature",
+        "fa": "منابع زیرساخت و داده"
+      },
+      "summary": {
+        "en": "Source studies supporting perception and acquisition; heterogeneous devices and tasks.",
+        "fa": "مطالعات دریافت و حسگری با تجهیزات و وظایف ناهمگون."
+      }
+    },
+    {
+      "id": "10",
+      "page": 18,
+      "title": {
+        "en": "LLM reasoning literature",
+        "fa": "منابع استدلال مدل"
+      },
+      "summary": {
+        "en": "LLM reasoning and operator support evidence; numerical tool dependence remains relevant.",
+        "fa": "شواهد استدلال و پشتیبانی اپراتور؛وابستگی به ابزار عددی مهم است."
+      }
+    },
+    {
+      "id": "11",
+      "page": 19,
+      "title": {
+        "en": "Multi-agent coordination literature",
+        "fa": "منابع هماهنگی چندعاملی"
+      },
+      "summary": {
+        "en": "Compares coordination across applications; no proof that more agents always improve outcomes.",
+        "fa": "هماهنگی در کاربردهای مختلف؛اثبات بهبود همیشگی با عامل بیشتر نیست."
+      }
+    },
+    {
+      "id": "12",
+      "page": 20,
+      "title": {
+        "en": "Tool-augmented optimization literature",
+        "fa": "منابع بهینه‌سازی ابزارمحور"
+      },
+      "summary": {
+        "en": "Evidence linking language reasoning to solvers,simulation and executable engineering tools.",
+        "fa": "شواهد اتصال استدلال زبانی به حل‌گر،شبیه‌سازی و ابزار مهندسی."
+      }
+    },
+    {
+      "id": "13",
+      "page": 21,
+      "title": {
+        "en": "Semantic interoperability literature",
+        "fa": "منابع تعامل‌پذیری معنایی"
+      },
+      "summary": {
+        "en": "Knowledge representations,context abstraction and compliance roles.",
+        "fa": "نقش نمایش دانش،انتزاع زمینه و انطباق."
+      }
+    },
+    {
+      "id": "14",
+      "page": 21,
+      "title": {
+        "en": "Twin and cyber-physical literature",
+        "fa": "منابع دوقلو و سامانه سایبرفیزیکی"
+      },
+      "summary": {
+        "en": "Virtual validation and feedback integration; different validation maturities.",
+        "fa": "اعتبارسنجی مجازی و بازخورد با بلوغ‌های متفاوت."
+      }
+    },
+    {
+      "id": "15",
+      "page": 22,
+      "title": {
+        "en": "Governance and trust literature",
+        "fa": "منابع حکمرانی و اعتماد"
+      },
+      "summary": {
+        "en": "Safety,explainability,cybersecurity and human oversight coverage; the review identifies fragmentation.",
+        "fa": "ایمنی،توضیح‌پذیری،امنیت و نظارت انسانی؛مرور پراکندگی را نشان می‌دهد."
+      }
+    }
+  ],
+  "critical": [
+    {
+      "en": "The search table ends in January2026 while the stated window is2019–2026 and some references are early-access/preprints. Reproducibility needs the exact search snapshot and included-study list; do not interpret the window as a complete audit of all2026 publications.",
+      "fa": "جدول جست‌وجو در ژانویه۲۰۲۶ پایان می‌یابد،در حالی که بازه۲۰۱۹تا۲۰۲۶ و برخی منابع پیش‌چاپ‌اند. بازتولید به تصویر دقیق جست‌وجو و فهرست مطالعات نیاز دارد؛نباید آن را ممیزی تمام آثار۲۰۲۶ دانست.",
+      "pages": [
+        3
+      ]
+    },
+    {
+      "en": "The architecture’s generality is a design argument rather than experimental evidence for our causal-diagnosis/recovery claim. Use the layer decomposition to organize contracts; test the actual contribution with controlled interventions and matched baselines.",
+      "fa": "عمومیت معماری استدلال طراحی است،نه شاهد تجربی ادعای تشخیص علّی/بازیابی ما. تفکیک لایه برای سازمان‌دهی قرارداد مناسب است و سهم واقعی باید با مداخله کنترل‌شده و خط‌مبنای همسان آزموده شود.",
+      "pages": [
+        6,
+        24
+      ]
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "It closely overlaps the proposed combination of LLM orchestration,Twins,tools,agents and governance, so it is important both for architecture clarity and for limiting novelty claims.",
+      "fa": "با ترکیب پیشنهادی مدل زبانی،دوقلو،ابزار،عامل و حکمرانی همپوشانی نزدیک دارد؛برای وضوح معماری و محدودکردن ادعای نوآوری مهم است.",
+      "pages": [
+        1,
+        10,
+        24
+      ]
+    },
+    "contribution": {
+      "en": "It supplies an evidence-to-architecture taxonomy and a traceability framework. It does not supply a fitted dynamic SCM,our five-family degradation model or a validated causal intervention policy.",
+      "fa": "رده‌بندی شواهد تا معماری و چارچوب ردیابی فراهم می‌کند؛SCM پویای برازش‌شده،پنج خانواده افت یا سیاست مداخله علّی معتبر پروژه ما را ارائه نمی‌کند.",
+      "pages": [
+        6,
+        10,
+        24
+      ]
+    },
+    "employment": {
+      "en": "In P0/P7 map evidence,semantic context,diagnosis,agent coordination,solver calls,Twin validation and safety/execution contracts to explicit modules. In P9 use it to position the specific diagnosis-to-intervention contribution beyond generic DT+LLM integration.",
+      "fa": "در P0/P7 شواهد،زمینه،تشخیص،هماهنگی،حل‌گر،اعتبارسنجی دوقلو و قرارداد ایمنی/اجرا را به ماژول صریح نگاشت کنیم.در P9 سهم مشخص تشخیص تا مداخله را فراتر از ادغام عمومی دوقلو و مدل زبانی جایابی کنیم.",
+      "pages": [
+        10,
+        11,
+        12,
+        24
+      ]
+    },
+    "baseline": {
+      "en": "No executable baseline is required from this review itself. Use it as an architecture and novelty-collision reference; select and independently read its concrete primary methods before implementing any comparative algorithm. A six-layer-inspired variant would be our adaptation, not reproduction of a tested method from this paper.",
+      "fa": "پیاده‌سازی خط‌مبنای اجرایی از خود این مرور لازم نیست.منبع معماری و همپوشانی نوآوری است؛پیش از الگوریتم مقایسه باید روش اولیه مشخص آن مستقل خوانده شود.نسخه الهام‌گرفته شش‌لایه اقتباس ماست،نه بازتولید روش آزموده این مقاله.",
+      "pages": [
+        6,
+        24
+      ]
+    }
+  }
+}

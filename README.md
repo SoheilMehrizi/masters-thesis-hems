@@ -1,5 +1,11 @@
 # Reproducible CityLearn HEMS research setup
 
+Project navigation: [research proposal](docs/HEMS_Research_Landing_Final_Title_Updated.html),
+[literature library](docs/literature/index.html), and
+[interactive backlog](docs/PROJECT_BACKLOG.html).
+Read [AGENTS.md](AGENTS.md) for shared research context, implementation status,
+scientific boundaries, contributor rules, and handoff instructions.
+
 This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 `fd86484b8b438f03eb40c3ec06dc90caa349842d`, recovery of the supplied Custom
 Alameda package, and bounded validation of building
@@ -51,7 +57,57 @@ Each example run replaces `reports/example_rollout.json`; copy it if you need
 to retain multiple runs. Indices are zero-based simulation hours, not verified
 civil timestamps.
 
-## Use it from Python
+## Local simulator dashboard and CityLearn UI
+
+Install the optional UI dependencies into the existing environment:
+
+```powershell
+$env:UV_CACHE_DIR = Join-Path $PWD '.uv-cache'
+.\.tools\bin\uv.exe pip install --python .venv/Scripts/python.exe -r requirements-ui.lock
+```
+
+Start the dashboard:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start_dashboard.ps1
+```
+
+Open http://127.0.0.1:8501 in your browser. Use the sidebar to select the
+custom or frozen scenario, start hour, number of transitions, seed, and fixed
+HVAC action. Run experiments, inspect signals and temperature set points,
+compare saved runs, and download observations, complete JSON, or an interactive
+chart. Runs execute synchronously; wait for completion before starting another.
+Battery and EV actions remain zero. This is an experiment UI, not an optimized
+controller or a live step/pause interface.
+
+Every run gets a unique folder under `outputs/experiments/` (excluded from Git).
+Successful runs include `result.json`, configuration, and native CityLearn CSV
+exports. Failed runs retain their configuration and error message but do not
+appear in the successful-run selector. Dashboard controls do not modify the
+baseline configuration or recovered data. Download or back up important runs.
+
+To export without the dashboard:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/export_ui.py --start 0 --steps 48 --hvac 0.2
+```
+
+Open [CityLearn UI](https://citylearnui.netlify.app/), click **Choose folders**,
+and select the exact export directory printed by the command or dashboard.
+Native CSV exports include time series and KPIs. Their calendar timestamps are
+not verified civil dates; the custom dashboard uses simulation-hour indices.
+Observation charts show the next observation step, while each saved JSON row
+also records the controlled interval and internal temperature. The first 14
+transitions build thermal history. Interpret short-run KPIs with that warm-up
+and the synthetic tariff/EV inputs in mind.
+
+Verify exports and the dashboard (after installing the UI dependencies):
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_ui.py -v
+```
+
+## Python API
 
 Use `.venv/Scripts/python.exe` as your editor's Python interpreter. For example:
 

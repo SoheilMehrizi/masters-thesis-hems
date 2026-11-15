@@ -1,0 +1,783 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A review on digital twin application in photovoltaic energy systems: challenges and opportunities · HEMS evidence library</title><link rel="stylesheet" href="style.css?v=4"><link rel="stylesheet" href="design.css?v=4"><link rel="stylesheet" href="theme.css?v=4"><link rel="stylesheet" href="figures.css?v=4"></head><body data-lang="en"><nav><div><b>HEMS / Evidence library</b><a href="index.html"><span class="en">All articles</span><span class="fa" lang="fa" dir="rtl">همه مقالات</span></a><a href="../PROJECT_BACKLOG.html"><span class="en">Project backlog</span><span class="fa" lang="fa" dir="rtl">فهرست کارها</span></a><select id="language" aria-label="Report language"><option value="en">English</option><option value="both">English + فارسی</option><option value="fa">فارسی</option></select><button onclick="window.print()"><span class="en">Print</span><span class="fa" lang="fa" dir="rtl">چاپ</span></button></div></nav><main><div class="hero"><span class="eyebrow">REVIEWS &AMP; CONTEXT</span><h1>PV digital twins / Alao</h1><p class="sub"><span class="en">A review on digital twin application in photovoltaic energy systems: challenges and opportunities</span><span class="fa" lang="fa" dir="rtl">مرور کاربرد دوقلوی دیجیتال در سامانه‌های فتوولتائیک: چالش‌ها و فرصت‌ها</span></p><span class="pill">8 figure views · 3 tables · 26 pages</span></div><div class="layout"><aside class="toc"><a href="#coverage"><span class="en">Source & review coverage</span><span class="fa" lang="fa" dir="rtl">منبع و پوشش مرور</span></a><a href="#identity"><span class="en">Identity, review objective & hypothesis status</span><span class="fa" lang="fa" dir="rtl">مشخصات، هدف مرور و وضعیت فرضیه</span></a><a href="#methodology"><span class="en">Review approach and evidence boundary</span><span class="fa" lang="fa" dir="rtl">روش مرور و مرز شواهد</span></a><a href="#approach"><span class="en">PV Twin implementation pipeline</span><span class="fa" lang="fa" dir="rtl">زنجیره پیاده‌سازی دوقلوی خورشیدی</span></a><a href="#evidence"><span class="en">Experiments, baselines and reported results</span><span class="fa" lang="fa" dir="rtl">آزمایش‌ها، خط‌مبناها و نتایج گزارش‌شده</span></a><a href="#gaps"><span class="en">Author-stated benefits, challenges & opportunities</span><span class="fa" lang="fa" dir="rtl">فواید، چالش‌ها و فرصت‌های نویسندگان</span></a><a href="#key-results"><span class="en">Key reported results</span><span class="fa" lang="fa" dir="rtl">نتایج کلیدی گزارش‌شده</span></a><a href="#figures"><span class="en">Figures, captions & extracted evidence</span><span class="fa" lang="fa" dir="rtl">شکل‌ها، عنوان‌ها و شواهد استخراج‌شده</span></a><a href="#tables"><span class="en">Tables & numerical evidence</span><span class="fa" lang="fa" dir="rtl">جدول‌ها و شواهد عددی</span></a><a href="#critical"><span class="en">Critical analysis — reviewer assessment</span><span class="fa" lang="fa" dir="rtl">تحلیل انتقادی — ارزیابی مرورگر</span></a><a href="#research-role"><span class="en">Role in our research</span><span class="fa" lang="fa" dir="rtl">نقش مقاله در پژوهش ما</span></a><a href="#pages"><span class="en">Original source pages</span><span class="fa" lang="fa" dir="rtl">صفحات اصلی منبع</span></a><a href="#references"><span class="en">Full bibliography</span><span class="fa" lang="fa" dir="rtl">کتاب‌نامه کامل</span></a></aside><article class="report"><section id="coverage" class="panel"><h2><span class="en">Source & review coverage</span><span class="fa" lang="fa" dir="rtl">منبع و پوشش مرور</span></h2><p><span class="en">Full-text source review with all identified numbered figures and tables indexed. Review-reported findings are attributed to the synthesis; original pages preserve exact labels, equations, citations, footnotes and bibliography. Project relevance and critical observations are separately labeled assessments. Numerical values are transcribed only when explicitly printed; curve points are not estimated.</span><span class="fa" lang="fa" dir="rtl">مرور منبع کامل با نمایه همه شکل‌ها و جدول‌های شماره‌دار شناسایی‌شده. یافته‌های نقل‌شده به مرور نسبت داده می‌شوند؛ صفحات اصلی برچسب، معادله، ارجاع، پانویس و کتاب‌نامه را حفظ می‌کنند. نقش در پروژه و نقدها ارزیابی مستقل‌اند. فقط اعداد صریح چاپ‌شده ثبت شده و نقاط منحنی تخمین زده نشده‌اند.</span></p><p><a class="cite" href="assets/article-18/page-01.png" target="_blank">Article · PDF p. 1</a> <a href="https://doi.org/10.1007/s42791-024-00083-z">10.1007/s42791-024-00083-z</a></p></section><section id="identity" class="panel"><h2><span class="en">Identity, review objective & hypothesis status</span><span class="fa" lang="fa" dir="rtl">مشخصات، هدف مرور و وضعیت فرضیه</span></h2><p><span class="en">Kehinde Temitope Alao, Syed Ihtsham Ul Haq Gilani, Kamaruzzaman Sopian and Taiwo Onaopemipo Alao. JMST Advances 6 (2024), 257–282; DOI 10.1007/s42791-024-00083-z. The review examines trends, challenges and opportunities for DT integration in PV plants. No formal hypothesis or numbered experimental research-question set is stated.</span><span class="fa" lang="fa" dir="rtl">Alao و همکاران؛ JMST Advances جلد ۶، سال ۲۰۲۴، صفحات ۲۵۷ تا ۲۸۲. مرور به روندها، چالش‌ها و فرصت‌های ادغام دوقلو در نیروگاه خورشیدی می‌پردازد. فرضیه رسمی یا پرسش آزمایشی شماره‌دار بیان نشده است.</span> <a class="cite" href="assets/article-18/page-01.png" target="_blank">Source · PDF p. 1</a><a class="cite" href="assets/article-18/page-03.png" target="_blank">Source · PDF p. 3</a></p></section><section id="methodology" class="panel"><h2><span class="en">Review approach and evidence boundary</span><span class="fa" lang="fa" dir="rtl">روش مرور و مرز شواهد</span></h2><p><span class="en">The paper is a thematic literature review organized around DT definitions/components, enabling technologies, the PV implementation pipeline, case studies, challenges and opportunities. It does not present a reproducible PRISMA selection count, a new controlled PV experiment, or a common train/test evaluation protocol. Bibliographic sources and cited case studies carry the evidence.</span><span class="fa" lang="fa" dir="rtl">مرور موضوعی بر تعریف و اجزای دوقلو، فناوری‌های توانمندساز، زنجیره پیاده‌سازی PV، نمونه‌های کاربردی، چالش و فرصت سازمان یافته است. شمار انتخاب بازتولیدپذیر PRISMA، آزمایش کنترل‌شده جدید یا پروتکل مشترک آموزش/آزمون ارائه نمی‌کند. شواهد در منابع و موارد کاربردی ارجاع‌شده است.</span> <a class="cite" href="assets/article-18/page-03.png" target="_blank">Source · PDF p. 3</a><a class="cite" href="assets/article-18/page-05.png" target="_blank">Source · PDF p. 5</a><a class="cite" href="assets/article-18/page-11.png" target="_blank">Source · PDF p. 11</a><a class="cite" href="assets/article-18/page-14.png" target="_blank">Source · PDF p. 14</a><a class="cite" href="assets/article-18/page-20.png" target="_blank">Source · PDF p. 20</a></p></section><section id="approach" class="panel"><h2><span class="en">PV Twin implementation pipeline</span><span class="fa" lang="fa" dir="rtl">زنجیره پیاده‌سازی دوقلوی خورشیدی</span></h2><p><span class="en">The components are physical PV assets, virtual models, and data connectivity/analytics. IoT provides measurements; AI supports analytics; XR and cloud computing support visualization/processing. The workflow covers data collection and integration, modeling/simulation, fault diagnostics, remote monitoring/control, data-driven decisions, predictive maintenance and performance optimization.</span><span class="fa" lang="fa" dir="rtl">اجزا شامل دارایی فیزیکی PV، مدل مجازی و ارتباط/تحلیل داده‌اند. IoT اندازه‌گیری، AI تحلیل، و XR/ابر نمایش و پردازش را پشتیبانی می‌کنند. گردش‌کار جمع‌آوری و ادغام داده، مدل‌سازی، تشخیص، پایش/کنترل دور، تصمیم، نگهداری پیش‌بین و بهینه‌سازی است.</span> <a class="cite" href="assets/article-18/page-05.png" target="_blank">Source · PDF p. 5</a><a class="cite" href="assets/article-18/page-06.png" target="_blank">Source · PDF p. 6</a><a class="cite" href="assets/article-18/page-07.png" target="_blank">Source · PDF p. 7</a><a class="cite" href="assets/article-18/page-09.png" target="_blank">Source · PDF p. 9</a><a class="cite" href="assets/article-18/page-10.png" target="_blank">Source · PDF p. 10</a><a class="cite" href="assets/article-18/page-11.png" target="_blank">Source · PDF p. 11</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a><a class="cite" href="assets/article-18/page-13.png" target="_blank">Source · PDF p. 13</a><a class="cite" href="assets/article-18/page-14.png" target="_blank">Source · PDF p. 14</a></p><p><span class="en">Monitoring compares simulated/predicted PV behavior against real sensor data to locate deviations in panels, inverters, trackers and infrastructure. The review lists possible diagnostic and maintenance functions but does not specify a calibrated probabilistic causal model or a fault-to-intervention loss function.</span><span class="fa" lang="fa" dir="rtl">پایش، رفتار شبیه‌سازی/پیش‌بینی‌شده را با حسگر واقعی برای یافتن انحراف پنل، اینورتر، ردیاب و زیرساخت مقایسه می‌کند. مرور کارکردهای تشخیص و نگهداری را فهرست می‌کند، اما مدل علّی احتمالاتی کالیبره یا تابع زیان خطا تا مداخله را مشخص نمی‌کند.</span> <a class="cite" href="assets/article-18/page-02.png" target="_blank">Source · PDF p. 2</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a><a class="cite" href="assets/article-18/page-14.png" target="_blank">Source · PDF p. 14</a></p></section><section id="evidence" class="panel"><h2><span class="en">Experiments, baselines and reported results</span><span class="fa" lang="fa" dir="rtl">آزمایش‌ها، خط‌مبناها و نتایج گزارش‌شده</span></h2><p><span class="en">Table 2 surveys IoT applications; Table 3 surveys ANN approaches for PV efficiency, including their study-specific errors. Section 4 discusses previously reported deployments/case studies. These are heterogeneous source results, not a head-to-head benchmark conducted by this review. There is no single proposed controller that can be assigned one baseline score.</span><span class="fa" lang="fa" dir="rtl">جدول ۲ کاربرد IoT و جدول ۳ روش‌های ANN برای بازده PV و خطاهای خاص هر مطالعه را مرور می‌کند. بخش ۴ استقرارها و نمونه‌های پیشین را بحث می‌کند. نتایج ناهمگون‌اند و معیار رقابتی اجراشده توسط همین مرور نیستند. کنترل‌گر واحدی با امتیاز خط‌مبنا وجود ندارد.</span> <a class="cite" href="assets/article-18/page-09.png" target="_blank">Source · PDF p. 9</a><a class="cite" href="assets/article-18/page-10.png" target="_blank">Source · PDF p. 10</a><a class="cite" href="assets/article-18/page-14.png" target="_blank">Source · PDF p. 14</a><a class="cite" href="assets/article-18/page-15.png" target="_blank">Source · PDF p. 15</a></p><p><span class="en">Figure 1 reproduces commercial DT market forecasts from references [15–17]. Text reports separate projections including USD10.1B (2023) to110.1B (2028), 61.3% CAGR, and USD8.60B (2022) to137.67B (2030), 42.6% CAGR. These are market estimates attributed to outside reports, not measured PV energy savings or diagnostic performance.</span><span class="fa" lang="fa" dir="rtl">شکل ۱ پیش‌بینی تجاری بازار دوقلو از [15–17] را نقل می‌کند؛ متن مسیر 10.1B دلار ۲۰۲۳ تا 110.1B در ۲۰۲۸ با رشد ۶۱٫۳٪ و مسیر 8.60B در ۲۰۲۲ تا 137.67B در ۲۰۳۰ با رشد ۴۲٫۶٪ را بیان می‌کند. این‌ها برآورد بازار خارجی‌اند و صرفه‌جویی یا دقت تشخیص اندازه‌گیری‌شده نیستند.</span> <a class="cite" href="assets/article-18/page-02.png" target="_blank">Source · PDF p. 2</a><a class="cite" href="assets/article-18/page-03.png" target="_blank">Source · PDF p. 3</a></p></section><section id="gaps" class="panel"><h2><span class="en">Author-stated benefits, challenges & opportunities</span><span class="fa" lang="fa" dir="rtl">فواید، چالش‌ها و فرصت‌های نویسندگان</span></h2><p><span class="en">Claimed benefits include continuous monitoring, condition-based maintenance, performance optimization and forecasting. Stated barriers are dependence on high-quality data, integration complexity, cybersecurity/privacy, implementation and maintenance costs, and lack of standardization. Opportunities include optimization, predictive maintenance, diagnostics and energy-yield forecasting.</span><span class="fa" lang="fa" dir="rtl">فواید ادعاشده پایش پیوسته، نگهداری مبتنی بر وضعیت، بهینه‌سازی و پیش‌بینی‌اند. موانع بیان‌شده کیفیت داده، پیچیدگی ادغام، امنیت/حریم خصوصی، هزینه اجرا و نگهداری و نبود استانداردند. فرصت‌ها بهینه‌سازی، نگهداری پیش‌بین، تشخیص و پیش‌بینی تولید انرژی است.</span> <a class="cite" href="assets/article-18/page-15.png" target="_blank">Source · PDF p. 15</a><a class="cite" href="assets/article-18/page-16.png" target="_blank">Source · PDF p. 16</a><a class="cite" href="assets/article-18/page-17.png" target="_blank">Source · PDF p. 17</a><a class="cite" href="assets/article-18/page-18.png" target="_blank">Source · PDF p. 18</a><a class="cite" href="assets/article-18/page-19.png" target="_blank">Source · PDF p. 19</a><a class="cite" href="assets/article-18/page-20.png" target="_blank">Source · PDF p. 20</a></p></section><section id="key-results" class="panel"><h2><span class="en">Key reported results</span><span class="fa" lang="fa" dir="rtl">نتایج کلیدی گزارش‌شده</span></h2><p><span class="en">The contribution is a synthesis of DT-PV opportunities and barriers; no single experimental effect size or baseline comparison is produced by the review.</span><span class="fa" lang="fa" dir="rtl">مشارکت، ترکیب فرصت و مانع دوقلوی PV است؛ مرور اندازه اثر آزمایشی یا مقایسه خط‌مبنای واحد تولید نمی‌کند.</span> <a class="cite" href="assets/article-18/page-01.png" target="_blank">Source · PDF p. 1</a><a class="cite" href="assets/article-18/page-20.png" target="_blank">Source · PDF p. 20</a></p></section><section id="figures" class="panel"><h2><span class="en">Figures, captions & extracted evidence</span><span class="fa" lang="fa" dir="rtl">شکل‌ها، عنوان‌ها و شواهد استخراج‌شده</span></h2><div class="figure-toolbar"><label for="figure-jump"><span class="en">Figure navigator</span><span class="fa" lang="fa" dir="rtl">مرور شکل‌ها</span></label><select id="figure-jump"><option value="" data-en="Choose a figure" data-fa="انتخاب شکل">Choose a figure</option><option value="fig-GA" data-en="GA · Graphical abstract" data-fa="GA · چکیده گرافیکی">GA · Graphical abstract</option><option value="fig-1" data-en="1 · Global digital twin market forecasts [15–17]" data-fa="1 · پیش‌بینی بازار جهانی دوقلوی دیجیتال [15–17]">1 · Global digital twin market forecasts [15–17]</option><option value="fig-2" data-en="2 · Digital twin technology" data-fa="2 · فناوری دوقلوی دیجیتال">2 · Digital twin technology</option><option value="fig-3" data-en="3 · Digital twin technologies [11]" data-fa="3 · فناوری‌های دوقلوی دیجیتال [11]">3 · Digital twin technologies [11]</option><option value="fig-4" data-en="4 · IoT design for remote PV monitoring [77]" data-fa="4 · طراحی IoT برای پایش دور PV [77]">4 · IoT design for remote PV monitoring [77]</option><option value="fig-5" data-en="5 · Architecture of a solar PV monitoring system" data-fa="5 · معماری پایش سامانه خورشیدی">5 · Architecture of a solar PV monitoring system</option><option value="fig-6" data-en="6 · Challenges in implementing DTs in PV systems" data-fa="6 · چالش پیاده‌سازی دوقلو در PV">6 · Challenges in implementing DTs in PV systems</option><option value="fig-7" data-en="7 · Opportunities for DTs in PV systems" data-fa="7 · فرصت‌های دوقلو در PV">7 · Opportunities for DTs in PV systems</option></select><button type="button" id="figure-mode" aria-pressed="false"><span class="en">Images only</span><span class="fa" lang="fa" dir="rtl">فقط تصاویر</span></button></div><figure id="fig-GA" class="figure-card" data-figure-kind="Source visual"><header class="figure-heading"><h3>Figure GA</h3><span class="figure-kind"><span class="en">Source visual</span><span class="fa" lang="fa" dir="rtl">تصویر منبع</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/view-GA.png" target="_blank"><img loading="lazy" src="assets/article-18/view-GA.png" alt="Graphical abstract" width="538" height="251"></a><div class="figure-actions"><span><span class="en">Focused original figure</span><span class="fa" lang="fa" dir="rtl">تصویر اصلی با نمای متمرکز</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-01.png" target="_blank">Figure GA · PDF p. 1</a></div><figcaption><span class="en">Graphical abstract</span><span class="fa" lang="fa" dir="rtl">چکیده گرافیکی</span><a class="cite" href="assets/article-18/page-01.png" target="_blank">Figure GA · PDF p. 1</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Read the original labels and caption first, then use the explanation and evidence note below. Printed quantities are preserved separately from reviewer interpretation.</span><span class="fa" lang="fa" dir="rtl">ابتدا برچسب‌ها و عنوان اصلی را بخوانید و سپس توضیح و یادداشت شاهد را بررسی کنید. مقدار چاپ‌شده از تفسیر مرورگر جدا نگه داشته شده است.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Visual overview of the PV DT review; read with its stated scope rather than as an implemented experiment.</span><span class="fa" lang="fa" dir="rtl">نمای کلی مرور دوقلوی PV؛ باید با دامنه مقاله خوانده شود و آزمایش اجراشده تلقی نشود.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-1" class="figure-card" data-figure-kind="Source visual"><header class="figure-heading"><h3>Figure 1</h3><span class="figure-kind"><span class="en">Source visual</span><span class="fa" lang="fa" dir="rtl">تصویر منبع</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-03.png" target="_blank"><img loading="lazy" src="assets/article-18/page-03.png" alt="Global digital twin market forecasts [15–17]" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-03.png" target="_blank">Figure 1 · PDF p. 3</a></div><figcaption><span class="en">Global digital twin market forecasts [15–17]</span><span class="fa" lang="fa" dir="rtl">پیش‌بینی بازار جهانی دوقلوی دیجیتال [15–17]</span><a class="cite" href="assets/article-18/page-03.png" target="_blank">Figure 1 · PDF p. 3</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Read the original labels and caption first, then use the explanation and evidence note below. Printed quantities are preserved separately from reviewer interpretation.</span><span class="fa" lang="fa" dir="rtl">ابتدا برچسب‌ها و عنوان اصلی را بخوانید و سپس توضیح و یادداشت شاهد را بررسی کنید. مقدار چاپ‌شده از تفسیر مرورگر جدا نگه داشته شده است.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Panels summarize commercial market forecasts. They provide adoption context and have no direct diagnostic or energy-control score.</span><span class="fa" lang="fa" dir="rtl">پنل‌ها برآورد تجاری بازار را خلاصه می‌کنند؛ بستر پذیرش‌اند و امتیاز مستقیم تشخیص یا کنترل انرژی ندارند.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">Text-associated forecasts include 10.1→110.1 billion USD (2023→2028,61.3% CAGR) and8.60→137.67 billion USD (2022→2030,42.6% CAGR). Keep report-specific assumptions separate.</span><span class="fa" lang="fa" dir="rtl">پیش‌بینی‌های متن ۱۰٫۱ تا ۱۱۰٫۱ میلیارد دلار با رشد ۶۱٫۳٪ و ۸٫۶ تا ۱۳۷٫۶۷ میلیارد دلار با رشد ۴۲٫۶٪ هستند؛ مفروضات گزارش‌ها باید جدا بمانند.</span></p></div></div></div></figure><figure id="fig-2" class="figure-card" data-figure-kind="Mechanism &amp; workflow"><header class="figure-heading"><h3>Figure 2</h3><span class="figure-kind"><span class="en">Mechanism & workflow</span><span class="fa" lang="fa" dir="rtl">سازوکار و گردش کار</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-05.png" target="_blank"><img loading="lazy" src="assets/article-18/page-05.png" alt="Digital twin technology" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-05.png" target="_blank">Figure 2 · PDF p. 5</a></div><figcaption><span class="en">Digital twin technology</span><span class="fa" lang="fa" dir="rtl">فناوری دوقلوی دیجیتال</span><a class="cite" href="assets/article-18/page-05.png" target="_blank">Figure 2 · PDF p. 5</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Trace the inputs, processing stages and outputs, then look for feedback or validation paths. Use the accompanying explanation to distinguish the proposed design from components actually tested in the paper.</span><span class="fa" lang="fa" dir="rtl">ورودی، مرحله پردازش و خروجی را دنبال و مسیر بازخورد یا اعتبارسنجی را پیدا کنید. با توضیح همراه، طراحی پیشنهادی را از مؤلفه واقعاً آزموده‌شده جدا کنید.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Explains physical/virtual connection and updating. No transferable model weights or control equations are supplied by the schematic.</span><span class="fa" lang="fa" dir="rtl">اتصال و به‌روزرسانی فیزیکی/مجازی را توضیح می‌دهد؛ وزن مدل یا معادله کنترل قابل‌انتقال از نقشه حاصل نمی‌شود.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-3" class="figure-card" data-figure-kind="Source visual"><header class="figure-heading"><h3>Figure 3</h3><span class="figure-kind"><span class="en">Source visual</span><span class="fa" lang="fa" dir="rtl">تصویر منبع</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-07.png" target="_blank"><img loading="lazy" src="assets/article-18/page-07.png" alt="Digital twin technologies [11]" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-07.png" target="_blank">Figure 3 · PDF p. 7</a></div><figcaption><span class="en">Digital twin technologies [11]</span><span class="fa" lang="fa" dir="rtl">فناوری‌های دوقلوی دیجیتال [11]</span><a class="cite" href="assets/article-18/page-07.png" target="_blank">Figure 3 · PDF p. 7</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Read the original labels and caption first, then use the explanation and evidence note below. Printed quantities are preserved separately from reviewer interpretation.</span><span class="fa" lang="fa" dir="rtl">ابتدا برچسب‌ها و عنوان اصلی را بخوانید و سپس توضیح و یادداشت شاهد را بررسی کنید. مقدار چاپ‌شده از تفسیر مرورگر جدا نگه داشته شده است.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Enabling-technology map; a citation-based conceptual overview.</span><span class="fa" lang="fa" dir="rtl">نقشه فناوری توانمندساز؛ مرور مفهومی مبتنی بر ارجاع.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-4" class="figure-card" data-figure-kind="Source visual"><header class="figure-heading"><h3>Figure 4</h3><span class="figure-kind"><span class="en">Source visual</span><span class="fa" lang="fa" dir="rtl">تصویر منبع</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-07.png" target="_blank"><img loading="lazy" src="assets/article-18/page-07.png" alt="IoT design for remote PV monitoring [77]" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-07.png" target="_blank">Figure 4 · PDF p. 7</a></div><figcaption><span class="en">IoT design for remote PV monitoring [77]</span><span class="fa" lang="fa" dir="rtl">طراحی IoT برای پایش دور PV [77]</span><a class="cite" href="assets/article-18/page-07.png" target="_blank">Figure 4 · PDF p. 7</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Read the original labels and caption first, then use the explanation and evidence note below. Printed quantities are preserved separately from reviewer interpretation.</span><span class="fa" lang="fa" dir="rtl">ابتدا برچسب‌ها و عنوان اصلی را بخوانید و سپس توضیح و یادداشت شاهد را بررسی کنید. مقدار چاپ‌شده از تفسیر مرورگر جدا نگه داشته شده است.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Shows collection/connection/remote monitoring roles for photovoltaic measurements.</span><span class="fa" lang="fa" dir="rtl">نقش‌های جمع‌آوری، اتصال و پایش دور اندازه‌گیری PV را نشان می‌دهد.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-5" class="figure-card" data-figure-kind="Mechanism &amp; workflow"><header class="figure-heading"><h3>Figure 5</h3><span class="figure-kind"><span class="en">Mechanism & workflow</span><span class="fa" lang="fa" dir="rtl">سازوکار و گردش کار</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-13.png" target="_blank"><img loading="lazy" src="assets/article-18/page-13.png" alt="Architecture of a solar PV monitoring system" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-13.png" target="_blank">Figure 5 · PDF p. 13</a></div><figcaption><span class="en">Architecture of a solar PV monitoring system</span><span class="fa" lang="fa" dir="rtl">معماری پایش سامانه خورشیدی</span><a class="cite" href="assets/article-18/page-13.png" target="_blank">Figure 5 · PDF p. 13</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Trace the inputs, processing stages and outputs, then look for feedback or validation paths. Use the accompanying explanation to distinguish the proposed design from components actually tested in the paper.</span><span class="fa" lang="fa" dir="rtl">ورودی، مرحله پردازش و خروجی را دنبال و مسیر بازخورد یا اعتبارسنجی را پیدا کنید. با توضیح همراه، طراحی پیشنهادی را از مؤلفه واقعاً آزموده‌شده جدا کنید.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Connects physical instrumentation, data pathways and digital monitoring. It helps identify telemetry dependencies before adopting diagnostic operations.</span><span class="fa" lang="fa" dir="rtl">ابزار فیزیکی، مسیر داده و پایش دیجیتال را متصل می‌کند و وابستگی تله‌متری را روشن می‌سازد.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-6" class="figure-card" data-figure-kind="Mechanism &amp; workflow"><header class="figure-heading"><h3>Figure 6</h3><span class="figure-kind"><span class="en">Mechanism & workflow</span><span class="fa" lang="fa" dir="rtl">سازوکار و گردش کار</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-15.png" target="_blank"><img loading="lazy" src="assets/article-18/page-15.png" alt="Challenges in implementing DTs in PV systems" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-15.png" target="_blank">Figure 6 · PDF p. 15</a></div><figcaption><span class="en">Challenges in implementing DTs in PV systems</span><span class="fa" lang="fa" dir="rtl">چالش پیاده‌سازی دوقلو در PV</span><a class="cite" href="assets/article-18/page-15.png" target="_blank">Figure 6 · PDF p. 15</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Trace the inputs, processing stages and outputs, then look for feedback or validation paths. Use the accompanying explanation to distinguish the proposed design from components actually tested in the paper.</span><span class="fa" lang="fa" dir="rtl">ورودی، مرحله پردازش و خروجی را دنبال و مسیر بازخورد یا اعتبارسنجی را پیدا کنید. با توضیح همراه، طراحی پیشنهادی را از مؤلفه واقعاً آزموده‌شده جدا کنید.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">Summarizes data quality, integration, security/privacy and cost constraints discussed in Section5.</span><span class="fa" lang="fa" dir="rtl">کیفیت داده، ادغام، امنیت/حریم خصوصی و هزینه بخش ۵ را خلاصه می‌کند.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure><figure id="fig-7" class="figure-card" data-figure-kind="Mechanism &amp; workflow"><header class="figure-heading"><h3>Figure 7</h3><span class="figure-kind"><span class="en">Mechanism & workflow</span><span class="fa" lang="fa" dir="rtl">سازوکار و گردش کار</span></span></header><div class="figure-layout"><div class="figure-visual"><a class="figure-image-link" href="assets/article-18/page-19.png" target="_blank"><img loading="lazy" src="assets/article-18/page-19.png" alt="Opportunities for DTs in PV systems" width="1054" height="1400"></a><div class="figure-actions"><span><span class="en">Original page · full context</span><span class="fa" lang="fa" dir="rtl">صفحه اصلی با بافت کامل</span></span><button type="button" class="enlarge-figure"><span class="en">Enlarge figure ↗</span><span class="fa" lang="fa" dir="rtl">بزرگ‌نمایی شکل ↗</span></button><a class="cite" href="assets/article-18/page-19.png" target="_blank">Figure 7 · PDF p. 19</a></div><figcaption><span class="en">Opportunities for DTs in PV systems</span><span class="fa" lang="fa" dir="rtl">فرصت‌های دوقلو در PV</span><a class="cite" href="assets/article-18/page-19.png" target="_blank">Figure 7 · PDF p. 19</a></figcaption></div><div class="figure-insights"><div class="reading-guide"><h4><span class="en">How to read this figure</span><span class="fa" lang="fa" dir="rtl">راهنمای خواندن شکل</span></h4><p><span class="en">Trace the inputs, processing stages and outputs, then look for feedback or validation paths. Use the accompanying explanation to distinguish the proposed design from components actually tested in the paper.</span><span class="fa" lang="fa" dir="rtl">ورودی، مرحله پردازش و خروجی را دنبال و مسیر بازخورد یا اعتبارسنجی را پیدا کنید. با توضیح همراه، طراحی پیشنهادی را از مؤلفه واقعاً آزموده‌شده جدا کنید.</span></p><small><span class="en">Reader guidance · not an additional author claim</span><span class="fa" lang="fa" dir="rtl">راهنمای مطالعه · ادعای اضافی نویسنده نیست</span></small></div><div class="figure-explanation"><h4><span class="en">What this figure shows</span><span class="fa" lang="fa" dir="rtl">این شکل چه نشان می‌دهد؟</span></h4><p><span class="en">The proposed opportunity map spans optimization, maintenance, diagnostics and forecasting. These are research directions rather than experimental wins.</span><span class="fa" lang="fa" dir="rtl">نقشه فرصت شامل بهینه‌سازی، نگهداری، تشخیص و پیش‌بینی است؛ این‌ها جهت پژوهش‌اند نه برتری آزمایشی.</span></p></div><div class="figure-evidence"><h4><span class="en">Reported values & evidence limits</span><span class="fa" lang="fa" dir="rtl">مقادیر گزارش‌شده و حدود شواهد</span></h4><p><span class="en">No experimental sample values are printed for this conceptual figure; none are estimated.</span><span class="fa" lang="fa" dir="rtl">این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است.</span></p></div></div></div></figure></section><section id="tables" class="panel"><h2><span class="en">Tables & numerical evidence</span><span class="fa" lang="fa" dir="rtl">جدول‌ها و شواهد عددی</span></h2><details><summary>Table 1 · <span class="en">Evolution and definitions of DT</span><span class="fa" lang="fa" dir="rtl">تکامل و تعریف دوقلو</span></summary><p><span class="en">Contrasts definitions across cited studies. Useful to distinguish dynamic synchronization from a static model.</span><span class="fa" lang="fa" dir="rtl">تعریف‌ها را در آثار مقایسه می‌کند و تمایز همگام‌سازی پویا از مدل ایستا را پشتیبانی می‌کند.</span></p><a class="cite" href="assets/article-18/page-04.png" target="_blank">Table 1 · PDF p. 4</a><a href="assets/article-18/page-04.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-04.png" alt="Source Table 1" width="1054" height="1400"></a></details><details><summary>Table 2 · <span class="en">IoT applications in PV energy systems</span><span class="fa" lang="fa" dir="rtl">کاربردهای IoT در PV</span></summary><p><span class="en">Compares application-specific sensing and communication contexts from primary studies.</span><span class="fa" lang="fa" dir="rtl">زمینه حسگری و ارتباط هر کاربرد از مطالعه اولیه مقایسه می‌شود.</span></p><a class="cite" href="assets/article-18/page-09.png" target="_blank">Table 2 · PDF p. 9</a><a href="assets/article-18/page-09.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-09.png" alt="Source Table 2" width="1054" height="1400"></a></details><details><summary>Table 3 · <span class="en">ANN methods for PV power efficiency</span><span class="fa" lang="fa" dir="rtl">روش‌های ANN برای بازده توان PV</span></summary><p><span class="en">Methods, evaluation errors and application contexts remain study-specific; their reported errors are not a new shared benchmark.</span><span class="fa" lang="fa" dir="rtl">روش، خطا و بستر هر مطالعه مستقل است؛ خطاهای نقل‌شده معیار مشترک جدید نیستند.</span></p><a class="cite" href="assets/article-18/page-10.png" target="_blank">Table 3 · PDF p. 10</a><a href="assets/article-18/page-10.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-10.png" alt="Source Table 3" width="1054" height="1400"></a></details></section><section id="critical" class="panel"><h2><span class="en">Critical analysis — reviewer assessment</span><span class="fa" lang="fa" dir="rtl">تحلیل انتقادی — ارزیابی مرورگر</span></h2><div class="notice critical"><span class="en">The following is separately labeled reviewer assessment, grounded in the cited passages.</span><span class="fa" lang="fa" dir="rtl">موارد زیر ارزیابی مستقل مرورگر بر پایه متن ارجاع‌شده است.</span></div><p><span class="en">The paper’s broad claims about precise fault localization describe the promise of DT applications; they do not demonstrate causal identifiability for our five competing degradation families.</span><span class="fa" lang="fa" dir="rtl">ادعای گسترده مکان‌یابی دقیق خطا بیان ظرفیت کاربرد دوقلو است و شناسایی علّی پنج خانواده رقیب ما را اثبات نمی‌کند.</span> <a class="cite" href="assets/article-18/page-02.png" target="_blank">Source · PDF p. 2</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a></p><p><span class="en">Market forecasts and application reviews are not evidence that the proposed system improves recovery. The operational benchmark must measure recovery independently of Twin predictions.</span><span class="fa" lang="fa" dir="rtl">پیش‌بینی بازار و مرور کاربرد شاهد بهبود بازیابی سامانه پیشنهادی نیست؛ معیار عملیاتی باید بازیابی را مستقل از پیش‌بینی دوقلو بسنجد.</span> <a class="cite" href="assets/article-18/page-03.png" target="_blank">Source · PDF p. 3</a><a class="cite" href="assets/article-18/page-14.png" target="_blank">Source · PDF p. 14</a></p></section><section id="research-role" class="panel"><h2><span class="en">Role in our research</span><span class="fa" lang="fa" dir="rtl">نقش مقاله در پژوهش ما</span></h2><div class="notice critical"><span class="en">Project-specific assessment grounded in the cited evidence. These are proposed uses and baseline recommendations, not claims made by the article’s authors or approved changes to our methodology.</span><span class="fa" lang="fa" dir="rtl">ارزیابی اختصاصی پروژه بر اساس شواهد ارجاع‌شده است. کاربردها و خط‌مبناها پیشنهادند؛ ادعای نویسندگان یا تغییر تأییدشده روش پژوهش نیستند.</span></div><h3><span class="en">Why is it important to our research?</span><span class="fa" lang="fa" dir="rtl">چرا برای پژوهش ما مهم است؟</span></h3><p><span class="en">Relevant to the PV/forecast/model-mismatch portions of our residential system, especially the risk of interpreting a prediction residual as a physical equipment fault.</span><span class="fa" lang="fa" dir="rtl">برای PV، پیش‌بینی و عدم‌تطابق مدل در سامانه مسکونی مرتبط است، به‌ویژه خطر تعبیر باقیمانده پیش‌بینی به خطای فیزیکی.</span> <a class="cite" href="assets/article-18/page-02.png" target="_blank">Source · PDF p. 2</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a></p><h3><span class="en">What does it contribute to our research?</span><span class="fa" lang="fa" dir="rtl">چه سهمی در پژوهش ما دارد؟</span></h3><p><span class="en">Contributes PV-specific telemetry, integration and maintenance requirements and threats to validity, not a ready-made SCM or complete residential scheduling architecture.</span><span class="fa" lang="fa" dir="rtl">نیازمندی حسگر، ادغام، نگهداری و تهدید اعتبار PV را می‌دهد، نه SCM آماده یا معماری کامل زمان‌بندی مسکونی.</span> <a class="cite" href="assets/article-18/page-11.png" target="_blank">Source · PDF p. 11</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a><a class="cite" href="assets/article-18/page-15.png" target="_blank">Source · PDF p. 15</a><a class="cite" href="assets/article-18/page-16.png" target="_blank">Source · PDF p. 16</a></p><h3><span class="en">How can we employ it?</span><span class="fa" lang="fa" dir="rtl">چگونه از آن استفاده کنیم؟</span></h3><p><span class="en">Use as a checklist for PV input provenance, missing/noisy data, synchronization and candidate PV diagnostics. Keep real-world PV failure mechanisms separate from our synthetic fault injection and inspect cited primary implementations before reuse.</span><span class="fa" lang="fa" dir="rtl">برای منشأ ورودی PV، داده گمشده/نویز، همگام‌سازی و تشخیص نامزد چک‌لیست بسازیم؛ مکانیسم واقعی PV از تزریق مصنوعی جدا بماند و پیاده‌سازی اولیه پیش از استفاده بررسی شود.</span> <a class="cite" href="assets/article-18/page-11.png" target="_blank">Source · PDF p. 11</a><a class="cite" href="assets/article-18/page-12.png" target="_blank">Source · PDF p. 12</a><a class="cite" href="assets/article-18/page-15.png" target="_blank">Source · PDF p. 15</a><a class="cite" href="assets/article-18/page-16.png" target="_blank">Source · PDF p. 16</a></p><h3><span class="en">Should we implement it as a baseline?</span><span class="fa" lang="fa" dir="rtl">آیا باید آن را به‌عنوان خط‌مبنا پیاده کنیم؟</span></h3><p><span class="en">No direct baseline implementation is needed from this review. A specific PV forecasting or FDD method in Table3 could be considered only if PV diagnosis becomes an agreed experimental subtask; it would be an adapted component baseline.</span><span class="fa" lang="fa" dir="rtl">خط‌مبنای مستقیم از این مرور لازم نیست. روش خاص پیش‌بینی یا FDD جدول ۳ فقط در صورت انتخاب آزمایش PV می‌تواند خط‌مبنای مؤلفه‌ای اقتباسی شود.</span> <a class="cite" href="assets/article-18/page-10.png" target="_blank">Source · PDF p. 10</a></p></section><section id="pages" class="panel"><h2><span class="en">Original source pages</span><span class="fa" lang="fa" dir="rtl">صفحات اصلی منبع</span></h2><details><summary>PDF page 1</summary><a href="assets/article-18/page-01.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-01.png" alt="Original PDF page 1" width="1054" height="1400"></a></details><details><summary>PDF page 2</summary><a href="assets/article-18/page-02.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-02.png" alt="Original PDF page 2" width="1054" height="1400"></a></details><details><summary>PDF page 3</summary><a href="assets/article-18/page-03.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-03.png" alt="Original PDF page 3" width="1054" height="1400"></a></details><details><summary>PDF page 4</summary><a href="assets/article-18/page-04.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-04.png" alt="Original PDF page 4" width="1054" height="1400"></a></details><details><summary>PDF page 5</summary><a href="assets/article-18/page-05.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-05.png" alt="Original PDF page 5" width="1054" height="1400"></a></details><details><summary>PDF page 6</summary><a href="assets/article-18/page-06.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-06.png" alt="Original PDF page 6" width="1054" height="1400"></a></details><details><summary>PDF page 7</summary><a href="assets/article-18/page-07.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-07.png" alt="Original PDF page 7" width="1054" height="1400"></a></details><details><summary>PDF page 8</summary><a href="assets/article-18/page-08.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-08.png" alt="Original PDF page 8" width="1054" height="1400"></a></details><details><summary>PDF page 9</summary><a href="assets/article-18/page-09.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-09.png" alt="Original PDF page 9" width="1054" height="1400"></a></details><details><summary>PDF page 10</summary><a href="assets/article-18/page-10.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-10.png" alt="Original PDF page 10" width="1054" height="1400"></a></details><details><summary>PDF page 11</summary><a href="assets/article-18/page-11.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-11.png" alt="Original PDF page 11" width="1054" height="1400"></a></details><details><summary>PDF page 12</summary><a href="assets/article-18/page-12.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-12.png" alt="Original PDF page 12" width="1054" height="1400"></a></details><details><summary>PDF page 13</summary><a href="assets/article-18/page-13.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-13.png" alt="Original PDF page 13" width="1054" height="1400"></a></details><details><summary>PDF page 14</summary><a href="assets/article-18/page-14.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-14.png" alt="Original PDF page 14" width="1054" height="1400"></a></details><details><summary>PDF page 15</summary><a href="assets/article-18/page-15.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-15.png" alt="Original PDF page 15" width="1054" height="1400"></a></details><details><summary>PDF page 16</summary><a href="assets/article-18/page-16.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-16.png" alt="Original PDF page 16" width="1054" height="1400"></a></details><details><summary>PDF page 17</summary><a href="assets/article-18/page-17.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-17.png" alt="Original PDF page 17" width="1054" height="1400"></a></details><details><summary>PDF page 18</summary><a href="assets/article-18/page-18.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-18.png" alt="Original PDF page 18" width="1054" height="1400"></a></details><details><summary>PDF page 19</summary><a href="assets/article-18/page-19.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-19.png" alt="Original PDF page 19" width="1054" height="1400"></a></details><details><summary>PDF page 20</summary><a href="assets/article-18/page-20.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-20.png" alt="Original PDF page 20" width="1054" height="1400"></a></details><details><summary>PDF page 21</summary><a href="assets/article-18/page-21.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-21.png" alt="Original PDF page 21" width="1054" height="1400"></a></details><details><summary>PDF page 22</summary><a href="assets/article-18/page-22.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-22.png" alt="Original PDF page 22" width="1054" height="1400"></a></details><details><summary>PDF page 23</summary><a href="assets/article-18/page-23.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-23.png" alt="Original PDF page 23" width="1054" height="1400"></a></details><details><summary>PDF page 24</summary><a href="assets/article-18/page-24.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-24.png" alt="Original PDF page 24" width="1054" height="1400"></a></details><details><summary>PDF page 25</summary><a href="assets/article-18/page-25.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-25.png" alt="Original PDF page 25" width="1054" height="1400"></a></details><details><summary>PDF page 26</summary><a href="assets/article-18/page-26.png" target="_blank"><img loading="lazy" style="width:100%" src="assets/article-18/page-26.png" alt="Original PDF page 26" width="1054" height="1400"></a></details></section><section id="references" class="panel"><h2><span class="en">Full bibliography</span><span class="fa" lang="fa" dir="rtl">کتاب‌نامه کامل</span></h2><p><span class="en">Full bibliography transcribed from the source PDF. Original reference pages are the authority for formatting and extraction ambiguities; cited works were not independently analyzed just because they appear here.</span><span class="fa" lang="fa" dir="rtl">کتاب‌نامه کامل از PDF منبع استخراج شده است. صفحه اصلی مرجع نگارش و ابهام استخراج است؛ درج منبع به معنی تحلیل مستقل آن اثر نیست.</span></p><pre>
+ 1. M.J.B. Kabeyi, O.A. Olanrewaju, Sustainable energy transition 
+for renewable and low carbon grid electricity generation and 
+supply. Front. Energy Res. (2022). https:// doi. org/ 10. 3389/ fenrg. 
+2021. 743114
+ 2. W. Strielkowski, L. Civín, E. Tarkhanova, M. Tvaronavičienė, 
+Y. Petrenko, Renewable energy in the sustainable development 
+of electrical power sector: a review. Energies (2021). https:// doi. 
+org/ 10. 3390/ en142 48240
+ 3. A.K. Sleiti, J.S. Kapat, L. Vesely, Digital twin in energy indus-
+try: proposed robust digital twin for power plant and other com-
+plex capital-intensive large engineering systems. Energy Rep. 8, 
+3704–3726 (2022). https:// doi. org/ 10. 1016/j. egyr. 2022. 02. 305
+ 4. T. Yalçin, P. ParadellSolà, P. Stefanidou-Voziki, J.L. Domínguez-
+García, T. Demirdelen, Exploiting digitalization of solar PV 
+plants using machine learning: digital twin concept for operation. 
+Energies (Basel) (2023). https:// doi. org/ 10. 3390/ en161 35044
+ 5. J. Chase, Global PV market outlook. Bloomberg new energy 
+finance. https:// about. bnef. com/ blog/ 3q- 2023- global- pv- market- 
+outlo ok/. Accessed 12 Jan 2024.
+ 6. M. Javaid, A. Haleem, R. Suman, Digital twin applications 
+toward industry 4.0: a review. Cogn. Robot. 3, 71–92 (2023). 
+https:// doi. org/ 10. 1016/j. cogr. 2023. 04. 003
+ 7. G. Ajay, Unlocking the full potential of solar power plants 
+with digital twins. https:// www. linke din. com/ pulse/ unloc king- 
+full- poten tial- solar- power- plants- digit al- ajay- ganga khedk ar/. 
+Accessed 12 Jan 2024.
+ 8. N. Kumari, A. Sharma, B. Tran, N. Chilamkurti, D. Alaha-
+koon, A comprehensive review of digital twin technology for 
+grid-connected microgrid systems: state of the art, potential and 
+challenges faced. Energies (2023). https:// doi. org/ 10. 3390/ en161 
+45525
+ 9. M.A.M. Yassin, A. Shrestha, S. Rabie, Digital twin in power sys-
+tem research and development: principle, scope, and challenges. 
+Energy Rev. 2(3), 100039 (2023). https:// doi. org/ 10. 1016/j. enrev. 
+2023. 100039
+ 10 S. Ansari, A. Ayob, M.S. Hossain Lipu, M.H. MdSaad, A. Hus-
+sain, A review of monitoring technologies for solar pv systems 
+using data processing modules and transmission protocols: pro-
+gress, challenges and prospects. Sustainability (Switzerland) 
+(2021). https:// doi. org/ 10. 3390/ su131 58120
+ 11 M. Attaran, B.G. Celik, Digital twin: benefits, use cases, chal-
+lenges, and opportunities. Decis. Anal. J. (2023). https:// doi. org/ 
+10. 1016/j. dajour. 2023. 100165
+ 12 M.M.H. Sifat et al., Towards electric digital twin grid: technol-
+ogy and framework review. Energy AI (2023). https:// doi. org/ 10. 
+1016/j. egyai. 2022. 100213
+ 13. O. Korhan, Introductory chapter: digital twin technology, 2023. 
+https:// doi. org/ 10. 5772/ intec hopen. 113345.
+ 14. Z. Song et al., Digital twins for the future power system: an over-
+view and a future perspective. Sustainability 15(6), 5259 (2023). 
+https:// doi. org/ 10. 3390/ su150 65259
+ 15. Fortune Business Insights, digital-twin-market-size-to-sur -
+pass-usd-137-67,” 2024. https:// www. fortu nebus iness insig hts. 
+com/ enqui ry/ reque st- sample- pdf/ digit al- twin- market- 106246. 
+Accessed 14 Jan 2024.
+ 16. Allied Market Research, Digital twin market: global opportunity 
+analysis and industry forecast, 2021–2030. 2022. https:// www.  
+allie dmark etres earch. com/ digit al- twin- market- A17185. Accessed 
+14 Jan 2024.
+ 17. Grand View Research, Digital twin market size, share &amp; trends 
+analysis report by solution (component, process), by deployment 
+(cloud, on-premise), by enterprise size, by application, by end-
+use, by region, and segment forecasts, 2023–2030. https:// www. 
+grand viewr esear ch. com/ indus try- analy sis/ digit al- twin- market. 
+Accessed 14 Jan 2024.
+ 18. M. Grieves, Origins of the digital twin concept. 2016, https:// doi. 
+org/ 10. 13140/ RG.2. 2. 26367. 61609.
+ 19. A. Sharma, E. Kosasih, J. Zhang, A. Brintrup, A. Calinescu, 
+Digital twins: state of the art theory and practice, challenges, and 
+open research questions. J. Ind. Inf. Integr. 30 , 100383 (2022). 
+https:// doi. org/ 10. 1016/j. jii. 2022. 100383
+ 20. J.-F. Yao, Y. Yang, X.-C. Wang, X.-P. Zhang, Systematic 
+review of digital twin technology and applications. Vis. Com -
+put. Ind. Biomed. Art. 6 (1), 10 (2023). https:// doi. org/ 10. 1186/ 
+s42492- 023- 00137-4
+ 21. E. H. Glaessgen, D. S. Stargel, The digital twin paradigm for 
+future NASA and U.S. air force vehicles. 2012.
+ 22. Y. Fu, G. Zhu, M. Zhu, F. Xuan, Digital twin for integration 
+of design-manufacturing-maintenance: an overview. Chin. 
+J. Mech. Eng. 35(1), 80 (2022). https:// doi. org/ 10. 1186/ 
+s10033- 022- 00760-x
+ 23. C. Semeraro, M. Lezoche, H. Panetto, M. Dassisti, Digital twin 
+paradigm: a systematic literature review. Comput. Ind. 130, 
+103469 (2021). https:// doi. org/ 10. 1016/j. compi nd. 2021. 103469
+ 24 O. Khalaj, M. Jamshidi, P. Hassas, B. Mašek, C. Štadler, J. Svo-
+boda, Digital twinning of a magnetic forging holder to enhance 
+productivity for industry 4.0 and metaverse. Processes. (2023). 
+https:// doi. org/ 10. 3390/ pr110 61703
+ 25 K. Josifovska, E. Yigitbas, G. Engels, A digital twin-based 
+multi-modal UI adaptation framework for assistance systems in 
+industry 4.0, in Human-computer interaction. Design practice in 
+contemporary societies. ed. by M. Kurosu (Springer International 
+Publishing, Cham, 2019), pp.398–409
+ 26. T. Mukherjee, T. DebRoy, A digital twin for rapid qualification of 
+3D printed metallic components. Appl. Mater. Today 14, 59–65 
+(2019). https:// doi. org/ 10. 1016/j. apmt. 2018. 11. 003
+ 27. N. R. Yusupbekov, F. R. Abdurasulov, F. T. Adilov, A. I. Ivanyan, 
+Application of cloud technologies for optimization of complex 
+processes of industrial enterprises, in 13th International Con-
+ference on Theory and Application of Fuzzy Systems and Soft 
+Computing — ICAFS-2018, ed. by R. A. Aliev, J. Kacprzyk, W. 
+Pedrycz, Mo. Jamshidi, and F. M. Sadikoglu, Cham: Springer 
+International Publishing, 2019, pp. 852–858.
+ 28. M. Ciavotta, M. Alge, S. Menato, D. Rovere, P. Pedrazzoli, A 
+microservice-based middleware for the digital factory. Procedia 
+Manuf. 11, 931–938 (2017). https:// doi. org/ 10. 1016/j. promfg. 
+2017. 07. 197
+ 29. M. Eckhart, A. Ekelhart, A specification-based state replication 
+approach, for digital twins. CPS-SPC (2018). https:// doi. org/ 10. 
+1145/ 32648 88
+ 30. T.-H. Stachowski, H. Kjeilen, Holistic ship design-how to uti-
+lise a digital twin in concept design through basic and detailed 
+design. 2017.
+ 31. M. Grieves, J. Vickers, Digital twin: mitigating unpredictable, 
+undesirable emergent behavior in complex systems, in Trans-
+disciplinary perspectives on complex systems: new findings and 
+approaches, ed. by F.-J. Kahlen, S. Flumerfelt, A. Alves, Cham: 
+Downloaded from https://iranpaper.ir
+
+278 JMST Advances (2024) 6:257–282
+Springer International Publishing, 2017, pp. 85–113. https:// doi. 
+org/ 10. 1007/ 978-3- 319- 38756-7_4.
+ 32. Y. Liau, H. Lee, K. Ryu, Digital Twin concept for smart injec-
+tion molding, in IOP Conference Series: Materials Science and 
+Engineering, Institute of Physics Publishing, Apr. 2018. https:// 
+doi. org/ 10. 1088/ 1757- 899X/ 324/1/ 012077
+ 33. G. Shao, D. Kibira, Digital manufacturing: requirements and 
+challenges for implementing digital surrogates, in 2018 Winter 
+Simulation Conference (WSC), 2018, pp. 1226–1237. https:// doi. 
+org/ 10. 1109/ WSC. 2018. 86322 42
+ 34. F. Tao, H. Zhang, A. Liu, A.Y.C. Nee, Digital twin in indus-
+try: state-of-the-art. IEEE Trans. Industr. Inf.Industr. Inf. 15(4), 
+2405–2415 (2019). https:// doi. org/ 10. 1109/ TII. 2018. 28731 86
+ 35. K. Park et al., Design and implementation of a digital twin 
+application for a connected micro smart factory. Int. J. Comput. 
+Integr. Manuf. 32, 1–19 (2019). https:// doi. org/ 10. 1080/ 09511 
+92X. 2019. 15994 39
+ 36. V. Stojanovic, M. Trapp, R. Richter, J. Döllner, Classification of 
+indoor point clouds using multiviews. in Proceedings—Web3D 
+2019: 24th International ACM Conference on 3D Web Tech -
+nology, Association for Computing Machinery, Inc, Jul. 2019. 
+https:// doi. org/ 10. 1145/ 33297 14. 33381 29
+ 37. H.-D. Wuttke, K. Henke, R. Hutschenreuter, Digital twins in 
+remote labs, in Cyber-physical Systems and Digital Twins, ed by 
+M. E. Auer, K. Ram B. (Cham: Springer International Publish-
+ing, 2020), pp. 289–297.
+ 38. T. Bergs, S. Gierlings, T. Auerbach, A. Klink, D. Schraknepper, 
+T. Augspurger, The concept of digital twin and digital shadow 
+in manufacturing, in Procedia CIRP, (Elsevier B.V., 2020), pp. 
+81–84. https:// doi. org/ 10. 1016/j. procir. 2021. 02. 010
+ 39. S. M. E. Sepasgozar, Digital twin and cities, in The Palgrave 
+Encyclopedia of Urban and Regional Futures (Cham: Springer 
+International Publishing, 2020), pp. 1–6. https:// doi. org/ 10. 1007/ 
+978-3- 030- 51812-7_ 253-1
+ 40. M. Eigner, A. Detzner, P.H. Schmidt, R. Tharma, Holistic defi-
+nition of the digital twin. Int. J. Prod. Lifecycle Manag. 13(4), 
+343–357 (2021). https:// doi. org/ 10. 1504/ ijplm. 2021. 119527
+ 41. F. Wilking, B. Schleich, S. Wartzack, Digital twins—Definitions, 
+classes and business scenarios for different industry sectors, in 
+Proceedings of the Design Society (Cambridge University Press, 
+2021), pp. 1293–1302. https:// doi. org/ 10. 1017/ pds. 2021. 129
+ 42. H. van der Valk, H. Haße, F. Möller, B. Otto, Archetypes of 
+digital twins. Bus. Inf. Syst. Eng.. Inf. Syst. Eng. 64(3), 375–391 
+(2022). https:// doi. org/ 10. 1007/ s12599- 021- 00727-7
+ 43 D. Piromalis, A. Kantaros, Digital twins in the automotive indus-
+try: the road toward physical-digital convergence. Appl. Syst. 
+Innov. (2022). https:// doi. org/ 10. 3390/ asi50 40065
+ 44. D.G. Broo, J. Schooling, Digital twins in infrastructure: defini-
+tions, current practices, challenges and strategies. Int. J. Constr. 
+Manag. 23(7), 1254–1263 (2023). https:// doi. org/ 10. 1080/ 15623 
+599. 2021. 19669 80
+ 45. F. Emmert-Streib, Defining a digital twin: a data science-based 
+unification. Mach. Learn. Knowl. Extr. 5(3), 1036–1054 (2023). 
+https:// doi. org/ 10. 3390/ make5 030054
+ 46. S. Andryushkevich, S. Kovalyov, E. Nefedov, Composition and 
+Application of Power System Digital Twins Based on Ontologi-
+cal Modeling. 2019. https:// doi. org/ 10. 1109/ INDIN 41052. 2019. 
+89722 67
+ 47. E. Franklin, Solar photovoltaic (PV) system components, 2018.
+ 48. A.S. Al-Ezzi, M.N.M. Ansari, Photovoltaic solar cells: a review. 
+Appl. Syst. Innov. (2022). https:// doi. org/ 10. 3390/ asi50 40067
+ 49. P. Muthukumar, S. Manikandan, R. Muniraj, T. Jarin, A. Sebi, 
+Energy efficient dual axis solar tracking system using IOT. Meas. 
+Sens. 28, 100825 (2023). https:// doi. org/ 10. 1016/j. measen. 2023. 
+100825
+ 50. M.A. Franco, S.N. Groesser, A systematic literature review of the 
+solar photovoltaic value chain for a circular economy. Sustain-
+ability (Switzerland) (2021). https:// doi. org/ 10. 3390/ su131 79615
+ 51. M.A.A. Radia, M.K. El Nimr, A.S. Atlam, IoT-based wireless 
+data acquisition and control system for photovoltaic module per-
+formance analysis. e-Prime Adv. Electr. Eng. Electr. Energy 6 , 
+100348 (2023). https:// doi. org/ 10. 1016/j. prime. 2023. 100348
+ 52. B. RegassaHunde, A. DebebeWoldeyohannes, Future prospects 
+of computer-aided design (CAD)—a review from the perspective 
+of artificial intelligence (AI), extended reality, and 3D printing. 
+Results Eng. 14, 100478 (2022). https:// doi. org/ 10. 1016/j. rineng. 
+2022. 100478
+ 53. V. Svahn, An analysis of how a Digital Twin could be used 
+throughout a process life cycle. 2023. https:// hh. diva- portal. org/ 
+smash/ get/ diva2: 17978 92/ FULLT EXT02. pdf. Accessed 15 Feb 
+2024.
+ 54. J. Ramirez-Vergara, L.B. Bosman, E. Wollega, W.D. Leon-Salas, 
+Review of forecasting methods to support photovoltaic predictive 
+maintenance. Clean. Eng. Technol. 8, 100460 (2022). https:// doi. 
+org/ 10. 1016/j. clet. 2022. 100460
+ 55 R. Ahmed, V. Sreeram, Y. Mishra, M. Arif, A review and evalu-
+ation of the state-of-the-art in PV solar power forecasting: tech-
+niques and optimization. Renew. Sustain. Energy Rev. (2020). 
+https:// doi. org/ 10. 1016/j. rser. 2020. 109792
+ 56 U. Hijjawi, S. Lakshminarayana, T. Xu, G. PieroMalfense Fierro, 
+M. Rahman, A review of automated solar photovoltaic defect 
+detection systems: approaches, challenges, and future orienta-
+tions. Sol. Energy 266, 112186 (2023). https:// doi. org/ 10. 1016/j. 
+solen er. 2023. 112186
+ 57 M. Elahi, S.O. Afolaranmi, J.L. Martinez Lastra, J.A. Perez 
+Garcia, A comprehensive literature review of the applications 
+of AI techniques through the lifecycle of industrial equipment. 
+Discov. Artif. Intell. 3(1), 43 (2023). https:// doi. org/ 10. 1007/ 
+s44163- 023- 00089-x
+ 58. A. Ünal, A. Toraman, Evaluation of digital twin technologY, pp. 
+1–25, Jul. 2023.
+ 59. M. A. Pozi, H. S. Lim, B. K. Lim, K. W. Liew, IoT-based 
+monitoring system for solar photovoltaics’ parameter analysis 
+and prediction, in Proceedings of the Multimedia University 
+Engineering Conference (MECON 2022), (Atlantis Press Inter -
+national BV, 2023), pp. 401–412. https:// doi. org/ 10. 2991/ 978- 
+94- 6463- 082-4_ 35
+ 60 S.R. Madeti, S.N. Singh, Monitoring system for photovoltaic 
+plants: a review. Renew. Sustain. Energy Rev. 67, 1180–1207 
+(2017). https:// doi. org/ 10. 1016/j. rser. 2016. 09. 088
+ 61. R. Ala-Laurinaho, Sensor data transmission from a physical 
+twin to a digital twin, 2019.
+ 62. V.V. Tuhaise, J.H.M. Tah, F.H. Abanda, Technologies for 
+digital twin applications in construction. Autom. Constr. 152, 
+104931 (2023). https:// doi. org/ 10. 1016/j. autcon. 2023. 104931
+ 63. I. U. Onaji, Bidirectional control of the integrated product-
+process digital twin, 2022.
+ 64. M.Ş Kalay, B. Kılıç, Ş Sağlam, Systematic review of the data 
+acquisition and monitoring systems of photovoltaic panels 
+and arrays. Sol. Energy 244, 47–64 (2022). https://  doi. org/ 10. 
+1016/j. solen er. 2022. 08. 029
+ 65. A. Chouder, S. Silvestre, N. Sadaoui, L. Rahmani, Modeling 
+and simulation of a grid connected PV system based on the 
+evaluation of main PV module parameters. Simul. Model. 
+Pract. Theory 20(1), 46–58 (2012). https:// doi. org/ 10. 1016/j.  
+simpat. 2011. 08. 011
+ 66 A. Fuller, Z. Fan, C. Day, C. Barlow, Digital twin: enabling tech-
+nologies, challenges and open research. IEEE Access (2020). 
+https:// doi. org/ 10. 1109/ ACCESS. 2020. 29983 58
+ 67 R. Alonso, R. Locci, D. ReforgiatoRecupero, Improving digital 
+twin experience through big data, IoT and social analysis: an 
+Downloaded from https://iranpaper.ir
+
+279JMST Advances (2024) 6:257–282 
+architecture and a case study. Heliyon 10(2), e24741 (2024). 
+https:// doi. org/ 10. 1016/j. heliy on. 2024. e24741
+ 68. F. Ridzuan, W.M.N. Zainon, A review on data cleansing meth-
+ods for big data. Procedia Comput Sci 161, 731–738 (2019). 
+https:// doi. org/ 10. 1016/j. procs. 2019. 11. 177
+ 69. A. Aljohani, Predictive analytics and machine learning for real-
+time supply chain risk mitigation and agility. Sustainability 
+15(20), 15088 (2023). https:// doi. org/ 10. 3390/ su152 015088
+ 70. P. Graniero, C. Ulbrich, H.-Z. Berlin, The use of advanced 
+algorithms in PV failure monitoring, 2022, https:// doi. org/ 10.  
+13140/ RG.2. 2. 23055. 87204
+ 71 M. Ibrahim, A. Alsheikh, F.M. Awaysheh, M.D. Alshehri, 
+Machine learning schemes for anomaly detection in solar 
+power plants. Energies (Basel) (2022). https:// doi. org/ 10. 3390/ 
+en150 31082
+ 72. E. Olshannikova, A. Ometov, Y. Koucheryavy, T. Olsson, 
+Visualizing big data, in Big data technologies and applica-
+tions . ed. by B. Furht, F. Villanustre (Springer International 
+Publishing, Cham, 2016), pp.101–131. https:// doi. org/ 10. 1007/ 
+978-3- 319- 44550-2_4
+ 73 P. Sethi, S.R. Sarangi, Internet of things: architectures, protocols, 
+and applications. J. Electr. Comput. Eng. (2017). https:// doi.  
+org/ 10. 1155/ 2017/ 93240 35
+ 74 S. Kumar, P. Tiwari, M. Zymbler, Internet of Things is a 
+revolutionary approach for future technology enhance-
+ment: a review. J. Big Data. (2019). https:// doi. org/ 10. 1186/  
+s40537- 019- 0268-2
+ 75. V. Khare, P. Chaturvedi, M. Mishra, Solar energy system con-
+cept change from trending technology: a comprehensive review. 
+e-Prime Adv. Electr. Eng. Electron. Energy 4 , 100183 (2023). 
+https:// doi. org/ 10. 1016/j. prime. 2023. 100183
+ 76 J. Kim, J. Byun, D. Jeong, M.I. Choi, B. Kang, S. Park, An IoT-
+based home energy management system over dynamic home area 
+networks. Int. J. Distrib. Sens. Netw. J Distrib Sens Netw (2015). 
+https:// doi. org/ 10. 1155/ 2015/ 828023
+ 77. N. Manoj Kumar, K. Atluri, S. Palaparthi, Internet of Things 
+(IoT) in Photovoltaic Systems . 2018. https:// doi. org/ 10. 1109/ 
+NPEC. 2018. 84768 07.
+ 78. S. Adhya, D. Saha, A. Das, J. Jana, H. Saha, An IoT based smart 
+solar photovoltaic remote monitoring and control unit, in 2016 
+2nd International Conference on Control, Instrumentation, 
+Energy and Communication, CIEC 2016, (Institute of Electrical 
+and Electronics Engineers Inc., Jul. 2016), pp. 432–436. https:// 
+doi. org/ 10. 1109/ CIEC. 2016. 75137 93
+ 79. B. Shrihariprasath, V. Rathinasabapathy, A Smart IoT System For 
+Monitoring Solar PV Power Conditioning Unit. 2016. https:// doi. 
+org/ 10. 1109/ START UP. 2016. 75839 30
+ 80 P. IribarrenAnacona et al., Arduino data loggers: a helping hand 
+in physical geography. Geogr. J. J 189(2), 314–328 (2023). 
+https:// doi. org/ 10. 1111/ geoj. 12480
+ 81. S. Sumardi, M. Sri, M. P. Fajar, Current and voltage monitoring 
+system based on measurements on solar panel based on Arduino 
+Uno, 2022.
+ 82. R. Koestoer, N. Pancasaputra, I. Roihan, H. Harinaldi, A simple 
+calibration methods of relative humidity sensor DHT22 for tropi-
+cal climates based on Arduino data acquisition system, vol. 2062. 
+2019. https:// doi. org/ 10. 1063/1. 50865 56.
+ 83 B.O. Olorunfemi, O.A. Ogbolumani, N. Nwulu, Solar panels 
+dirt monitoring and cleaning for performance improvement: a 
+systematic review on smart systems. Sustainability (Switzerland) 
+(2022). https:// doi. org/ 10. 3390/ su141 710920
+ 84. M. Panjwani, G.B. Narejo, Effect of humidity on the efficiency of 
+solar cell (photovoltaic). Int. J. Eng. Res. General Sci. 2, 499–503 
+(2014)
+ 85. K. Al Smadi, P.-T. Al Smadi, Y. Najm, Optimization of stable 
+energy PV systems using the internet of things (IoT). Tikrit J. 
+Eng. Sci. 31(1), 127–137 (2024). https:// doi. org/ 10. 25130/ tjes. 
+31.1. 11
+ 86. M. Soori, B. Arezoo, R. Dastres, Internet of things for smart 
+factories in industry 4.0, a review. Internet of Things Cyber-Phys. 
+Syst. 3, 192–204 (2023). https:// doi. org/ 10. 1016/j. iotcps. 2023. 
+04. 006
+ 87. A. Nawaz, M. Zhou, J. Wu, C. Long, A comprehensive review 
+on energy management, demand response, and coordination 
+schemes utilization in multi-microgrids network. Appl. Energy 
+323, 119596 (2022). https:// doi. org/ 10. 1016/j. apene rgy. 2022. 
+119596
+ 88. I.H. Sarker, Data science and analytics: an overview from data-
+driven smart computing, decision-making and applications per -
+spective. SN Comput. Sci. 2 (5), 377 (2021). https:// doi. org/ 10. 
+1007/ s42979- 021- 00765-8
+ 89. F. Mahjabeen, B. Betar, Revolutionizing solar energy: the impact 
+of artificial intelligence on photovoltaic systems. Int. J. Multidis-
+cip. Sci. Arts (2023). https:// doi. org/ 10. 47709/ ijmdsa. vxix. xxxx
+ 90. T. Ahmad et al., Energetics Systems and artificial intelligence: 
+applications of industry 4.0. Energy Rep. 8 , 334–361 (2022). 
+https:// doi. org/ 10. 1016/j. egyr. 2021. 11. 256
+ 91. A. Mohammad, F. Mahjabeen, Revolutionizing solar energy with 
+AI-driven enhancements in photovoltaic technology, vol. 2, Oct. 
+2023.
+ 92. P. Bouquet, I. Jackson, M. Nick, A. Kaboli, AI-based forecasting 
+for optimised solar energy management and smart grid efficiency. 
+Int. J. Prod. Res. (2023). https:// doi. org/ 10. 1080/ 00207 543. 2023. 
+22695 65
+ 93. N. Willing, How AI can optimize solar panel systems, Techo-
+pedia, 2023. https:// www. techo pedia. com/ how- ai- can- optim ize- 
+solar- panel- syste ms. Accessed 16 Feb 2024.
+ 94 I.M.S. Anekwe, Artificial intelligence applications in solar pho-
+tovoltaic renewable energy systems, in Application of Artificial 
+Intelligence in New Materials Discovery. ed. by Inamuddin, 
+(Materials Research Forum LLC, 2023), pp.47–86. https:// doi.  
+org/ 10. 21741/ 97816 44902 530-3
+ 95. Z. Liu et al., Artificial intelligence powered large-scale renewable 
+integrations in multi-energy systems for carbon neutrality transi-
+tion: challenges and future perspectives. Energy AI 10, 100195 
+(2022). https:// doi. org/ 10. 1016/j. egyai. 2022. 100195
+ 96. I. Jamil et al., Predictive evaluation of solar energy variables 
+for a large-scale solar power plant based on triple deep learning 
+forecast models. Alex. Eng. J. 76, 51–73 (2023). https:// doi. org/ 
+10. 1016/j. aej. 2023. 06. 023
+ 97. G. Sahin, G. Isik, W.G.J.H.M. van Sark, Predictive modeling of 
+PV solar power plant efficiency considering weather conditions: 
+a comparative analysis of artificial neural networks and multiple 
+linear regression. Energy Rep. 10, 2837–2849 (2023). https:// doi. 
+org/ 10. 1016/j. egyr. 2023. 09. 097
+ 98 M. Attaran, S. Attaran, B.G. Celik, The impact of digital 
+twins on the evolution of intelligent manufacturing and Indus-
+try 40. Adv. Comput. Intell. (2023). https:// doi. org/ 10. 1007/  
+s43674- 023- 00058-y
+ 99 M.M. Rahman et al., Prospective methodologies in hybrid renew-
+able energy systems for energy prediction using artificial neu-
+ral networks. Sustainability (Switzerland) 13(4), 1–28 (2021). 
+https:// doi. org/ 10. 3390/ su130 42393
+ 100. H.A. Kazem, J.H. Yousif, Comparison of prediction methods of 
+photovoltaic power system production using a measured dataset. 
+Energy Convers. Manag. 148, 1070–1081 (2017). https:// doi. org/ 
+10. 1016/j. encon man. 2017. 06. 058
+ 101. A.T. Mohammad, H.M. Hussen, H.J. Akeiber, Prediction of the 
+output power of photovoltaic module using artificial neural net-
+works model with optimizing the neurons number. Int. J. Renew. 
+Energy Dev. 12(3), 478–487 (2023). https://  doi. org/ 10. 14710/ 
+ijred. 2023. 49972
+Downloaded from https://iranpaper.ir
+
+280 JMST Advances (2024) 6:257–282
+ 102 M. Jlidi et al., An artificial neural network for solar energy pre-
+diction and control using Jaya-SMC. Electronics (Switzerland) 
+(2023). https:// doi. org/ 10. 3390/ elect ronic s1203 0592
+ 103. S. Qaadan, A. Alshare, Forecasting solar photovoltaic power 
+output in the German Jordanian University in Amman using 
+artificial intelligence and machine learning algorithms, in 2022 
+10th International Conference on Control, Mechatronics and 
+Automation, ICCMA 2022, (Institute of Electrical and Electron-
+ics Engineers Inc., 2022), pp. 243–248. https:// doi. org/ 10. 1109/ 
+ICCMA 56665. 2022. 10011 464
+ 104. A. Mani Mohamed, “Artificial neural network technique to pre-
+dict the power output of photovoltaic for monocrystalline and 
+polycrystalline,” 2022.
+ 105. N.M.M. Fahmi, N.A. Zambri, N. Salim, S.S. Yi, Power forecast-
+ing from solar panels using artificial neural network in UTHM 
+Parit Raja. J. Adv. Ind. Technol. Appl. (2021). https:// doi. org/ 10. 
+30880/ jaita. 2021. 02. 01. 003
+ 106. S. Wang, Y. Zhang, C. Zhang, M. Yang, Improved artificial neu-
+ral network method for predicting photovoltaic output perfor -
+mance. Glob. Energy Interconnect. 3(6), 553–561 (2020). https:// 
+doi. org/ 10. 1016/j. gloei. 2021. 01. 005
+ 107. J.L. Gómez, A.O. Martínez, F.T. Pastoriza, L.F. Garrido, E.G. 
+Álvarez, J.A.O. García, Photovoltaic power prediction using arti-
+ficial neural networks and numerical weather data. Sustainability 
+(Switzerland) 12(24), 1–19 (2020). https:// doi. org/ 10. 3390/ su122 
+410295
+ 108 S. Al-Dahidi, O. Ayadi, J. Adeeb, M. Louzazni, Assessment of 
+artificial neural networks learning algorithms and training data-
+sets for solar photovoltaic power production prediction. Front 
+Energy Res (2019). https:// doi. org/ 10. 3389/ fenrg. 2019. 00130
+ 109 Y. Icel, M.S. Mamis, A. Bugutekin, M. Ismail Gursoy, Photovol-
+taic panel efficiency estimation with artificial neural networks: 
+samples of Adiyaman, Malatya, and sanliurfa. Int. J. Photoener-
+gyPhotoenergy (2019). https:// doi. org/ 10. 1155/ 2019/ 62890 21
+ 110. M.H. Alomari, J. Adeeb, O. Younis, Solar photovoltaic power 
+forecasting in Jordan using artificial neural networks. Int. J. 
+Electric. Comput. Eng. 8 (1), 497–504 (2018). https:// doi. org/  
+10. 11591/ ijece. v8i1. pp497- 504
+ 111. T. Konjic, A. Jahic, T. Konjić, A. Jahić, J. Pihler, Artificial neural 
+network approach to photovoltaic system power output forecast-
+ing, 2015. https:// www. resea rchga te. net/ publi cation/ 29299 1430
+ 112. J. Cook, Digital twin technology enhances future engineering, 
+2022. https:// www. arrow. com/ en/ resea rch- and- events/ artic les/ 
+digit al- twin- techn ology- enhan ces- future- engin eering. Accessed 
+14 Feb 2024
+ 113. A. Ismail, M. Aladin, N. Abdul Halim, Digital twin in extended 
+reality applications for industry 4.0, 2024, pp. 867–880. https://  
+doi. org/ 10. 1007/ 978- 981- 99- 6749-0_ 58
+ 114. P. M. Mell, T. Grance, The NIST definition of cloud comput -
+ing, Gaithersburg, MD, 2011. https:// doi. org/ 10. 6028/ NIST. SP. 
+800- 145
+ 115. B.H. Banimfreg, A comprehensive review and conceptual frame-
+work for cloud computing adoption in bioinformatics. Healthc. 
+Anal. 3, 100190 (2023). https:// doi. org/ 10. 1016/j. health. 2023. 
+100190
+ 116. N. Almurisi, S. Tadisetty, Cloud-based virtualization environ-
+ment for IoT-based WSN: solutions, approaches and challenges. 
+J. Ambient. Intell. Humaniz. Comput. (2022). https:// doi. org/ 10. 
+1007/ s12652- 021- 03515-z
+ 117. N. D. W. Cahyani, B. Martini, K. K. R. Choo, A. M. N. Al-Azhar, 
+Forensic data acquisition from cloud-of-things devices: windows 
+Smartphones as a case study, in Concurrency and Computation: 
+Practice and Experience (John Wiley and Sons Ltd, Jul. 2017). 
+https:// doi. org/ 10. 1002/ cpe. 3855
+ 118. S. Zahoor, R.N. Mir, Virtualization and IoT resource manage-
+ment: a survey. Int. J. Comput. Netw. Appl. 5 (4), 43 (2018). 
+https:// doi. org/ 10. 22247/ ijcna/ 2018/ 49435
+ 119. G. Berriman, E. Deelman, G. Juve, M. Rynge, J.-S. Vckler, The 
+application of cloud computing to scientific workflows: a study 
+of cost and performance. Philos. Trans. A Math. Phys. Eng. Sci. 
+371, 20120066 (2013). https:// doi. org/ 10. 1098/ rsta. 2012. 0066
+ 120. S.A. Bello et al., Cloud computing in construction industry: 
+use cases, benefits and challenges. Autom. Constr. 122, 103441 
+(2021). https:// doi. org/ 10. 1016/j. autcon. 2020. 103441
+ 121. N. Greene, R. Parker, R. Perry, Is your network ready for digital 
+transformation?,” 2017. www. idc. com
+ 122 L. Golightly, V. Chang, Q.A. Xu, X. Gao, B.S.C. Liu, Adoption 
+of cloud computing as innovation in the organization. Int. J. Eng. 
+Bus. Manag. (2022). https:// doi. org/ 10. 1177/ 18479 79022 10939 
+92
+ 123 M.L. Berkane, M. Boufaida, N.E.H. Bouzerzour, Modelling 
+elastic scaling of cloud with energy-efficiency: application to 
+smart-university. J. King Saud Univ. Comput. Inf. Sci. 34(6), 
+3136–3150 (2022). https:// doi. org/ 10. 1016/j. jksuci. 2020. 11. 025
+ 124. Y.-C. Lee, A. Zomaya, Energy efficient utilization of resources in 
+Cloud computing systems. J. Supercomput. 60, 268–280 (2010). 
+https:// doi. org/ 10. 1007/ s11227- 010- 0421-3
+ 125. T. Kaur, I. Chana, Energy efficiency techniques in cloud com-
+puting—a survey and taxonomy. ACM Comput. Surv.Comput. 
+Surv. 48, 1–46 (2015). https:// doi. org/ 10. 1145/ 27424 88
+ 126. J. Guamán, D. Guevara, C. Vargas, A. Ríos, R. Nogales, Solar 
+manager: acquisition, treatment and isolated photovoltaic system 
+information visualization cloud platform, 2017.
+ 127. R. Vignesh, A. Samydurai, Automatic monitoring and lifetime 
+detection of solar panels using internet of things. Int. J. Innov. 
+Res. Comput. Commun. Eng. 5(4), 7014–7020 (2017)
+ 128. A. Asnil, K. Krismadinata, I. Husnaini, H. Hazman, E. Astrid, 
+Real-time monitoring system using IoT for photovoltaic param-
+eters. TEM J. 12(3), 1316–1322 (2023). https:// doi. org/ 10. 18421/ 
+TEM123- 11
+ 129. S. Quach, P. Thaichon, K.D. Martin, S. Weaven, R.W. Palma-
+tier, Digital technologies: tensions in privacy and data. J. Acad. 
+Mark. Sci. 50 (6), 1299–1323 (2022). https://  doi. org/ 10. 1007/ 
+s11747- 022- 00845-y
+ 130 M.M. Rathore, S. Shah, D. Shukla, E. Bentafat, S. Bakiras, The 
+role of AI, machine learning, and big data in digital twinning: a 
+systematic literature review, challenges, and opportunities. IEEE 
+Access (2021). https:// doi. org/ 10. 1109/ ACCESS. 2021. 30608 63
+ 131. N. Torabi, H.B. Gunay, W. O’Brien, R. Moromisato, A holistic 
+sequential fault detection and diagnostics framework for multiple 
+zone variable air volume air handling unit systems. Build. Serv. 
+Eng. Res. Technol. 43(5), 605–625 (2022). https:// doi. org/ 10.  
+1177/ 01436 24422 10978 27
+ 132. J. Aldrini, I. Chihi, L. Sidhom, Fault diagnosis and self-healing 
+for smart manufacturing: a review. J. Intell. Manuf.Intell. Manuf. 
+(2023). https:// doi. org/ 10. 1007/ s10845- 023- 02165-6
+ 133. J.M. Barrera, A. Reina, A. Mate, J.C. Trujillo, Fault detec-
+tion and diagnosis for industrial processes based on clustering 
+and autoencoders: a case of gas turbines. Int. J. Mach. Learn. 
+Cybern. 13(10), 3113–3129 (2022). https:// doi. org/ 10. 1007/  
+s13042- 022- 01583-x
+ 134. X. Xie, J. Merino, N. Moretti, P. Pauwels, J.Y. Chang, A. Par -
+likad, Digital twin enabled fault detection and diagnosis process 
+for building HVAC systems. Autom. Constr. 146, 104695 (2023). 
+https:// doi. org/ 10. 1016/j. autcon. 2022. 104695
+ 135. S.I. Kaitouni et al., Implementing a digital twin-based fault detec-
+tion and diagnosis approach for optimal operation and mainte-
+nance of urban distributed solar photovoltaics. Renew Energy 
+Focus 48, 100530 (2024). https:// doi. org/ 10. 1016/j. ref. 2023. 
+100530
+Downloaded from https://iranpaper.ir
+
+281JMST Advances (2024) 6:257–282 
+ 136. Y.J. Park, S.K.S. Fan, C.Y. Hsu, A review on fault detection and 
+process diagnostics in industrial processes. Processes. (2020). 
+https:// doi. org/ 10. 3390/ PR809 1123
+ 137. T. Goelles, B. Schlager, S. Muckenhuber, Fault detection, isola-
+tion, identification and recovery (Fdiir) methods for automotive 
+perception sensors including a detailed literature survey for lidar. 
+Sensors (Switzerland) 20(13), 1–21 (2020). https:// doi. org/ 10. 
+3390/ s2013 3662
+ 138. Syafaruddin, D. S. Zinger, Review on methods of fault diagnosis 
+in photovoltaic system applications. J. Eng. Sci. Technol. Rev. 
+12(5): 53–66, 2019. https:// doi. org/ 10. 25103/ jestr. 125. 07
+ 139. B. Aboagye, S. Gyamfi, E.A. Ofosu, S. Djordjevic, Investigation 
+into the impacts of design, installation, operation and mainte-
+nance issues on performance and degradation of installed solar 
+photovoltaic (PV) systems. Energy Sustain. Dev. 66, 165–176 
+(2022). https:// doi. org/ 10. 1016/j. esd. 2021. 12. 003
+ 140. G.R. Venkatakrishnan et al., Detection, location, and diagnosis of 
+different faults in large solar PV system—a review. Int. J. Low-
+Carbon Technol. 18(1), 659–674 (2023). https:// doi. org/ 10. 1093/ 
+ijlct/ ctad0 18
+ 141. F. Touati, A. Khandakar, M. E. H. Chowdhury, A. S. P. Gonza-
+les, C. K. Sorino, K. Benhmed, Photo-voltaic (PV) monitoring 
+system, performance analysis and power prediction models in 
+Doha, Qatar, 2020. www. intec hopen. com
+ 142. M. Javaid, A. Haleem, R.P. Singh, R. Suman, E.S. Gonzalez, 
+Understanding the adoption of Industry 4.0 technologies in 
+improving environmental sustainability. Sustain. Oper. Comput. 
+3, 203–217 (2022). https:// doi. org/ 10. 1016/j. susoc. 2022. 01. 008
+ 143. M. Benghanem, Measurement of meteorological data based 
+on wireless data acquisition system monitoring. Appl. Energy 
+86(12), 2651–2660 (2009). https:// doi. org/ 10. 1016/j. apene rgy. 
+2009. 03. 026
+ 144. N. Forero, J. Hernández, G. Gordillo, Development of a mon-
+itoring system for a PV solar plant. Energy Convers. Manag. 
+47(15–16), 2329–2336 (2006). https:// doi. org/ 10. 1016/j. encon 
+man. 2005. 11. 012
+ 145. H. Rezk, I. Tyukhov, M. Dhaifullah, A. Tikhonov, Performance 
+of data acquisition system for monitoring PV system parameters. 
+Measurement (2017). https:// doi. org/ 10. 1016/j. measu rement. 
+2017. 02. 050
+ 146. F.J. Gimeno-Sales et al., Pv monitoring system for a water pump-
+ing scheme with a lithium-ion battery using free open-source 
+software and iot technologies. Sustainability (Switzerland) 
+12(24), 1–28 (2020). https:// doi. org/ 10. 3390/ su122 410651
+ 147. H. Harajli Jessica Obeid Carla Nassab Jil Amine Eric El Obeid, 
+Trama TecnoAmbiental (TTA) Ms. Marilena Lazopoulou, TTA 
+Ms, 2016. http:// www. lb. undp. org/
+ 148 D. Manno, G. Cipriani, G. Ciulla, V. Di Dio, S. Guarino, V. Lo 
+Brano, Deep learning strategies for automatic fault diagnosis in 
+photovoltaic systems by thermographic images. Energy Convers. 
+Manag. 241, 114315 (2021). https:// doi. org/ 10. 1016/j. encon man. 
+2021. 114315
+ 149. D. Zhong, Z. Xia, Y. Zhu, J. Duan, Overview of predictive main-
+tenance based on digital twin technology. Heliyon 9(4), e14534 
+(2023). https:// doi. org/ 10. 1016/j. heliy on. 2023. e14534
+ 150. K. Arafet, R. Berlanga, Digital twins in solar farms: an approach 
+through time series and deep learning, 2021, 10.3390/a.
+ 151. M.M. Rahman, J. Selvaraj, N.A. Rahim, M. Hasanuzzaman, 
+Global modern monitoring systems for PV based power gen-
+eration: a review. Renew. Sustain. Energy Rev. 82, 4142–4158 
+(2018). https:// doi. org/ 10. 1016/j. rser. 2017. 10. 111
+ 152. A. Banik, A. Shrivastava, R. Manohar Potdar, S. Kumar Jain, 
+S. Gopal Nagpure, M. Soni, Design, modelling, and analysis of 
+novel solar PV system using MATLAB. Mater Today Proc. 51: 
+756–763, 2022, https:// doi. org/ 10. 1016/j. matpr. 2021. 06. 226.
+ 153. P. de Arquer Fernández, M. Á. Fernández Fernández, J. L. Carús 
+Candás, P. Arboleya Arboleya, An IoT open source platform for 
+photovoltaic plants supervision, Int. J. Electr. Power Energy Syst. 
+125: 106540, 2021, https:// doi. org/ 10. 1016/j. ijepes. 2020. 106540.
+ 154. M. Emamian, A. Eskandari, M. Aghaei, A. Nedaei, A.M. Siz-
+kouhi, J. Milimonfared, Cloud computing and IoT based intel-
+ligent monitoring system for photovoltaic plants using machine 
+learning techniques. Energies (Basel) (2022). https:// doi. org/ 10. 
+3390/ en150 93014
+ 155. A. Eskandari, J. Milimonfared, M. Aghaei, A.H.M.E. Reinders, 
+Autonomous monitoring of line-to-line faults in photovoltaic sys-
+tems by feature selection and parameter optimization of support 
+vector machine using genetic algorithms. Appl. Sci. (Switzer -
+land) (2020). https:// doi. org/ 10. 3390/ app10 165527
+ 156. F.S.M. Abdallah, M.N. Abdullah, I. Musirin, A.M. Elshamy, 
+Intelligent solar panel monitoring system and shading detection 
+using artificial neural networks. Energy Rep. 9, 324–334 (2023). 
+https:// doi. org/ 10. 1016/j. egyr. 2023. 05. 163
+ 157. F. Rodríguez, W.D. Chicaiza, A. Sánchez, J.M. Escaño, Updat-
+ing digital twins: Methodology for data accuracy quality control 
+using machine learning techniques. Comput. Ind. 151, 103958 
+(2023). https:// doi. org/ 10. 1016/j. compi nd. 2023. 103958
+ 158. R. van Dinter, B. Tekinerdogan, C. Catal, Predictive maintenance 
+using digital twins: a systematic literature review. Inf. Softw. 
+Technol. 151, 107008 (2022). https:// doi. org/ 10. 1016/j. infsof. 
+2022. 107008
+ 159. D. Dimitrova Angelova, D. Carmona Fernández, M. Calderón 
+Godoy, J. Antonio, Á. Moreno, J. Félix González González, A 
+review on digital twins and its application in the modeling of 
+photovoltaic installations, 2024. https:// doi. org/ 10. 20944/ prepr 
+ints2 02401. 1585. v1
+ 160. S. Mihai et al. A digital twin framework for predictive mainte-
+nance in industry 4.0. 2021.
+ 161. M. Soori, B. Arezoo, R. Dastres, Digital twin for smart manu -
+facturing, review. Sustain. Manuf. Serv. Econ. 2, 100017 (2023). 
+https:// doi. org/ 10. 1016/j. smse. 2023. 100017
+ 162. A.G. Abo-Khalil, Digital twin real-time hybrid simulation plat-
+form for power system stability. Case Stud. Thermal Eng. 49, 
+103237 (2023). https:// doi. org/ 10. 1016/j. csite. 2023. 103237
+ 163. F. Tahmasebinia, L. Lin, S. Wu, Y. Kang, S. Sepasgozar, 
+Exploring the benefits and limitations of digital twin technol-
+ogy in building energy. Appl. Sci. 13, 8814 (2023). https:// doi.  
+org/ 10. 3390/ app13 158814
+ 164. A. Kumar, Harnessing the power of digital twins for solar PV 
+plants. 2024. https:// www. linke din. com/ pulse/ harne ssing-  
+power- digit al- twins- solar- pv- plants- amit- kumar/. Accessed 
+16 Feb 2024.
+ 165. SmartHelio, Decoding digital twins for solar power plants, 
+2023. https:// smart helio. com/ decod ing- digit al- twin- for- solar- 
+plants/. Accessed 9 Jul 2024.
+ 166. G. Vernova, How artificial intelligence (AI) and machine learn-
+ing (ML) streamlines renewable energy trading, 2024. https://  
+www. ge. com/ digit al/ blog/ how- artifi  cial- intel ligen ce- ai- and- 
+machi ne- learn ing- ml- strea mlines- renew able- energy- tradi ng . 
+Accessed 9 Jul 2024.
+ 167. A. Siemens, Press release: Siemens expands virtual power 
+plants to industry with new Sinebrychoff contract, 2020. 
+https:// sie. ag/ 3kgvr E6
+ 168. M. Amoah, Geographical and climate change implications on 
+solar photovoltaic performance, 2022.
+ 169. M. Aghaei et al., Review of degradation and failure phenomena 
+in photovoltaic modules. Renew. Sustain. Energy Rev. 159, 
+112160 (2022). https:// doi. org/ 10. 1016/j. rser. 2022. 112160
+ 170. R.J. Mustafa, M.R. Gomaa, M. Al-Dhaifallah, H. Rezk, Envi-
+ronmental impacts on the performance of solar photovoltaic 
+Downloaded from https://iranpaper.ir
+
+282 JMST Advances (2024) 6:257–282
+systems. Sustainability (Switzerland) (2020). https:// doi. org/  
+10. 3390/ su120 20608
+ 171. T. Ravi, K.S. Kumar, C. Dhanamjayulu, B. Khan, K. Rajalak -
+shmi, Analysis and mitigation of PQ disturbances in grid con-
+nected system using fuzzy logic based IUPQC. Sci. Rep. 13(1), 
+22425 (2023). https:// doi. org/ 10. 1038/ s41598- 023- 49042-z
+ 172. A.G. Abo-Khalil, K. Sayed, A. Radwan, I.A. El-Sharkawy, 
+Analysis of the PV system sizing and economic feasibility 
+study in a grid-connected PV system. Case Stud. Thermal Eng. 
+45, 102903 (2023). https:// doi. org/ 10. 1016/j. csite. 2023. 102903
+ 173. M.G. Juarez, V.J. Botti, A.S. Giret, Digital twins: review and 
+challenges. J. Comput. Inf. Sci. Eng.Comput. Inf. Sci. Eng. 
+(2021). https:// doi. org/ 10. 1115/1. 40502 44
+ 174. S. Spyridonidou, D. Vagiona, A systematic review of site-
+selection procedures of PV and CSP technologies. Energy Rep. 
+9, 2947–2979 (2023). https:// doi. org/ 10. 1016/j. egyr. 2023. 01. 
+132
+ 175 F. Shaik, S.S. Lingala, P. Veeraboina, Effect of various param-
+eters on the performance of solar PV power plant: a review and 
+the experimental study. Sustain. Energy Res. (2023). https:// doi. 
+org/ 10. 1186/ s40807- 023- 00076-x
+ 176. M. Homaei, Ó. Mogollón-Gutiérrez, J. Carlos, S. Núñez, Á. 
+Vegas, C. Lindo, A review of digital twins and their application 
+in cybersecurity based on artificial intelligence, 2023, https:// doi. 
+org/ 10. 20944/ prepr ints2 02310. 1127. v1.
+ 177. B. Dimd et al., Digital twins: shaping the future of energy sys-
+tems and smart cities through cybersecurity, efficiency, and sus-
+tainability. 2023. https:// doi. org/ 10. 36227/ techr xiv. 22731 911.
+ 178. H. Boyes, T. Watson, Digital twins: an analysis framework and 
+open issues. Comput. Ind. 143, 103763 (2022). https:// doi. org/  
+10. 1016/j. compi nd. 2022. 103763
+ 179. J. Ngesa, Tackling security and privacy challenges in the realm 
+of big data analytics. World J. Adv. Res. Rev. 21(2), 552–576 
+(2023). https:// doi. org/ 10. 30574/ wjarr. 2024. 21.2. 0429
+ 180. W. Yu, P. Patros, B. Young, E. Klinac, T. Walmsley, Energy 
+digital twin technology for industrial energy management: clas-
+sification, challenges and future. Renew. Sustain. Energy Rev. 
+161, 112407 (2022). https:// doi. org/ 10. 1016/j. rser. 2022. 112407
+Springer Nature or its licensor (e.g. a society or other partner) holds 
+exclusive rights to this article under a publishing agreement with the 
+author(s) or other rightsholder(s); author self-archiving of the accepted 
+manuscript version of this article is solely governed by the terms of 
+such publishing agreement and applicable law.
+Kehinde Temitope Alao  is cur -
+rently a Master’s student at Uni-
+versiti Teknologi PETRONAS 
+(UTP) in the Department of 
+Mechanical Engineering. He 
+received his Bachelor of Tech-
+nology in Mechanical Engineer-
+ing from Ladoke Akintola Uni-
+versity of Technology,  
+Ogbomoso, Nigeria in 2015. His 
+research interests include photo-
+voltaic (PV) materials and 
+devices, solar thermal energy, 
+building-integrated photovolta-
+ics (BIPV), hybrid systems and 
+new technologies, recycling of 
+waste materials, digital twin technologies, and energy management 
+systems.
+Dr. Syed Ihtsham Ul Haq Gilani is 
+an Associate Professor in the 
+Department of Mechanical Engi-
+neering at Universiti Teknologi 
+PETRONAS (UTP) in Malaysia. 
+Dr. Gilani completed his Ph.D. 
+in Mechanical Engineering from 
+the University of Birmingham, 
+UK, in 1992. His research inter -
+ests are primarily focused on 
+solar thermal systems, solar-
+assisted air conditioning sys-
+tems, solar steaming using power 
+towers or parabolic troughs, and 
+energy management systems. 
+Over the years, Dr. Gilani has 
+made significant contributions to his field through numerous high-
+impact research articles (150 articles) and active participate in both 
+national and international conferences. With over 20 years of experi-
+ence in teaching solar energy-related subjects, he has also been 
+involved in various training sessions and courses designed to provide 
+practical insights into solar energy systems. His extensive publication 
+record and participation in the academic community underscore his 
+dedication and expertise in renewable energy and mechanical engineer-
+ing research.
+Prof. Kamaruzzaman Sopian is a 
+distinguished professor in Renew-
+able Energy at the Universiti 
+Teknologi PETRONAS (UTP). 
+With over 20 years of experience 
+in solar energy research, he has 
+made significant contributions in 
+areas such as solar radiation mod-
+eling, solar water heating systems, 
+and advanced solar photovoltaic 
+systems. Prof. Sopian has pub-
+lished over 400 research articles 
+and is highly cited in the field, with 
+an h-index of 86. He has been rec-
+ognized as one of the highly cited 
+researchers by Clarivate Analytics 
+from 2019 to 2022. Prof. Sopian&#x27;s work extends beyond academia, as he 
+has been actively involved in community and industrial projects promoting 
+solar energy technology. He has developed solar dryers, water filters, and 
+pumping systems for rural communities and designed large-scale solar-
+assisted systems for hospitals and industries. He is also a founding member 
+of the Malaysian Institute of Energy and a member of the World Renewable 
+Energy Network.
+Taiwo Onaopemipo Alao is cur-
+rently a Master’s student at Uni-
+versiti Teknologi PETRONAS 
+(UTP) in the Department of 
+Mechanical Engineering. He 
+received his Bachelor of Tech-
+nology in Mechanical Engineer-
+ing from Ladoke Akintola Uni-
+versity of Technology,  
+Ogbomoso, Nigeria in 2015. His 
+research interests include prefer-
+ential weld corrosion,  CO2 cor-
+rosion, simulation and modelling 
+of localised corrosion, renewable 
+energy, solar energy, and the 
+recycling of waste materials.
+Downloaded from https://iranpaper.ir
+</pre><p><a class="cite" href="assets/article-18/page-21.png" target="_blank">Bibliography · PDF p. 21</a><a class="cite" href="assets/article-18/page-22.png" target="_blank">Bibliography · PDF p. 22</a><a class="cite" href="assets/article-18/page-23.png" target="_blank">Bibliography · PDF p. 23</a><a class="cite" href="assets/article-18/page-24.png" target="_blank">Bibliography · PDF p. 24</a><a class="cite" href="assets/article-18/page-25.png" target="_blank">Bibliography · PDF p. 25</a><a class="cite" href="assets/article-18/page-26.png" target="_blank">Bibliography · PDF p. 26</a></p></section></article></div><footer><span class="en">Local research library · Source evidence and critical commentary are labeled separately. Review status reflects actual coverage.</span><span class="fa" lang="fa" dir="rtl">کتابخانه محلی پژوهش · شواهد مقاله و تحلیل انتقادی جداگانه مشخص شده‌اند. وضعیت مرور بر اساس پوشش واقعی است.</span></footer></main><script src="shared.js?v=4"></script><script src="experience.js?v=4"></script></body></html>

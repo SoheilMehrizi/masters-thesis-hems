@@ -227,3 +227,7 @@ __marimo__/
 vendor/
 data/recovered/
 exports/*.zip
+outputs/
+
+# Regenerable literature build diagnostics
+reports/literature/build_stderr.txt

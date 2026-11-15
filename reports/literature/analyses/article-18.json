@@ -1,0 +1,366 @@
+{
+  "id": "article-18",
+  "title": {
+    "en": "A review on digital twin application in photovoltaic energy systems: challenges and opportunities",
+    "fa": "مرور کاربرد دوقلوی دیجیتال در سامانه‌های فتوولتائیک: چالش‌ها و فرصت‌ها"
+  },
+  "short_title": "PV digital twins / Alao",
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "en": "Identity, review objective & hypothesis status",
+        "fa": "مشخصات، هدف مرور و وضعیت فرضیه"
+      },
+      "paragraphs": [
+        {
+          "en": "Kehinde Temitope Alao, Syed Ihtsham Ul Haq Gilani, Kamaruzzaman Sopian and Taiwo Onaopemipo Alao. JMST Advances 6 (2024), 257–282; DOI 10.1007/s42791-024-00083-z. The review examines trends, challenges and opportunities for DT integration in PV plants. No formal hypothesis or numbered experimental research-question set is stated.",
+          "fa": "Alao و همکاران؛ JMST Advances جلد ۶، سال ۲۰۲۴، صفحات ۲۵۷ تا ۲۸۲. مرور به روندها، چالش‌ها و فرصت‌های ادغام دوقلو در نیروگاه خورشیدی می‌پردازد. فرضیه رسمی یا پرسش آزمایشی شماره‌دار بیان نشده است.",
+          "pages": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "methodology",
+      "title": {
+        "en": "Review approach and evidence boundary",
+        "fa": "روش مرور و مرز شواهد"
+      },
+      "paragraphs": [
+        {
+          "en": "The paper is a thematic literature review organized around DT definitions/components, enabling technologies, the PV implementation pipeline, case studies, challenges and opportunities. It does not present a reproducible PRISMA selection count, a new controlled PV experiment, or a common train/test evaluation protocol. Bibliographic sources and cited case studies carry the evidence.",
+          "fa": "مرور موضوعی بر تعریف و اجزای دوقلو، فناوری‌های توانمندساز، زنجیره پیاده‌سازی PV، نمونه‌های کاربردی، چالش و فرصت سازمان یافته است. شمار انتخاب بازتولیدپذیر PRISMA، آزمایش کنترل‌شده جدید یا پروتکل مشترک آموزش/آزمون ارائه نمی‌کند. شواهد در منابع و موارد کاربردی ارجاع‌شده است.",
+          "pages": [
+            3,
+            5,
+            11,
+            14,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "id": "approach",
+      "title": {
+        "en": "PV Twin implementation pipeline",
+        "fa": "زنجیره پیاده‌سازی دوقلوی خورشیدی"
+      },
+      "paragraphs": [
+        {
+          "en": "The components are physical PV assets, virtual models, and data connectivity/analytics. IoT provides measurements; AI supports analytics; XR and cloud computing support visualization/processing. The workflow covers data collection and integration, modeling/simulation, fault diagnostics, remote monitoring/control, data-driven decisions, predictive maintenance and performance optimization.",
+          "fa": "اجزا شامل دارایی فیزیکی PV، مدل مجازی و ارتباط/تحلیل داده‌اند. IoT اندازه‌گیری، AI تحلیل، و XR/ابر نمایش و پردازش را پشتیبانی می‌کنند. گردش‌کار جمع‌آوری و ادغام داده، مدل‌سازی، تشخیص، پایش/کنترل دور، تصمیم، نگهداری پیش‌بین و بهینه‌سازی است.",
+          "pages": [
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "en": "Monitoring compares simulated/predicted PV behavior against real sensor data to locate deviations in panels, inverters, trackers and infrastructure. The review lists possible diagnostic and maintenance functions but does not specify a calibrated probabilistic causal model or a fault-to-intervention loss function.",
+          "fa": "پایش، رفتار شبیه‌سازی/پیش‌بینی‌شده را با حسگر واقعی برای یافتن انحراف پنل، اینورتر، ردیاب و زیرساخت مقایسه می‌کند. مرور کارکردهای تشخیص و نگهداری را فهرست می‌کند، اما مدل علّی احتمالاتی کالیبره یا تابع زیان خطا تا مداخله را مشخص نمی‌کند.",
+          "pages": [
+            2,
+            12,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "title": {
+        "en": "Experiments, baselines and reported results",
+        "fa": "آزمایش‌ها، خط‌مبناها و نتایج گزارش‌شده"
+      },
+      "paragraphs": [
+        {
+          "en": "Table 2 surveys IoT applications; Table 3 surveys ANN approaches for PV efficiency, including their study-specific errors. Section 4 discusses previously reported deployments/case studies. These are heterogeneous source results, not a head-to-head benchmark conducted by this review. There is no single proposed controller that can be assigned one baseline score.",
+          "fa": "جدول ۲ کاربرد IoT و جدول ۳ روش‌های ANN برای بازده PV و خطاهای خاص هر مطالعه را مرور می‌کند. بخش ۴ استقرارها و نمونه‌های پیشین را بحث می‌کند. نتایج ناهمگون‌اند و معیار رقابتی اجراشده توسط همین مرور نیستند. کنترل‌گر واحدی با امتیاز خط‌مبنا وجود ندارد.",
+          "pages": [
+            9,
+            10,
+            14,
+            15
+          ]
+        },
+        {
+          "en": "Figure 1 reproduces commercial DT market forecasts from references [15–17]. Text reports separate projections including USD10.1B (2023) to110.1B (2028), 61.3% CAGR, and USD8.60B (2022) to137.67B (2030), 42.6% CAGR. These are market estimates attributed to outside reports, not measured PV energy savings or diagnostic performance.",
+          "fa": "شکل ۱ پیش‌بینی تجاری بازار دوقلو از [15–17] را نقل می‌کند؛ متن مسیر 10.1B دلار ۲۰۲۳ تا 110.1B در ۲۰۲۸ با رشد ۶۱٫۳٪ و مسیر 8.60B در ۲۰۲۲ تا 137.67B در ۲۰۳۰ با رشد ۴۲٫۶٪ را بیان می‌کند. این‌ها برآورد بازار خارجی‌اند و صرفه‌جویی یا دقت تشخیص اندازه‌گیری‌شده نیستند.",
+          "pages": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gaps",
+      "title": {
+        "en": "Author-stated benefits, challenges & opportunities",
+        "fa": "فواید، چالش‌ها و فرصت‌های نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "Claimed benefits include continuous monitoring, condition-based maintenance, performance optimization and forecasting. Stated barriers are dependence on high-quality data, integration complexity, cybersecurity/privacy, implementation and maintenance costs, and lack of standardization. Opportunities include optimization, predictive maintenance, diagnostics and energy-yield forecasting.",
+          "fa": "فواید ادعاشده پایش پیوسته، نگهداری مبتنی بر وضعیت، بهینه‌سازی و پیش‌بینی‌اند. موانع بیان‌شده کیفیت داده، پیچیدگی ادغام، امنیت/حریم خصوصی، هزینه اجرا و نگهداری و نبود استانداردند. فرصت‌ها بهینه‌سازی، نگهداری پیش‌بین، تشخیص و پیش‌بینی تولید انرژی است.",
+          "pages": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "GA",
+      "page": 1,
+      "caption": {
+        "en": "Graphical abstract",
+        "fa": "چکیده گرافیکی"
+      },
+      "explanation": {
+        "en": "Visual overview of the PV DT review; read with its stated scope rather than as an implemented experiment.",
+        "fa": "نمای کلی مرور دوقلوی PV؛ باید با دامنه مقاله خوانده شود و آزمایش اجراشده تلقی نشود."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "1",
+      "page": 3,
+      "caption": {
+        "en": "Global digital twin market forecasts [15–17]",
+        "fa": "پیش‌بینی بازار جهانی دوقلوی دیجیتال [15–17]"
+      },
+      "explanation": {
+        "en": "Panels summarize commercial market forecasts. They provide adoption context and have no direct diagnostic or energy-control score.",
+        "fa": "پنل‌ها برآورد تجاری بازار را خلاصه می‌کنند؛ بستر پذیرش‌اند و امتیاز مستقیم تشخیص یا کنترل انرژی ندارند."
+      },
+      "data": {
+        "en": "Text-associated forecasts include 10.1→110.1 billion USD (2023→2028,61.3% CAGR) and8.60→137.67 billion USD (2022→2030,42.6% CAGR). Keep report-specific assumptions separate.",
+        "fa": "پیش‌بینی‌های متن ۱۰٫۱ تا ۱۱۰٫۱ میلیارد دلار با رشد ۶۱٫۳٪ و ۸٫۶ تا ۱۳۷٫۶۷ میلیارد دلار با رشد ۴۲٫۶٪ هستند؛ مفروضات گزارش‌ها باید جدا بمانند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 5,
+      "caption": {
+        "en": "Digital twin technology",
+        "fa": "فناوری دوقلوی دیجیتال"
+      },
+      "explanation": {
+        "en": "Explains physical/virtual connection and updating. No transferable model weights or control equations are supplied by the schematic.",
+        "fa": "اتصال و به‌روزرسانی فیزیکی/مجازی را توضیح می‌دهد؛ وزن مدل یا معادله کنترل قابل‌انتقال از نقشه حاصل نمی‌شود."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "3",
+      "page": 7,
+      "caption": {
+        "en": "Digital twin technologies [11]",
+        "fa": "فناوری‌های دوقلوی دیجیتال [11]"
+      },
+      "explanation": {
+        "en": "Enabling-technology map; a citation-based conceptual overview.",
+        "fa": "نقشه فناوری توانمندساز؛ مرور مفهومی مبتنی بر ارجاع."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "4",
+      "page": 7,
+      "caption": {
+        "en": "IoT design for remote PV monitoring [77]",
+        "fa": "طراحی IoT برای پایش دور PV [77]"
+      },
+      "explanation": {
+        "en": "Shows collection/connection/remote monitoring roles for photovoltaic measurements.",
+        "fa": "نقش‌های جمع‌آوری، اتصال و پایش دور اندازه‌گیری PV را نشان می‌دهد."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "5",
+      "page": 13,
+      "caption": {
+        "en": "Architecture of a solar PV monitoring system",
+        "fa": "معماری پایش سامانه خورشیدی"
+      },
+      "explanation": {
+        "en": "Connects physical instrumentation, data pathways and digital monitoring. It helps identify telemetry dependencies before adopting diagnostic operations.",
+        "fa": "ابزار فیزیکی، مسیر داده و پایش دیجیتال را متصل می‌کند و وابستگی تله‌متری را روشن می‌سازد."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "6",
+      "page": 15,
+      "caption": {
+        "en": "Challenges in implementing DTs in PV systems",
+        "fa": "چالش پیاده‌سازی دوقلو در PV"
+      },
+      "explanation": {
+        "en": "Summarizes data quality, integration, security/privacy and cost constraints discussed in Section5.",
+        "fa": "کیفیت داده، ادغام، امنیت/حریم خصوصی و هزینه بخش ۵ را خلاصه می‌کند."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    },
+    {
+      "id": "7",
+      "page": 19,
+      "caption": {
+        "en": "Opportunities for DTs in PV systems",
+        "fa": "فرصت‌های دوقلو در PV"
+      },
+      "explanation": {
+        "en": "The proposed opportunity map spans optimization, maintenance, diagnostics and forecasting. These are research directions rather than experimental wins.",
+        "fa": "نقشه فرصت شامل بهینه‌سازی، نگهداری، تشخیص و پیش‌بینی است؛ این‌ها جهت پژوهش‌اند نه برتری آزمایشی."
+      },
+      "data": {
+        "en": "No experimental sample values are printed for this conceptual figure; none are estimated.",
+        "fa": "این شکل مفهومی نمونه عددی آزمایشی چاپ‌شده ندارد؛ مقداری تخمین زده نشده است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Evolution and definitions of DT",
+        "fa": "تکامل و تعریف دوقلو"
+      },
+      "summary": {
+        "en": "Contrasts definitions across cited studies. Useful to distinguish dynamic synchronization from a static model.",
+        "fa": "تعریف‌ها را در آثار مقایسه می‌کند و تمایز همگام‌سازی پویا از مدل ایستا را پشتیبانی می‌کند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 9,
+      "title": {
+        "en": "IoT applications in PV energy systems",
+        "fa": "کاربردهای IoT در PV"
+      },
+      "summary": {
+        "en": "Compares application-specific sensing and communication contexts from primary studies.",
+        "fa": "زمینه حسگری و ارتباط هر کاربرد از مطالعه اولیه مقایسه می‌شود."
+      }
+    },
+    {
+      "id": "3",
+      "page": 10,
+      "title": {
+        "en": "ANN methods for PV power efficiency",
+        "fa": "روش‌های ANN برای بازده توان PV"
+      },
+      "summary": {
+        "en": "Methods, evaluation errors and application contexts remain study-specific; their reported errors are not a new shared benchmark.",
+        "fa": "روش، خطا و بستر هر مطالعه مستقل است؛ خطاهای نقل‌شده معیار مشترک جدید نیستند."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Relevant to the PV/forecast/model-mismatch portions of our residential system, especially the risk of interpreting a prediction residual as a physical equipment fault.",
+      "fa": "برای PV، پیش‌بینی و عدم‌تطابق مدل در سامانه مسکونی مرتبط است، به‌ویژه خطر تعبیر باقیمانده پیش‌بینی به خطای فیزیکی.",
+      "pages": [
+        2,
+        12
+      ]
+    },
+    "contribution": {
+      "en": "Contributes PV-specific telemetry, integration and maintenance requirements and threats to validity, not a ready-made SCM or complete residential scheduling architecture.",
+      "fa": "نیازمندی حسگر، ادغام، نگهداری و تهدید اعتبار PV را می‌دهد، نه SCM آماده یا معماری کامل زمان‌بندی مسکونی.",
+      "pages": [
+        11,
+        12,
+        15,
+        16
+      ]
+    },
+    "employment": {
+      "en": "Use as a checklist for PV input provenance, missing/noisy data, synchronization and candidate PV diagnostics. Keep real-world PV failure mechanisms separate from our synthetic fault injection and inspect cited primary implementations before reuse.",
+      "fa": "برای منشأ ورودی PV، داده گمشده/نویز، همگام‌سازی و تشخیص نامزد چک‌لیست بسازیم؛ مکانیسم واقعی PV از تزریق مصنوعی جدا بماند و پیاده‌سازی اولیه پیش از استفاده بررسی شود.",
+      "pages": [
+        11,
+        12,
+        15,
+        16
+      ]
+    },
+    "baseline": {
+      "en": "No direct baseline implementation is needed from this review. A specific PV forecasting or FDD method in Table3 could be considered only if PV diagnosis becomes an agreed experimental subtask; it would be an adapted component baseline.",
+      "fa": "خط‌مبنای مستقیم از این مرور لازم نیست. روش خاص پیش‌بینی یا FDD جدول ۳ فقط در صورت انتخاب آزمایش PV می‌تواند خط‌مبنای مؤلفه‌ای اقتباسی شود.",
+      "pages": [
+        10
+      ]
+    }
+  },
+  "bibliography_start_page": 21,
+  "critical": [
+    {
+      "en": "The paper’s broad claims about precise fault localization describe the promise of DT applications; they do not demonstrate causal identifiability for our five competing degradation families.",
+      "fa": "ادعای گسترده مکان‌یابی دقیق خطا بیان ظرفیت کاربرد دوقلو است و شناسایی علّی پنج خانواده رقیب ما را اثبات نمی‌کند.",
+      "pages": [
+        2,
+        12
+      ]
+    },
+    {
+      "en": "Market forecasts and application reviews are not evidence that the proposed system improves recovery. The operational benchmark must measure recovery independently of Twin predictions.",
+      "fa": "پیش‌بینی بازار و مرور کاربرد شاهد بهبود بازیابی سامانه پیشنهادی نیست؛ معیار عملیاتی باید بازیابی را مستقل از پیش‌بینی دوقلو بسنجد.",
+      "pages": [
+        3,
+        14
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "The contribution is a synthesis of DT-PV opportunities and barriers; no single experimental effect size or baseline comparison is produced by the review.",
+      "fa": "مشارکت، ترکیب فرصت و مانع دوقلوی PV است؛ مرور اندازه اثر آزمایشی یا مقایسه خط‌مبنای واحد تولید نمی‌کند.",
+      "pages": [
+        1,
+        20
+      ]
+    }
+  ],
+  "coverage_notes": {
+    "en": "Full-text source review with all identified numbered figures and tables indexed. Review-reported findings are attributed to the synthesis; original pages preserve exact labels, equations, citations, footnotes and bibliography. Project relevance and critical observations are separately labeled assessments. Numerical values are transcribed only when explicitly printed; curve points are not estimated.",
+    "fa": "مرور منبع کامل با نمایه همه شکل‌ها و جدول‌های شماره‌دار شناسایی‌شده. یافته‌های نقل‌شده به مرور نسبت داده می‌شوند؛ صفحات اصلی برچسب، معادله، ارجاع، پانویس و کتاب‌نامه را حفظ می‌کنند. نقش در پروژه و نقدها ارزیابی مستقل‌اند. فقط اعداد صریح چاپ‌شده ثبت شده و نقاط منحنی تخمین زده نشده‌اند."
+  }
+}

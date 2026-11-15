@@ -1,0 +1,2512 @@
+=== PDF PAGE 1 ===
+Digital twins in renewable energy systems: A comprehensive review of 
+concepts, applications, and future directions
+Wulfran Fendzi Mbasso a,*, Ambe Harrison b,**, Idriss Dagal c, Pradeep Jangir d,e,f,  
+Mohammad Khishe g,***
+ , Hossam Kotb h, Muhammad Suhail Shaikh i, Aseel Smerat j,  
+Emmanuel Fendzi Donfack k, Raman Kumar l,m
+a Department of Biosciences, Saveetha School of Engineering, Saveetha Institute of Medical and Technical Sciences, Chennai, 602 105, India
+b Applied Science Research Center, Applied Science Private University, 11937, Amman, Jordan
+c Beykent University, Electrical Engineering, Ayaza˘ga Mahallesi, Hadım Koruyolu Cd. No:19, Sarıyer, Istanbul, Turkey
+d Department of CSE, Graphic Era Hill University, Graphic Era Deemed to Be University, Dehradun, 248002, India
+e Innovation Center for Artificial Intelligence Applications, Yuan Ze University, Taoyuan, 320315, Taiwan
+f Centre for Research & Outcome, Chitkara University Institute of Engineering and Technology, Chitkara University, Rajpura, 1404010, Punjab, India
+g Department of Electrical Engineering, Imam Khomeini Naval Science University of Nowshahr, Nowshahr, Iran
+h Department of Electrical Power and Machines, Faculty of Engineering, Alexandria University, Alexandria, 21544, Egypt
+i School of Physics and Electronic Engineering, Hanshan Normal University, China
+j Faculty of Educational Sciences, Al-Ahliyya Amman University, Amman, 19328, Jordan
+k Nonlinear Physics and Complex Systems Group, Department of Physics, The Higher Teacher’s Training College, University of Yaound´e I, P.O. Box47, Yaounde, 
+Cameroon
+l Jadara University Research Centre, Jadara University, Jordan
+m Department of Mechanical and Production Engineering, Guru Nanak Dev Engineering College, Ludhiana, Punjab, 141006, India
+ARTICLE INFO
+Handling editor: Mark Howells
+Keywords:
+Digital Twin
+Renewable energy systems
+Predictive maintenance
+Real-time monitoring
+Cyber-physical systems
+Artificial intelligence
+ABSTRACT
+Digital Twin (DT) technologies are rapidly transforming the design, operation, and lifecycle management of 
+renewable energy systems. This systematic review investigates DT applications across four major renewable 
+energy domains—solar, wind, hydro, and hybrid systems—encompassing all lifecycle phases from initial design 
+and simulation to maintenance and end-of-life (EoL) optimization. Using a PRISMA-guided methodology and 
+keyword-driven thematic classification, the study analyzes over 150 peer-reviewed and industry-sourced pub-
+lications from 2014 to 2024. A novel taxonomy is introduced to categorize DT applications by energy type and 
+lifecycle phase, offering a structured and comprehensive perspective on current practices and research directions. 
+The review synthesizes enabling technologies within a layered DT architecture, highlighting the roles of Artificial 
+Intelligence (AI), Internet of Things (IoT), cloud/edge computing, and big data in realizing scalable, intelligent, 
+and autonomous systems. Real-world deployments—such as GE’s Digital Wind Farm and Huawei’s DT-enhanced 
+solar inverters—demonstrate tangible benefits, including up to a 25 % reduction in downtime and 10–20 % 
+improvements in energy yield. Key challenges are critically examined, including model fidelity, data heteroge-
+neity, standardization, and cybersecurity. In response, the study outlines a forward-looking agenda aligned with 
+global sustainability frameworks such as the UN Sustainable Development Goals (SDGs) and the EU Green Deal. 
+By integrating fragmented literature into a coherent, application-driven framework, this work advances aca-
+demic understanding, supports industrial innovation, and informs policy development for the next generation of 
+intelligent renewable energy systems.
+* Corresponding author. Department of Biosciences, Saveetha School of Engineering, Saveetha Institute of Medical and Technical Sciences, Chennai 602 105, India.
+** Corresponding author. Applied Science Research Center, Applied Science Private University, Amman, Jordan.
+*** Corresponding author. Department of Electrical Engineering, Imam Khomeini Naval Science University of Nowshahr, Nowshahr, Iran.
+E-mail addresses: fendzi.wulfran@yahoo.fr (W.F. Mbasso), ambe.harrison@ubuea.cm (A. Harrison), idriss.dagal@std.yildiz.edu.tr (I. Dagal), pkjmtech@gmail. 
+com (P. Jangir), m_khishe@alumni.iust.ac.ir (M. Khishe), Hossam.kotb@alexu.edu.eg (H. Kotb), Suhail.shaikh@live.com (M.S. Shaikh), smerat.2020@gmail.com
+(A. Smerat), fendziemmanuel@yahoo.fr (E. Fendzi Donfack), sehgal91@yahoo.co.in (R. Kumar). 
+Contents lists available at ScienceDirect
+Energy Strategy Reviews
+journal homepage: www.elsevier.com/locate/esr
+https://doi.org/10.1016/j.esr.2025.101814
+Received 5 April 2025; Received in revised form 25 June 2025; Accepted 31 July 2025  
+Energy Strategy Reviews 61 (2025) 101814 
+Available online 5 August 2025 
+2211-467X/© 2025 The Authors. Published by Elsevier Ltd. This is an open access article under the CC BY license ( http://creativecommons.org/licenses/by/4.0/ ). 
+=== PDF PAGE 2 ===
+Table of Abbreviations
+Abbreviation Full Form
+AI Artificial Intelligence
+CPS Cyber-Physical Systems
+DT Digital Twin
+EoL End-of-Life
+GE General Electric
+IoT Internet of Things
+MTTR Mean Time to Repair
+PRISMA Preferred Reporting Items for Systematic Reviews and Meta- 
+Analyses
+PV Photovoltaic
+RUL Remaining Useful Life
+SCADA Supervisory Control and Data Acquisition
+SDGs Sustainable Development Goals
+SOC State of Charge
+US DOE United States Department of Energy
+1. Introduction
+1.1. Background and motivation
+According to a recent white paper by the International Renewable 
+Energy Agency (IRENA, 2022), digital technologies—including Digital 
+Twins (DTs)—are central to enabling renewable energy scalability, 
+flexibility, and real-time operational intelligence. The report un-
+derscores the need for harmonizing digital innovation with policy, 
+infrastructure, and regulation, emphasizing the importance of DTs in 
+bridging physical infrastructure with digital capabilities across solar, 
+wind, and hybrid systems. This digital transition is framed as a foun-
+dational enabler for achieving the targets of the Paris Agreement and UN 
+SDGs. In the last few decades, the energy sector has undergone a major 
+transformation. This is because there is a necessity to address climate 
+change, decrease reliance on fossil fuels, and protect the environment 
+[1] discussed climate-related energy policies [2], focused on fossil fuel 
+dependency, and [3] emphasized environmental sustainability. The 
+goals of sustainability, structural resilience, and low-carbon emissions 
+have brought the development of renewable energy technologies to the 
+forefront of domestic and global policy frameworks. This shift is also a 
+result of growing awareness about the risks posed by greenhouse gas 
+emissions, the finite reserves of fossil fuels, the degradation of energy 
+security due to geopolitical turmoil, and tensions in the fossil fuel-driven 
+economy [4] noted geopolitical influences on energy security, while [5] 
+elaborated on fossil fuel-driven economic tensions. In reaction, gov-
+ernments, industries, and research organizations worldwide have step-
+ped up their activities to harness renewable energy sources and integrate 
+them into the current and future power infrastructure. Solar photovol-
+taic (PV) and wind energy, as well as hydroelectric power, biomass, and 
+geothermal energy, are now recognized as critical components for 
+achieving global decarbonization targets. These clean and sustainable 
+energy sources provide environmental protection by mitigating carbon 
+emissions and pollution while also enhancing economic prosperity 
+through long-term energy cost savings, diversification, and new 
+employment opportunities. According to the International Energy 
+Agency (IEA), by the end of this decade, renewables are projected to 
+have over 90 % share in new installations of power capacity, making it 
+the most predominant energy sector [6]. This growth also increases the 
+importance of renewable sources in fulfilling global electricity re-
+quirements as well as fulfilling climate targets such as the ones put 
+forward in the Paris Agreement.
+Even with their promise, renewable energy systems are deep rooted 
+complicated and provide many operational and technological diffi-
+culties. One of the more important issues is their strong dependency on 
+environmental factors which are highly unpredictable and dynamic. The 
+amplitude of solar irradiance, wind speed, ambient temperature, and 
+humidity levels fluctuate remarkably over time and space which directly 
+impact the energy output, achieving system performance stability and 
+optimization becomes very difficult [7,8]. This variability brings a high 
+level of risk, increasing the needs of sophisticated prediction, moni-
+toring, control mechanisms, and reliability for ensuring grid stability. In 
+addition, the growing decentralization and interconnection of renew-
+able energy infrastructures through smart grids and distributed energy 
+resources (DERs) adds new elements of complexity to system manage-
+ment [9]. Oftentimes, traditional control and supervisory approaches 
+are inadequate to address the changes within operational timeframes 
+and fail to adequately represent the nonlinear interactions between the 
+different components of the system. Therefore, advanced digital tech-
+nologies are needed that would increase system observability, renew-
+ables controllability, adaptability, and responsiveness to changing 
+conditions [10]. Hence, digitalization stands as a primary driver, 
+providing an array of tools and methods that can change how energy 
+systems are imagined, designed, operated, and maintained. Among 
+these technologies, DT appears as a particularly promising innovation. A 
+DT is defined as a real-time digital counterpart of a tangible system that 
+perpetually replicates its state, behavior, and performance [11]. In 
+combination with data analytics, AI, and real-time sensors, DTs offer 
+unrivaled visibility and insight into the operations of renewable energy 
+assets [12]. The use of DT technologies in the renewable energy industry 
+signifies a paradigm shift in how stakeholders manage uncertainty, 
+failure prediction, and performance optimization. The ability of DTs to 
+simulate operational environments, predict system deterioration, 
+determine maintenance schedules, and respond to shifting parameters is 
+unmatched. DTs enable the real-time application of intelligence and 
+predictive controls with high precision and adaptability, resulting in 
+enhanced system reliability, operational efficiency, and reduced costs 
+[13]. With the continuing digital transformation of the worldwide en-
+ergy sector, incorporating DTs into renewable energy systems will be 
+crucial in building a resilient, intelligent, and sustainable energy future.
+1.2. Definition and concept of DT
+A Digital Twin (DT) is a recent technological innovation that enables 
+real-time monitoring, analysis, and control of physical systems. It is a 
+virtual representation of a physical asset, process, or system, continu-
+ously updated based on live data from the physical counterpart. Unlike 
+static simulations, DTs dynamically evolve with changes in system 
+behavior, environmental conditions, and operational parameters [14]. 
+This bi-directional, real-time integration enhances responsiveness across 
+the asset’s lifecycle. DTs aggregate diverse data streams—including 
+sensor readings, control signals, logs, and physics- or data-driven mod-
+els—to closely replicate system performance [15]. This allows the DT to 
+simulate scenarios, evaluate performance, diagnose faults, and support 
+decision-making in near real-time [16]. The architecture typically 
+comprises three layers: the physical system, digital model, and a data 
+stream layer linking the two [17]. This framework applies to systems 
+such as solar PV arrays, wind turbines, and hydroelectric generators. The 
+digital layer incorporates design models, algorithms, and simulations, 
+while the data stream layer ensures real-time feedback between the 
+physical and virtual entities. Advanced DTs increasingly integrate AI, 
+machine learning, and cloud or edge computing to enhance adaptability 
+and intelligence [18]. AI supports anomaly detection and predictive 
+maintenance, cloud computing manages large-scale data, and edge 
+computing enables low-latency control. Collectively, these features 
+make DTs core components of cyber-physical systems (CPS) for real-time 
+optimization and autonomous control [19,20]. In renewable energy, 
+DTs simulate solar panel performance under varying irradiance, tem-
+perature, and shading conditions [21,22], and model wind turbine dy-
+namics using real wind data and vibration profiles [23]. Hydropower 
+DTs can emulate water flow and sediment accumulation to optimize 
+output and maintenance. As renewable systems grow in complexity and 
+data intensity, DTs are increasingly essential for enhancing efficiency, 
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+2 
+=== PDF PAGE 3 ===
+reducing downtime, and enabling flexible, intelligent control [24,25]. 
+Fig. 1 illustrates the layered architecture of a Digital Twin system for 
+renewable energy, bridging physical and digital components. The 
+framework captures how sensor-acquired data flows through the 
+communication interface, gets modeled in a virtual environment, and 
+enables intelligent decision-making for monitoring, fault detection, and 
+control.
+1.3. Relevance of DTs in renewable energy contexts
+The increasing complexity of renewable energy systems as well as 
+their penetration into modern power grids makes the application of DT 
+technology timely and crucial. In contrast with traditional power gen-
+eration assets, renewable energy installations are often situated in 
+remote and environmentally challenging locations [26]. Examples of 
+these include urban rooftop installations, solar farms in arid deserts, 
+offshore wind turbines in harsh marine conditions, and small-scale 
+hydro or hydro microgrids in remote rural regions. Such operational 
+environments are often associated with logistical challenges, problems 
+related to accessibility, and increased maintenance costs because of 
+weather or infrastructural difficulties. Adopting renewable energy 
+sources contributes to the green and blue aspects of the Ecological 
+Footprint, balancing with corresponding carbon expenditures, while 
+maximizing the efficiency of existing resources [27]. To ensure service 
+system and user satisfaction, as well as operational interfaces, the most 
+modern technologies such as AI, machine learning, data analysis, and 
+deep learning models can and should be used. DTs, along with the 
+Internet of Things (IoT), constitute one of the most powerful technolo-
+gies in the contemporary world, particularly in relation to asset per-
+formance monitoring and maintenance. The key benefit of using DTs in 
+wind turbine and renewable energy captures is the technological fore-
+sight and remote operational capabilities modern AI provides [28,29].
+DTs help to alleviate these issues by allowing for remote and constant 
+monitoring of renewable energy systems. With the integration of 
+advanced modeling techniques and real-time sensor data, DTs permit 
+virtual inspection of important components, thus minimizing physical 
+interactions. Maintenance-based on conditions where DTs enable shifts 
+in maintenance strategies from traditional time intervals to advanced, 
+predictive, and data-driven approaches [30]. This change not only helps 
+to avoid operational disruptions and unplanned outages, but also en-
+hances asset lifespans while constraining operational expenditures. For 
+operators of energy systems as well as asset managers, the ability to 
+foresee performance issues, degradation trends, or even component 
+failures facilitate a significant improvement in reliability and 
+cost-effectiveness. Beyond upkeep, DTs are critical for refining the 
+operational efficiency, flexibility, and robustness of renewable energy 
+systems. With respect to solar PV systems, DTs can be utilized for 
+estimating irradiance levels, monitoring partial shading, assessing the 
+temperature impact on module efficiency, as well as projecting 
+long-term degradation patterns [31]. With these abilities, energy output 
+forecasting becomes more precise, and system operation can be adjusted 
+dynamically. In DT models of wind energy systems, DTs can also 
+simulate the aerodynamics of turbine blade of changing wind speeds, 
+supervision of gearbox vibrations and mechanical components wear, 
+and rendering performance forecasts [32]. Because DGs are based on 
+inputs from the environment, they provide valuable guidance for sus-
+taining operation even under adverse and rapidly changing conditions.
+In hybrid systems and microgrids comprising of diverse energy 
+generation, storage units, and even load demands, DTs facilitate intel-
+ligent energy orchestration and management. Considering the real-time 
+energy availability, load profiles, and meteorological forecasts, DTs can 
+analyze and identify the most efficient balance in dispatch strategy, 
+provide automated optimization of battery charging and discharging 
+cycles, and even balance supply-demand dynamics autonomously [33,
+34]. This leads to a more reliable, self-regulating system to work effi-
+ciently regardless of whether it is in grid-connected or islanded mode. 
+Furthermore, DTs help considerably with the initial phases of system 
+development. In the design and pre-deployment stage, a DT allows en-
+gineers and planners to model different scenarios with simulated com-
+ponents which can be placed in different environments. This allows the 
+evaluation of control system tuning, risk assessment, and control system 
+tuning within a virtual setting, which is leaps ahead in reducing the 
+uncertainties which comes hand in hand with the physical prototype. 
+With the option of validating the configuration digitally before any 
+digitized implementation takes place means acceleration of both system 
+reliability as well as development timelines resulting in the mitigation of 
+overall investment and system capital.
+As the technology develops, the integrating of AI and machine 
+learning into the DT framework enhances the performance of the twin 
+multitudes. A DT which is enhanced with AI has the potential to become 
+a self learning system which improves it assistive powers of predictive 
+model by evaluating data that has already been collected in real time 
+[35]. In addition, evaluating past data in real time translates to out-
+performing earlier set standards in the detection of system permanent 
+faults, being able to startlingly forecast energy expenditure, and being 
+able to assess dynamic system behaviors shocking to the operator. 
+Eventually, the intelligent DT can guarantee the autonomous systems 
+decision making while using renewable energy systems which will allow 
+them to react to any urging internal and external changes. The imple-
+mentation of DT technologies across the renewable energy domain 
+marks a notable progression towards the development of CPS, which 
+integrate digital infrastructure and intelligence. DTs of energy assets 
+amplify their intelligence and autonomy by making energy operations 
+more automated and resilient, owing to the close coupling of the phys-
+ical energy assets with their real-time virtual counterparts. This trans-
+formation is not simply a digital upgrade; it serves as a powerful 
+accelerator of the strategic goals set for energy system changes. It 
+strengthens the scalability of decentralized generation, facilitates grid 
+stability in variable renewable energy-dominated systems, and is in sync 
+with the internationally agreed goal of achieving net-zero carbon 
+emissions. In this perspective, DTs are configured not just as facilitators 
+of operational efficiency, but as fundamental pillars of the intelligent 
+and adaptive synergetic systems of sustainable energy of the forth-
+coming days.
+1.4. Scope and objectives of the review
+Although the application of DT technology started with Aerospace 
+Engineering, and later migrated to manufacturing and industrial auto-
+mation, its use within the context of renewable energy is a new venture 
+[36]. Historically, traditional sectors have realized the value DTs pro-
+vide in predictive maintenance, lifecycle optimization, and advanced 
+process control. However, there is still some way to go in the full-scale 
+Fig. 1. Physical and digital architecture of a digital Twin system for renew-
+able energy.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+3 
+=== PDF PAGE 4 ===
+implementation of renewable energy systems, although, with the 
+growing focus on sustainable energy generation, there is great interest in 
+utilizing DTs to overcome fundamental barriers towards effective 
+management of generation and control. With the accelerated pace of 
+digital transformation in the global energy industry, there is a stronger 
+motivation to incorporate DTs into renewable infrastructures [37]. The 
+use of advanced analytics, virtual modeling, and real-time decision 
+making unlocks new potential in the design, monitoring, and control of 
+renewables – but much of the existing literature remains scattered. 
+There is much work to be done regarding studies that focus on practical 
+implementation rather than theoretical frameworks. Comprehensive 
+reviews are lacking that map out the full-scale application of DTs across 
+all technologies and stages of the asset lifecycle, as well as the under-
+lying enabling digital architecture.
+This review focuses on providing a deep analysis of DT technologies 
+in renewable energy systems for literature that has been previously 
+neglected. We start with explaining and positioning renewable energy 
+operations within the industry and studying the impact of DTs on the 
+operation and management of the wide variety of renewable sources 
+such as solar PV, wind, hydroelectric, and hybrid systems. Covering the 
+entire lifecycle of a renewable energy asset, from design and configu-
+ration to DTs-enhanced operation, condition monitoring, predictive, 
+maintenance inter-maintenance, and dismantling showcases the so-
+phistication of these systems and their potential for optimizing perfor-
+mance and reliability during various stages. A central focus of this 
+review is examining the digital frameworks and technology accelerators 
+that are critical for the development of contemporary DT architectures. 
+Special attention is paid to AI, IoT, cloud and edge computing, and data 
+science. These technologies enable the construction of agile and so-
+phisticated DTs, and, at the same time, are essential for the smart CPS of 
+the future energy systems. The DT’s relationship dynamics with these 
+technologies is fundamental in understanding their disruptive capability 
+in the energy systems.
+Alongside the theoretical framework, the review includes a number 
+of practical case studies from testbed facilities, industry innovations, and 
+other non-scientific research activities that showcase the practical 
+application of DTs in the context of renewable energy. These illustra-
+tions capture the extremes of benefits, challenges, and consequences of 
+adopting dual technologies, forming comprehensive knowledge for 
+educational and industrial purposes. DTs hold incredible potential but 
+their widespread adoption is impeded by numerous technical and 
+operational issues. This review systematically evaluates the most 
+prominent barriers, including model fidelity and heterogeneity, absence 
+of uniform guidelines, complexities of cyber-physical integration, and 
+computational scalability. Besides being technical obstacles, these 
+challenges are often institutional, financial, and legal in nature which 
+makes harnessing the full value of DTs in energy systems incredibly 
+difficult.
+The concluding section of the review suggests innovative pathways 
+for subsequent work aimed at fulfilling the articulated challenges, 
+including the creation of agile and resilient frameworks that can effec-
+tively respond to the specific demands posed by renewable energy sys-
+tems. Furthermore, these frameworks need to go beyond traditional 
+disciplinary boundaries with regard to standardization of frameworks, 
+development of comprehensive ecosystems, and the integration of DTs 
+for large-scale implementation. This paper attempts to merge the gaps 
+between the existing theoretical work on DT technology and its practical 
+implementation within the renewable energy industry by accomplishing 
+the stated goals. Advanced Theory emphasizes the considerable and 
+balancing consideration of the digitization and the automation modern 
+energy systems. We aspire to advance the awareness of the role DTs play 
+in expediting the shift to a more intelligent, flexible, and cleaner energy 
+system by conducting this review.
+These research questions help to methodically organize the review 
+and guarantee congruence with its declared goals. 
+• Applied to renewable energy systems, what are the fundamental 
+ideas, building blocks, and architectural forms of DT technologies?
+• From design to operation, maintenance, and end-of-life (EoL), how 
+have DTs been practically applied across the lifetimes of several 
+renewable energy systems including solar, wind, hydro, and hybrid 
+infrastructures?
+• Which enabling technologies—such as artificial intelligence, IoT, 
+edge/cloud computing, and big data—are essential for the develop-
+ment and operation of DTs in renewable energy environments, and 
+how are they synergistically combined?
+• In real-world renewable energy environments, what main techno-
+logical, operational, and institutional obstacles restrict the scalabil-
+ity, integrity, and dependability of DT deployment?
+• What research gaps exist, and what road map might be suggested to 
+direct next developments in DT frameworks for intelligent, adapt-
+able, and sustainable energy systems?
+These guiding questions form the structural backbone of the evalu-
+ation and are discussed in great length in Section 2 through Section 7 of 
+this work.
+1.5. What previous reviews have not covered?
+Although earlier studies on DT technology across several industri-
+es—including manufacturing, aerospace, and power systems—including 
+manufacturing, aerospace, and power systems have examined parts of 
+DTs within renewable energy systems remain poorly unexplored. Most 
+current publications have addressed DTs via either a general-purpose 
+technology lens or via fractured case studies with limited scope 
+limited to a single type of energy source such wind or solar. These 
+studies may ignore hybrid energy systems, lack a thorough lifecycle 
+viewpoint, and do not methodically address enabling technologies as AI, 
+IoT, and edge/cloud computing in concert with DT implementations. 
+Unlike these disjointed approaches, the present review provides a 
+complete, multi-dimensional taxonomy classifying DT applications 
+across four renewable energy domains (solar, wind, hydro, hybrid) and 
+throughout four lifetime stages (design, operation, maintenance, EoL). 
+Moreover, current evaluations usually underrepresent actual case 
+studies or limit them to high-level summaries devoid of critical assess-
+ment of their impact, problems, or scalability. By combining academic 
+and industrial case studies together with empirical performance gains, 
+cost savings, and operational improvements directly attributable to DT 
+deployment, this work closes that void. Furthermore, absent from pre-
+vious studies is a clear road map for future research organized around 
+short-, mid-, and long-term goals based on technological and operational 
+deficiencies including model integrity, computational overhead, data 
+heterogeneity, and cybersecurity. This evaluation is especially impor-
+tant for academic and industrial stakeholders since it not only shows 
+these obstacles with quantitative assessment (e.g., via Fig. 5 and Table 4) 
+but also connects them to practical research initiatives. Finally, although 
+other publications note enabling technologies like AI or IoT in passing, 
+this analysis offers a layered integration framework (e.g., Fig. 5 and 
+Table 3) that contextualizes how these technologies interact inside a 
+functional DT architecture customized for renewable systems. Most 
+earlier studies lack this degree of cross-technology synergy.
+DTs first found use in the aerospace and manufacturing industries, 
+setting the foundation for their later adaptation to energy systems. Of-
+fering a commonly referenced formalization of the DT idea [38], framed 
+it as a fundamental component of Product Lifecycle Management. 
+Reliability-driven applications were made possible by NASA’s work 
+[39], which also greatly helped to employ digital replicas for structural 
+integrity monitoring during missions [40]. presented a layered archi-
+tecture for DTs in production systems combining data, models, and 
+service apps in smart manufacturing. Early industrial adopters including 
+GE’s Predix, Siemens’ MindSphere, and Bosch’s CPS platforms—which 
+leveraged DTs for predictive diagnostics, dynamic control, and virtual 
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+4 
+=== PDF PAGE 5 ===
+commissioning—operationalized these theoretical contributions. These 
+initiatives together show the fundamental function of DTs in industrial 
+environments and offer the methodological framework for their migra-
+tion to the renewable energy sphere. Drawing on these industrial pre-
+decessors, the present review extends their applicability to dispersed, 
+sensor-rich, and mission-critical energy contexts.
+1.6. Gap analysis and target audience
+Despite growing interest in DT applications across various energy 
+domains, a comprehensive and lifecycle-spanning review tailored to 
+renewable energy remains lacking. Table 1 below summarizes key prior 
+reviews and highlights their thematic limitations in scope, technology 
+integration, or sectoral coverage.
+This review advances beyond prior work by offering a unified tax-
+onomy, multi-technology integration, and sector-specific case 
+studies, positioning it as a unique reference for practitioners and 
+scholars alike.
+This review is intended to serve a diverse but interconnected 
+audience. 
+• Academic Researchers: It offers a coherent synthesis of DT archi-
+tectures and enablers, empirical metrics from real-world de-
+ployments, and a structured roadmap for future investigations.
+• Utility and System Engineers: It provides actionable insights into 
+predictive maintenance, system-level optimization, and integration 
+strategies for AI-enabled DTs.
+• Policy Makers and Planners: The review highlights technology 
+readiness levels, deployment barriers, and alignment with global 
+decarbonization goals (e.g., SDGs, EU Green Deal, Inflation Reduc-
+tion Act), enabling better policy formulation.
+• Technology Developers: By presenting real-world case studies and 
+deployment challenges, this work serves as a decision-support tool 
+for prototyping, testing, and commercializing scalable DT solutions 
+in renewable systems.
+In sum, this review fills a crucial knowledge void and enables multi- 
+stakeholder decision-making through a balanced integration of theory, 
+application, and strategic foresight.
+1.7. Contribution and Novelty of this review
+The fast-changing interaction between DT technologies and renew-
+able energy systems is synthesised in this timely and thorough overview. 
+By means of a disciplined, cross-domain study spanning technical, 
+operational, and strategic dimensions, its contribution is both novel and 
+multidimensional, providing major scholarly and pragmatic value. This 
+work provides a comprehensive investigation of DT applications across 
+solar, wind, hydro, and hybrid systems, encompassing the whole asset 
+lifetime: from design and simulation to real-time operation, predictive 
+maintenance, and EoL optimization, while past reviews have typically 
+focused narrowly—either on a specific renewable technology such as 
+PV, or on isolated stages like monitoring. The inclusion of a fresh clas-
+sification taxonomy—which methodically groups DT implementations 
+by energy type, lifetime stage, and functional role—makes this study 
+among the most unique. This taxonomy, shown in Fig. 5 and Table 3, 
+gives a field sometimes marked by scattered and isolated insights 
+structural clarity. It helps academics and professionals to spot areas of 
+concentration for DT applications, areas of weakness, and how different 
+subsystems link across both physical and digital spheres. This review’s 
+layered integration of enabling technologies—including AI, the Internet 
+of Things (IoT), cloud and edge computing, and big data analytics—adds 
+still another special quality. The review shows—through architectural 
+mappings (e.g., Fig. 4 and Table 3)—how various technologies combine 
+to construct intelligent, autonomous, and scalable DT ecosystems, 
+therefore transcending their status as auxiliary components. By stressing 
+the cooperative roles of these technologies in improving real-time de-
+cision-making, defect detection, asset optimization, and distributed 
+energy coordination, this study expands the scholarly debate.
+Unlike many conceptual or theoretical studies available in the 
+literature, this work is based on actual uses and empirical case studies. 
+Inspired by both academic research and industrial installations like DT- 
+enhanced wind farms, solar inverters, hydroelectric systems, and 
+microgrid pilots These case studies provide objective data—such as a 
+10–20 % improvement in energy yield and up to 25 % decrease in 
+maintenance downtime—that supports the useful influence of DTs in 
+operational contexts. Engineers, developers, and energy system de-
+signers especially should find the review very pertinent. Beyond only 
+technical contributions, the paper presents a forward-looking research 
+roadmap identifying and contextualizing major obstacles confronting 
+the field: including model authenticity, data heterogeneity, lack of 
+standardizing, cybersecurity concerns, and computational scalability. 
+These problems are localized to the practical and institutional reality of 
+renewable energy systems rather than being addressed generally. The 
+roadmap is thus divided into short-, medium-, and long-term priorities, 
+thereby offering strategic guidance for industry as well as for academia. 
+The multidisciplinary character of this evaluation adds even more its 
+uniqueness. Combining ideas from CPS, computer science, and energy 
+systems engineering, it shows how DTs are enablers of intelligent, 
+flexible, and resilient infrastructues rather than isolated digital tools. 
+Supporting autonomous system control, performance optimization, and 
+sustainable energy transitions, the study places DTs as basic for the 
+digital transformation of the energy industry.
+In summary, this review fills in a major hole in the literature with a 
+disciplined, practical, and future-oriented framework. It not only ar-
+ranges a scattered body of knowledge into a logical totality but also 
+presents innovative approaches, taxonomies, and integration models. 
+For researchers, system designers, legislators, and technologists at the 
+nexus of renewable energy and digital change, its observations provide 
+authoritative direction.
+1.8. Structure of the paper
+This review has been purposefully arranged to lead the reader 
+through a logical sequence reflecting the tiered method applied in the 
+process of literature screening, selection, and synthesis. From basic ideas 
+to enabling technologies, practical applications, new challenges, and 
+finally a forward-looking research program, the aim is to progress from 
+This tiered structure guarantees that the study delivers a coherent 
+narrative that catches the changing function of DTs in renewable energy 
+Table 1 
+Comparison of prior review articles on DTs in renewable energy contexts.
+Author(s) & 
+Year
+Energy Focus Lifecycle Coverage Tech Integration (AI, IoT, 
+Edge)
+Gap Identified
+[41] Wind only Operation phase only Limited to IoT No multi-energy comparison
+[42] PV systems Monitoring only AI-focused No discussion on hybrid systems or EoL strategies
+[43] General DTs Broad but non-renewable Not discussed No RE context or taxonomy
+This Review Solar, Wind, Hydro, 
+Hybrid
+Full lifecycle: Design → 
+EoL
+AI, IoT, Edge, Cloud Comprehensive lifecycle and system taxonomy, practical 
+roadmap
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+5 
+=== PDF PAGE 6 ===
+systems, not only aggregates past work. Section 2 describes the review 
+approach, including the search strategy, inclusion criteria, period span 
+(2014–2024), databases consulted, and thematic sorting techniques 
+guiding the later structure. This methodological openness guarantees a 
+repeatability and a systematic approach to the review. Section 3 opens 
+with the theoretical underpinnings and core ideas of DT technology. 
+Through tracking the development of DTs from aerospace and 
+manufacturing sectors into the energy sector, it offers historical back-
+ground. It then addresses important architectural components like the 
+physical asset, virtual model, and data interface and explores their in-
+teractions inside a real-time, cyber-physical loop. The conceptual basis 
+required to grasp the relevance of DTs to contemporary energy in-
+frastructures is established in this part. Section 4 shows the enabling 
+digital technologies enabling intelligent and functional DT systems. 
+Emphasizing AI, the IoT, cloud-edge computing, and big data analytics. 
+These systems are investigated in respect to their functions in autono-
+mous control, fault detection, predictive diagnostics, and system opti-
+mization. Their combined value is positioned as indispensable for the 
+evolution of scalable, adaptable, and robust energy systems. Section 5
+presents a thorough taxonomy and classification system for DT uses in 
+renewable energy. It arranges current research in line with lifetime 
+stage—design, operation, maintenance, and EoL as well as energy 
+type—solar PV, wind, hydroelectric, and hybrid systems. This part 
+summarizes industrial methods and scholarly achievements, so stressing 
+the flexibility of DTs in many fields and system phases. Section 6 pro-
+vides an evidence-based summary of actual implementations. Using 
+industry reports, case studies, and peer-reviewed literature, it looks at 
+how DTs have been used in operating environments. The section eval-
+uates the results, scalability, and efficiency of these implementations, 
+therefore offering objective analysis of how theory is being put into use. 
+Section 7 points up ongoing difficulties and research limitations that 
+now restrict the complete adoption of DTs in the renewable energy in-
+dustry. These cover problems such model accuracy, data heterogeneity, 
+lack of standardizing, cybersecurity flaws, and heavy computing load. 
+Understanding these constraints prepares one for focused research 
+projects and significant invention. Building on the earlier study, Section 
+8 offers a strategic road map for next investigations and development. 
+The road map calls for the integration of DTs in energy storage man-
+agement, climate adaption modeling, and decentralized grid control 
+among short-, medium-, and long-term priorities. This forward-looking 
+part matches technical needs with world policy frameworks including 
+the Paris Agreement, the Sustainable Development Goals (SDGs), the EU 
+Green Deal, and the U.S. Inflation Reduction Act. The last section, Sec-
+tion 9, summarizes the main conclusions of the review and emphasizes 
+the transforming power DTs can have in the worldwide change toward a 
+decarbonized, intelligent, and inclusive energy future. The ending 
+further supports the dual significance of this assessment as a scholarly 
+source and a useful manual for those involved in digital energy 
+transitions.
+The structure of the study thus shows a well-chosen analytical 
+sequence, starting with basic knowledge and moving toward imple-
+mentation, criticism, and future vision. It reflects the methodological 
+logic of the review, which categorized the literature along three axes: (i) 
+theoretical and architectural foundations, (ii) enabling technologies, 
+and (iii) application domains defined by energy type and lifecycle phase. 
+This intentional architecture guarantees that every part logically builds 
+on the one before it helps to provide a consistent knowledge of how DTs 
+are changing renewable energy systems. Driven by policy, technological 
+developments, and industrial impetus, the assessment addresses an 
+important worldwide need—driven by which scattered ideas should be 
+consolidated and steer the next wave of invention in sustainable digital 
+energy infrastructure.
+2. Methodology of the review
+This section outlines the systematic methodology used to conduct the 
+review. It follows PRISMA guidelines, detailing the search strategy, in-
+clusion/exclusion criteria, and classification approach. The aim is to 
+ensure transparency, reproducibility, and thematic coherence in the 
+literature selection and synthesis process. Having ensured scholarly 
+depth, complete coverage, and relevance to context, this review employs 
+a particular strategy and style. The methodology aims to collect, 
+analyze, and integrate the most important advancements concerning the 
+intersection of DT technologies and renewable energy systems from 
+academic and industrial sources. The objective is to provide an overview 
+that is both comprehensive in detail and accurate regarding the current 
+progression of the field while recognizing the notable trends, challenges, 
+and opportunities that exist. The literature reviewed in this work in-
+corporates a broad range of scholarly and industry publications pub-
+lished between 2014 and 2024. This ten-year span was selected to 
+capture both foundational and cutting-edge developments in DT appli-
+cations relevant to renewable energy systems. Special focus was given to 
+journal articles published in peer-reviewed journals that have gained 
+significant attention and prestige for their quality and impact. These are 
+journals that can be accessed via IEEE Xplore, ScienceDirect, Spring-
+erLink, and Web of Science. The review also captures non-journal ma-
+terial, including quality conference proceedings, technical reports, and 
+industry white papers authored by prominent energy companies, tech-
+nology firms, and standardization organizations. The addition of these 
+documents enriches the theoretical perspective and practical framework 
+applicable to DT technologies in the energy industry. To ensure meth-
+odological transparency and reproducibility, a systematic literature 
+search strategy was adopted. Major scientific databases—IEEE Xplore, 
+ScienceDirect, SpringerLink, and Web of Science—were queried be-
+tween January 2024 and April 2024. The search focused on journal 
+articles, conference proceedings, technical reports, and white papers 
+published between 2014 and 2024, covering both academic and in-
+dustrial contributions.
+The following keyword combinations were used with Boolean op-
+erators to refine the search. 
+• ("Digital Twin" OR "DT") AND ("Renewable Energy" OR "Solar PV" OR 
+"Wind Turbine" OR "Hydropower" OR "Hybrid Systems")
+• ("Smart Grid" OR "CPS") AND ("Monitoring" OR "Predictive 
+Maintenance")
+• ("AI" OR "Machine Learning") AND ("Digital Twin" AND "Energy 
+Systems")
+Titles, abstracts, and keywords were screened to eliminate duplicates 
+and off-topic records. Articles were then sorted based on thematic 
+alignment, technical depth, and publication quality (peer-reviewed, 
+high-impact journals prioritized). Further screening involved a second- 
+level evaluation of full texts, assessing relevance, methodological 
+soundness, and practical or theoretical contribution to DTs in 
+renewable energy. Studies were excluded if they were purely concep-
+tual without energy system relevance, lacked analytical depth, or were 
+outdated in terms of DT integration.
+This process resulted in a curated set of 156 peer-reviewed sources, 
+including studies with substantial simulation, experimental validation, 
+and real-world deployment of DT solutions across solar, wind, hydro, 
+and hybrid systems. To enhance transparency and reproducibility, the 
+methodology follows the PRISMA 2020 framework. Fig. 1 presents the 
+PRISMA flow diagram illustrating the number of records identified, 
+screened, excluded, and included at each stage of the review. The 
+following selection criteria were applied. 
+• Time Range: Publications from January 2014 to April 2024
+• Inclusion Criteria: Peer-reviewed journal articles, industry case 
+studies, and technical white papers reporting on DT applications in 
+solar, wind, hydro, or hybrid renewable energy systems, with a clear 
+technical or operational contribution
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+6 
+=== PDF PAGE 7 ===
+• Exclusion Criteria: Articles not directly related to DTs or renewable 
+energy, studies lacking technical depth or methodological trans-
+parency, duplicates, and review articles without novel synthesis
+After applying these filters, a curated set of 156 publications was 
+finalized for inclusion in this review. Fig. 2 presents the revised PRISMA 
+2020-compliant flow diagram, which clearly delineates each stage of the 
+systematic review process—identification, screening, eligibility, and 
+inclusion—along with exclusion reasons and source types, thereby 
+enhancing clarity and reproducibility.
+A second level assessment was done in order to assess published 
+works with regard to their thematic relevance, relevance impact, tech-
+nical level profundity, innovativeness, and value add to the discipline. In 
+this regard, only those works which had substantial analytical depth, 
+methodical scrutiny, or practical understanding were put through 
+selected scrutiny. Each of the selected works was categorized in accor-
+dance with pre-established key parameters: the focus of the renewable 
+energy technology was categorized as solar, wind, hydro or hybrid 
+systems; the functions and lifecycle of the DT were system design, 
+operation, monitoring and maintenance, and the last parameter was the 
+types of enabling digital technologies used which include, but are not 
+limited to, AI, IoT or edge/cloud computing. Such categorization 
+enabled systematic evaluation of the energy-specific implementations of 
+DTs. Where relevant, the review adds comparative assessment of several 
+frameworks, architectures, or models of DTs examining their effective-
+ness, flexibility, and extent of scalability concerning different opera-
+tional environments. This further includes study analysis, simulation 
+analysis, and experimental validation analyses which shed light on the 
+benefits and drawbacks of particular DT implementations. The chosen 
+methodology makes certain that the review is not only academically 
+sound, but also practically relevant. It provides a uniform and neutral 
+approach which allows for identifying trends, defining focal points, and 
+developing innovative research hypotheses. Furthermore, it nurtures the 
+clarity and coherence of the synthesis aimed at informing researchers, 
+practitioners, and policymakers by dividing the methodology-guided 
+parts of the review using these structural principles with the underly-
+ing goal of enabling effective engagement with DT solutions in renew-
+able energy development. A second-level relevance assessment was 
+undertaken following the first keyword-guided screening. Studies were 
+ranked according to their conceptual fit with DT applications in 
+renewable energy, their analytical depth—that is, inclusion of simula-
+tion, modeling, or experimental validation—their degree of technical 
+innovation, and their practical usefulness or industrial significance. 
+Retained were only studies offering significant value for the knowledge, 
+growth, or application of DTs within solar, wind, hydro, or hybrid en-
+ergy systems. This strategy guaranteed the selected literature corpus’s 
+methodological soundness and practical relevance.
+In line with the objective of this systematic review, the following 
+Research Question guides our investigation:
+What is the current state, emerging trends, and technological read-
+iness level of Digital Twin (DT) frameworks and their enabling tech-
+nologies in the context of renewable energy systems?
+This RQ serves as the foundation for our literature selection criteria, 
+review methodology, and synthesis structure, focusing on both theo-
+retical contributions and real-world deployment evidence.
+3. Fundamentals of DT technology
+This section introduces the foundational principles of DT technology. 
+It covers its evolution, core components, and architectural structure. The 
+aim is to establish a conceptual basis for understanding how DTs are 
+applied in renewable energy systems.
+3.1. Historical development and evolution of DTs
+DT technology’s beginnings dates back to the early 2000s, together 
+with its foundation emerging from the aerospace industry [44]. This 
+specific field integrates complex and mission-critical systems that 
+perform in inaccessible or dangerous locations. One of DT’s earliest 
+documented application was during NASA’s space exploration pro-
+grams. Engineers with NASA created high-fidelity virtual replicas of 
+spacecraft subsystems and monitored their performance in real-time is 
+simulation environments during space missions. With these virtual 
+models, mission control was able to monitor a spacecraft’s state millions 
+of kilometers away from earth and predict future system failures, assess, 
+and provide anomaly detection. The immense practical necessity of 
+ensuring system reliability in unfathomable remote locations leads to 
+the concept of a DT: a model that continuously evolves to capture the 
+essence of system’s behavior in accurate real-time scenarios [45]. With 
+early models showing the importance of digital replicas in managing 
+intricate physical systems, the term “DT” was later defined. The appli-
+cation of the concept advanced to manufacturing during the fourth in-
+dustrial revolution. Enabling the production of virtual real time models 
+of factory floors, machines, robotic arms, and production lines are the 
+DTs in the manufacturing sector. The advent of sensors, simulation, and 
+control systems provided unprecedented insight into operational pro-
+cesses, which in turn allowed for real time optimization, predictive 
+maintenance, reduced downtimes, and improved equipment and sys-
+tems life cycle management.
+The implementation of DTs within the manufacturing sector was a 
+novel step since industrial operations shifted from reactive problem- 
+solving business models to proactive, data-driven decision-making 
+frameworks. This change was fueled by peripheral growth of supporting 
+new technologies such as CPS, IoT, and AI. CPS provided a mechanism to 
+merge physical and digital realms, IoT facilitated data collection from 
+numerous sensors and devices to be captured in real-time, and AI 
+enhanced self-learning models with advanced intelligent decision- 
+making capabilities [46–48]. This evolution transformed DTs from 
+obsolete representations into dynamic, adaptive systems with the ability 
+to reason, forecast, and execute autonomously. After maturing in aero-
+space and industrial sectors, DT technology began gaining traction in 
+Fig. 2. PRISMA-style flow diagram.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+7 
+=== PDF PAGE 8 ===
+other vital areas. In the healthcare sector, DTs have been used for 
+modeling pupils’ specific anatomic and physiologic features for optimal 
+treatment planning and monitoring. Virtual reproduction of urban in-
+frastructures as part of smart city initiatives have been carried out to 
+control the management of traffic, energy consumption, emergency 
+response, and other services. Vehicle dynamics and fleet operations have 
+also been managed through real-time digital monitoring. The variety of 
+applications illustrates the unique scalability of DT technology whose 
+impacts can be felt in multiple industries.
+The renewable energy sector has recently emerged as one of the most 
+promising and recent frontiers for the use of DTs. It is logical, as well as 
+timely, to expect that the DT technology transition to renewable energy 
+systems will occur. The increasing penetration of distributed energy 
+resources together with the volatility and intermittency of solar and 
+wind renewables add new challenges to energy generation, forecasting, 
+and grid integration [49]. Renewables systems are frequently located in 
+isolated, climatically volatile, and physically harsh regions where 
+routine maintenance is hard, and operational uncertainty is high. Such 
+conditions mirror those, which in the first place motivated the devel-
+opment of DTs in aerospace and, thus, emphasizes the significance of 
+DTs in the context of renewable energy. In renewable applications, DTs 
+provide the same transformational benefits that other industries adop-
+ted. They enhance system monitoring through data collection, improve 
+system dependability through fault, and predictive diagnostics, as well 
+as assist decision-making using simulation and virtual testing. Further-
+more, with the progressing modularity and intelligence of renewable 
+systems from the storage units, power electronics, and smart inverters, 
+DTs become the unifying control hardware, software, environment in-
+puts, and systems [50]. Therefore, the development history of DT 
+technology, starting from the space’s DT and now including sustainable 
+energy systems, signifies the digital fusion and automation evolution. 
+This exemplifies the advances of DTs in coping with ever-increasing 
+newer challenges in modern infrastructure systems, which are com-
+plex, fragmented, data-rich, and eco-sensitive. With increasing pace of 
+global energy transformation, growing needs for robust renewable en-
+ergy systems, DTs will serve as crucial components for optimal, 
+dependable, and smart management of renewable energy systems.
+The concept of DT was introduced by NASA in aerospace engineering 
+to track and replicate spacecraft systems under highly demanding 
+operational conditions. But DTs found great conceptual and practical 
+relevance in the field of smart manufacturing and the more general In-
+dustry 4.0 movement. DTs were the pillar of cyber-physical production 
+systems (CPPS) in this age since they allowed real-time coordination 
+between digital and physical manufacturing techniques. Among the first 
+to embrace DTs for uses including process optimization, predictive 
+maintenance, factory automation, and dynamic product lifecycle man-
+agement were leading industrial companies including Siemens, General 
+Electric (GE), and Bosch. In these environments, DTs were used to 
+generate high-fidelity virtual replicas of physical assets—from CNC 
+machines and robotic arms to entire production lines—which could then 
+be used to simulate operational scenarios, evaluate wear and failure 
+probabilities, and optimize control parameters without so disrupting 
+real-world operations. The viability and scope of DTs were much 
+improved by the explosion of enabling technologies during the Industry 
+4.0 transition—especially the integration of IoT sensors, cloud and edge 
+computing, AI, and big data analytics. These technologies supplied the 
+sensory, computational, and analytical tools needed for DTs to develop 
+from stationary design-time models into dynamic, self-adaptive, and 
+intelligence-driven systems. DTs’ success in manufacturing settings 
+prepared the way for their cross-domain spread. Their versatility, scal-
+ability, and real-time adaptation made them perfect for use in sophis-
+ticated, dispersed, sensor-rich contexts like renewable energy systems. 
+Within this framework, renewable energy systems—which include solar 
+farms, wind turbines, hydroelectric plants, and hybrid micro-
+grids—miracle many of the traits of contemporary factories: distributed 
+operation, component heterogeneity, the need of dependability, and 
+growing use of automation and intelligent control. Thus, where they 
+now support system monitoring, fault detection, predictive mainte-
+nance, and lifecycle optimization, the basic approaches and technologies 
+established in the context of Industry 4.0 have immediately facilitated 
+the migration of DT frameworks into the energy industry.
+Early industry-led use of DTs in renewable energy systems started 
+with businesses like Vestas and Siemens Gamesa, who created DT- 
+enabled platforms to track wind turbine health, simulate aerodynamic 
+fatigue, and predict component failures based on real-time telemetry 
+data. Their implementations demonstrated how realistically DT frame-
+works might be used in offshore and onshore wind farms. In PV plant 
+management, First Solar also used DT modeling methods to replicate 
+module degradation, maximize inverter loading, and match site-specific 
+performance with long-term yield projections. These first uses signal the 
+change of DTs from manufacture into vital energy infrastructure. This 
+evolutionary road is shown in Fig. 3 below together with important 
+industrial benchmarks in the advancement of DT applications.
+3.2. Core principles and architecture of DTs
+The DT technology surpasses simple simulation, digital model, or 
+even a static representation of a physical system. Static representations 
+capture only a snapshot of the system’s features, whereas DTs provide a 
+virtual replica of systems that are autonomous, interactive, and self- 
+adaptive [51]. Such features dynamically evolve with the asset’s pro-
+cesses, systems, physical features, functionality, and real-time updates 
+of operational states. The main goal of DTs is to furnish a precise rep-
+resentation of the asset over its entire lifecycle, including sustained 
+design, commissioning, operational use, maintenance, and decom-
+missioning phases. As a result, they yield improved and advanced ca-
+pabilities like condition monitoring, state diagnostics, performance 
+forecasting, optimization of processes, and even self-sufficient control. 
+The construction of a DT and its virtualization uses a smart data man-
+agement system. For the model to work properly and for its functions to 
+be useful, a layered architecture needs to be implemented. This begins 
+with the physical system layer that includes the actual asset like this 
+solar panel, wind turbine, battery storage unit, or hydroelectric turbine. 
+These hardware assets include sensors, actuators, controllers, and 
+communication modals. These deliverances are specialized in capturing 
+data real time. These are the primary sources of operational data. These 
+devices provide key parameters which range from: temperature, current, 
+voltage, pressure, wind speed, vibrance, or even irradiance. The mea-
+surements done may influence the DT operating. Therefore, measuring 
+standards need to be accurate, granular, and consistent over time.
+As with the other layers, the DT layer completes the physical layer 
+and is responsible for the system’s computation (or processing). This 
+layer contains the models, simulations, and intelligent algorithms that 
+reconstruct digitally the actions of the system’s physical counterpart 
+Fig. 3. Chronological evolution of dt applications.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+8 
+=== PDF PAGE 9 ===
+depending on the operational scenarios being run. Such models could 
+either be based on physics (or first principles) through governing 
+equations or alternatively be approximations created through data using 
+machine learning and statistical inference techniques. More often, there 
+are hybrids, where the data-centric approaches are combined with 
+existing physical laws for better model accuracy, generalization, and 
+adaptability to the operating conditions. The DT not only replicates 
+system states that can be observed, but also makes estimates about 
+system states that cannot be directly measured, predicts future actions, 
+and computes what-if scenarios for decision support [52,53]. The data 
+interface layer creates the bridge into the digital world while main-
+taining 2-way, continuous communication with the asset’s digital 
+counterpart. This layer comprises of the hardware and software systems 
+that build a framework for the collection, transmission, storage, and 
+processing of large amounts of diverse data. Streams from sensors are 
+fused with operational records logs and relevant context data such as 
+weather, geospatial information, and grid supplied information. Hence, 
+it becomes possible to ensure constant updating of changes to the 
+physical asset as and when they occur, alongside the virtual model. 
+Furthermore, it allows for the execution of control strategies where the 
+DT, after executing prediction-based optimization algorithms, issues 
+command or makes alerts tailored for the physical apparatus.
+Integration of these three levels creates a closed-loop cyber-physical 
+system where the DT provides feedback to refine operations, and the 
+physical model updates in real time. Such two-way interaction alters the 
+role of the DT, shifting it from a static analytical instrument to a dynamic 
+participant within the system’s command and control network. For 
+instance, a DT of a solar PV array could observe deterioration of a 
+panel’s performance and automatically adjust the MPPT algorithm to 
+optimize output. A DT of a wind turbine could, on the other hand, pre- 
+emptively issue a maintenance warning due to anticipated gearbox 
+failure well ahead of an expensive breakdown. Adaptability is incorpo-
+rating self-learning capabilities, while monitoring data trends, and au-
+tonomy means acting on one’s own judgement. Such principles are what 
+allows this architecture enhance safety, efficiency, and reliability. In the 
+scope of renewable energy systems, this configuration has immense 
+importance. Because renewable energy generation is intrinsically vari-
+able and distributed, DTs offer a singular solution for constant system 
+supervision, multi-level integration, and intelligent management. DTs 
+are pivotal to contemporary, smart, and resilient energy systems infra-
+structure because they help facilitate the virtualization of physical assets 
+alongside embedding intelligence into the operational processes of the 
+system [54]. These tools aid energy stakeholders shift from reacting to 
+systems to adopting proactive strategies, improving system availability, 
+reducing costs, and expediting the transition to sustainable energy sys-
+tems. Fig. 4 illustrates this layered DT architecture, where data flows 
+continuously between the physical and virtual realms to ensure accurate 
+synchronization. This diagram depicts the three-dimensional view of a 
+DT system’s architecture on a renewable energy asset. The Physical 
+System Layer comprises the sensing devices and energy-generating 
+machines. The Data Interface Layer functions as the communication 
+channel which consolidates data streams to be delivered in real-time and 
+provides context. The DT Layer encompasses the scanning and analytical 
+tools responsible for simulating and anticipating the behaviors of the 
+actual systems. Moreover, the Control and Decision Loop facilitates 
+optimal feedback control, enabling the twin to assist passively or 
+actively in ensuring the safety and efficient operation of the physical 
+system.
+3.3. Mathematical modeling of DT synchronization
+To function effectively, a DT must accurately replicate the behavior 
+Fig. 4. Conceptual architecture of a DT in renewable energy systems.
+Fig. 5. Integrated architecture showing the layered interaction between key enabling technologies (AI, IoT, Cloud/Edge Computing, Big Data) and the core functions 
+of DTs in renewable energy systems.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+9 
+=== PDF PAGE 10 ===
+of its physical counterpart [55]. Let the state of the physical system be 
+denoted as x(t), and the corresponding state of the DT as ̂x (t). The 
+synchronization of the twin can be mathematically expressed as per 
+relation (1) [56]: 
+̂x(t)= f(x(t), u(t), θ(t))+ ε(t) (1) 
+Where. 
+• x(t) represents the real-time state of the physical system,
+• u(t) is the control input,
+• θ(t) denotes environmental and operational parameters (e.g., solar 
+irradiance, wind speed),
+• f(⋅) is the behavioral model (physics-based, data-driven, or hybrid),
+• ε(t) is the modeling error, ideally minimized through learning and 
+calibration.
+The objective of a high-fidelity DT is to minimize ε(t) over time using 
+AI techniques, sensor fusion, and online recalibration mechanisms.
+3.4. Real-time data integration and feedback mechanism
+An aspect that sets apart DTs is their peculiarity to receive, process, 
+and act on live data stemming from the actual system. Operational data 
+streams like temperature, voltage, current, vibration, wind speed, and 
+irradiance are perpetually available from the sensor networks associated 
+with renewable energy systems [57]. These data streams are utilized by 
+the DT for state reproduction, fault isolation, or operational scenario 
+prediction. Considering the time function t, let the vector of incoming 
+sensor signals be S(t) and let the twin’s output action be y(t). Then, the 
+feedback control loop can be modeled as in Equation (2) [58]: 
+y(t)= g(S(t),̂x(t)) (2) 
+Where g(⋅) may involve optimization algorithms, control laws, or rule- 
+based logic to update system operations in real-time. This function-
+ality allows DTs to serve not only as diagnostic tools but as intelligent 
+agents within control architectures for renewable systems.
+3.5. DT integration in renewable energy systems
+The spatial distribution and high data availability of renewable en-
+ergy systems makes them vastly profit from DT technologies. In solar 
+power systems, DTs can simulate real-time degradation of components, 
+temperature impacts, and losses in power conversion. For Wind Tur-
+bines, DTs can simulate the structural dynamics of blades, gear wear, 
+summative optimization of orientation, and max efficiency. Hydro-
+power plants use DTs for simulation of flow dynamics and build-up of 
+sediment in addition to maintenance intervals of the turbines and gates. 
+Typical DT Applications for various renewable energy technologies and 
+their lifecycle phases are presented in Table 2 [59].
+4. Enabling technologies for DTs in renewable energy systems
+This section explores the critical digital technologies that empower 
+DT functionality. It highlights the roles of AI, IoT, cloud/edge 
+computing, and big data analytics. These technologies are presented as 
+integral to real-time control, predictive diagnostics, and system opti-
+mization. The functionalities of DTs in renewable energy includes their 
+real-time linking and automated task handling. Their achievements are 
+sustained by a powerful system of technology and infrastructure, which 
+includes: AI, the IoT, cloud and edge computing systems, and big data 
+analytics [60]. Together, these systems supply as much needed intelli-
+gence and data for the DTs to function as autonomous, self-modifying, 
+and scalable cyber-physical frameworks. Among the many enablers of 
+DT systems, perhaps the most disruptive one is AI. AI equips DTs with 
+the necessary intelligence that enables them to recognize patterns, 
+‘learn’ how their systems operate, and make rational choices [61]. For 
+renewable systems, AI is essential in predictive upkeep, calculating en-
+ergy requirements, spotting faults, and optimizing operations in 
+real-time. To illustrate, a wind turbine is subject to various fluctuations 
+in wind speed. A DT of such a turbine can be fitted with a neural network 
+capable of relating operational parameters such as blade rotation speed, 
+torque, vibration, and generator temperature to a health state index. 
+This is representable as (3): 
+̂y(t)= f(x1(t),x2(t),...,xn(t); θ) (3) 
+where xi(t) represents real-time input features at time t, θ is the set of 
+learned parameters from historical data, and ̂y (t) is the predicted con-
+dition or performance metric. The DT can use this forecast to schedule 
+maintenance, prevent catastrophic failures, and adjust operating points 
+for efficiency.
+The IoT delivers the crucial sensing and communication framework 
+for DT systems. IoT networks encompass smart sensors, embedded sys-
+tems, edge devices and protocols that facilitate the real-time data ex-
+change between physical energy assets and their virtual counterparts 
+[62]. IoT in solar PV applications, for example, allows for monitoring of 
+solar irradiance, module temperature, and voltage output of every in-
+dividual panel. All this information is transmitted to the DT so that the 
+virtual model remains up to date with the actual physical state. 
+Furthermore, IoT’s bidirectional communication allows DTs not only to 
+monitor and control remotely with commands sent in their feedback 
+loop after an anomaly or predicted change in operating conditions is 
+detected, but also to issue commands autonomously. The latency and 
+processing issues associated with DT operations in real time are 
+Table 2 
+Application of DTs in renewable energy systems.
+Renewable 
+Source
+Design & 
+Simulation
+Operation 
+& 
+Monitoring
+Maintenance 
+& 
+Optimization
+Example Use 
+Case/ 
+Reference
+Solar PV Panel layout 
+optimization
+Irradiance 
+forecasting
+Degradation 
+tracking, 
+MPPT tuning
+Huawei 
+FusionSolar 
+platform [21], 
+University of 
+Seville DT 
+model [23]
+Wind Blade 
+aerodynamics
+Gearbox 
+vibration 
+analysis
+Predictive 
+maintenance
+GE Digital 
+Wind Farm 
+[24], Vestas 
+turbine 
+diagnostics 
+[59]
+Hydro Turbine flow 
+modeling
+Water level 
+estimation
+Sediment and 
+wear 
+diagnostics
+EDF Villerest 
+Dam [24]
+Hybrid 
+Systems
+System 
+coordination
+Load 
+balancing
+Battery life 
+extension, 
+control
+US DOE hybrid 
+pilot [24]
+Table 3 
+Roles of enabling technologies in DT functions.
+Enabling 
+Technology
+Core Role in DTs Application Example 
+in Renewable Energy
+References
+AI Predictive analytics, 
+optimization, fault 
+detection
+Wind turbine blade 
+fatigue prediction
+[60,61]
+IoT Real-time data 
+acquisition and control
+PV panel monitoring 
+and MPPT adjustment
+[62]
+Cloud & Edge 
+Computing
+Scalable processing and 
+low-latency 
+responsiveness
+Edge-based control of 
+microgrid voltage 
+levels
+[63]
+Big Data 
+Analytics
+Pattern discovery, 
+forecasting, diagnostics
+Energy yield 
+prediction under 
+changing weather
+[64,65]
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+10 
+=== PDF PAGE 11 ===
+mitigated by cloud and edge computing technologies [63]. While the 
+cloud offers virtually limitless resources for data storage, data access, 
+historical analysis, AI model training, and more, edge computing offers 
+real-time processing at the location data is collected, further reducing 
+latency. This is critical in remote renewable energy locations, such as 
+offshore wind farms or solar farms located in deserts, where high-speed 
+internet connectivity is spotty. For instance, near sub-second deci-
+sion-making for real-time fault isolation in wind turbines may not be 
+possible via cloud servers. Local edge devices can ensure faster decision 
+execution by processing data, executing safety protocols, and updating 
+with DT local to the DT in milliseconds [64].
+The analytical component of big data serves as the interpretive and 
+diagnostic layer for the DT technology, or DT. It allows the functioning 
+of the DTs with regard to the challenges of volume, velocity, variety, and 
+veracity associated with data from renewable energy systems. Tech-
+nique of time series analysis, regression models, unsupervised learning, 
+and dimensionality reduction approaches enable actionable insights to 
+be advanced from the sensor data. In hybrid systems of solar and wind 
+energy, big data tools enable the DT to correlate the solar and wind 
+environmental parameters with system output to optimize the configu-
+ration and quantity of system resource constituents [65–67]. This im-
+proves energy yield, reduces operational risk, and enhances smart grid 
+integration. Table 3 summarizes how each of these enabling technolo-
+gies contributes to the key functions of a DT in renewable energy 
+systems.
+Fig. 5 presents a layered visualization of how enabling technologies 
+empower the functionality of DTs in renewable energy contexts. The 
+diagram shows how IoT enables data acquisition, edge/cloud platforms 
+facilitate scalable processing, AI contributes to real-time intelligence, 
+and big data analytics support performance diagnostics and forecasting.
+As provided in Fig. 4 and Table 3, these technologies do not work in 
+isolation; rather, it is their convergence which allows the DT to move 
+beyond classical system modeling and monitoring. For example, a solar 
+power plant could use AI-powered forecasting to anticipate cloud cover 
+and subsequently activate battery charging controls via edge computing. 
+At the same time, IoT ensures monitoring of voltage levels in real time, 
+while the cloud keeps predictive models current with historical datasets 
+enhanced through big data. The merger of AI, IoT, cloud-edge 
+computing, and big data analytics shifts the paradigm; rather than 
+serving as passive replicas, DTs become active decision-making systems 
+that propel enterprises into the future. This feature is crucially important 
+in renewable energy, where the need for intelligent, autonomous, 
+adaptive, and self-governing systems is required due to unpredictable 
+environmental inputs, decentralized asset distribution, and high system 
+complexity.
+Using hybrid frameworks like the Deep Energy Method (DEM), 
+which blends data-driven models with physical laws to improve learning 
+accuracy and generalizability, is a developing progress in the integration 
+of machine learning with DT systems. To train physics-informed neural 
+networks, DEM has shown great efficiency in absorbing experimental 
+data, real-world observations, and simulation-based knowledge, hence 
+lowering dependency on large-scale labeled datasets. DEM powerfully 
+closes the gap between simulations and physical systems, hence 
+permitting strong generalization across dynamic situations, as proven by 
+Ref. [68] in Computer Methods in Applied Mechanics and Engineering. 
+Including such techniques into renewable energy DTs—for example, 
+simulating turbulent wind flows or PV thermal interactions—offers a 
+viable approach toward producing high-fidelity, data-efficient DTs with 
+improved predictive power. This emphasizes the continuous change 
+from typical ML pipelines to hybrid, physics-aware learning systems 
+essential for intelligent, resilient, and self-adaptive renewable 
+infrastructues.
+In summary, the purpose of the enabling technology features has 
+been fundamental to the adoption and implementation of DT systems in 
+applications related to renewable energy. These technologies will 
+require a DT with algorithms for intelligence, omnipresent sensors, 
+processors for cloud-edge scalable computing, and sophisticated ana-
+lytics to meet the performance, reliability, and efficiency standards of 
+sustainable energy infrastructures.
+5. Classification and applications of DTs in renewable energy 
+systems
+A novel taxonomy is introduced in this section to categorize DT ap-
+plications across renewable energy types and lifecycle phases. This 
+framework helps organize fragmented research and industry efforts into 
+a coherent structure. It emphasizes how DTs are being used in design, 
+monitoring, maintenance, and optimization. The applicability of DT 
+technology is growing in scope across different renewable energy sys-
+tems, with each system having its own operational difficulties and life-
+cycle requirements. For additional detail of the range of DT applications, 
+a hierarchy based on the energy source and the lifecycle phases of the 
+relevant assets is needed. This framework assists to understand how the 
+function of DTs’ changes from evolution through design, through con-
+ceptual framework to the optimization at the end of life, for various 
+technologies including solar PV, wind energy systems, hydroelectric 
+power, and hybrid renewables systems. The advances in the application 
+of DTs are prominent in the design phase of solar PV systems. Advanced 
+computer models of PV fields capture physical features such as the 
+geometrical configuration of panels as well as the dynamically changing 
+solar irradiance level, allowing for simulation of energy production for 
+various weather scenarios [69]. Several of those simulations depend on 
+solar irradiance G(t), module temperature T(t), and efficiency η(t), thus 
+enabling the dynamic forecasting of power output with the help of 
+equation (4): 
+PPV(t) = G(t)⋅A⋅η(T(t))                                                                   (4)
+where A is the total surface area of the modules. This modeling aids in 
+decision-making regarding the configuration of arrays and their capacity 
+relative to geographic and climatic factors. DTs have a plethora of ap-
+plications, but for this case, a DT of the solar farm would monitor and 
+control the installation remotely. Real-time data on irradiance, tem-
+perature, and electric performance is ingested throughout the operation 
+to fine-tune MPPT algorithms, troubleshoot shading losses, or thermal 
+drifts. The DT autonomously learns to estimate degradation trends over 
+time against historical data by non-linear declines in performance which 
+are mostly unnoticed by traditional monitoring systems [70,71]. In the 
+maintenance stage, these insights provide support for condition-based 
+scheduling, inverter fault detection, and soiling anomaly detection. 
+For the repowering, recycling, or reconfiguring the solar modules stra-
+tegies toward the EoL phase, DTs help analyze the trade-offs of opera-
+tional yield with replacement cost and augment decision-making 
+sophistication.
+Due to the stochastic characteristics of wind flow, the stress placed 
+on the moving components, and the altitude of the turbines, wind energy 
+systems present a more challenging environment for the application of 
+DTs [72,73]. During the design phase, DTs are used to estimate aero-
+dynamic loading, wake effects, and optimal turbine spacing with respect 
+to the historical and site-specific wind speed distributions. Typically, 
+these simulations employ computational fluid dynamics (CFD) for 
+modeling interaction of blades with structures as well as aerodynamic 
+loads. As for operations, DTs command real-time telemetry tracking 
+with sensors located in the blades, nacelles, and towers to adjust yaw 
+angle optimization, anomaly detection in vibration profiles, and regu-
+lation of rotor speed to maximize power generation. In this case, a 
+representative equation for predictive fault detection is the Remaining 
+Useful Life (RUL), often modeled as shown in Equation (5) [74]: 
+RUL(t)= Cthreshold  C(t
+dC(t)/dt (5) 
+where C(t) is a time-evolving condition index such as vibration ampli-
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+11 
+=== PDF PAGE 12 ===
+tude, and dC(t)/dt denotes its rate of deterioration. This formulation 
+allows the DT to trigger preventive maintenance actions in advance of 
+potential failures. Maintenance also includes gear lubrication di-
+agnostics, blade crack prediction using ultrasonic data, and bearing 
+temperature monitoring. At the EoL phase, DTs offer structural reuse 
+analysis, support repowering strategies, and assess fatigue accumulation 
+for retrofitting decisions.
+Hydroelectric systems, while often more centralized and stable, 
+benefit significantly from DT models for flow optimization and infra-
+structure diagnostics. In the design phase, DTs simulate water inflow, 
+turbine behavior, and structural load under different seasonal and hy-
+drological conditions. These models incorporate Bernoulli’s principle 
+and head-flow relationships to estimate power generation [75]. These 
+relationships are presented in Relation (6): 
+Phydro(t) = ρ⋅g⋅H(t)⋅Q(t)⋅η                                                               (6)
+where ρ is water density, g is gravitational acceleration, H(t) is net head, 
+Q(t)) is flow rate, and η\etaη is turbine efficiency. In operation, the DT 
+synchronizes with SCADA systems to monitor real-time water levels, 
+control gates, and turbine speed. Maintenance activities are enhanced by 
+monitoring penstock corrosion, analyzing cavitation patterns in tur-
+bines, and predicting silt buildup. For aging hydro systems, DTs play a 
+vital role in determining retrofit potential, extending plant lifespan, and 
+ensuring that structural elements are still within their fatigue thresholds.
+Hybrid renewable systems—those integrating two or more energy 
+sources such as solar, wind, hydro, and battery storage—are particularly 
+suited to DT deployment due to their inherent complexity and dynamic 
+interactions. In the design stage, the DT helps size components, optimize 
+load-generation matching, and simulate control strategies for energy 
+dispatch. During operation, it functions as a centralized decision-making 
+system that coordinates between generation sources and storage sys-
+tems, ensuring energy reliability and quality. The DT manages inverter 
+synchronization, forecasts generation under composite environmental 
+data, and arbitrates between charging and discharging states for battery 
+systems [76,77]. In maintenance, the twin monitors battery state of 
+health, inverter switching behavior, and transformer performance. To-
+ward system retirement, it supports cost-yield analysis to determine 
+whether partial upgrades, total decommissioning, or hybrid reconfigu-
+ration would be most economically viable. To summarize these func-
+tions, Table 4 presents a structured view of DT applications across four 
+major renewable energy sources and lifecycle phases. This table presents 
+a detailed classification of DT applications across four major renewable 
+energy systems (solar, wind, hydro, and hybrid) and each phase of the 
+asset lifecycle, namely design, operational monitoring, maintenance, 
+and EoL optimization. This table serves as a structured reference for 
+understanding how DT implementations vary in functionality depending 
+on both system type and lifecycle stage.
+As shown in Fig. 6, this taxonomy reveals both the breadth and depth 
+of DT deployments across renewable energy systems, and supports the 
+strategic alignment of DT functions across the asset lifecycle. According 
+to this figure, the application of DTs is implemented in four primary 
+energy systems: Solar PV, Wind, Hydroelectric, and Hybrid Systems, as 
+well as in each critical phase of the asset lifecycle which includes: 
+Design, Operational Monitoring, Maintenance, and EoL Optimization. 
+The combination of energy types and lifecycle phases outlined in Table 3
+and Fig. 5 showcases the versatility and scalability of DTs to both 
+centralized and decentralized energy systems. This view is illustrated 
+previously in Fig. 5 which depicts the interrelation of role delineation in 
+these technological domains vertically and the application layers hori-
+zontally. To summarize, the use of DTs in renewable energy signifies an 
+asset management approach that is shifting from static and reactive, to 
+design and operation that is driven by intelligence on the system, and is 
+far more agile and autonomous. The operational and predictive simu-
+lations, along with optimization capabilities of DTs throughout the 
+entire life of an asset, are crucial for not just operational optimization, 
+but also broader sustainability objectives. This taxonomy helps industry 
+stakeholders and policy drivers to strategically transform clean energy 
+digitally as they evolve and adapt to shifting demands.
+6. Real-world implementations and case studies of DTs in 
+renewable energy
+This section presents documented academic and industrial case 
+studies that demonstrate DT applications in operational settings. The 
+selected examples span solar, wind, hydro, and hybrid systems. Quan-
+tifiable outcomes such as energy yield improvements and maintenance 
+reductions are discussed.
+Fig. 6. Taxonomy of dt applications across renewable energy systems and lifecycle phases.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+12 
+=== PDF PAGE 13 ===
+6.1. Solar PV systems
+As the world adopts DTs to simulate engineering practices, a multi-
+tude of use cases demonstrating the practical benefits have emerged 
+alongside their operational value and performance improvements. 
+consider the enhancement of systems optimization, fault diagnosis, 
+maintenance prediction, and asset lifetime extension in digitalized ac-
+ademic laboratories, pilot testbeds, and large-scale industrial energy 
+projects; all of this pursuing automation [78]. Outside the technical 
+achievements, the value of these case studies includes findings around 
+scalability and interoperability, not to mention total return on invest-
+ment. The rapid divergence of DTs for solar PV systems stems from the 
+availability of real-time contextual data along with the configurability of 
+PV arrays [79]. Another illustrative example of DT application on energy 
+is developing a real-time irradiance and yield forecasting model by 
+University of Seville researchers. Their system calibrated a digital meter 
+of a PV array to automatically control the solar panels using weather 
+forecasting in conjunction with I-V characteristics and temperature of 
+the panels. The goal of estimating power output P(t) is given in terms of 
+irradiance G(t), its real-time function, and temperature dependent effi-
+ciency η(T(t)). These pieces of the model are also illustrated in relation 
+(4). This dual feature of the model allowed for the dynamic reconfigu-
+ration of MPPT parameters, especially during transient shading, and 
+increased daily energy yield estimation by over 10 %. At the same time, 
+industrial implementations have progressed significantly, with Huawei 
+and Sungrow, for example, incorporating DT frameworks into their 
+inverter technologies. These inverters autonomously detect perfor-
+mance decline, calculate the soiling ratio of the solar panels, and even 
+remotely propose maintenance actions over communication lines. From 
+operational data, there is an estimated 15 %–20 % decrease in mean 
+time to repair (MTTR), and 5 %–8 % increase in overall energy yield 
+with the use of DT-enhanced diagnostics.
+6.2. Wind energy systems
+The deployment of DT platforms has also been active in the wind 
+energy sector for component health monitoring and performance opti-
+mization. A well-known example is GE Renewable Energy’s “Digital 
+Wind Farm” solution that simulates each wind turbine in real time from 
+sensor data like nacelle position, blade strain gauges, and vibration 
+transducers. The digital model estimates fatigue analysis of the cumu-
+lative damage done over time which follows Miner’s rule of damage 
+accumulation described in relation (7) [769]: 
+D(t)=
+∑n
+i=1
+Ni
+Nf,i
+(7) 
+where Ni is the number of stress cycles experienced and Nf,i is the 
+number of cycles to failure at each stress amplitude. The wind turbine’s 
+DT uses this model to predict the RUL of components and schedule pre- 
+emptive repairs. By combining this with aerodynamic modeling, the DT 
+also optimizes yaw and pitch controls in response to evolving wind 
+conditions. These strategies have been reported to extend turbine life 
+expectancy by up to five years and reduce unplanned maintenance by 
+25 %. Siemens Gamesa has similarly integrated DTs into its offshore 
+turbine platforms, focusing on remote inspection, gearbox anomaly 
+detection, and ice accretion modeling.
+6.3. Hydroelectric systems
+The role of DTs in the structural and operational management of 
+hydroelectric systems has recently gained prominence. EDF, the Electric 
+Company of France, has developed a DT model of Villerest Dam in 
+France which serves as a remarkable example of industrial imple-
+mentation. This model contains a simulative representation of the dam’s 
+inflow and outflow processes, gate movement algorithms, sediment 
+transport, and structural stress behavioral feedback. The simulation is 
+fed data from flow meters, water level sensors, and SCADA systems. The 
+twin is aided with data from flow meters, water level sensors, and 
+SCADA systems. Hydropower generation is modeled using the classic 
+equation (6). Detection of early-stage cavitation, abnormal penstock 
+pressure, and other hydraulic abnormalities has been possible with 
+reduced incident response time and lower false alarm rates. From the 
+Villerest case presented, DT technology has proven advantageous in 
+flow dispatch planning resulting in twelve percent reported efficiency 
+gains during a six-month operational cycle with variable inflow 
+conditions.
+6.4. Hybrid renewable systems
+One of the most complex applications of DTs’ technology must be in 
+hybrids of renewable systems which involve the simultaneous man-
+agement of solar, wind and storage. A project microgrid pilot was 
+designed by the US Department of Energy that incorporates Solar PV, 
+Wind Turbines, and Li-Ion Batteries along with a centralized DT that 
+performs load forecasting, predictive dispatch, and dynamic voltage 
+regulation [80,81]. This DT utilizes machine learning models with 
+consumption and weather data to optimize energy balance while 
+reducing curtailment and storage degradation. Dispatch optimization is 
+usually described as a cost minimization problem as stated in Equation 
+(8) [82]: 
+Min
+∑
+t
+[
+Cgen(t)+ Cstorage(t)+ Ccurtail(t)
+]
+(8) 
+subject to the constraints of power balance, inverter limits, and 
+battery state-of-charge (SOC) trajectories. Applied validation studies 
+demonstrated that the microgrid’s operational cost was reduced by over 
+10 % alongside a reduction of fossil fuel reliance by 22 %, an 
+improvement in battery longevity by 15 % with the deployment of a DT- 
+enhanced controller [83]. DT systems have shown great potential for 
+enabling energy supply during prolonged periods of lower resource 
+predictability and responsiveness to demand variability in remote areas. 
+In order to illustrate the range and focus of these implementations, Fig. 7
+illustrates the quantity of documented academic and industrial case 
+studies across four renewable energy technologies. The bar chart em-
+phasizes that solar and wind are at the forefront of both areas because of 
+their data abundance and modular design, while hydropower and hybrid 
+systems, though less frequently adopted, are often accompanied by more 
+sophisticated or system-wide DT capabilities. This forgoes the setting of 
+the reporting and visually compares the quantitative gap of the DT use 
+cases in literature versus those in industry for solar PV, wind, hydro-
+power, and hybrid systems.
+6.5. Comparative analysis
+This is several crucial synthesizing conclusions through the use of 
+digital twining. To begin with, DT systems always yield better results 
+due to enhanced performance, particularly with the use of predictive 
+analytics in anomaly detection and lifecycle planning. Integration with 
+edge computing will always be a crucial success factor due to mitigation 
+of latency in control loops and increased autonomy in more remote, 
+gated areas. Flexibility of DT modules is a great domain for change since 
+the architectures can either be fleet centered or modular systems 
+distributed. This is important because they must align with operational 
+objectives and complexity of the system. And lastly, there is still scope 
+construct of proper platform for ontology standardization which comes 
+together with interoperability and scalability. Many DT systems are 
+created based on proprietary frameworks and asset behavior modeling 
+ontologies are still being developed [84]. Despite the challenges, it is 
+equally clear both in academia and industries that such challenges 
+provide a great degree of motivation. We can expect acceleration in DT 
+deployment over large-scale utility and remote energy projects which is 
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+13 
+=== PDF PAGE 14 ===
+why enabling technologies and lowering cost of implementation drives 
+such deployment. The experiences mentioned in this section is aimed to 
+not only assist the milestones alongside the DT assumption but to aid as 
+guiding frameworks in deployment strategical aid, future pedagogical 
+works and research strategies [85,86].
+Based on recorded case studies, Fig. 8 succinctly shows the propor-
+tional distribution of DT deployments over important renewable energy 
+sectors: Solar PV, Wind, Hydro, and Hybrid systems. This graphic not 
+only supports the textual debate about real-world installations but also 
+offers a quick comparative knowledge of where DT adoption is now most 
+concentrated. With almost 45 % of installations under Solar PV, the 
+sector’s great adaptability, sensor readiness, and integration with AI- 
+based monitoring systems are reflected. Following with a noteworthy 
+30 %, wind energy shows great absorption in predictive maintenance, 
+yaw control, and turbine performance analytics. Though it has long been 
+a part of the world’s energy supply, hydropower makes 15 % of DT use 
+cases mostly in water level management, penstock diagnostics, and 
+structural risk prediction. Though the lowest at 10 %, the hybrid systems 
+segment is becoming more and more of interest as microgrids and in-
+tegrated storage-control systems using synchronized digital represen-
+tations are adopted. This number balances the enlarged Section 5, in 
+which thorough case studies explore the technical depth and variety of 
+DT applications. For example, the high percentage for Solar PV fits case 
+studies like Huawei’s and Sungrow’s deployment of DT-augmented 
+inverter systems, whereas Wind’s representation fits GE’s Digital Wind 
+Farm project. With visual clarity and measurable emphasis, the figure so 
+helps the narrative by providing an easily available summary of trends 
+that improves reader involvement and increases the practical usefulness 
+of the paper. By means of specialized platforms and linked software 
+ecosystems, major industry participants have greatly sped the adoption 
+of DTs in renewable energy systems. Using sensor telemetry coupled 
+with cloud analytics, GE’s Predix platform—one of the first industrial- 
+grade DT solutions—allows one to replicate and control wind turbine 
+behavior in real time. Built on Predix, GE’s Digital Wind Farm system 
+automatically adjusted turbine parameters depending on environmental 
+data, therefore displaying a 20 % boost in wind farm efficiency. DT 
+capability in offshore wind turbines and grid-connected PV systems has 
+also come from Siemens’ MindSphere, a cloud-based IoT operating 
+system. By means of AI-based pattern recognition, it allows virtual 
+commissioning, fault diagnostics, and predictive maintenance. Using AI 
+to hone MPPT control and increase asset lifetime, Huawei’s FusionSolar 
+platform combines DT capability for PV asset monitoring, performance 
+tuning, and remote fault detection. Sungrow’s iSolarCloud also com-
+bines real-time DT visuals for inverter health with coordination of 
+deployment. EDF’s DT application at the Villerest Dam models sediment 
+movement, hydraulic stress, and gate operations in the hydropower 
+domain, therefore helping to reduce downtime and improve operating 
+safety. These systems not only confirm the feasibility of DT adoption on 
+a large scale but also provide modular designs fit for several renewable 
+technologies. By reducing entrance barriers through standardized APIs, 
+visual interfaces, and pre-trained diagnostic models, their impact has 
+made DTs more available to energy utilities and system integrators. 
+Table 5 serves as a semi-quantitative synthesis of real-world appli-
+cations, transforming textual evidence into measurable outcomes.
+Several constraints limit the general scalability and economic 
+viability of DT installations in renewable energy systems, notwith-
+standing the encouraging outcomes shown by several industry and ac-
+ademic case studies. First, many successful demonstrations—like GE’s 
+Digital Wind Farm or Huawei’s DT-enhanced solar inverters—still limit 
+themselves to highly regulated settings or big companies with significant 
+resources for digital infrastructure. From pilot-scale DTs to full-grid or 
+national installations, interoperability, sensor integration across legacy 
+Fig. 7. Distribution of dt implementations across renewable energy sectors.
+Fig. 8. Distribution of DT Implementations According to various case studies.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+14 
+=== PDF PAGE 15 ===
+assets, and real-time data infrastructure suffer. Furthermore, small and 
+medium-sized utilities or off-grid projects in developing nations find the 
+financial expenses of scaling DTs—from edge computing equipment to 
+ongoing model recalibration—remain exorbitant. The return on invest-
+ment (ROI) is quite context-dependent; local labor prices, dependability 
+criteria, and legal systems all affect payback times. For example, 
+whereas DT-based predictive maintenance shows MTTR reductions of 
+15–25 %, the upfront capital cost for digital instrumentation and AI 
+model development typically surpasses the cost-savings threshold for 
+small-scale systems. The availability and quality of training data 
+represent still another important restriction. Accurate, time- 
+synchronized data is what high-fidelity DT models demand, and older 
+systems or scattered data ecosystems might not be easily accessible. The 
+performance and generalizability of DTs across many geographical or 
+climatic situations is degraded without consistent data schemas and 
+interoperable protocols. These limitations highlight the requirement of 
+adaptable and modular DT designs, regional policy support, and cost- 
+sharing systems (e.g., utility alliances or digital infrastructure in-
+centives) to enable more general adoption. From hypothetical or niche 
+DT applications to a strong, scalable DT architecture across the world-
+wide renewable energy sector, addressing these constraints is crucial.
+7. Challenges, gaps, and research opportunities in DT 
+applications for renewable energy
+Key challenges limiting the scalability and reliability of DTs in 
+renewable energy systems are identified here. Topics include model fi-
+delity, data heterogeneity, lack of standardization, and cybersecurity. 
+These gaps are analyzed to set the stage for targeted future research. 
+Although the potential advantages and growing implementation of DT 
+technology in renewable energy systems is immense, there remain some 
+technical, operational, and strategic hurdles. These hurdles hinder the 
+full potential of DT capabilities harnessed but more importantly reveal 
+crucial gaps that must be filled to ensure scalable, secured, and intelli-
+gent deployment. Addressing such constraints needs to be incorporated 
+in the integrative frameworks for policy, standardization, and digital 
+integration design like cybersecurity in Energy infrastructure CPS. Gaps 
+in model accuracy for monitoring, control, and supervision of systems 
+reflect fundamental challenges to be surmounted [87]. DTs depend on 
+physics-based equations and data paired with a given asset’s dynamic 
+behavior to emulate it. However, deviations always occur between vir-
+tual models and real-world systems due to simplification, lack of 
+completeness constituent parameters, or environmental ambiguity. For 
+instance, in PV system modeling, efficiency is usually considered a linear 
+function of temperature and irradiance. However, actual data shows non 
+trivial impact of spectral shifts, and mismatch losses. In wind systems 
+paired with other energy systems, accurate CFD simulation of turbu-
+lence alongside wake effects puts an elevated computational load on 
+real-time systems dubbed as highly sophisticated. Consequently, the 
+virtual models are not responsive or detailed enough to aid in accurate 
+decision-making. Also, the degradation models for components such as 
+batteries or inverters are frequently constructed from laboratory con-
+ditions and do not translate well to actual stressors in the environment 
+[88].
+Compounding the modeling challenge is the issue of data hetero-
+geneity and quality. DTs depend on continuous streams of sensor data 
+for calibration, validation, and control actuation. However, the data 
+ingested is often noisy, asynchronous, or sampled at inconsistent rates. 
+The integration of diverse data types—including numerical readings, 
+categorical flags, image data, and time-series logs—poses a significant 
+preprocessing burden. For instance, aligning SCADA data with weather 
+station inputs and inverter telemetry requires robust temporal harmo-
+nization, interpolation, and fault handling techniques. A misalignment 
+of even a few seconds between power output and irradiance data in a PV 
+twin can distort MPPT analysis and hinder diagnostics. Mathematically, 
+let x1(t), x2(t), …, xn(t) represent input variables with differing time 
+stamps t1, t2 …, tn. An effective DT model must first align them to a 
+unified timeline as per relation (9): 
+̂xi (t)= Interpolate  xi  tj)), for tj ∕= t (9) 
+This alignment stage is important but still lacking refinement in 
+several DT platforms, particularly concerning geographically distributed 
+and multi-source data environments [89]. Another chronic problem is 
+the absence of uniformity in the design of a DT, its communication in-
+terfaces, and data semantics. In the renewable energy sector, there are 
+no comprehensive standards governing the architecture of DTs which 
+leads to fragmented approaches that limit overall cooperation. While 
+certain standards like IEC 61850 exist in support of substation auto-
+mation, there is little agreement as to how cross-domain interactions in 
+hybrid systems and AI based decision making are to be modeled by DTs 
+[90]. Consequently, even high-fidelity DTs cannot often be reused across 
+different projects, leading to limited scalability. Furthermore, their DT 
+platforms are dominated by closed ecosystems and proprietary tools 
+Table 4 
+Classification of DT applications in renewable energy systems.
+Energy 
+System
+Design Stage Applications Operational Monitoring Maintenance Strategies EoL Optimization Representative 
+Studies
+Solar PV Array layout optimization, PV 
+sizing, yield forecasting
+MPPT tuning, thermal drift 
+tracking, real-time irradiance
+Inverter diagnostics, soiling 
+detection, degradation modeling
+Repowering assessment, 
+recycling decisions
+[69,70]
+Wind Blade aerodynamics, wake 
+modeling, turbine siting
+Yaw control, wind field 
+analysis, vibration detection
+Gearbox and bearing wear 
+prediction, lubrication analysis
+Fatigue life modeling, repowering 
+or retrofitting
+[71,72]
+Hydroelectric Head-flow simulation, turbine 
+sizing, flow optimization
+Gate regulation, silt detection, 
+flow tracking
+Penstock wear detection, 
+cavitation analysis, SCADA 
+linkage
+Structural lifetime estimation, 
+overhaul planning
+[73]
+Hybrid 
+Systems
+Load-source matching, control 
+strategy simulation
+Multi-source coordination, 
+real-time dispatch
+Battery diagnostics, inverter 
+synchronization
+System reconfiguration analysis, 
+energy yield-cost forecasting
+[74–77]
+Table 5 
+Summary of key outcomes from selected DT case studies.
+Case Study 
+Source
+Energy 
+Domain
+DT Functionality Reported Outcome
+Huawei & 
+Sungrow (DT- 
+enhanced 
+Inverters)
+Solar PV Performance 
+monitoring, fault 
+detection, 
+diagnostics
+15–20 % reduction 
+in MTTR; 5–8 % 
+increase in energy 
+yield
+GE Digital Wind 
+Farm
+Wind Fatigue analysis, 
+predictive 
+maintenance, 
+control
+Up to 5 years 
+turbine life 
+extension; 25 % 
+downtime 
+reduction
+EDF Villerest 
+Dam
+Hydroelectric Flow modeling, 
+stress analysis, 
+cavitation detection
+12 % increase in 
+dispatch efficiency 
+over 6 months
+US DoE Hybrid 
+Microgrid
+Hybrid (Solar 
++ Wind)
+Load forecasting, 
+dispatch 
+optimization
+Improved voltage 
+stability; enhanced 
+grid autonomy
+Univ. of Seville 
+PV Forecasting 
+System
+Solar PV Irradiance 
+forecasting, MPPT 
+optimization
+>10 % increase in 
+daily energy yield
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+15 
+=== PDF PAGE 16 ===
+which curtail collaboration and transparency, resulting in little to no 
+openness. An important issue that comes with the digitalization of en-
+ergy systems is the cybersecurity aspect. Due to constant connectivity, 
+DTs are continuously vulnerable to cyber threats. The seamless inter-
+action between the physical and digital world creates additional intru-
+sion possibilities such as sensor spoofing, data poisoning, and takeover, 
+as well as control over the system. For instance, an attacker would 
+manipulate irradiance data to controls PV twin’s power output calcu-
+lations and inverter command execution which would send commands 
+that could destabilize the grid. Securing infrastructure associated with 
+DTs necessitates applying multiple encryptions, anomaly detection, and 
+strong authentication over the edge controls. In addition, hybrid DT 
+systems that interface with public cloud services are required for 
+securing APIs and encrypted channels that avert data exposure or illicit 
+system takeover.
+The last and perhaps most intimidating hurdle is the enormous 
+computational resources needed for sustaining real-time synchroniza-
+tion, learning, and optimization in DTs [91]. Moreover, the execution of 
+high-fidelity simulations, like those used for wind turbine aerodynamics 
+or hydro flow modeling, incurs immense processing costs if required to 
+run with sub-second ceilings. The situation is exacerbated when paired 
+with AI-based decision engines, which use even more advanced 
+computational resources such as GPUs or dedicated edge processors. In 
+hybrid microgrids, for example, the DT must compute multiple differ-
+ential equations and optimization problems within each time step while 
+concurrently managing storage dispatch and demand response [92,93]. 
+These factors form substantial obstacles to low-resource or off-grid 
+contexts, which are particularly useful, but least implementable due to 
+infrastructure constraints where DEs could be most beneficial. The cu-
+mulative burden of these factors is exemplified in Fig. 9, which graphs 
+five primary limitations—model fidelity, data heterogeneity, standard-
+ization, cybersecurity, and computational demands—along with a 
+severity scale assembled from real-world cases and expert judgment. 
+Each of these challenges has been found to exceed an 8 out of 10 score, 
+underscoring the importance of barriers restricting the efficiency and 
+dependability of DTs. To blend and contrast these factors in a succinct 
+way, Table 6 presents each limitation, its origin, its definition, and im-
+plications for operations of renewable energy categorically.
+Regarding cybersecurity and data integrity concerns, it is note-
+worthy that the security of data flow between physical assets and their 
+virtual counterparts becomes crucial as DTs grow essential portions of 
+real-time renewable energy system control. Data spoofing, bogus com-
+mand injection, and denial-of-service attacks—each able to compromise 
+system operation or cause cascading failures—are among the hazards 
+unsecured DT systems could face. In multi-site solar or wind farms, a 
+corrupted DT might provide false control signals or deceive supervising 
+systems. Recent studies have suggested homomorphic encryption for 
+safe telemetry, zero-trust architectures, and blockchain-backed data 
+provenance systems to help to counteract these dangers. First proof-of- 
+concept solutions come from industry installations including NREL’s 
+cyber-physical threat modeling and Siemens’ DT security sandboxing. 
+Still open areas of research, nevertheless, include cost, latency overhead, 
+and deployment difficulty of these solutions. Moreover, in the field of 
+computational scalability and real-time processing constraints, another 
+major obstacle to DT scalability is the great computational load needed 
+for real-time simulation, anomaly detection, and control loop synchro-
+nization, particularly under hybrid energy systems or high-resolution 
+meteorological databases. For large-scale wind farms, for instance, 
+constant updating of high-fidelity fluid dynamic models and structural 
+health diagnostics generates significant delay and memory re-
+quirements. This calls for careful architectural balancing between cloud 
+computing for model training and historical analysis and edge compu-
+ting—for low-latency judgments. To solve this trade-off, emerging par-
+adigms including fog computing and federated learning are under 
+investigation; nonetheless, performance criteria for renewable energy 
+applications remain quite limited. Studies from IEEE Transactions on 
+Industrial Informatics and Applied Energy have underlined these trade- 
+offs and suggested event-driven data sampling, GPU acceleration, and AI 
+model pruning as possible means to lower resource footprints.
+The coordination of efforts across various domains is necessary to 
+tackle complex problems. Data-driven and physics-informed models 
+would benefit from more sophisticated hybrid modeling techniques. 
+Increased edge-based data pre-processing services can improve data 
+quality value. There is an urgent need to establish open DT standards 
+from international consortia to unify architectures. Federated learning 
+and blockchain-based audit trails are two emerging solutions in the 
+cybersecurity gap. Optimization algorithms with supported hardware 
+and lightweight simulation models are expected to alleviate the 
+computational burden and expand the applicability of DTs to off-grid 
+and resource-constrained areas. Moreover, while the management of 
+renewable energy systems by DTs is unprecedently extensive, several 
+critical hurdles still exist which limit their practical implementation. 
+The roadmap for future R&D is depicted in this section. Addressing these 
+issues will transform experimental tools into standards of the next 
+generation of intelligent, secure, adaptive energy systems. Lack of uni-
+versally accepted standardizing procedures is a major obstacle to the 
+large-scale application of DTs in renewable energy systems. Harmonized 
+frameworks enable consistent compatibility amongst DT platforms, 
+Fig. 9. Distribution of dt implementations across renewable energy sectors.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+16 
+=== PDF PAGE 17 ===
+components, and energy management systems without which this re-
+mains uneven. Acknowledging this difficulty, various international 
+projects have been started. Developing reference architectures and 
+interface standards that specify how DTs should represent and interact 
+with physical systems is the focus of the International Electrotechnical 
+Commission (IEC) and the International Organization for Standardiza-
+tion (ISO). Especially ISO 23247, a series on DT frameworks for 
+manufacturing, offers conceptual direction fit for energy systems. To 
+assist uniform DT deployment, the DT Consortium—a group of business 
+leaders—has also released cross-industry standards on vocabulary, 
+trustworthiness, and interoperability. In complex, distributed renewable 
+energy systems, seamless integration, modularity, and data interchange 
+across disparate assets depend on these developing criteria. Scalable, 
+safe, vendor-agnostic DT systems will depend on strengthening these 
+standardizing efforts.
+8. Strategic importance and future research directions
+Building on the insights of prior sections, this section proposes a 
+roadmap for advancing DT research and deployment. It links techno-
+logical needs to global policy frameworks such as the SDGs, Paris 
+Agreement, and EU Green Deal. Recommendations are structured across 
+short-, mid-, and long-term priorities.
+8.1. Strategic importance of DTs in renewable energy
+The importance, in a strategic sense, that lies in the application of the 
+DT technology within renewable energy stems from its ability to 
+completely change the systems’ architecture, processes, and control 
+concepts. A DT or DT can play a fundamental role in providing solutions 
+for some challenges related to energy systems, in its most basic princi-
+ples of real-time monitoring, intelligent simulation, and control. DTs in 
+systems analogously remove the need for a mechanical separation of 
+energy systems which enables us to surpass non-dynamic, reactive, 
+piecemeal approaches towards more dynamic, self-sustaining, coordi-
+nated energy systems [94,95]. At the operational level, embracing the 
+use of DTs marks a departure from conventional monitoring and main-
+tenance practices. For traditional energy systems, performance concerns 
+are detected only after a failure has occurred, or during a scheduled 
+maintenance check; both scenarios result in wasteful interventions that 
+create asset downtime, incur high expenses, and shorten the asset’s 
+operational life. Unlike overs dependent on schedules, DTs allow 
+maintenance to be predictive and condition-based, continuous moni-
+toring enables the assessment of the component’s health, performance 
+deviation, and operational anomalies. Such paradigm shift adds value by 
+optimally managing the system’s assets for dependency moves ailing 
+system reliability to embedded redundancy increases downtime sus-
+tainable cost-effective lifetime savings. Furthermore, for renewable en-
+ergy assets located in difficult-to-reach remote locations, such capability 
+adds immense relevance.
+Additionally, the support DTs provide allows for progression from 
+system management in isolation to a more sophisticated and 
+collaborative system. The constituents of renewable energy systems are 
+increasingly becoming distributed and diverse in nature such as solar PV 
+panels, wind turbines, battery storage systems, and microgrids, each one 
+possessing unique control attributes and functional restrictions. DTs 
+allow operators to apply integrated energy management systems by 
+providing a single digital interface for the simulation and coordination 
+of these various parts [96]. Shifting energy management strategies this 
+way will allow meeting the changing demand and supply, cutting back 
+on system flexibility, curtailment, and enhancing yield, thus stabilizing 
+the grid as well. With the aid of DTs’ modern energy systems can in-
+crease their yield and stability as them facilitate autonomous system 
+intelligence and observation control yield operational system oversight. 
+Equally notable is the fact that dynamic monitoring technologies (DTs) 
+help shift regulation from a static, schedule-controlled perspective to a 
+more adaptable system management approach. Systems that harness 
+renewable sources of energy encounter uncertainties due to changes in 
+environmental conditions such as solar irradiance, wind speed, and 
+temperature. These traditional control systems tend to be slow and less 
+responsive to rapid changes. DTs, on the other hand, provide the ability 
+to construct and update models in real time, which means energy sys-
+tems can adapt to their conditions most of the time. Such anticipatory 
+adaptations can make the system use resources more efficiently, be more 
+resilient in operations, and better respond to the needs of the grid.
+DTs technologies are emerging as key facilitators of smart, flexible, 
+and robust renewable energy systems within the context of the ever- 
+evolving global energy transition. With the global strive toward legal 
+climate goals, lowering the carbon footprint, and providing balanced 
+energy access to all citizens, renewable energy resources are expected to 
+play a major role [97]. At the same time, place these resources are being 
+integrated within has increasing scale and complexity, which require 
+sophisticated digitized transparency, intelligence, and self-operating 
+systems. DTs provide a solid base for accelerating the integration of 
+physical energy resources into their digital counterparts, thereby closing 
+the crucial void. DTs may significantly aid concerns regarding inclusion 
+and energy equity. With remote monitoring, automated diagnostics, and 
+optimized control, DTs lessens the burden of highly skilled and expen-
+sive remote technical interventions, which require onsite equipment 
+servicing. This operational intelligence democratization enables 
+deploying and managing renewable energy systems at scale in rural and 
+underserved communities, where resources and expert access are 
+limited. Thus, DTs do help augment energy accessibility while sup-
+porting equity toward clean energy technology benefits distribution.
+In conclusion, DTs strategically matter not only because of their 
+technological prowess but also for supporting the SDGs and objectives of 
+digital transformation. With the increasing adoption of renewable en-
+ergy systems and the more decentralized and digitally controlled grid 
+infrastructure, DTs must be included to enable smart growth, ensuring 
+resourceful, resilient, and efficient advancement. DTs’ real-time situa-
+tional awareness, failure prediction and prevention, system performance 
+optimization, and autonomous operational support capabilities position 
+DTs as foundational enabling technologies for net-zero-emission targets, 
+improved energy security, and enduring environmental and economic 
+Table 6 
+Summary of key challenges limiting DT deployment in renewable energy.
+Challenge Technical Root Manifestation in DT Systems Operational Implications
+Model Accuracy & Fidelity Oversimplified assumptions, underfitted 
+data
+Poor fault prediction, inaccurate forecasts Reduced confidence in DT outputs and false alarms
+Data Heterogeneity & 
+Quality
+Multi-source asynchronous noisy data Time lags, misalignment, and incomplete 
+analytics
+Inaccurate diagnostics and control errors
+Lack of Standardization Fragmented toolchains and vendor lock-in Non-reusable models and poor scalability Incompatibility across projects, high integration 
+overhead
+Cybersecurity Concerns Increased connectivity and weak 
+authentication
+Data breaches, command spoofing, control 
+hijacking
+Grid instability, system vulnerability, legal 
+liabilities
+High Computational 
+Demand
+Real-time simulation, AI workloads, large 
+datasets
+Latency, overheating, or system 
+inaccessibility
+Infeasibility in remote or resource-constrained 
+deployments
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+17 
+=== PDF PAGE 18 ===
+sustainability.
+8.2. Future research directions
+These research trajectories are consistent with industry-level guid-
+ance provided in global policy documents such as the IRENA (2022) 
+white paper [98], which advocates for investment in interoperable 
+digital infrastructure—including DTs—as part of the pathway to resil-
+ient, intelligent, and decarbonized energy systems. For DT technologies, 
+the rapidly emerging applications in diagnostics, fault isolation, system 
+optimization, and lifecycle enhancement of renewable energy systems 
+present abundant opportunities. Nevertheless, as examined in the prior 
+sections of this paper, most achievements to date have been limited to 
+isolated system implementations or experimental test beds. This trans-
+formation cannot happen without a concerted research and innovation 
+effort shifting the focus of DTs from project-specific, monolithic assets to 
+integrated, distributed, context-aware infrastructures throughout the 
+renewable energy ecosystem value chain [99–101]. This section outlines 
+the comprehensive roadmap needed to guide such an evolution. The 
+roadmap consists of DT priorities for a clean energy transition and de-
+tails the stepwise, tiered structure of priority execution, setting terms for 
+short-, mid-, and long-term scheduling. In doing so, it also articulates 
+relevant deeper scientific, technologic, and operational questions that 
+need to be solved to enable wide-scale deployment across multiple ap-
+plications. In the 1–2-year short-term window, the focus of research 
+paradigm capture attention is the enhancement of accuracy and 
+responsiveness while interacting with individual units of renewable 
+energy systems. Almost all DT models, including those of PV modules, 
+wind turbines, and energy storage units, today use overly simplified 
+models. They, at best, replicate approximate static structures neglecting 
+dynamic nonlinearities. This oversimplification is addressed using 
+Hybrid modeling techniques that integrate physics-guided differential 
+equations with machine learning algorithms. An example is the 
+current-voltage characteristics of PV modules during partial shading 
+represented in relation (10): 
+I= Iph  I0
+(
+e
+V+RIs
+nVt – 1
+)
+  V+ RIs
+Rsh
+(10) 
+where I represents the output current, V is the output voltage, Iph is the 
+photocurrent, I0 is the diode reverse saturation current, Rs is the series 
+resistance, Rsh is the shunt resistance, and n is the diode ideality factor. 
+This equation, derived from the single-diode model, forms the basis for 
+higher-fidelity DT frameworks. However, to function in real time, it 
+must be calibrated and coupled with neural networks or adaptive filters 
+trained on high-resolution operational data. The integration of high- 
+frequency sensors, edge processors, and adaptive solvers will be cen-
+tral to overcoming the real-time simulation bottleneck in asset-level 
+twins.
+Over the mid-term horizon (3–5 years), the challenge transitions 
+from improving individual models to building scalable, interoperable, 
+and secure DT ecosystems. Research must address the fragmentation of 
+existing DT platforms, the lack of standardization in communication 
+protocols, and the limited capacity for cross-domain integration. Unified 
+ontologies for asset metadata, harmonized time-series APIs, and plug- 
+and-play architectures will enable DT systems developed by different 
+vendors or research groups to interoperate within shared environments. 
+A critical milestone in this phase will be the development of modular DT 
+libraries for hybrid systems and local grids. These libraries would allow 
+the dynamic assembly of multi-asset twins in response to operational 
+needs, such as demand surges or fault propagation. Moreover, edge/ 
+cloud orchestration algorithms must be optimized for renewable envi-
+ronments, balancing latency-sensitive decision-making with the 
+compute-intensive needs of long-term analytics. Security will also 
+become paramount, prompting research into lightweight encryption 
+schemes, anomaly-based intrusion detection, and federated data 
+governance across energy stakeholders.
+The long-term horizon (6–10 years) envisions DTs as integral 
+components of national and global energy intelligence platforms. In this 
+scenario, DTs do not merely track local assets but operate at the scale of 
+entire energy networks—interacting with markets, weather models, 
+climate risk predictors, and policy engines. One key direction for this 
+phase is the integration of DTs into climate-resilient grid modeling. As 
+climate variability increasingly affects renewable generation, DTs will 
+need to simulate probabilistic weather pathways and their effects on 
+distributed energy flows, infrastructure stress, and storage volatility. 
+Scenario modeling may incorporate climate variables Ci(t), linked to 
+renewable generation functions G(t,Ci) that vary stochastically over 
+time, as presented in Equation (11): 
+Gforecast (t) = E[G(t,Ci)] + ϵ(t)                                                      (11)
+where E denotes the expected output and ϵ(t) accounts for residual 
+uncertainties. These forecasts can then drive system-wide optimization 
+models, such as mixed-integer linear programs (MILPs), that coordinate 
+dispatch, market bidding, and resource planning at national scales.
+Additionally, energy storage management represents a fertile ground 
+for DT innovation. Advanced battery twins, capable of tracking thermal 
+behavior, aging, and internal electrochemical dynamics, will be essen-
+tial for supporting demand-response strategies, electric vehicle inte-
+gration, and peak shaving in urban areas [102,103]. These models must 
+incorporate multi-layer equations representing charge/discharge ki-
+netics, electrolyte behavior, and diffusion effects, transforming DTs from 
+energy flow models into full electrochemical co-simulators. To illustrate 
+this staged approach, Fig. 10 presents a strategic roadmap linking DT 
+R&D priorities from 2025 through 2035 with international energy policy 
+targets. Each temporal phase emphasizes the progressive alignment 
+between DT technological capabilities and global sustainability 
+mandates.
+A strong future roadmap for DT acceptance must not only solve 
+technological issues and innovation shortages but also fit worldwide 
+climate and energy policy frameworks. Driven by obligations under the 
+Paris Agreement to limit global warming below 1.5 ◦C as well as the UN 
+SDGs (SDG 7, 9, and 13) that urge clean, resilient, and smart energy 
+infrastructure, the next decade marks a vital opportunity for action. 
+Legislative tools like the European Union’s Green Deal and the Inflation 
+Reduction Act (IRA) in the United States directly incentivize the digi-
+talization of energy assets, funding and regulatory support for DT 
+deployment in grid modernization, efficiency enhancement, and low- 
+carbon infrastructure in the Global North. Including DT development 
+into these policy objectives guarantees congruence between technical 
+advancement and legal requirements. Fig. 6 now links short-, mid-, and 
+long-term DT development priorities to matching policy aims, therefore 
+including policy alignment. This paradigm guarantees that innovation in 
+DTs moves in line with digital equality concepts, global decarbonizing 
+Fig. 10. Strategic research roadmap for dt development in renewable en-
+ergy systems.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+18 
+=== PDF PAGE 19 ===
+initiatives, and resilient infrastructure goals.
+In conclusion, the future of DTs in renewable energy is poised for 
+exponential growth, but only if key research frontiers are systematically 
+addressed. These include hybrid modeling frameworks, standardized DT 
+protocols, secure and scalable computing infrastructure, and advanced 
+integration with environmental and market models. By adhering to a 
+clearly defined roadmap and aligning multi-disciplinary research ef-
+forts, DTs can evolve into the backbone of a resilient, intelligent, and 
+decarbonized global energy system.
+9. Conclusion
+This review presents a thorough and multifaceted viewpoint of the 
+transforming power of Digital Twin (DT) technologies in systems of 
+renewable energy. The paper proposes a layered and scalable framework 
+for understanding and applying DTs across solar, wind, hydro, and 
+hybrid systems by grouping scattered material into a cohesive taxonomy 
+and merging enabling technologies including AI, IoT, cloud/edge 
+computing, and big data analytics. such academic and industrial case 
+examples help to highlight the useful nature of DTs by exposing real 
+benefits such 10–25 % increases in energy efficiency and notable de-
+creases in unexpected maintenance downtime. Beyond their practical 
+use, the article emphasizes how strategically important DTs are in 
+allowing durable, intelligent, autonomous CPS. Managing the growing 
+complexity, decentralization, and volatility inherent in renewable en-
+ergy ecosystems calls for these qualities. Significantly, the road map 
+suggested in this review charts unresolved technical challenges—such as 
+data heterogeneity, model integrity, real-time integration, and cyber-
+security—to phased research priorities matched with global policy 
+frameworks including the SDGs, the EU Green Deal, and national 
+decarbonization mandates. The results imply that DTs are fundamental 
+enablers of next-generation energy systems—where data-driven intelli-
+gence, predictive skills, and system adaptability constitute the corner-
+stone of smart, decarbonized infrastructure—not only optimization 
+tools. Standardizing platforms, expanding interoperability protocols, 
+tying policy with technological readiness levels, and building domain- 
+specific benchmarking frameworks top priorities for future work. Such 
+efforts will guarantee that the development of DTs stays anchored in 
+actual needs and follows the course of world energy transformation.
+Availability of data and materials
+The datasets used and/or analyzed during the current study are 
+available from the corresponding author upon reasonable request.
+Funding
+This research received no external funding.
+Declaration of competing interest
+The authors declare that they have no known competing financial 
+interests or personal relationships that could have appeared to influence 
+the work reported in this paper.
+Data availability
+Data will be made available on request.
+References
+[1] Qusay Hassan, Patrik Viktor, Tariq J. Al-Musawi, Bashar Mahmood Ali, 
+Sameer Algburi, Haitham M. Alzoubi, Ali Khudhair Al-Jiboory, Aws 
+Zuhair Sameen, Hayder M. Salman, Marek Jaszczur, The renewable energy role in 
+the global energy Transformations, Renew. Energy Focus 48 (2024) 100545, 
+https://doi.org/10.1016/j.ref.2024.100545. ISSN 1755-0084.
+[2] Jiannan Wang, Waseem Azam, Natural resource scarcity, fossil fuel energy 
+consumption, and total greenhouse gas emissions in top emitting countries, 
+Geosci. Front. 15 (2) (2024) 101757, https://doi.org/10.1016/j. 
+gsf.2023.101757. ISSN 1674-9871.
+[3] J.L. Holechek, H.M.E. Geli, M.N. Sawalhah, R. Valdez, A global assessment: can 
+renewable energy Replace fossil fuels by 2050? Sustainability 14 (2022) 4792, 
+https://doi.org/10.3390/su14084792.
+[4] Q. Wang, F. Ren, R. Li, Geopolitics and energy security: a comprehensive 
+exploration of evolution, collaborations, and future directions, Humanit. Soc. Sci. 
+Commun. 11 (2024) 1071, https://doi.org/10.1057/s41599-024-03507-2.
+[5] F.D. Santos, P.L. Ferreira, J.S.T. Pedersen, The climate change challenge: a review 
+of the barriers and solutions to deliver a Paris solution, Climate 10 (2022) 75, 
+https://doi.org/10.3390/cli10050075.
+[6] IEA, Africa Energy Outlook, International Energy Agency Report, 2022.
+[7] R. Qu, R. Kou, T. Zhang, The impact of weather variability on renewable energy 
+consumption: insights from explainable machine learning models, Sustainability 
+17 (2025) 87, https://doi.org/10.3390/su17010087.
+[8] S. Syama, J. Ramprabhakar, R. Anand, et al., A novel hybrid methodology for 
+wind speed and solar irradiance forecasting based on improved whale optimized 
+regularized extreme learning machine, Sci. Rep. 14 (2024) 31657, https://doi. 
+org/10.1038/s41598-024-83836-z.
+[9] M. Cavus, Advancing power systems with renewable energy and intelligent 
+technologies: a comprehensive review on grid transformation and integration, 
+Electronics 14 (2025) 1159, https://doi.org/10.3390/electronics14061159.
+[10] M.J.B. Kabeyi, O.A. Olanrewaju, Smart grid technologies and application in the 
+sustainable energy transition: a review, Int. J. Sustain. Energy 42 (1) (2023) 
+685–758, https://doi.org/10.1080/14786451.2023.2222298.
+[11] Mohd Javaid, Abid Haleem, Rajiv Suman, Digital twin applications toward 
+industry 4.0, A Review, Cognitive Robotics 3 (2023) 71–92, https://doi.org/ 
+10.1016/j.cogr.2023.04.003. ISSN 2667-2413.
+[12] Md Shezad Dihan, Anwar Islam Akash, Zinat Tasneem, Prangon Das, Sajal Kumar 
+Das, Md Robiul Islam, Md Manirul Islam, Faisal R. Badal, Md Firoj Ali, Md Hafiz 
+Ahamed, Sarafat Hussain Abhi, Subrata Kumar Sarker, Md Mehedi Hasan, Digital 
+twin: data exploration, architecture, implementation and future, Heliyon 10 (5) 
+(2024) e26503, https://doi.org/10.1016/j.heliyon.2024.e26503. ISSN 2405- 
+8440.
+[13] I.C. Fantozzi, A. Santolamazza, G. Loy, M.M. Schiraldi, Digital twins: strategic 
+guide to utilize digital twins to improve operational efficiency in industry 4.0, 
+Future Internet 17 (2025) 41, https://doi.org/10.3390/fi17010041.
+[14] Koen de Koning, Jeroen Broekhuijsen, Ingolf Kühn, Otso Ovaskainen, 
+Franziska Taubert, Dag Endresen, Dmitry Schigel, Volker Grimm, Digital twins: 
+dynamic model-data fusion for ecology, Trends Ecol. Evol. 38 (10) (2023) 
+916–926, https://doi.org/10.1016/j.tree.2023.04.010. ISSN 0169-5347.
+[15] Mohsen Soori, Behrooz Arezoo, Roza Dastres, Digital twin for smart 
+manufacturing, A review, Sustainable Manufacturing and Service Economics 2 
+(2023) 100017, https://doi.org/10.1016/j.smse.2023.100017. ISSN 2667-3444.
+[16] W. Liu, B. Han, A. Zheng, Z. Zheng, Fault diagnosis for reducers based on a digital 
+twin, Sensors 24 (2024) 2575, https://doi.org/10.3390/s24082575.
+[17] D.M. Botín-Sanabria, A.-S. Mihaita, R.E. Peimbert-García, M.A. Ramírez-Moreno, 
+R.A. Ramírez-Mendoza, J.d.J. Lozoya-Santos, Digital twin technology challenges 
+and applications: a comprehensive review, Remote Sens. 14 (2022) 1335, https:// 
+doi.org/10.3390/rs14061335.
+[18] D. Alfaro-Viquez, M. Zamora-Hernandez, M. Fernandez-Vega, J. Garcia- 
+Rodriguez, J. Azorin-Lopez, A comprehensive review of AI-based digital twin 
+applications in manufacturing: integration across operator, product, and process 
+dimensions, Electronics 14 (2025) 646, https://doi.org/10.3390/ 
+electronics14040646.
+[19] G. Lampropoulos, K. Siakas, Enhancing and securing cyber-physical systems and 
+Industry 4.0 through digital twins: a critical review, J Softw Evol Proc. 35 (7) 
+(2023) e2494, https://doi.org/10.1002/smr.2494.
+[20] G. Rolofs, F. Wilking, S. Goetz, S. Wartzack, Integrating digital twins and cyber- 
+physical systems for flexible energy management in manufacturing facilities: a 
+conceptual framework, Electronics 13 (2024) 4964, https://doi.org/10.3390/ 
+electronics13244964.
+[21] A. Saxena, C. Brown, A. Arneth, et al., Advanced photovoltaic technology can 
+reduce land requirements and climate impact on energy generation, Commun. 
+Earth Environ. 5 (2024) 586, https://doi.org/10.1038/s43247-024-01754-4.
+[22] A.M. Soomar, A. Hakeem, M. Messaoudi, P. Musznicki, A. Iqbal, S. Czapp, Solar 
+photovoltaic energy optimization and challenges, Front. Energy Res. 10 (2022) 
+879985, https://doi.org/10.3389/fenrg.2022.879985.
+[23] F. Castellani, D. Astolfi, M. Peppoloni, F. Natili, D. Butt`a, A. Hirschl, Experimental 
+vibration analysis of a small scale vertical wind energy system for residential use, 
+Machines 7 (2019) 35, https://doi.org/10.3390/machines7020035.
+[24] Alsaffar Alhadi, Beach Dr Tom, Rezgui Yacine, Enhancing asset management: 
+integrating digital twins for continuous permitting and compliance - a systematic 
+literature review, J. Build. Eng. 99 (2025) 111515, https://doi.org/10.1016/j. 
+jobe.2024.111515. ISSN 2352-7102.
+[25] N. Mchirgui, N. Quadar, H. Kraiem, A. Lakhssassi, The applications and 
+challenges of digital twin technology in smart grids: a comprehensive review, 
+Appl. Sci. 14 (2024) 10933, https://doi.org/10.3390/app142310933.
+[26] Md Mhamud Hussen Sifat, Safwat Mukarrama Choudhury, Sajal K. Das, Md Hafiz 
+Ahamed, S.M. Muyeen, Md Mehedi Hasan, Md Firoj Ali, Zinat Tasneem, 
+Md Manirul Islam, Md Robiul Islam, Md Faisal R. Badal, Sarafat H. Abhi, Subrata 
+K. Sarker, Prangon Das, Towards electric digital twin grid: technology and 
+framework review, Energy and AI 11 (2023) 100213, https://doi.org/10.1016/j. 
+egyai.2022.100213. ISSN 2666-5468.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+19 
+=== PDF PAGE 20 ===
+[27] Asif Raihan, Monirul Islam Pavel, Ahmed Muhtasim Dewan, Sadia Farhana, 
+Faruk Omar, Arindrajit Paul, The role of renewable energy use, technological 
+innovation, and forest cover toward green development: evidence from 
+Indonesia, Innov. Green Dev. 2 (1) (2023) 100035, https://doi.org/10.1016/j. 
+igd.2023.100035. ISSN 2949-7531.
+[28] Z. Shen, F. Arra˜no-Vargas, G. Konstantinou, Artificial intelligence and digital 
+twins in power systems: trends, synergies and opportunities: [version 2; peer 
+review: 2 approved], Digital Twin 1 (3) (2024), https://doi.org/10.12688/ 
+digitaltwin.17632.2.
+[29] P. Sharma, B.J. Bora, B. Deepanraj, T. Jarin, Overview of digital twins in 
+renewable energy. 2024 1st International Conference on Trends In Engineering 
+Systems And Technologies (ICTEST), Kochi, India, 2024, pp. 1–6, https://doi.org/ 
+10.1109/ICTEST60614.2024.10576156.
+[30] Luca Pinciroli, Piero Baraldi, Enrico Zio, Maintenance optimization in industry 
+4.0, Reliab. Eng. Syst. Saf. 234 (2023) 109204, https://doi.org/10.1016/j. 
+ress.2023.109204. ISSN 0951-8320.
+[31] R. Sørensen, L. Mihet-Popa, Comparative evaluation of traditional and advanced 
+algorithms for photovoltaic systems in partial shading conditions, Solar 4 (2024) 
+572–594, https://doi.org/10.3390/solar4040027.
+[32] M. Boˇsnjakovi´c, M. Martinovi´c, K. Đoki´c, Application of artificial intelligence in 
+wind power systems, Appl. Sci. 15 (2025) 2443, https://doi.org/10.3390/ 
+app15052443.
+[33] M. Meliani, A.E. Barkany, I.E. Abbassi, A.M. Darcherif, M. Mahmoudi, Energy 
+management in the smart grid: state-of-the-art and future trends, Int. J. Eng. Bus. 
+Manag. 13 (2021), https://doi.org/10.1177/18479790211032920.
+[34] F.R. Albogamy, G. Hafeez, I. Khan, S. Khan, H.I. Alkhammash, F. Ali, G. Rukh, 
+Efficient energy optimization day-ahead energy forecasting in smart grid 
+considering demand response and microgrids, Sustainability 13 (2021) 11429, 
+https://doi.org/10.3390/su132011429.
+[35] Tim Kreuzer, Panagiotis Papapetrou, Jelena Zdravkovic, Artificial intelligence in 
+digital twins—a systematic literature review, Data Knowl. Eng. 151 (2024) 
+102304, https://doi.org/10.1016/j.datak.2024.102304. ISSN 0169-023X.
+[36] Sharmin Attaran, Mohsen Attaran, Bilge Gokhan Celik, Digital twins and 
+industrial internet of things: uncovering operational intelligence in industry 4.0, 
+decision analytics, Journal 10 (2024) 100398, https://doi.org/10.1016/j. 
+dajour.2024.100398. ISSN 2772-6622.
+[37] Mou Mahmood, Prangon Chowdhury, Rahbaar Yeassin, Mahmudul Hasan, 
+Tanvir Ahmad, Nahid-Ur-Rahman Chowdhury, Impacts of digitalization on smart 
+grids, renewable energy, and demand response: an updated review of current 
+applications, Energy Convers. Manag. X 24 (2024) 100790, https://doi.org/ 
+10.1016/j.ecmx.2024.100790. ISSN 2590-1745.
+[38] M. Grieves, J. Vickers, Digital twin: mitigating unpredictable, Undesirable 
+emergent behavior in complex systems, in: Transdisciplinary Perspectives on 
+Complex Systems, Springer, 2017, pp. 85–113, https://doi.org/10.1007/978-3- 
+319-38756-7_4.
+[39] E. Glaessgen, D. Stargel, The digital twin paradigm for future NASA and U.S. Air 
+force vehicles. 53rd AIAA/ASME/ASCE/AHS/ASC Structures, Structural 
+Dynamics and Materials Conference, 2012, https://doi.org/10.2514/6.2012- 
+1818.
+[40] F. Tao, F. Sui, A. Liu, Q. Qi, M. Zhang, B. Song, A.Y.C. Nee, Digital twin-driven 
+product design, manufacturing and service with big data, Int. J. Adv. Manuf. 
+Technol. 94 (9) (2018) 3563–3576, https://doi.org/10.1007/s00170-017-0233- 
+1.
+[41] Hao Wang, Bendong Xiong, Zutao Zhang, Hexiang Zhang, Azam Ali, Small wind 
+turbines and their potential for internet of things applications, iScience 26 (9) 
+(2023) 107674, https://doi.org/10.1016/j.isci.2023.107674. ISSN 2589-0042.
+[42] A.-M. C˘alin, D.T. Cotfas, P.A. Cotfas, A review of smart photovoltaic systems 
+which are using remote-control, AI, and cybersecurity approaches, Appl. Sci. 14 
+(2024) 7838, https://doi.org/10.3390/app14177838.
+[43] Waqar Ali Khan, Ashkan Pakseresht, Caslon Chua, Yavari Ali, Digital twin role for 
+sustainable and resilient renewable power plants: a systematic literature review, 
+Sustain. Energy Technol. Assessments 75 (2025) 104197, https://doi.org/ 
+10.1016/j.seta.2025.104197. ISSN 2213-1388.
+[44] L. Li, S. Aslam, A. Wileman, S. Perinpanayagam, Digital twin in aerospace 
+industry: a gentle introduction, IEEE Access 10 (2022) 9543–9562, https://doi. 
+org/10.1109/ACCESS.2021.3136458.
+[45] D. Wu, A. Zheng, W. Yu, H. Cao, Q. Ling, J. Liu, D. Zhou, Digital twin technology 
+in transportation infrastructure: a comprehensive survey of current applications, 
+challenges, and future directions, Appl. Sci. 15 (2025) 1911, https://doi.org/ 
+10.3390/app15041911.
+[46] Luis Piardi, Paulo Leit˜ao, Jonas Queiroz, Joseane Pontes, Role of digital 
+technologies to enhance the human integration in industrial cyber–physical 
+systems, Annu. Rev. Control 57 (2024) 100934, https://doi.org/10.1016/j. 
+arcontrol.2024.100934. ISSN 1367-5788.
+[47] Adib Bin Rashid, M.D. Ashfakul Karim Kausik, AI revolutionizing industries 
+worldwide: a comprehensive overview of its diverse applications, Hybrid Adv. 7 
+(2024) 100277, https://doi.org/10.1016/j.hybadv.2024.100277. ISSN 2773- 
+207X.
+[48] M. Klumpp, Innovation potentials and pathways merging AI, CPS, and IoT, Appl. 
+Syst. Innov. 1 (2018) 5, https://doi.org/10.3390/asi1010005.
+[49] Collins N. Nwagu, Chika Oliver Ujah, Daramy V.V. Kallon, Victor S. Aigbodion, 
+Integrating solar and wind energy into the electricity grid for improved power 
+accessibility, Unconventional Resources 5 (2025) 100129, https://doi.org/ 
+10.1016/j.uncres.2024.100129. ISSN 2666-5190.
+[50] Mohammed A.M. Yassin, Ashish Shrestha, Suhaila Rabie, Digital twin in power 
+system research and development: principle, scope, and challenges, Energy Rev. 2 
+(3) (2023) 100039, https://doi.org/10.1016/j.enrev.2023.100039. ISSN 2772- 
+9702.
+[51] M. Attaran, S. Attaran, B.G. Celik, The impact of digital twins on the evolution of 
+intelligent manufacturing and Industry 4.0, Adv. in Comp. Int. 3 (2023) 11, 
+https://doi.org/10.1007/s43674-023-00058-y.
+[52] Mohsen Attaran, Bilge Gokhan Celik, Digital Twin: benefits, use cases, challenges, 
+and opportunities, Decision Analytics Journal 6 (2023) 100165, https://doi.org/ 
+10.1016/j.dajour.2023.100165. ISSN 2772-6622.
+[53] K. Sado, J. Peskar, A. Downey, et al., A digital twin based forecasting framework 
+for power flow management in DC microgrids, Sci. Rep. 15 (2025) 6430, https:// 
+doi.org/10.1038/s41598-025-91074-0.
+[54] Opy Das, Muhammad Hamza Zafar, Filippo Sanfilippo, Souman Rudra, Lal 
+Kolhe Mohan, Advancements in digital twin technology and machine learning for 
+energy systems: a comprehensive review of applications in smart grids, renewable 
+energy, and electric vehicle optimisation, Energy Convers. Manag. X 24 (2024) 
+100715, https://doi.org/10.1016/j.ecmx.2024.100715. ISSN 2590-1745.
+[55] L. Nele, G. Mattera, E.W. Yap, et al., Towards the application of machine learning 
+in digital twin technology: a multi-scale review, Discov. Appl. Sci. 6 (2024) 502, 
+https://doi.org/10.1007/s42452-024-06206-4.
+[56] Barıs¸ Tan, Andrea Matta, The digital twin synchronization problem: framework, 
+formulations, and analysis, IISE Transactions 56 (6) (2024) 652–665, https://doi. 
+org/10.1080/24725854.2023.2253869.
+[57] Hesam Nejati Sharif Aldin, Mostafa Razavi Ghods, Farnoush Nayebipour, 
+Masoud Niazi Torshiz, A comprehensive review of energy harvesting and routing 
+strategies for IoT sensors sustainability and communication technology, Sens. Int. 
+5 (2024) 100258, https://doi.org/10.1016/j.sintl.2023.100258. ISSN 2666-3511.
+[58] Mohammad Sadegh Es-haghi, Cosmin Anitescu, Timon Rabczuk, Methods for 
+enabling real-time analysis in digital twins: a literature review, Comput. Struct. 
+297 (2024) 107342, https://doi.org/10.1016/j.compstruc.2024.107342. ISSN 
+0045-7949.
+[59] Concetta Semeraro, Haya Aljaghoub, Hamad Khalid Mohamed Hussain Al-Ali, 
+Mohammad Ali Abdelkareem, Abdul Ghani Olabi, Harnessing the future: 
+exploring digital twin applications and implications in renewable energy, Energy 
+Nexus 18 (2025) 100415, https://doi.org/10.1016/j.nexus.2025.100415. ISSN 
+2772-4271.
+[60] S. Khan, T. Arslan, T. Ratnarajah, Digital twin perspective of fourth industrial and 
+healthcare revolution, IEEE Access 10 (2022) 25732–25754, https://doi.org/ 
+10.1109/ACCESS.2022.3156062.
+[61] Robert X. Gao, J¨org Krüger, Marion Merklein, Hans-Christian M¨ohring, J´ozsef 
+V´ancza, Artificial Intelligence in manufacturing: state of the art, perspectives, and 
+future directions, CIRP Annals 73 (2) (2024) 723–749, https://doi.org/10.1016/j. 
+cirp.2024.04.101. ISSN 0007-8506.
+[62] A. Choudhary, Internet of Things: a comprehensive overview, architectures, 
+applications, simulation tools, challenges and future directions, Discov Internet 
+Things 4 (2024) 31, https://doi.org/10.1007/s43926-024-00084-3.
+[63] M.-S. Kang, D.-H. Lee, M.S. Bajestani, D.B. Kim, S.D. Noh, Edge computing-based 
+digital twin framework based on ISO 23247 for enhancing data processing 
+capabilities, Machines 13 (2025) 19, https://doi.org/10.3390/ 
+machines13010019.
+[64] Tri Nguyen, Huong Nguyen, Tuan Nguyen Gia, Exploring the integration of edge 
+computing and blockchain IoT: principles, architectures, security, and 
+applications, J. Netw. Comput. Appl. 226 (2024) 103884, https://doi.org/ 
+10.1016/j.jnca.2024.103884. ISSN 1084-8045.
+[65] Tolulope Falope, Liyun Lao, Dawid Hanak, Da Huo, Hybrid energy system 
+integration and management for solar energy: a review, Energy Convers. Manag. 
+X 21 (2024) 100527, https://doi.org/10.1016/j.ecmx.2024.100527. ISSN 2590- 
+1745.
+[66] M. Asadi, K. Pourhossein, Y. Noorollahi, M. Marzband, G. Iglesias, A new decision 
+framework for hybrid solar and wind power plant site selection using linear 
+regression modeling based on GIS-AHP, Sustainability 15 (2023) 8359, https:// 
+doi.org/10.3390/su15108359.
+[67] V. Simankov, P. Buchatskiy, A. Kazak, S. Teploukhov, S. Onishchenko, K. Kuzmin, 
+P. Chetyrbok, A solar and wind energy evaluation methodology using artificial 
+intelligence technologies, Energies 17 (2024) 416, https://doi.org/10.3390/ 
+en17020416.
+[68] D. Zhang, L. Lu, Y. Liu, Q. Sun, Deep energy method for solving PDEs: a machine 
+learning approach for physics simulation, Comput. Methods Appl. Mech. Eng. 362 
+(2020) 112790, https://doi.org/10.1016/j.cma.2020.112790.
+[69] Quentin Paletta, Guillermo Terr´en-Serrano, Yuhao Nie, Binghui Li, Bieker Jacob, 
+Wenqi Zhang, Laurent Dubus, Soumyabrata Dev, Cong Feng, Advances in solar 
+forecasting: computer vision with deep learning, Adv. Appl. Energy 11 (2023) 
+100150, https://doi.org/10.1016/j.adapen.2023.100150. ISSN 2666-7924.
+[70] Chong Chen, Huibin Fu, Yu Zheng, Fei Tao, Ying Liu, The advance of digital twin 
+for predictive maintenance: the role and function of machine learning, J. Manuf. 
+Syst. 71 (2023) 581–594, https://doi.org/10.1016/j.jmsy.2023.10.010. ISSN 
+0278-6125.
+[71] Z. Zhou, C. Qiu, Y. Zhang, A comparative analysis of linear regression, neural 
+networks and random forest regression for predicting air ozone employing soft 
+sensor models, Sci. Rep. 13 (2023) 22420, https://doi.org/10.1038/s41598-023- 
+49899-0.
+[72] M.R. Machado, M. Dutkiewicz, Wind turbine vibration management: an 
+integrated analysis of existing solutions, products, and Open-source 
+developments, Energy Rep. 11 (2024) 3756–3791, https://doi.org/10.1016/j. 
+egyr.2024.03.014. ISSN 2352-4847.
+[73] J.D.M. De Kooning, K. Stockman, J. De Maeyer, A. Jarquin-Laguna, 
+L. Vandevelde, Digital twins for wind energy conversion systems: a literature 
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+20 
+=== PDF PAGE 21 ===
+review of potential modelling techniques focused on model fidelity and 
+computational load, Processes 9 (2021) 2224, https://doi.org/10.3390/ 
+pr9122224.
+[74] Z. Kang, C. Catal, B. Tekinerdogan, Remaining useful life (RUL) prediction of 
+equipment in production lines using artificial neural networks, Sensors 21 (2021) 
+932, https://doi.org/10.3390/s21030932.
+[75] M.C. Hsu, Y. Bazilevs, Fluid–structure interaction modeling of wind turbines: 
+simulating the full machine, Comput. Mech. 50 (2012) 821–833, https://doi.org/ 
+10.1007/s00466-012-0772-0.
+[76] M.S.H. Lipu, A.A. Mamun, S. Ansari, M.S. Miah, K. Hasan, S.T. Meraj, M.G. 
+M. Abdolrasol, T. Rahman, M.H. Maruf, M.R. Sarker, et al., Battery management, 
+key technologies, methods, issues, and future trends of electric vehicles: a 
+pathway toward achieving sustainable development goals, Batteries 8 (2022) 
+119, https://doi.org/10.3390/batteries8090119.
+[77] Angira Sharma, Edward Kosasih, Jie Zhang, Alexandra Brintrup, 
+Anisoara Calinescu, Digital Twins: state of the art theory and practice, challenges, 
+and open research questions, Journal of Industrial Information Integration 30 
+(2022) 100383, https://doi.org/10.1016/j.jii.2022.100383. ISSN 2452-414X.
+[78] M. Singh, J. Kapukotuwa, E.L.S. Gouveia, E. Fuenmayor, Y. Qiao, N. Murray, 
+D. Devine, Comparative study of digital twin developed in unity and Gazebo, 
+Electronics 14 (2025) 276, https://doi.org/10.3390/electronics14020276.
+[79] Lu Zhang, A new fatigue cumulative damage model based on material parameters 
+and stress interaction, Int. J. Fatig. 179 (2024) 108035, https://doi.org/10.1016/ 
+j.ijfatigue.2023.108035. ISSN 0142-1123.
+[80] E. Irmak, E. Kabalci, Y. Kabalci, Digital transformation of microgrids: a review of 
+design, operation, optimization, and cybersecurity, Energies 16 (2023) 4590, 
+https://doi.org/10.3390/en16124590.
+[81] B. Loza, L.I. Minchala, D. Ochoa-Correa, S. Martinez, Grid-friendly integration of 
+wind energy: a review of power forecasting and frequency control techniques, 
+Sustainability 16 (2024) 9535, https://doi.org/10.3390/su16219535.
+[82] W. Yang, Y. Zhang, X. Zhu, K. Li, Z. Yang, Research on dynamic economic 
+dispatch optimization problem based on improved Grey Wolf algorithm, Energies 
+17 (2024) 1491, https://doi.org/10.3390/en17061491.
+[83] Moslem Uddin, Huadong Mo, Daoyi Dong, Sondoss Elsawah, Jianguo Zhu, Josep 
+M. Guerrero, Microgrids: a review, outstanding issues and future trends, Energy 
+Strategy Rev. 49 (2023) 101127, https://doi.org/10.1016/j.esr.2023.101127. 
+ISSN 2211-467X.
+[84] Christina Latsou, Dedy Ariansyah, Louis Salome, John Ahmet Erkoyuncu, 
+Jim Sibson, John Dunville, A unified framework for digital twin development in 
+manufacturing, Adv. Eng. Inform. 62 (Part A) (2024) 102567, https://doi.org/ 
+10.1016/j.aei.2024.102567. ISSN 1474-0346.
+[85] S. Kraus, P. Jones, N. Kailer, A. Weinmann, N. Chaparro-Banegas, N. Roig-Tierno, 
+Digital transformation: an overview of the current state of the art of research, 
+Sage Open 11 (3) (2021), https://doi.org/10.1177/21582440211047576.
+[86] P. Nilsen, Making sense of implementation theories, models and frameworks, 
+Implementation Sci 10 (2015) 53, https://doi.org/10.1186/s13012-015-0242-0.
+[87] D. Koldasbayeva, P. Tregubova, M. Gasanov, et al., Challenges in data-driven 
+geospatial modeling for environmental research and practice, Nat. Commun. 15 
+(2024) 10700, https://doi.org/10.1038/s41467-024-55240-8.
+[88] M.A. Rodríguez Licea, F.J. P´erez Pinal, A.G. Soriano S´anchez, An overview on 
+electric-stress degradation empirical models for electrochemical devices in smart 
+grids, Energies 14 (2021) 2117, https://doi.org/10.3390/en14082117.
+[89] N. Hoblos, M. Sandeep, S.L. Pan, Achieving stakeholder alignment in digital 
+transformation: a frame transformation perspective, J. Inf. Technol. 39 (4) (2023) 
+630–649, https://doi.org/10.1177/02683962231219518.
+[90] Matheus Ayello, Yona Lopes, Interoperability based on IEC 61850 standard: 
+systematic literature review, certification method proposal, and case study, Elec. 
+Power Syst. Res. 220 (2023) 109355, https://doi.org/10.1016/j. 
+epsr.2023.109355. ISSN 0378-7796.
+[91] Siva Sai, Pulkit Sharma, Aanchal Gaur, Vinay Chamola, Pivotal role of digital 
+twins in the metaverse: a review, Digital Communications and Networks (2024), 
+https://doi.org/10.1016/j.dcan.2024.12.003. ISSN 2352-8648.
+[92] J. Bilbao, E. Bravo, O. García, C. Rebollar, C. Varela, Optimising energy 
+management in hybrid microgrids, Mathematics 10 (2022) 214, https://doi.org/ 
+10.3390/math10020214.
+[93] E. Garcia, A. ´Aguila, L. Ortiz, D. Carri´on, Optimal resource assignment in hybrid 
+microgrids based on demand response proposals, Sustainability 16 (2024) 1797, 
+https://doi.org/10.3390/su16051797.
+[94] A. Sghiri, M. Gallab, S. Merzouk, S. Assoul, Leveraging digital twins for enhancing 
+building energy efficiency: a literature review of applications, technologies, and 
+challenges, Buildings 15 (2025) 498, https://doi.org/10.3390/ 
+buildings15030498.
+[95] Z. Song, C.M. Hackl, A. Anand, A. Thommessen, J. Petzschmann, O. Kamel, 
+R. Braunbehrens, A. Kaifel, C. Roos, S. Hauptmann, Digital twins for the future 
+power system: an overview and a future perspective, Sustainability 15 (2023) 
+5259, https://doi.org/10.3390/su15065259.
+[96] Yiqun Pan, Mingya Zhu, Yan Lv, Yikun Yang, Yumin Liang, Ruxin Yin, 
+Yiting Yang, Xiaoyu Jia, Xi Wang, Fei Zeng, Seng Huang, Danlin Hou, Lei Xu, 
+Rongxin Yin, Xiaolei Yuan, Building energy simulation and its application for 
+building performance optimization: a review of methods, tools, and case studies, 
+Adv. Appl. Energy 10 (2023) 100135, https://doi.org/10.1016/j. 
+adapen.2023.100135. ISSN 2666-7924.
+[97] Voicu D. Dragomir, M˘ad˘alina Dumitru, Florentina M˘ad˘alina Perevoznic, Carbon 
+reduction and energy transition targets of the largest European companies: an 
+empirical study based on institutional theory, Clean. Prod. Lett 4 (2023) 100039, 
+https://doi.org/10.1016/j.clpl.2023.100039. ISSN 2666-7916.
+[98] International Renewable Energy Agency (IRENA), Digitalisation and the Future of 
+Energy Systems. Abu Dhabi, 2022. ISBN: 978-92-9260-430-3. [Available online: 
+https://www.irena.org/publications/2022/May/Digitalisation-and-the-Future-o 
+f-Energy-Systems.
+[99] A. Fuller, Z. Fan, C. Day, C. Barlow, Digital twin: enabling technologies, 
+challenges and open research, IEEE Access 8 (2020) 108952–108971, https://doi. 
+org/10.1109/ACCESS.2020.2998358.
+[100] Y. Zhou, L. Xu, X. Deng, Digital twins in energy systems: modeling climate 
+resilience and control adaptability, Nat. Energy 8 (2023) 419–428, https://doi. 
+org/10.1038/s41560-023-01234-7.
+[101] Q. Liu, Y. Zhao, X. Huang, A hybrid physics-AI digital twin architecture for 
+intelligent monitoring of wind turbines, IEEE Trans. Ind. Inf. 19 (5) (2023) 
+6324–6333, https://doi.org/10.1109/TII.2023.3245691(Section3: 
+presentinganedge- 
+augmentedDTmodelforwindturbinefaultdetectionandresponselatencyreduction.
+[102] J. Wang, Y. He, C. Zhang, Adaptive control of hybrid PV-battery systems using 
+digital twins and reinforcement learning, Appl. Energy 354 (2024) 121812, 
+https://doi.org/10.1016/j.apenergy.2023.121812(Section4:detailingAI- 
+enhancedDTsforbattery-integratedhybridPVsystemswithadaptivecontrollogic.
+[103] M. Fern´andez, P. G´omez, L. Castillo, Cloud-integrated digital twins for real-time 
+dispatch and fault prediction in utility-scale PV farms, Renew. Sustain. Energy 
+Rev. 180 (2023) 113301, https://doi.org/10.1016/j.rser.2023.113301.
+W.F. Mbasso et al.                                                                                                                                                                                                                              Energy Strategy Reviews 61 (2025) 101814 
+21 

@@ -1,0 +1,191 @@
+[
+  {
+    "id": "article-03",
+    "figures": 13,
+    "tables": 8,
+    "pages": 21,
+    "bibliography_entries": 58,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-04",
+    "figures": 26,
+    "tables": 13,
+    "pages": 27,
+    "bibliography_entries": 51,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-05",
+    "figures": 18,
+    "tables": 3,
+    "pages": 21,
+    "bibliography_entries": 43,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-06",
+    "figures": 4,
+    "tables": 8,
+    "pages": 25,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-07",
+    "figures": 9,
+    "tables": 5,
+    "pages": 15,
+    "bibliography_entries": 34,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-08",
+    "figures": 9,
+    "tables": 7,
+    "pages": 25,
+    "bibliography_entries": 36,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-09",
+    "figures": 7,
+    "tables": 10,
+    "pages": 34,
+    "bibliography_entries": 22,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-10",
+    "figures": 12,
+    "tables": 2,
+    "pages": 15,
+    "bibliography_entries": 36,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-11",
+    "figures": 6,
+    "tables": 5,
+    "pages": 11,
+    "bibliography_entries": 35,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-12",
+    "figures": 19,
+    "tables": 7,
+    "pages": 17,
+    "bibliography_entries": 37,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-13",
+    "figures": 8,
+    "tables": 6,
+    "pages": 17,
+    "bibliography_entries": 41,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-14",
+    "figures": 8,
+    "tables": 4,
+    "pages": 25,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-15",
+    "figures": 4,
+    "tables": 15,
+    "pages": 26,
+    "bibliography_entries": 84,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-16",
+    "figures": 11,
+    "tables": 8,
+    "pages": 44,
+    "bibliography_entries": 216,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-17",
+    "figures": 12,
+    "tables": 1,
+    "pages": 22,
+    "bibliography_entries": 32,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-18",
+    "figures": 8,
+    "tables": 3,
+    "pages": 26,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-19",
+    "figures": 9,
+    "tables": 7,
+    "pages": 22,
+    "bibliography_entries": 180,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-20",
+    "figures": 12,
+    "tables": 3,
+    "pages": 35,
+    "bibliography_entries": 86,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-21",
+    "figures": 10,
+    "tables": 9,
+    "pages": 35,
+    "bibliography_entries": 128,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  },
+  {
+    "id": "article-22",
+    "figures": 4,
+    "tables": 1,
+    "pages": 20,
+    "bibliography_entries": null,
+    "bibliography_format": "full transcript",
+    "status": "Report available"
+  },
+  {
+    "id": "article-23",
+    "figures": 10,
+    "tables": 6,
+    "pages": 21,
+    "bibliography_entries": 103,
+    "bibliography_format": "numbered",
+    "status": "Report available"
+  }
+]

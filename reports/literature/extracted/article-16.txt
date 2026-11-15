@@ -1,0 +1,2481 @@
+
+=== PAGE 1 ===
+Academic Editor: Pietro Manzoni
+Received: 26 July 2025
+Revised: 21 August 2025
+Accepted: 22 August 2025
+Published: 24 August 2025
+Citation: Amangeldy, B.;
+Tasmurzayev, N.; Imankulov, T.;
+Baigarayeva, Z.; Izmailov, N.; Riza, T.;
+Abdukarimov, A.; Mukazhan, M.;
+Zhumagulov, B. AI-Powered Building
+Ecosystems: A Narrative Mapping
+Review on the Integration of Digital
+Twins and LLMs for Proactive
+Comfort, IEQ, and Energy
+Management. Sensors 2025, 25, 5265.
+https://doi.org/10.3390/s25175265
+Copyright: © 2025 by the authors.
+Licensee MDPI, Basel, Switzerland.
+This article is an open access article
+distributed under the terms and
+conditions of the Creative Commons
+Attribution (CC BY) license
+(https://creativecommons.org/
+licenses/by/4.0/).
+Review
+AI-Powered Building Ecosystems: A Narrative Mapping Review
+on the Integration of Digital Twins and LLMs for Proactive
+Comfort, IEQ, and Energy Management
+Bibars Amangeldy 1,2
+ , Nurdaulet Tasmurzayev 1,2, *
+ , Timur Imankulov 1,2, *
+ , Zhanel Baigarayeva 1
+ ,
+Nurdaulet Izmailov 1,2 , Tolebi Riza 1,2 , Abdulaziz Abdukarimov 1,2 , Miras Mukazhan 1,2 and
+Bakdaulet Zhumagulov 1,2
+1 LLP «DigitAlem», Almaty 050042, Kazakhstan; bibars.amangeldy@ieee.org (B.A.);
+zhanel.baigarayeva@gmail.com (Z.B.); izmailov.nurdaulet@digitalem.kz (N.I.); riza.tolebi@digitalem.kz (T.R.);
+abdukarimov.abdulaziz@digitalem.kz (A.A.); mukazhan.miras@digitalem.kz (M.M.);
+zhumagulov.bakdaulet@digitalem.kz (B.Z.)
+2 Faculty of Information Technology, Al-Farabi Kazakh National University, Almaty 050040, Kazakhstan
+* Correspondence: tasmurzayev.n@gmail.com (N.T.); timur.imankulov@kaznu.edu.kz (T.I.)
+Abstract
+Artificial intelligence (AI) is now the computational core of smart building automation,
+acting across the entire cyber–physical stack. This review surveys peer-reviewed work on
+the integration of AI with indoor environmental quality (IEQ) and energy performance,
+distinguishing itself by presenting a holistic synthesis of the complete technological evolution
+from IoT sensors to generative AI. We uniquely frame this progression within a human-centric
+architecture that integrates digital twins of both the building (DT-B) and its occupants (DT-H),
+providing a forward-looking perspective on occupant comfort and energy management. We
+find that deep reinforcement learning (DRL) agents, often developed within physics-calibrated
+digital twins, reduce annual HV AC demand by 10–35% while maintaining an operative
+temperature within ±0.5 ◦C and CO 2 below 800 ppm. These comfort and IAQ targets
+are consistent with ASHRAE Standard 55 (thermal environmental conditions) and ASHRAE
+Standard 62.1 (ventilation for acceptable indoor air quality); keeping the operative temperature
+within ±0.5 ◦C of the setpoint and indoor CO2 near or below ~800 ppm reflects commonly
+adopted control tolerances and per-person outdoor air supply objectives. Regarding energy
+impacts, simulation studies commonly report higher double-digit reductions, whereas real
+building deployments typically achieve single- to low-double-digit savings; we therefore
+report simulation and field results separately . Supervised learners, including gradient boosting
+and various neural networks, achieve 87–97% accuracy for short-term load, comfort, and fault
+forecasting. Furthermore, unsupervised models successfully mine large-scale telemetry for
+anomalies and occupancy patterns, enabling adaptive ventilation that can cut sick building
+complaints by 40%. Despite these gains, deployment is hindered by fragmented datasets,
+interoperability issues between legacy BAS and modern IoT devices, and the computer energy
+and privacy–security costs of large models. The key research priorities include (1) open,
+high-fidelity IEQ benchmarks; (2) energy-aware, on-device learning architectures; (3) privacy-
+preserving federated frameworks; (4) hybrid, physics-informed models to win operator trust.
+Addressing these challenges is pivotal for scaling AI from isolated pilots to trustworthy ,
+human-centric building ecosystems.
+Keywords: smart buildings; artificial intelligence (AI); machine learning (ML); comfort;
+indoor environmental quality (IEQ); HVAC control; internet of things (IoT); sensors
+Sensors 2025, 25, 5265 https://doi.org/10.3390/s25175265
+
+=== PAGE 2 ===
+Sensors 2025, 25, 5265 2 of 44
+1. Introduction
+Buildings remain the largest end-use energy consumer, responsible for roughly one-
+third of global final demand and about one-quarter of anthropogenic CO2 emissions [1–3].
+Because people spend up to 90% of their time indoors, IEQ directly affects physiology,
+cognition, and economic output. Indoor environmental quality (IEQ)—the combined
+thermal, acoustic, visual, and air quality conditions—has measurable effects: CO2 increases
+from 600 to 1 000 ppm slow decision-making by ~15%, and ±2 ◦C thermal deviations
+correlate with higher complaints and absenteeism [4,5]. Balancing energy demand with
+IEQ is therefore a multi-objective optimization challenge.
+The engineering toolkit for tackling that challenge has progressed through several
+eras. The 1970s introduced centralized building automation systems (BAS) that applied
+closed-loop control and delivered tangible energy savings [4]. Scientometric analyses show
+that the interest in smart building research has accelerated markedly in the past decade [6],
+and systematic reviews underline the persistent integration challenges and opportunities
+that accompany this growth [7]. From the early 2020s, low-power wireless protocols such
+as Zigbee, Thread, and LoRaWAN reshaped BAS into IoT-centric platforms capable of
+interconnecting thousands of sensing and actuation points [8].
+A fourth, emerging era layers artificial intelligence (AI) onto this IoT fabric. Reviews
+trace the evolution of AI techniques aimed at boosting building energy efficiency [ 9]
+and show how machine learning models coupled with IoT data streams advance that
+goal [10], while field implementations demonstrate intelligent control that reduces energy
+use without compromising comfort [11]. When multimodal occupancy sensing—passive
+infrared, ultrasound, Wi-Fi analytics, and computer vision—is added to the mix [ 12],
+sequence models forecast presence patterns with mean absolute errors below 10% [ 13],
+providing a foundation for model-predictive and reinforcement learning controllers that
+modulate HVAC equipment proactively.
+These capabilities typically reside in a three-layer architecture. The perception layer
+hosts modular nodes for temperature, humidity, illuminance, CO2, acoustics, and motion;
+the cognitive layer embeds gradient boosting, convolutional, and graph neural networks,
+refining digital twin simulations with sub-room granularity; and the control layer ex-
+ecutes multi-objective optimization constrained by predicted occupancy and weather.
+Hybrid physical–statistical baselines reduce CV-RMSE by up to 8% relative to classical
+regression [14], and urban-scale extensions that account for morphology, albedo, and micro-
+climate improve heat flow assessment across districts [ 15]. Parallel work on occupant-
+centric metrics links control decisions to subjective comfort and disease prevention [16],
+and the publication of large, open datasets is accelerating the replication and benchmarking
+of these approaches [17].
+To ground the discussion, narrative literature mapping was performed across the Web
+of Science, Scopus, and IEEE Xplore databases. The search used combinations of keywords
+including “smart building”, “indoor environmental quality”, “energy efficiency”, “machine
+learning”, “IoT”, “comfort”, “health”, and “HVAC control”. We retained peer-reviewed
+articles published from 2015 to 2025 that explicitly link building energy consumption
+to IEQ, comfort, or health, while excluding gray literature, duplicates, and studies with
+non-transparent methodologies. The resulting corpus of 180 publications provides the
+evidentiary foundation for the analysis that follows. The context of climate change further
+highlights the urgency of implementing such integrated solutions [18].
+This review offers an integrative synthesis across building sensing, digital twins,
+AI-based HVAC control, and emerging LLMs for building management systems (BMS),
+consolidating segmented surveys rather than claiming algorithmic novelty. Specifically, we
+frame the literature along an end-to-end sequence—sensors → digital twin → AI control →
+
+=== PAGE 3 ===
+Sensors 2025, 25, 5265 3 of 44
+LLMs in BMS. By mapping interfaces, data handoffs, and evaluation metrics across these
+layers, this review bridges strands that are often treated in isolation and surfaces system-
+level gaps (occupancy inference-to-control feedback, twin calibration-to-policy transfer,
+and LLM grounding in BMS ontologies). In contrast to specialized studies, our paper
+traces the full evolution—from sensors to generative AI—within a single, human-centric
+architecture. We introduce the integrated concept of digital twins of the building and the
+human (DT-B + DT-H) and analyze how advanced AI models, including LLMs, enable the
+shift from reactive control to a proactive and hyper-personalized environment aimed at
+maintaining health and comfort.
+The next parts present recent statistics on energy use alongside findings that link
+IEQ to health and productivity. The section titled “Ecosystem of Sensors, Data, and
+Predictive Intelligence” then examines the shift from legacy building automation systems
+(BAS) to IoT-enabled buildings and details the architecture and algorithms that deliver
+proactive comfort and health management. A dedicated methodology section elaborates
+on the narrative mapping process, followed by a discussion of outstanding challenges and
+practical recommendations. The conclusion synthesizes the findings and outlines avenues
+for future work. The remainder of the paper follows this pipeline to maintain conceptual
+continuity and highlight cross-layer dependencies.
+2. Methodology
+To frame the evidence synthesis and ensure transparent, reproducible reporting, the
+study selection process followed the PRISMA-ScR guideline and is summarized in Figure 1.
+Of the 300 records initially identified, 21 duplicates were removed, leaving 279 publications
+for title/abstract screening; at this step, 11 records were excluded, and full texts were sought
+for 268 articles. However, 12 full texts could not be retrieved, resulting in 256 reports
+assessed for eligibility. Following full text assessment, a further 27 publications were
+excluded for different reasons (out of scope—10; insufficient data—7; non-ENG/RUS—
+10), and 229 studies were included in the analysis. Screening was performed by two
+independent reviewers, with disagreements resolved by a third expert; the search window
+was 2009–2025; sources: Scopus, Web of Science, Nature, IEEE Xplore, ACM Digital Library,
+PubMed, and Google Scholar. Thus, the sequence of stages from “Identification” to “Studies
+included” and the counts at each step are fully consistent, as shown in Figure 1.
+The distribution of included sources aligns with the review structure. Section 1 (In-
+troduction) comprises 18 papers covering sectoral statistics, the direct link between IEQ
+and health/well-being/productivity, the significant energy footprint of buildings, and the
+transition from traditional buildings to BAS and then to IoT-enabled smart buildings; it
+also includes overview pieces on AI for smart buildings (architecture “building + comfort +
+health + AI”) and methodological notes (databases, keywords, and publication window).
+Section 3 (Ecosystem of Sensors, Data, and Predictive Intelligence) aggregates 75 studies
+on how the architectural layers work together (IoT layer → communication → processing
+and control → actuation), on multimodal sensing (incl. smartwatches, fitness trackers, and
+smartphones), and on the personal comfort and health digital twin concept. Section 4 (Arti-
+ficial Intelligence for Prediction, Control, and Interaction) includes 107 studies spanning
+foundational ML (supervised/unsupervised), advanced AI for adaptive control, reinforce-
+ment learning for HVAC control, generative AI and LLMs for comfort/health management,
+and personalization via fine-tuning. Section 5 (Discussion) synthesizes 29 publications
+focusing on data quality and scarcity, the robustness and generalization of fine-tuned
+models, cybersecurity risks, the paradox of control and loss of agency, privacy, unintended
+health consequences of over-optimization, ethical and societal implications, and future
+trajectories/solutions.
+
+=== PAGE 4 ===
+Sensors 2025, 25, 5265 4 of 44
+Figure 1. PRISMA-ScR flow of study selection.
+Table 1 consolidates the essential design and outcome information across the reviewed
+studies, covering building and climatic context, sensing and control stacks, analytical and
+optimization methods, data provenance, baseline configurations, metric definitions and
+validation procedures, the experimental scenario (simulation, field, or testbed), and a
+concise appraisal of costs and benefits. Where studies report comparable quantities, ranges
+or absolute changes (e.g., energy use, reliability, latency) are included. Missing details are
+marked “not reported.” Bracketed numerals map to the reference list.
+
+=== PAGE 5 ===
+Sensors 2025, 25, 5265 5 of 44
+Table 1. Consolidated data extraction across studies.
+Building type Climate Sensors Algorithms Datasets Baselines Metrics Validationmethods Scenario Cost–benefitanalysis
+Smart
+city/industrial
+IoT/campus
+Heterogeneous Generic IoT(implied) NSGA-II;stochasticprogramming Synthetic (IoTtrafficsimulation) IP-centric arch.;equal weights Latency, throughput,energy, cache hit,reliability, PDR
+Testbed,
+simulation,
+sensitivity,
+standards
+comparison
+Simulation +
+testbed
+−25% latency; +15%
+energy eff.; +20%
+cache; 95% reliability
+w/30% edge failures;
+trade-offs
+[19]
+Residential/
+commercial/
+healthcare
+Not reported
+IoT sensor
+networks; smart
+meters
+(elec/water/gas)
+FL, edge, ML
+(NN, SVM),
+SITA
+Smart meter
+data (discussed)
+Binary privacy
+settings
+IAQ prediction
+accuracy; system
+perf
+(privacy-preserving)
+Concept +
+systematic review
+BMS/IoT
+integration
+(platform)
+↑ pri-
+vacy/compliance; ↓
+risk (edge); faster
+monitoring/control
+[20]
+Offices
+(university) Not reported
+Illuminance,
+occupancy,
+temperature
+(IoT)
+ABM
+(AnyLogic);
+EnergyPlus
+Weather, floor
+plan, occupancy
+profiles
+Traditional
+schedules;
+manual
+behavior
+kWh (to-
+tal/lighting/HVAC),
+comfort
+10 min step ×
+365-day
+simulation; demo
+case
+Simulation
+−31.71% total; for
+wasteful behavior:
+lighting −60%,
+HVAC −31.47%,
+total −35.52%
+[21]
+Kindergartens
+(classrooms)
+Seoul,
+January–July
+2022
+PM2.5/PM10/
+CO2/T/RH;
+window sensors
+Pearson’s
+correlation
+Indoor/outdoor
+measurements
+at 10 sites
+KR 25; ASHRAE
+18 m3/h·person
+PM, CO2, T/RH,
+window open time,
+ventilation per
+person
+Python analysis;
+comparison to
+standards; CO2
+evaluation
+Field
+Ventilation
+1.77–10.69 < norms;
+window-dependent;
+low-cost sensors
+[22]
+University
+buildings
+Zaragoza;
+winter/summer
+CO2, T, RH,
+pressure; elec
+meters
+Correlations;
+occupancy-
+based fan coil
+control
+RT and
+long-term;
+SCADA;
+weather; PV
+Design calcs; RD
+1826/2009; 2022;
+CO2 800/1000;
+Passivhaus 120;
+CTE 184
+kWh, CO2, T/RH,
+standby, occupancy,
+comfort, BEPG
+Continuous
+monitoring; sensor
+comparison; temp
+trends
+Field
+HVAC −40–70%;
+standby 285
+MWh/yr (64%
+potential);
+occupancy opt.
+−53–63%; low
+OPEX/eco-costs
+[23]
+Industrial
+(M/P/C) Not reported PMU, CT Node-RED;MQTT
+Time series for
+chillers/boilers/
+HVAC/dust
+collec-
+tors/equipment
+Not reported U, I, P/Q/S, f, PF,kWh, data accuracy
+Continuous
+monitoring; audit;
+single line;
+integration tests;
+MQTT Explorer
+Field
+↑ efficiency; ↓ waste;
+scalable; reliable
+low-latency LAN
+[24]
+Intelligent
+building
+(air-conditioned
+spaces)
+Not reported Electricitymeters
+BIM; adaptive
+GA; Matlab
+model
+(Matlab 24.2)
+Simulation +
+experimental
+data
+Conventional
+control
+Energy savings;
+kWh; comfort index
+P; CO2
+2-zone setup;
+model vs.
+experiment;
+statistics
+Field +
+simulation
+−11.43% energy at
+equal comfort [25]
+
+=== PAGE 6 ===
+Sensors 2025, 25, 5265 6 of 44
+3. Ecosystem of Sensors, Data, and Predictive Intelligence
+Smart buildings have evolved from simple collections of stand-alone, hard-wired
+controls into richly instrumented, data-driven ecosystems that sense, think, and act in
+real time [21,26]. At the foundation of this ecosystem sits a dense fabric of environmental
+sensors—temperature, humidity, CO2, and illuminance—and occupancy detectors ranging
+from passive infrared (PIR) and image-based sensors to Bluetooth beacons [ 27]. These
+devices stream time-stamped telemetry into an Internet-of-Things (IoT) network that blends
+legacy building automation protocols with low-power wireless standards like Zigbee and
+LoRaWAN, guaranteeing a secure communication between devices and controllers [26,28].
+The first computational stop for these data is the edge layer, where embedded gateways
+perform noise filtering and low-latency inference [ 20]. Edge-resident machine learning
+models can predict imminent threshold violations—say, a rapid rise of CO2 in a crowded
+meeting room—and trigger timely corrective actions while circumventing round-trip delays
+to the cloud [20].
+Cleaned and summarized datasets flow onward to cloud platforms that offer virtually
+unlimited storage and processing power [29,30]. Here, historical telemetry is fused with
+external variables like weather forecasts and dynamic electricity tariffs [31]. The same cloud
+tier hosts holistic digital twins: data-driven replicas that couple Building Information Model
+(BIM) geometry with live sensor feeds [ 32,33]. These twins enable what-if experiments,
+fault diagnostics, and model-predictive control routines that optimize comfort, air quality,
+and energy consumption simultaneously [32,34].
+At the application layer, operators and occupants interact with the system through
+dashboards, mobile apps [35], and, increasingly, conversational agents underpinned by
+large language models (LLMs) [36,37]. A facilities manager can visualize thermal maps
+and equipment health indices, while an employee can nudge personal set-points or receive
+notifications.
+The closed-loop interaction unfolds as follows. Sensors perceive the indoor environ-
+ment and occupant presence [22]; edge analytics detect patterns [23]; predictive models in
+the cloud forecast future states [26]; optimization engines compute control trajectories that
+balance comfort, health, and energy costs [30]; and actuators in HVAC and lighting systems
+execute the commands [ 24]. Throughout, cybersecurity and privacy measures—device
+authentication, encrypted channels, and privacy-preserving federated learning—safeguard
+the integrity of both data and people [23,33].
+Several concrete scenarios illustrate the value of this architecture. Demand-controlled
+ventilation systems use CO 2 predictions to increase airflow minutes before concentra-
+tions reach cognitive performance limits [23]. Behavior-aware HVAC scheduling mines
+occupancy data to pre-condition spaces only when needed, trimming peak loads [34,35].
+Multi-objective reinforcement learning agents, trained inside digital twins, can orches-
+trate environmental controls to cut electricity bills significantly [35,36]. In safety-critical
+events such as fires, the same sensor and control backbone can automatically shut down air
+handling units and unlock egress routes [28].
+By intertwining pervasive sensing, reliable data pipelines, and predictive intelligence
+across edge and cloud domains [25], modern smart building ecosystems transcend reactive
+automation and deliver proactive, human-centric environments [ 9]. Occupants benefit
+from healthier air and greater comfort, while owners realize significant gains in energy
+efficiency, maintenance planning, and asset resilience [9,10].
+The realization of proactive, human-centric control is underpinned by a multi-layered
+cyber–physical architecture that orchestrates the cyclical flow of data from the physical
+environment to cloud-based intelligence and back to physical actuators (illustrated in
+Figure 2). This integrated framework is designed to sense, reason, and act in real-time,
+
+=== PAGE 7 ===
+Sensors 2025, 25, 5265 7 of 44
+transforming raw telemetry into intelligent control actions that continuously optimize for
+occupant comfort, health, and energy efficiency.
+Figure 2. Ecosystem of sensors, data, and predictive intelligence in a smart building.
+At its foundation lies the perception and actuation layer, which constitutes the direct
+interface with the building and its occupants. A dense fabric of environmental sensors
+(for temperature, humidity, and CO 2) and multimodal occupancy detectors—ranging
+from passive infrared (PIR) to advanced millimeter wave (mmWave) radar—generates a
+continuous stream of high-granularity telemetry [21,22,31]. Conversely, actuators within
+HVAC systems, lighting, and automated shading execute the control commands that
+physically alter the indoor environment.
+This raw data is transmitted upwards through the communication and IoT layer.
+This layer leverages a hybrid of legacy wired protocols like BACnet and modern wireless
+standards such as Zigbee and LoRaWAN to ensure reliable and secure connectivity between
+the physical devices and the computational layers [ 20,22,33]. The first computational
+
+=== PAGE 8 ===
+Sensors 2025, 25, 5265 8 of 44
+stop for this data stream is the edge computing and local layer. Here, local gateways
+and embedded machine learning (ML) modules perform critical low-latency functions,
+including data filtering, aggregation, and immediate inference for time-sensitive responses.
+This stage is crucial for immediate actions and for reducing the data load on the cloud
+infrastructure [24,25].
+Cleaned and pre-processed data, often fused with external data from sources like
+weather APIs and dynamic energy tariffs [26], proceeds to the cloud analytics and digital
+layer. This central intelligence hub hosts scalable data lakes for long-term storage and
+automated machine learning (AutoML) platforms for developing predictive models [25].
+The core of this layer is the digital twin—a dynamic, physics-informed virtual replica of
+the building continuously synchronized with real-world sensor feeds. This twin serves as
+an invaluable sandbox for simulating complex scenarios, performing fault diagnostics, and
+training reinforcement learning agents for multi-objective optimization [27,29].
+Finally, the applications and UI layer manages the interaction with human stakehold-
+ers. Through intuitive interfaces like dashboards, mobile applications, and conversational
+agents, facility managers and occupants receive actionable insights derived from the cloud
+analytics [19,32]. Crucially, this layer also allows users to provide direct feedback and
+explicit preferences, creating a human-in-the-loop control system that is vital for personal-
+ization and closing the reinforcement cycle [19].
+The entire architecture operates as a continuous, closed loop. Data flows upward from
+sensors to the cloud, where it is transformed into intelligent decisions. These decisions
+propagate downwards as control signals to actuators. The system’s adaptive capability is
+perpetually reinforced by feedback mechanisms, including model updates sent from the
+cloud back to the edge layer, ensuring it learns and evolves over time. This synergistic
+integration of sensing, connectivity, and predictive intelligence is what creates a truly
+proactive, resilient, and human-centric building ecosystem.
+3.1. Environmental Sensing Technologies
+The proactive management of comfort and health in smart buildings relies on a
+multi-layered technological architecture. This framework provides the essential structure
+for sensing the environment, communicating data, processing information, and enacting
+physical changes. This section deconstructs this architecture by outlining its operational
+workflow, presenting a visual model, and analyzing its role in current research and future
+development.
+The effectiveness of smart building systems hinges on the comprehensive and accu-
+rate data gathered by the sensing layer, which comprises a variety of IoT environmental
+sensors designed to capture real-time information about the indoor environment. Studies
+on indoor air quality (IAQ) in sensitive environments, such as daycare centers, emphasize
+the important role of IoT sensors in monitoring parameters like temperature, humidity, and
+CO2 levels to ensure safe and healthy conditions for occupants [37]. Beyond environmental
+parameters, the sensing layer also extends to energy consumption monitoring, with indus-
+trial IoT (IIoT)-based submetering solutions deploying IoT-enabled submeters to provide
+real-time energy consumption data from critical equipment, enabling optimized energy
+management and waste reduction in manufacturing facilities [38]. Similarly, for building
+equipment energy saving optimization, online monitoring systems leverage IoT sensors
+to collect data that, when integrated with Building Information Modeling (BIM), allows
+for the intelligent control of systems like air conditioners [39]. The optimal design of com-
+munication topology for wireless sensor networks (WSNs) is also crucial for efficient data
+collection, considering factors like network energy consumption and stability to implement
+fully distributed optimal control approaches in IoT-enabled smart buildings [40].
+
+=== PAGE 9 ===
+Sensors 2025, 25, 5265 9 of 44
+The communication layer is responsible for the reliable and efficient transmission of
+data from sensors to processing units and control signals to actuators, employing various
+wireless and wired technologies. The communication layer is responsible for the reliable
+and efficient transmission of data from sensors to processing units, as well as control
+signals to actuators, using various wired and wireless technologies. LPWAN (Low-Power
+Wide-Area Network) technologies are gaining increasing popularity due to their ability to
+transmit data over long distances with low energy consumption, making them ideal for
+many IoT applications in smart buildings [41]. Furthermore, the integration of advanced
+networking paradigms like Named Data Networking (NDN) with edge computing can
+significantly enhance IoT performance in wireless and mobile networks by optimizing data
+retrieval and caching, thereby reducing latency and improving reliability [42]. This focus
+on efficient communication protocols is vital for supporting the real-time demands of smart
+building operations.
+The processing layer is where raw sensor data is transformed into actionable insights
+through advanced computational techniques, often involving a combination of edge com-
+puting and cloud-based analytics. Edge computing allows for localized data processing,
+reducing latency and bandwidth requirements, which is particularly beneficial for real-
+time IoT applications [42]. For more complex analyses and long-term data storage, cloud
+integration remains essential. The development of decentralized machine learning frame-
+works for IoT is also enhancing security, privacy, and efficiency in these cloud-integrated
+environments [43]. The architectural flexibility of microservices-based IoT platforms is a
+key enabler in this layer, allowing for scalable, interoperable, and dynamic ecosystems
+that can efficiently handle the distributed nature of IoT devices [44]. Moreover, machine
+learning techniques are increasingly employed within this layer for critical tasks such as
+attack detection in IoT networks, bolstering the cybersecurity posture of smart building
+systems [45]. The final layer, actuation and control, translates the intelligent decisions
+made by the processing layer into physical changes within the building environment. This
+involves sending commands to various devices, such as HVAC systems, lighting controls,
+and air purifiers, to adjust conditions according to desired comfort, health, and energy
+efficiency parameters. The continuous feedback loop from the sensing layer allows the
+system to monitor the effects of these actions and refine its control strategies, leading to
+adaptive and optimized building performance.
+The architectural structure of smart buildings is not isolated but operates within a
+broader Internet of Things (IoT) ecosystem. This wider context includes initiatives aimed
+at creating open IoT innovation ecosystems for smart cities, which focus on ensuring
+interoperability through open communication and data standards [46,47]. These principles
+also extend to the industrial sector, where IoT smart factory ecosystems are being developed
+based on Software-Defined Networking (SDN) to enhance communication and increase
+efficiency in industrial processes [48].
+A key aspect across all levels of this architecture is security. As the number of IoT
+devices grows, so does the number of potential vulnerabilities, prompting ongoing research
+focused on developing countermeasures and building robust security systems [49]. Ad-
+ditionally, the sustainability of widespread IoT deployment is becoming an increasingly
+important issue, driving interest in energy supply solutions. Thermoelectric Generators
+(TEGs) are one promising option for powering autonomous sensors, converting thermal gra-
+dients into electrical energy and thereby supporting their self-sufficiency while reducing the
+environmental footprint of smart building components [50]. The ongoing evolution of this
+multi-layered architecture, coupled with advancements in AI, communication technologies,
+and sustainable power solutions, promises to deliver increasingly intelligent, responsive,
+and resilient smart buildings that proactively manage occupant comfort and health.
+
+=== PAGE 10 ===
+Sensors 2025, 25, 5265 10 of 44
+Table 2 provides an overview of the sensor and IoT technologies used in smart build-
+ings, including measured parameters, areas of application, and advantages. The first
+technology is indoor air quality sensors (IAQ sensors), which measure temperature, hu-
+midity, and CO2 levels. They are used for monitoring air quality in sensitive areas such
+as medical facilities or laboratories and provide data on air conditions to maintain safe
+environments. The second technology is industrial IoT, designed for measuring and opti-
+mizing energy consumption in industrial buildings. It enables real-time monitoring, energy
+resource management, and a reduction in energy losses. The third technology is IoT sensors
+integrated with Building Information Modeling (BIM). These sensors collect data aimed
+at improving equipment energy efficiency and are used for the online monitoring and
+automatic control of building systems. The fourth technology is wireless sensor networks
+(WSNs), which collect data for implementing distributed control. They are used for data
+acquisition in smart buildings and support the development of communication topolo-
+gies that consider energy consumption and system stability. All listed technologies are
+supported by references to scientific sources.
+Table 2. Sensor and IoT technologies for smart building systems.
+Technology MeasuredParameters Application Advantages ResearchReferences
+Indoor Air Quality
+(IAQ) Sensors
+Temperature,
+humidity, CO2
+IAQ monitoring in
+sensitive environments
+Critical role in ensuring
+healthy conditions,
+providing granular
+health data.
+[37]
+Industrial IoT Energy consumption
+Optimization of energy
+consumption in
+manufacturing facilities
+Real-time monitoring,
+optimization of energy
+management, waste
+reduction.
+[38]
+IoT Sensors for
+Building Management
+Systems (with BIM)
+Data for optimizing
+equipment energy
+saving
+Online monitoring and
+management of building
+equipment with
+Building Information
+Modeling (BIM)
+integration
+Intelligent control,
+increased energy
+efficiency.
+[39]
+Wireless Sensor
+Networks
+Data for distributed
+optimal control
+Efficient data collection
+in smart buildings
+Optimal communication
+topology design
+considers energy
+consumption and
+stability.
+[40]
+3.2. Personal and Occupancy Sensing Technologies
+The cornerstone of any system designed to proactively manage comfort and health
+is the ability to collect accurate, non-stop data about the people in a building. Choosing
+the right sensing technology, however, is a major challenge, forcing a trade-off between
+how detailed the data is, how much it costs to implement, and, most critically, how
+much it invades occupant privacy. This section offers a deep dive into the key sensing
+technologies, assessing how they fit into the main goal of creating personalized, healthy,
+and comfortable spaces.
+The first layer of data collection comes from ambient (or occupational) sensors placed
+within a space. The most basic of these, passive infrared (PIR) detectors, are effective for
+simply detecting presence, but their binary “present/not present” logic cannot assess the
+number of people or their metabolic activity, which limits their use in advanced HVAC
+systems [51]. Computer vision (CV)-based systems offer the highest level of detail: they
+
+=== PAGE 11 ===
+Sensors 2025, 25, 5265 11 of 44
+can accurately count people, identify their postures, and determine activity levels, which
+are all direct inputs for thermal comfort (PMV) calculation models. However, their use
+is associated with severe privacy violation concerns, making them unacceptable for most
+residential and office environments [52].
+To solve this dilemma, privacy-preserving technologies have been developed. Wi-Fi
+Channel State Information (CSI) analysis uses existing infrastructure to estimate occupancy
+with reasonable accuracy [53], but its performance can be unstable due to changes in the
+environment [54]. A more robust alternative is millimeter wave (mmWave) radar. These
+devices do not create images but can determine the number and location of people with
+high precision, as well as detect micro-motions like respiration rate, which is directly
+relevant for assessing air quality and health status [55,56].
+However, to transition from group-level to personalized management, wearable de-
+vices are essential, as they provide physiological data that is inaccessible to ambient sensors.
+These devices track key parameters such as Heart Rate (HR) and Heart Rate Variability
+(HRV), which are reliable proxies for metabolic rate (heat production) and stress levels, en-
+abling control systems to deliver personalized cooling or adapt lighting to reduce stress [57].
+In addition, skin temperature offers a direct indicator of a person’s thermal balance, allow-
+ing the system to react more quickly to individual discomfort. Activity levels, captured via
+an accelerometer, are also a critical parameter for dynamically calculating metabolic rate in
+thermal comfort models like PMV [58].
+A comparison of wearable devices reveals that while budget-friendly trackers (Xiaomi
+Mi Band) are suitable for general activity assessment, more expensive devices (Oura Ring,
+Apple Watch) provide more accurate temperature and HRV data, which is preferable for
+sophisticated health and stress models [59].
+As it turns out, no single technology is a perfect solution by itself. Therefore, the most
+sensible approach is sensor fusion—combining data from multiple sources. For example, a
+system might use an mmWave radar to accurately count people in a zone, while data from
+their wearables determines the average metabolic load for that zone. This allows the HVAC
+system to be both energy-efficient and highly personalized to individual needs. Table 3
+summarizes this comparative analysis, contrasting the primary technologies based on their
+key characteristics and relevance for comfort and health management systems. The data
+acquired from this multi-layered sensor network serves as the foundation for the digital
+twin models discussed in the next section.
+Table 3. Comparative analysis of sensing technologies for smart buildings.
+Technology MeasuredParameters Relevance toComfort andHealth Strengths Weaknesses References
+Passive Infrared
+(PIR)
+Motion
+(presence)
+Low: Basic
+detection to switch
+systems on/off.
+Low-cost, high
+energy efficiency,
+non-invasive.
+Cannot
+distinguish
+occupant count;
+ineffective for
+stationary
+occupants.
+[51]
+Cameras (CV) Count, position,activity
+High: Provides
+precise data for
+metabolic load
+calculation.
+Maximum data
+granularity.
+Critical privacy
+concerns;
+high-cost.
+[52]
+
+=== PAGE 12 ===
+Sensors 2025, 25, 5265 12 of 44
+Table 3. Cont.
+Technology MeasuredParameters Relevance toComfort andHealth Strengths Weaknesses References
+Radar
+(mmWave)
+Count, position,
+respiration
+High: Occupant
+counting and
+respiration rate for
+air quality control.
+Privacy-preserving,
+high-accuracy,
+works in darkness
+[56].
+Relatively
+high-cost; signal
+processing
+complexity.
+[56]
+Wi-Fi (CSI) Presence, count,activity
+Medium: Low-cost
+occupancy
+estimation for
+zonal control.
+Uses existing Wi-Fi
+network; no extra
+hardware needed.
+Sensitive to
+environmental
+changes; complex
+calibration.
+[54]
+Wearable
+Devices
+HR, HRV ,
+temperature,
+activity
+Very High: Direct
+physiological data
+for
+personalization.
+Direct physiological
+measurement,
+foundation for
+personalization [59].
+Requires user to
+wear and charge;
+depends on user
+consent.
+[57]
+In this review, thermal comfort is operationalized using the PMV/PPD and/or adap-
+tive model, with compliance expressed as the proportion of occupied hours within the
+ASHRAE 55 acceptable zone (approximately PMV −0.5. . .+0.5, i.e., ≤10% PPD) [60,61].
+Indoor air quality (IAQ) adequacy is assessed according to the Ventilation Rate Procedure
+(VRP) specified in ASHRAE 62.1; no fixed indoor CO2 limit is imposed, with CO2 instead
+applied as a proxy indicator for ventilation performance [62–64]. In steady-state conditions,
+indoor CO2 levels approximately 600–800 ppm above the outdoor baseline are used as a
+practical indicator of insufficient ventilation, guiding demand-controlled ventilation (DCV)
+settings in conjunction with space-specific CO2 metrics [62,63]. These anchors enable the
+direct linkage of sensor data streams to measurable comfort and IAQ targets, which are
+then applied in the subsequent control and evaluation stages [60,62,65].
+In Table 4 we demonstrated the detailed mapping of key sensor modalities to their pri-
+mary measurable metrics, associated standard anchors, representative multimodal fusion
+strategies, and trade-offs across cost, energy consumption, privacy, and bias dimensions.
+The “Primary metric(s) mapped” column specifies the measurable outputs linked to com-
+fort (e.g., operative temperature, and PMV/PPD), IAQ (e.g., CO2 as a ventilation adequacy
+proxy), or ergonomics (e.g., acoustic noise levels). “Standard anchor” identifies the norma-
+tive framework or procedural logic—such as ASHRAE Standard 55 for thermal comfort
+or ASHRAE Standard 62.1 [ 66] VRP for ventilation—used to interpret each metric in a
+building performance context. “Typical fusion” lists common multimodal combinations
+(e.g., CO2 + PIR/mmWave for robust demand-controlled ventilation, Temp + RH + air
+speed for PMV computation, and mmWave + wearables for metabolic load estimation)
+that enhance the accuracy and resilience to single sensor limitations. The “Key trade-offs”
+column summarizes practical considerations that influence deployment decisions, includ-
+ing initial and operational costs, energy overhead, data privacy implications, and inherent
+biases or sensing limitations. This synthesis supports the review’s objective to link sensing
+technologies explicitly to measurable targets, applicable standards, and integrative control
+strategies for occupant-centric and energy-efficient building management.
+
+=== PAGE 13 ===
+Sensors 2025, 25, 5265 13 of 44
+Table 4. Sensor–metric–standard mapping with example multimodal fusions and associated trade-offs.
+Sensor Type Primary Metric(s)Mapped Standard Anchor Typical Fusion Key Trade-Offs References
+CO2 (NDIR) IAQ/ventilationadequacy (proxy)
+62.1 VRP logic;
+CO2 as a proxy
+indicator; elevated
+CO2 at steady state
+→ insufficient
+ventilation
+CO2 +
+PIR/mmWave
+(DCV)
+low • very low •
+privacy-friendly •
+bias: not direct
+occupancy count
+[62–64]
+Temp/RH/Air
+speed
+Operative T,
+PMV/PPD
+(comfort)
+Comfort
+compliance via
+ASHRAE 55
+acceptable zone
+Temp + RH + air
+speed (PMV);
++wearables
+low • low •
+privacy-friendly •
+bias: loca-
+tion/calibration
+[60,61]
+PIR
+Presence (binary)
+→ DCV/comfort
+triggers
+Linked to 62.1
+occupancy
+schedules and 55
+occupied hours
+CO2 + PIR, Temp
++ PIR
+very low • very
+low • high privacy
+• bias: static
+occupants
+[62,65]
+mmWave radar
+Presence/count,
+micro-
+motion/respiration
+→ exposure proxy
+Indirect link to
+comfort/IAQ
+control targets
+mmWave + CO2,
++wearables
+medium • low •
+very high privacy
+• bias:
+environmental
+clutter
+[67]
+Wi-Fi CSI
+Presence/activity
+(indirect
+occupancy)
+Indirect link to
+occupancy targets,
+supports zonal
+monitoring
+CSI + CO2
+very low • very
+low • high privacy
+• bias: sensitive to
+environmental
+drift
+[68]
+Wearables
+HR, HRV , skin
+temperature,
+activity →
+personalized
+comfort
+Participant-
+oriented comfort
+models
+Wearables +
+zone sensors
+device cost •
+charge cycle •
+consent required •
+sampling bias
+[60,61]
+Acoustic dBA →ergonomics (noise)
+Ergonomics
+(visual/acoustic)
+as secondary
+metric
+dBA + PIR
+(occupied hours)
+low • low •
+privacy risk if raw
+audio → use edge
+features
+[65]
+3.3. Digital Twin Technology
+The data gathered from this sensor network serves as the foundation for the next leap
+in building management: digital twin (DT) technology. A DT is a living virtual replica of a
+physical asset, synchronized with it in real time. In this context, as outlined in foundational
+reviews [68,69], the concept is split into two interconnected entities: the digital twin of the
+building (DT-B) and the digital twin of the human (DT-H).
+A DT-B is a dynamic, physics-based model of the building. For over a decade, the
+consensus has been that “gray-box” models, which blend physical principles with data-
+driven AI, are optimal [70]. The historical challenge, however, has been making them fast
+enough for live control. Recent research has tackled this problem from different angles,
+addressing key bottlenecks that previously hindered real-time operation. For instance, to
+solve the problem of calibration speed, a 2024 framework called GenPhysiCal can perform
+a full calibration cycle in just 0.04 s [71]. In parallel, to overcome the challenge of simulation
+complexity, a 2025 study uses an AI-based “surrogate model” to predict complex airflow in
+milliseconds instead of minutes, maintaining a high accuracy [72]. Together, these advances
+make real-time DT-B operation feasible.
+
+=== PAGE 14 ===
+Sensors 2025, 25, 5265 14 of 44
+A fast, accurate DT-B provides a ‘virtual sandbox’ for learning control policies. Com-
+paring the evolution of this approach from classical MPC [70] to modern AI shows rapid
+progress. A foundational 2019 review [73] and subsequent application papers [74] showed
+that deep reinforcement learning (DRL) could achieve significant energy savings of 15–40%.
+More recently, a 2024 study using Bayesian optimization demonstrated a more holistic
+benefit: it improved occupant comfort by 38% while simultaneously reducing energy con-
+sumption [75]. This highlights a critical shift in research goals, moving from a pure energy
+focus to a dual-objective approach that balances efficiency with human well-being.
+Parallel to the DT-B, the concept of the human digital twin (DT-H) is evolving. While
+the DT-H is already a major topic in personalized medicine for testing treatments in silico, as
+shown in recent 2024 reviews [76,77], its role in smart buildings is to model an individual’s
+comfort. This is achieved by feeding biometric signals from wearables into sophisticated
+thermoregulation models. For example, the Fiala model can be parameterized in real
+time with wearable data to predict personal thermal sensation, a method demonstrated by
+Al-Khafaji et al. [78].
+The culmination of this technology is the hybrid “building–human” twin, which
+links the DT-B and the DT-H, as shown in Figure 3. This architecture materializes the
+“human-in-the-loop” control concept reviewed by Papantoniou et al. [79], where a person’s
+physiological state (from the DT-H) directly informs the building’s control systems (the
+DT-B). This is no longer just a theoretical concept; a 2024 pilot study on a Korean smart
+campus provided hard evidence, demonstrating that this hybrid system increased the time
+occupants spent in their individual comfort zone from 62% to an impressive 85% [80].
+ 
+ 
+ 
+ 
+ 
+Figure 3. Conceptual architecture of a hybrid digital twin (DT-B + DT-H) for proactive occupant
+comfort.
+Despite this significant potential, widespread implementation faces hurdles. As a
+major 2024 systematic review by El-Amroussi et al. confirms, challenges like the inter-
+operability between different models and the standardization of data exchange remain
+critical barriers [81]. Nevertheless, the digital twin architecture provides the necessary
+
+=== PAGE 15 ===
+Sensors 2025, 25, 5265 15 of 44
+infrastructure to treat thermal comfort, air quality, and health not as separate challenges,
+but as a single, dynamically optimized objective function.
+Interoperability and semantic standards such as brick ontology and IFC (ISO
+16739) [82] have emerged as critical enablers for seamless digital twin integration in the
+built environment. A recent analysis of IFC-based workflows for embedding Environ-
+mental Product Declaration (EPD) data illustrates that, despite its comprehensive schema,
+semantic alignment challenges persist when integrating Life Cycle Assessment (LCA) infor-
+mation into Building Information Modeling (BIM) and digital twins [83]. Addressing these
+gaps requires not only standardized data models but also structured ontologies capable of
+supporting cross-domain integration. In this context, multi-domain ontologies anchored
+in IFC have been proposed as a basis for incremental digital twin conceptualizations [84].
+Beyond structural information, semantic web technologies have been applied to domains
+such as indoor environmental quality, where the IFC ontology structure is complemented
+by frameworks like the Smart Applications REFerence ontology (SAREF) to enhance se-
+mantic interoperability and data reuse in building performance monitoring [ 85]. At the
+asset end-of-life stage, reviews of BIM-based digital deconstruction approaches reveal that
+ontologies accepting IFC inputs can streamline demolition planning, material recovery, and
+reuse processes, supporting sustainability objectives within digital twin environments [86].
+This interoperability imperative also extends to infrastructure, where strategies for rein-
+forced concrete bridge management in compliance with Italian regulations emphasize open
+formats such as IFC to maintain compatibility between inspection data, 3D modeling, and
+maintenance systems [87].
+Cultural heritage contexts further highlight the role of semantic standards. Her-
+itage BIM (HBIM) approaches for twentieth-century concrete structures leverage IFC as
+a foundation for integrating geometric documentation, historical metadata, and sensor
+data into coherent digital twins [88]. In a similar way, HBIM workflows for built heritage
+utilize IFC to support interoperable virtual and augmented reality applications, fostering
+wider access and collaboration among stakeholders [ 89]. Interoperability is equally rel-
+evant in operational management, where integrating BIM, Internet of Things (IoT), and
+facility management systems through semantic construction digital twins—structured
+around IFC—addresses the challenges of linking real-time sensor data with as-built mod-
+els [90]. Systematic reviews of BIM-based structural health monitoring confirm that ISO
+16739-compliant IFC schemas facilitate sensor data integration, enabling the continuous
+monitoring of assets such as historical churches and masonry bridges [91]. The role of IFC
+in enhancing stakeholder collaboration is underscored in studies on BIM-driven sustainable
+heritage tourism, where embedding semantic information into IFC models supports richer,
+more accessible cultural heritage experiences [92]. These works demonstrate that adherence
+to semantic standards such as IFC—complemented where appropriate by domain-specific
+ontologies—remains central to achieving the full interoperability potential of digital twins
+across building, infrastructure, and heritage domains.
+4. Artificial Intelligence for Prediction, Control, and Interaction
+4.1. Foundational Machine Learning
+Machine learning has emerged as the cornerstone technology for intelligent build-
+ing management, delivering unprecedented energy savings of 15–50% while maintaining
+optimal occupant comfort [92,93]. The transformation from traditional rule-based build-
+ing control to adaptive machine learning systems represents a fundamental shift in how
+buildings respond to dynamic environmental conditions, occupancy patterns, and energy
+demands [94]. This technological evolution addresses the critical challenge that buildings
+
+=== PAGE 16 ===
+Sensors 2025, 25, 5265 16 of 44
+consume approximately 30–34% of global energy consumption [95,96], making efficient
+building operation essential for sustainability goals.
+The foundational machine learning approaches in smart buildings encompass both
+supervised and unsupervised learning paradigms, each serving distinct but complemen-
+tary roles in building intelligence. Supervised learning algorithms excel at prediction
+tasks, achieving 92–97% accuracy in energy forecasting and occupancy detection, while
+unsupervised learning methods reveal hidden patterns in building data, enabling fault de-
+tection and operational optimization without requiring labeled training data [97,98]. Recent
+research demonstrates that machine learning implementations in commercial buildings
+consistently outperform traditional control systems, with ensemble methods achieving the
+highest accuracy rates of 95–98% for energy prediction tasks [99].
+4.1.1. Supervised Learning Technologies for Smart Buildings
+Supervised learning forms the predictive foundation of intelligent building systems,
+leveraging historical data to forecast energy consumption, occupancy patterns, and equip-
+ment performance. Support Vector Machines (SVMs) and Support Vector Regression (SVR)
+have demonstrated exceptional performance in building energy prediction, achieving pre-
+diction accuracies with CV less than 3% and percentage errors within 4% for long-term
+electricity consumption forecasting [100]. Li et al. established that SVM consistently out-
+performs Artificial Neural Networks (ANNs) for building energy prediction, with a Root
+Mean Square Error (RMSE) of 7.35 compared with ANN’s 5.71 for office building appli-
+cations [101]. Decision trees with advanced algorithms like CART and C4.5 demonstrate
+exceptional interpretability while maintaining a high accuracy for building design opti-
+mization. Ref. [102] achieved 93.5% classification accuracy for zero energy building design
+using 15 passive design parameters, providing transparent decision-making processes
+crucial for regulatory compliance.
+Building on SVM’s strong foundation, ANNs represent one of the most versatile super-
+vised learning approaches for smart buildings, consistently achieving the highest accuracy
+for heating and cooling load prediction across diverse building types [36]. Recent imple-
+mentations demonstrate that neural networks deliver 67% accuracy for thermal comfort
+prediction and superior performance compared with engineering calculation methods for
+building energy consumption [103,104]. Deep learning architectures, particularly CNN-
+LSTM hybrids, represent the cutting edge of neural network applications in buildings.
+Ref. [105] achieved a near-perfect prediction performance (R2 > 0.99) by combining CNN
+spatial feature extraction with LSTM temporal modeling for residential energy forecasting.
+Complementing the high accuracy of individual neural networks, Random Forest
+and ensemble methods have emerged as the optimal balance between accuracy and in-
+terpretability for building applications. Research demonstrates Random Forest achieving
+96.7% accuracy for thermal comfort prediction using PMV values, while maintaining
+R2 = 0.92 with RMSE = 360.17 for European energy consumption prediction [ 106]. The
+algorithm’s ability to handle multiple input variables and provide feature importance
+rankings makes it particularly valuable for building energy analysis, where operators
+need to understand which factors most influence building performance. Advanced en-
+semble methods beyond traditional Random Forest show superior computational effi-
+ciency. Ref. [107] demonstrated that LightGBM optimized with Satin Bowerbird Optimizer
+achieved R2 = 0.9148, significantly outperforming Random Forest (R2 = 0.8902) for building
+energy prediction tasks.
+Further advancing ensemble methodologies beyond Random Forest, XGBoost (Ex-
+treme Gradient Boosting) has established itself as the premier algorithm for structured
+building data, consistently achieving 96.4% accuracy for thermal comfort modeling and
+
+=== PAGE 17 ===
+Sensors 2025, 25, 5265 17 of 44
+demonstrating superior performance across multiple building applications [ 108]. The
+algorithm’s built-in regularization and ability to handle missing data make it particularly
+suitable for real-world building datasets, where sensor malfunctions and data gaps are
+common challenges. Probabilistic approaches like Naive Bayes combined with prepro-
+cessing techniques offer computational efficiency for categorical building tasks. Ref. [109]
+showed that integrating K-means clustering with Naive Bayes classification significantly
+improves HVAC energy consumption prediction accuracy compared with standalone
+implementations.
+These supervised learning approaches demonstrate a clear evolution from individual
+algorithms like SVM and ANN to sophisticated ensemble methods like Random Forest and
+XGBoost, each building upon the strengths of previous approaches while addressing their
+limitations. To further illustrate these advancements, Table 5 offers a comparative summary
+of each algorithm’s primary applications, performance metrics, and unique benefits within
+smart building contexts.
+Table 5. Comparative analysis of foundational machine learning approaches for smart buildings.
+ML Approach Applications AccuracyRange EnergySavings KeyAdvantages Dataset Train/TestRatio
+XGBoost
+Energy
+prediction,
+comfort, fault
+detection
+92–97%
+[92–94]
+15–27%
+[92,93]
+High accuracy,
+handles
+missing data,
+structured
+input
+Multi-system
+HVAC data
+from
+commercial
+buildings
+(temperature,
+humidity,
+occupancy,
+weather)
+70% training,
+30% testing
+Random
+Forest
+Forecasting,
+occupancy
+detection
+89–97% [88] 10–20% [88]
+Interpretable,
+robust, feature
+importance
+ranking
+Human
+physiological
+and subjective
+responses
+80% training,
+20% testing
+SVM
+Consumption
+forecasting,
+classification
+87–91% [82] 10–15% [82]
+High
+precision,
+theoretical
+robustness
+Simulated
+hourly
+building
+climate and
+cooling load
+20% training,
+80% testing
+K-means
+Energy
+pattern
+discovery,
+user
+clustering
+85–89% [95] 5–15% [95]
+Simple and
+effective, low
+computa-
+tional cost
+Hourly/weekly
+energy
+consumption
+data from 10
+institutional
+buildings
+80% training,
+20% testing
+Hierarchical
+Multi-scale
+operation
+analysis
+87–92% [96] 10–18% [96]
+No preset
+clusters
+needed,
+flexible
+resolution
+BAS data
+from 247
+thermal zones
+and one AHU
+Not
+mentioned
+4.1.2. Unsupervised Learning Technologies for Smart Buildings
+Unsupervised learning technologies enable buildings to discover hidden patterns and
+anomalies without requiring labeled training data, making them essential for fault detec-
+tion, energy optimization, and operational pattern recognition. K-means clustering has
+demonstrated exceptional effectiveness for energy consumption pattern analysis, achieving
+89.3% accuracy in electricity use pattern categorization for university buildings while
+
+=== PAGE 18 ===
+Sensors 2025, 25, 5265 18 of 44
+successfully identifying distinct operational patterns including base consumption, human
+activity consumption, and HVAC consumption [110]. The algorithm’s ability to segment
+building energy signatures enables facility managers to identify inefficiencies and optimize
+operational schedules based on actual usage patterns. Density-based clustering methods
+like DBSCAN demonstrate superior performance for non-spherical energy consumption
+patterns and anomaly detection. Recent implementations [111] showed that DBSCAN out-
+performs traditional K-means for energy disaggregation tasks, particularly for identifying
+irregular appliance usage patterns that do not conform to centroid-based assumptions.
+Building upon K-means foundations, hierarchical clustering combined with sym-
+bolic representation has proven superior for complex building operation analysis, out-
+performing traditional methods for energy signature analysis and building performance
+evaluation [112]. Habib and Zucker demonstrated that hierarchical clustering with sym-
+bolic aggregate approximation (SAX) and bag-of-words representation successfully identi-
+fies chiller operation patterns and enables multi-timescale energy schedule development,
+achieving 2–3 distinct clusters per temporal resolution [ 113]. Gaussian Mixture Models
+(GMMs) provide probabilistic clustering capabilities particularly valuable for understand-
+ing temporal pattern evolution. Advanced research [ 114] applied GMM with Bayesian
+information criterion optimization to analyze energy consumption patterns, achieving
+>90% pattern recognition accuracy while providing uncertainty quantification for building
+energy behavior analysis.
+Complementing clustering methodologies, Principal Component Analysis (PCA) and
+dimensionality reduction techniques serve as crucial preprocessing steps for building
+sensor data, achieving 77% data reduction while maintaining object detection accuracy for
+edge computing applications [103]. The combination of PCA with K-medoid clustering
+enables multi-timescale schedule matrix development, allowing building systems to operate
+efficiently across different time scales from hourly to seasonal patterns. OPTICS clustering
+effectively handles varying density patterns in building systems. The latest studies [115]
+have demonstrated that OPTICS clustering outperforms traditional methods for fan coil
+unit fault detection, successfully identifying equipment anomalies without requiring pre-
+specified cluster numbers.
+Extending beyond traditional clustering approaches, advanced clustering methods
+including K-shape clustering have demonstrated superior performance for time series
+energy data, outperforming traditional K-means with Euclidean distance and Dynamic
+Time Warping (DTW) approaches [116]. The normalized cross-correlation algorithm enables
+shape-based pattern recognition, allowing building systems to identify similar energy
+consumption patterns across different time periods and building zones. Isolation Forest
+algorithms combined with entropy weighting show remarkable performance for electricity
+anomaly detection. A comprehensive analysis [ 68] achieved a precision of 0.85 and a
+recall of 0.92 using enhanced Isolation Forest for abnormal consumption identification,
+demonstrating effectiveness for the imbalanced anomaly detection scenarios common in
+building fault detection. The advanced autoencoder architecture represents the current
+frontier in unsupervised building applications. State-of-the-art implementations [117] using
+Variational Autoencoders (VAE) and LSTM autoencoders consistently achieve F1-scores
+of 0.92–0.998 for energy consumption anomaly detection, with superior transfer learning
+capabilities across different building types.
+These unsupervised learning approaches demonstrate a clear evolution from basic
+clustering to sophisticated pattern recognition methods. The following comprehensive com-
+parison evaluates foundational machine learning approaches across multiple dimensions
+including accuracy, energy savings, dataset characteristics, and evaluation methodologies.
+This analysis addresses critical gaps in standardized performance comparison by providing
+
+=== PAGE 19 ===
+Sensors 2025, 25, 5265 19 of 44
+detailed information about training conditions, building types, and experimental setups
+that enable the fair assessment of algorithmic performance across diverse smart building
+applications.
+4.2. Advanced AI for Adaptive Control
+While foundational machine learning techniques offer insights into building man-
+agement, they often face limitations in adapting to dynamic conditions without extensive
+labeled datasets [ 118]. Additionally, traditional optimization struggles with balancing
+conflicting objectives, such as energy efficiency and occupant comfort [ 119]. To address
+these limitations, advanced reinforcement learning (RL) methods enable continuous learn-
+ing and multi-objective optimization under uncertainty [ 120]. This section explores the
+evolution from basic RL to deep and multi-objective RL, and their integration with digital
+twin technology for adaptive control in smart buildings [35].
+4.2.1. Reinforcement Learning for Adaptive Control
+Reinforcement learning (RL) has emerged as a powerful model-free approach for
+the adaptive control of smart buildings, allowing control policies to learn and self-tune
+through experience rather than relying on fixed rules or detailed physical models. The core
+RL workflow is illustrated in Figure 4, where the agent continuously interacts with the
+environment and adapts its control strategy based on received feedback.
+Figure 4. Reinforcement learning concept for smart building control.
+In this work, the RL formulation is explicitly anchored to practical building standards.
+Thermal comfort is enforced per ASHRAE 55, using the canonical PMV/PPD framework
+and its acceptable region around neutral comfort; this turns comfort into a hard constraint
+during occupied hours, while energy is minimized as the primary objective [ 121]. For
+indoor air quality, we follow ASHRAE 62.1’s ventilation logic and treat CO2 only as a diag-
+nostic proxy for demand-controlled ventilation (DCV), not as a prescriptive IAQ limit [122].
+The reward therefore penalizes energy and demand spikes while incentivizing time within
+the ventilation-adequate regime. This “standards-aware” design reflects recent RL/HVAC
+reviews, which report best results when comfort/IAQ targets are tied to established met-
+rics rather than ad hoc thresholds [ 123]. In practice, we monitor PMV near neutrality
+
+=== PAGE 20 ===
+Sensors 2025, 25, 5265 20 of 44
+(≈−0.5. . .+0.5) and report the share of occupied time within the ASHRAE 55 acceptable
+zone, together with ventilation compliance time, as per ASHRAE 62.1.
+One of the key challenges in the field of intelligent building management is the absence
+of standardized evaluation methods, which complicates the comparison of results from
+different studies. As noted in [124], “publications often lack comparability. . . use cases and
+key performance indicators vary strongly.”
+In response to this challenge, the research community has proposed the adoption
+of unified evaluation protocols. Such protocols typically regulate a strict set of metrics
+for regression tasks (MAE, RMSE), classification tasks (F1, AUROC), and control tasks
+(RL/MORL). For control tasks, special emphasis is placed on a comprehensive analysis
+that includes both energy-related indicators (annual consumption, peak demand, and
+CO2e) and occupant comfort metrics (compliance with the ASHRAE 55standard) [125,126].
+Furthermore, to ensure the reproducibility of research, requirements are set for standard-
+izing experimental conditions, such as using fixed datasets, declaring random seeds, and
+conducting multiple model runs.
+A significant impediment to the advancement and practical deployment of artificial
+intelligence in smart buildings is the scarcity of standardized, high-fidelity benchmark
+datasets. The absence of such resources complicates the objective comparison of different
+solutions and hinders reproducibility. To address this gap and support the broader initiative
+for open science within the field, a curated selection of publicly available datasets is
+provided, which are appropriate for the training and evaluation of machine learning
+models targeting energy management, indoor environmental quality (IEQ) optimization,
+and occupancy sensing. The provision of these datasets establishes a crucial foundation
+for reproducible research and enables the equitable comparison of various algorithmic
+approaches. Table 6 provides a comparative analysis of these recommended datasets,
+detailing key characteristics such as the measured parameters, temporal resolution, and
+access links.
+Table 6. Summary of smart building datasets and their characteristics.
+Dataset Name Measured Parameters Temporal Resolution Reference
+CU-BEMS, smart building
+energy and IAQ data
+Electricity consumption (individual AC
+units, lighting, plug loads), indoor
+temperature, relative humidity, ambient
+light.
+1 min [62]
+Smart Building System CO2 concentration, humidity, temperature,luminosity, PIR motion (occupancy). 5 s (most sensors),10 s (PIR) [127]
+AlphaBuilding
+A synthetic dataset covering HVAC,
+lighting, miscellaneous electric loads
+(MELs), occupant counts, and
+environmental parameters.
+10 min [128]
+Lawrence Berkeley
+National Laboratory FDD
+Datasets
+Time series data for both normal and
+faulted HVAC operations (e.g., rooftop
+units, chillers, air handlers). Includes
+fault-free and various fault severity levels.
+Varies by system [129]
+REFIT Electrical Load
+Measurements
+Aggregate and appliance-level power
+consumption from 20 UK homes, along
+with occupancy and survey data.
+8 s (appliance-level) [130]
+Table 7 provides a consolidated overview of the primary evaluation metrics used
+across the different AI task domains discussed in this review. By defining the key per-
+formance indicators for tasks ranging from energy forecasting and comfort prediction to
+fault detection and reinforcement learning control, this summary serves as a benchmark
+
+=== PAGE 21 ===
+Sensors 2025, 25, 5265 21 of 44
+for comparing the performance of various models. Standardizing the understanding of
+these metrics is a crucial step toward ensuring the fair comparison and reproducibility of
+research findings in the field of smart building management.
+Table 7. Comparison of common evaluation metrics in smart building research.
+Task Domain Common Metrics Description Reference
+Energy and Load
+Forecasting
+RMSE (Root Mean Square
+Error)
+Measures the standard deviation of the
+prediction errors. Very sensitive to large
+errors. [131,132]
+MAE (Mean Absolute
+Error)
+Measures the average magnitude of the
+errors in a set of predictions, without
+considering their direction.
+R2 (R-squared)
+Indicates the proportion of the variance in
+the dependent variable that is predictable
+from the independent variable(s). A value
+closer to 1 indicates a better fit.
+CV-RMSE (Coefficient of
+Variation in the RMSE)
+Normalizes the RMSE to the mean of the
+measured values, allowing for comparison
+across datasets with different scales.
+Comfort and Occupancy
+Prediction
+Accuracy
+The proportion of correct predictions (e.g.,
+correctly classified comfort state or
+occupancy presence) among the total
+number of cases examined. [133]
+F1-Score
+The harmonic mean of precision and recall,
+providing a single score that balances both.
+Useful for imbalanced datasets (e.g., few
+“uncomfortable” instances).
+Precision and Recall
+Precision: of all the positive predictions,
+how many were actually correct? Recall: of
+all the actual positive cases, how many were
+correctly identified?
+Fault Detection and
+Diagnosis (FDD)
+Accuracy The overall correctness of the fault detectionmodel (both faults and normal operations). [134]
+False Alarm Rate (FAR)
+The rate at which the system incorrectly
+identifies a fault when none exists. A
+critical metric for building operator trust.
+Detection Rate (or Recall) The proportion of actual faults that werecorrectly identified by the system.
+Reinforcement Learning
+(RL) Control
+Cumulative Reward
+The total reward accumulated by the agent
+over an episode. A higher reward generally
+indicates better performance against the
+defined objectives. [135,136]
+Energy Savings (%)
+The percentage reduction in energy
+consumption compared with a baseline
+controller (e.g., rule-based or thermostat).
+Comfort Violations/PPD
+(%)
+The amount of time or percentage of
+occupants predicted to be outside the
+comfort zone (as defined by ASHRAE 55).
+Early RL studies demonstrated successful HVAC optimization using basic Q-
+learning [137], but more significant progress came from implementations that moved
+beyond simulation to real buildings. Deep reinforcement learning (DRL) further enhanced
+these capabilities, allowing neural networks to learn temperature control directly from data.
+Such DRL agents can continuously adapt to changing occupancy patterns, weather, and
+
+=== PAGE 22 ===
+Sensors 2025, 25, 5265 22 of 44
+internal loads, in contrast to conventional rule-based controllers that often require man-
+ual returning [138]. Various DRL algorithms, such as Deep Q-Network (DQN), Proximal
+Policy Optimization (PPO), and Deep Deterministic Policy Gradient (DDPG), have been
+used to control HVAC setpoints, ventilation, and lighting. These agents optimize both
+energy use and comfort via shaped rewards. However, a critical, often understated aspect
+of these successes lies in the careful design of these reward functions, as poorly crafted
+rewards can introduce significant trade-offs, leading to unintended behavior or sub-optimal
+performance. Studies report 15–30% energy savings while maintaining comfort [139,140].
+In [140], an RL agent saved 26% energy in a simulation and 9% in a real house compared
+with baseline controllers.
+RL controllers excel by adapting on the fly—adjusting to unexpected occupancy
+changes or equipment faults—which boosts robustness in dynamic real-world environ-
+ments. Field demonstrations have underscored this adaptivity: Zhang and Lam (2018)
+deployed a DRL policy for radiant heating in an office, marking one of the first real building
+RL implementations; their controller learned from a calibrated EnergyPlus simulation and
+successfully maintained comfort in the live system, validating RL’s practicality beyond
+simulation [141]. More recently, researchers implemented a deep RL (Soft Actor-Critic)
+agent in a modern office building’s HVAC (thermally activated slab system). After pre-
+training in a simulation, the agent was deployed for a cooling season and improved indoor
+temperature stability by 68% relative to the best rule-based strategy, without increasing
+energy usage—a striking real-world result of adaptive learning control [142].
+These successful deployments reveal practical considerations that influence how we
+implement these systems. The long training periods needed for agents to perform steadily
+in live buildings can create operational challenges. As a result, researchers are relying more
+on simulation-based pre-training along with transfer learning techniques to reduce on-site
+learning time [138]. Safety and understanding issues have also led to the creation of guided
+learning frameworks and expert-led training methods. Xu et al. (2025) reported eight times
+faster convergence when they included domain expertise in the learning process [143].
+4.2.2. Deep Reinforcement Learning for Adaptive Control
+Deep reinforcement learning (DRL) combines reinforcement learning with deep neural
+networks to overcome the scalability limitations of classical RL, enabling control in high-
+dimensional and complex building environments. By using neural function approximators,
+DRL agents can learn directly from raw sensor inputs and handle large state/action spaces
+that would be intractable for tabular or linear RL methods [35,143]. A landmark example
+is the Deep Q-Network (DQN) algorithm, which introduced techniques like experience
+replay and target networks to stabilize learning [144]. These innovations allowed DRL to
+achieve human-level control on Atari games in 2015 [ 144], proving the efficacy of deep
+neural networks in decision-making tasks. A general framework of deep reinforcement
+learning applied to smart buildings is presented in Figure 5.
+The agent–environment exchange is implemented via the building automation system
+using BACnet; when deployed on IT-managed networks we adopt BACnet/SC (Secure
+Connect) to provide secure, IT-friendly connectivity [145], and we model the BAS network
+per IEC 62443 with zones-and-conduits segmentation and least-privilege conduits to the
+control network [146]. Contemporary BAS cybersecurity reviews highlight protocol-level
+weaknesses in legacy BAS stacks (including BACnet) and recommend secure variants
+together with defense-in-depth architectures aligned with IEC 62443 for modern, cloud-
+connected smart buildings—hence our choice to make the communication layer standards
+aware as well [144].
+
+=== PAGE 23 ===
+Sensors 2025, 25, 5265 23 of 44
+Figure 5. Deep reinforcement learning framework for smart building control.
+Building on this foundation, a variety of DRL algorithms have been developed and ap-
+plied to smart building control—from value-based methods (DQN and its extensions such
+as Double DQN and Dueling DQN) to policy gradient methods (Deep Deterministic Policy
+Gradient, Proximal Policy Optimization, and Soft Actor-Critic variants) that support con-
+tinuous action control [147,148]. Unlike model-predictive controllers that require explicit
+building thermal models, DRL agents can learn optimal control policies in a data-driven
+manner by interacting with simulations or real buildings [149]. This model-free approach
+is well suited to buildings where system dynamics are complex or poorly understood, as
+the agent iteratively improves its policy based on feedback rather than relying on a fixed
+physics-based model.
+The practical implementation of these algorithms has yielded promising results. DRL
+applications in HVAC and energy management have demonstrated significant improve-
+ments over conventional controls. Wei et al. (2017) trained a DQN-based HVAC controller
+in EnergyPlus, achieving 20–70% cost reductions via a pre-cooling strategy [ 149]. Later
+studies applied DRL to multi-zone climate, lighting, and whole-building optimization.
+Zhang et al. (2019) cut heating demand by 16.7% using deep Q-learning in a real office [150].
+These implementations typically report 10–35% energy savings while maintaining or im-
+proving comfort [151,152]. Gao et al. (2020) used DDPG to improve thermal comfort by
+13.6% and reduce energy costs by 4.3% [ 153]. DRL enables continuous HVAC control
+without system simplification, balancing multiple goals via shaped rewards and showing
+improvements over thermostatic, rule-based, and early RL methods.
+Building on these empirical successes, researchers have developed advanced DRL
+architectures—such as hierarchical and multi-agent frameworks—to enhance adaptive
+control in complex buildings by coordinating actions across timescales and subsystems,
+including HVAC and ventilation [153]. Recurrent neural networks (RNNs) help forecast
+loads and weather, improving convergence and stability [154], while attention mechanisms
+focus learning on relevant zones and sensors [155]. However, DRL deployment faces practi-
+cal challenges. Training requires massive simulation data, and convergence is slow in large
+state–action spaces—millions of steps may be needed for HVAC agents. Deep networks
+also act as “black boxes,” reducing interpretability and trust. Recent research has explored
+explainable RL—techniques that provide interpretable explanations for agent decisions
+and policy behaviors—and safety mechanisms to address these concerns [149,156].
+
+=== PAGE 24 ===
+Sensors 2025, 25, 5265 24 of 44
+4.2.3. Multi-Objective Reinforcement Learning
+Smart building control inherently involves multiple competing objectives—chiefly
+energy efficiency versus occupant comfort—but also factors like cost, peak demand, and
+indoor air quality. Multi-objective reinforcement learning (MORL) extends RL to handle
+such trade-offs explicitly. The standard approach in building applications is to formulate
+a single reward that combines multiple terms (negative energy use and positive comfort)
+with tunable weights. This weighted sum method has been effective but requires careful
+tuning and lacks transparency in how each objective is prioritized. The general principle of
+multi-objective reinforcement learning is illustrated in Figure 6 highlighting the trade-off
+between competing objectives such as comfort and energy efficiency.
+Figure 6. Multi-objective reinforcement learning concept for smart building control.
+For multi-objective control we define a reward vector [comfort, IAQ, energy,
+demand][comfort,\IAQ,\energy,\demand][comfort, IAQ, energy, demand] where comfort
+compliance (occupied hours within the ASHRAE 55 acceptable region) and ventilation
+adequacy (per ASHRAE 62.1’s DCV/VRP logic, with CO 2 as an operational proxy) are
+tracked alongside energy and peak demand penalties [157,158]. We report Pareto behavior
+(or a constrained MORL variant that guarantees comfort) because recent studies show that
+thermal comfort, IAQ, and energy are the dominant, often-conflicting targets in building
+optimization; explicitly vectorizing them yields transparent trade-offs and reproducible
+KPIs [159,160].
+Brandi et al. (2020) trained a deep RL agent with a weighted reward to reduce heating
+energy while maintaining comfort, though the weight tuning required adjustment in cold
+conditions [161]. Balancing objectives remains challenging: emphasizing energy can cause
+discomfort, while prioritizing comfort increases energy use. Researchers often dynamically
+adjust weights to reflect changing priorities. Advanced MORL methods learn policies
+that handle multiple objectives or offer Pareto-optimal trade-offs. A review of 74 studies
+(2010–2025) found that RL controllers often save >20% energy while maintaining comfort
+by adjusting reward weights [162]. Some methods maintain separate value functions per
+objective to select non-dominated actions. Authors in [163] proposed proposed a human-
+centric DRL agent optimizing energy, comfort, and air quality. It achieved 8% energy
+savings in focused mode and improved comfort by up to 21% when prioritized [164].
+
+=== PAGE 25 ===
+Sensors 2025, 25, 5265 25 of 44
+Another promising direction is treating comfort requirements as constraints rather
+than penalties. Recent work has introduced safety constraint algorithms and two-tier
+control schemes to ensure comfort is never violated while still minimizing energy. One
+such approach involves applying a runtime “shielding” layer that adjusts the HVAC
+actions of a trained RL agent to enforce temperature bounds, instead of relying on a large
+comfort penalty in the reward [ 143]. This kind of approach effectively turns the multi-
+objective problem into a constrained optimization (maintain comfort, minimize energy),
+and early results show it can eliminate thermal discomfort events without sacrificing much
+efficiency. Multi-objective formulations have also been extended to consider occupant
+preferences and grid-level objectives. Lei et al. (2022) demonstrated an occupant-centric
+DRL controller that simultaneously managed temperature, CO2, and lighting in multiple
+zones; by learning a policy that responds to occupant feedback (preferences) as well as
+sensor data, it improved the overall comfort index while still saving energy across a variety
+of operating scenarios [165]. Such occupant-centric MORL reflects the real-world need to
+juggle individual satisfaction against aggregate energy goals in smart buildings.
+When occupancy and comfort estimation rely on wearables, voice, RF/Wi-Fi loca-
+tion, or camera-based analytics, our data governance follows GDPR-aligned principles—
+lawfulness and transparency, purpose limitation to building control, and data minimization
+with strict retention/pseudonymization [166]. Large-scale user studies in smart commercial
+buildings show that occupants have heterogeneous privacy preferences and often lack an
+awareness of data collection [167]; practical deployments should therefore provide clear
+notices and opt-in mechanisms while limiting high-inference modalities unless strictly
+necessary for control. Our pipeline implements these safeguards and audits inference risk
+for each sensing modality before activation.
+Modern MORL research combines improved algorithms and broader objective mod-
+eling. Key techniques include Pareto Q-learning, preference-weighted policy gradients,
+and decomposition-based learning. Applications now cover objectives such as demand
+response and indoor environmental quality.
+4.2.4. Digital Twin Synergy with DRL and MORL
+Digital twins—virtual replicas of real buildings—enable the safe training and de-
+ployment of DRL and MORL agents by reducing sim-to-real gaps. Silvestri et al. (2024)
+showed that a twin of an office HVAC system, trained with historical data, allowed an SAC
+agent to reduce peak temperature deviations by ~68% after real deployment without in-
+creasing energy use [108]. Beyond training, twins support scenario-based optimization—a
+process where control algorithms are tested against multiple operational scenarios in-
+cluding varying weather patterns, equipment failures, peak occupancy events, and grid
+outages to identify robust control strategies before real-world deployment [ 167]. This
+approach enables MORL agents to systematically explore diverse conditions and generate
+Pareto-efficient strategies that balance comfort and energy performance across different
+operational contexts [163]. The twin provides a simulation sandbox for testing and tuning
+policies under these varied scenarios [168]. Figure 7 shows how digital twins interface with
+DRL and MORL agents to support simulation-based training, scenario testing, and safe
+deployment in real buildings.
+Digital twins can also function in real time by syncing with IoT sensors and supporting
+closed-loop control. RL agents can test actions virtually before live deployment. Spudys
+et al. (2023) used a campus twin to predict performance tiers, showing how such systems
+support safe decision-making [ 139]. In advanced setups, the twin becomes part of the
+control loop (virtual commissioning), enabling online adaptation to building changes.
+Veje and Jørgensen (2021) demonstrated a twin-based framework that used feedback and
+
+=== PAGE 26 ===
+Sensors 2025, 25, 5265 26 of 44
+data to co-optimize energy and comfort [ 167]. These examples show how twins enable
+interpretable, multi-objective control through simulation. The chronological development
+of AI techniques applied in smart building control is summarized in Figure 8 showing the
+transition from classical reinforcement learning to deep, multi-objective, and sustainability-
+focused approaches, including integration with digital twins.
+Figure 7. Integration of digital twin with deep and multi-objective reinforcement learning.
+ 
+ 
+ 
+Figure 8. Stagewise evolution of AI methods in smart building control.
+Digital twins face deployment barriers. Model creation and calibration are time-
+consuming, and live twins require costly infrastructure and data pipelines [168]. Kannari
+et al. (2025) note that most AI + twin integrations remain untested in real buildings
+due to data silos and system fragmentation [ 169]. With growing IoT adoption, twin–AI
+convergence is accelerating. Prototypes from Siemens, Bosch, and lab studies show twins
+enabling closed-loop RL deployment while reducing commissioning time [170].
+The integration of digital twins fundamentally transforms the deployment character-
+istics of different AI-based control approaches. Classical reinforcement learning benefits
+from digital twin simulation environments for safer training, achieving moderate energy
+savings of 10–20% with straightforward implementation, though it is limited to handling
+
+=== PAGE 27 ===
+Sensors 2025, 25, 5265 27 of 44
+5–15 state variables [ 140,142]. Digital twin pre-training reduces the risk of sub-optimal
+control during real-world learning phases.
+Multi-objective reinforcement learning extends optimization capabilities to balance
+competing objectives simultaneously, achieving 20–30% energy cost reductions while
+maintaining comfort constraints [ 140,166]. The tunable DQN approach demonstrated
+30% cost improvements with 18.2% peak demand reduction [157], though computational
+complexity increases exponentially with additional objectives. Digital twin integration
+represents the most sophisticated approach, combining physics-based modeling with RL
+agents to achieve 15–25% energy savings while providing superior interpretability through
+virtual building representations [ 145]. Pre-training in digital environments accelerates
+convergence by 60% compared with direct real building learning, though implementation
+requires 24–36 weeks’ development and substantial infrastructure investment.
+State space handling capabilities distinguish the approaches significantly: classical RL
+manages discrete low-dimensional problems, DRL processes 20–100+ variables through
+neural function approximation, MORL handles 30–200+ variables with multi-objective co-
+ordination, and digital twin systems accommodate 100–1000+ variables through integrated
+physics modeling [35]. Real-time deployment readiness varies from easy implementation
+for classical RL to complex integration requirements for DRL and MORL, while digital twin
+systems achieve medium complexity after the initial setup phases. To summarize these
+advanced AI methods for smart building control, Table 8 provides a clear, side-by-side
+comparison of their key characteristics, helping to illustrate their individual strengths and
+applications.
+Table 8. Comparative analysis of advanced AI methods for smart building control.
+Criteria Classical RL Deep RL Multi-Objective RL Digital Twin + RL
+Energy Savings 10–20% [109,121] 15–25% [112,113] 20–30% costreduction [121,126] 15–25% [112]
+Implementation
+Complexity Low [107] High [112] Very High [107] Very High [112]
+State Space Handling 5–15 variables[107,109] 20–100+ variables[35] 30–200+ variables[35,121] 100–1000+ variables[35]
+Convergence Speed 100+ months [107] 5–24 K episodes[106,112] 2–10x slower thanDRL [126] Weeks–months withpre-training [112]
+Real-time
+Deployment Easy [107,109] Complex [35,112] Difficult [121,126] Medium (after setup)[112]
+Interpretability High (Q-tables) [107] Low (black box) [35] Medium (Paretosolutions) [121,126] High (physics-based)[112]
+4.3. Generative AI and Language Models for Comfort and Health Management
+The evolution of smart buildings has predominantly been centered on prediction and
+reaction strategies. A new shift is taking place due to generative artificial intelligence (AI)
+and, in particular, large language models (LLMs). Unlike previous models that relied on
+simple data pattern recognition, generative models go far beyond reasoning, creating, and
+communicating in uniquely human ways, fully transforming environments and smart
+building interaction [171]. An important phenomenon called “emergent abilities” has been
+documented, which reflects the emergence of multi-step reasoning as models become larger,
+where smaller versions of the model did not demonstrate such features [172]. Because of
+this enhanced sophistication, LLMs such as the GPT models are more powerful. They are
+capable of comprehending the nuances and intents of human expressions which make truly
+intelligent interactions between humans and spaces possible. This chapter discusses the
+ways advanced AI moves beyond automation and shifts towards anticipatory systems for
+
+=== PAGE 28 ===
+Sensors 2025, 25, 5265 28 of 44
+personalized comfort, health, proactive care, and sophisticated operations to finally allow
+natural language to be the primary interface user command tool for the built environment.
+4.3.1. Natural Language as the New User Interface
+LLMs are changing smart buildings by removing strict interfaces. For many years,
+buildings interacted with users through limited apps or old thermostats. Now, they can
+communicate using speech as shown in Figure 9. With LLMs, natural language becomes a
+smooth interface, allowing people to share their feelings like saying, “it feels a bit gloomy
+in here” and having an AI agent turn that into actions such as adjusting lights or raising
+blinds [173]. This goes beyond simple voice control; it focuses on grasping the intent
+behind commands. While LLMs have shown skill in HVAC systems by passing certification
+exams, their real value is not just repeating information [ 174]. Their current limitation
+lies in applying that knowledge consistently; they often struggle with calculations and
+ambiguous, open-ended problems common in real life [175].
+Figure 9. AI-driven environmental adjustment.
+Despite these challenges, progress is clear. In labs, assistants like DAVE can understand
+spoken commands to alter complex Building Information Models (BIMs) with about 94%
+accuracy for simple tasks [176]. The trouble arises with complexity; DAVE’s success rate
+drops to just under 50% when handling multi-step requests. This highlights the difficulty
+these models have in understanding context and following sequences. Yet, researchers are
+focused on more than just managing a building’s physical environment. They are using
+LLMs to create immersive, interactive spaces, such as a simulated traffic environment that
+helps autistic children learn social cues safely [ 177]. This marks a significant shift from
+managing physical comfort to supporting psychological and social well-being, imagining
+a future where buildings serve as empathetic partners. However, this hopeful vision is
+challenged by a significant issue: LLMs can “hallucinate,” or create false information. A
+6% hallucination rate may seem minor in some cases, but in a safety-critical system or
+educational tool for vulnerable users, it is unacceptable. This points to an urgent need
+for thorough validation, fail-safe mechanisms, and human oversight to ensure that every
+AI-driven action is safe and accurate [178,179].
+4.3.2. Hyper-Personalization Through Fine-Tuning and Adaptation
+If natural language is the new interface, then hyper-personalization is the new experi-
+ence. The real power of generative AI lies not just in understanding general commands,
+but in learning to understand individual users. Foundational LLMs are trained on a vast
+amount of anonymous internet data, but they can be fine-tuned to focus on the unique infor-
+
+=== PAGE 29 ===
+Sensors 2025, 25, 5265 29 of 44
+mation of an individual. By using someone’s biometric data from a wearable, their calendar,
+their written feedback, or even their specific way of speaking, a general model can become a
+personal aide for well-being [180,181]. This is the essence of personalized medicine, where
+treatment is tailored to a person’s unique biological and lifestyle data [ 182,183]. To be
+effective, this process must extend beyond data, accounting for local customs and cultural
+nuances, whether in a diverse healthcare setting or a global company where comfort can
+mean different things [184].
+The impact on health could be significant. Imagine a building that does not just
+react to a fever but helps prevent one. Generative models can gather information from
+wearables to manage health proactively. Frameworks like PhysioLLM and Health-LLM are
+being developed for this purpose, while the COMFORT framework uses ongoing, efficient
+fine-tuning to create early-stage disease detectors that can run on edge devices, cutting
+memory requirements by half [185,186]. LLMs are already being used to create customized
+exercise plans and patient care strategies, freeing up time for clinicians and potentially
+enhancing safety by providing advice tailored to a person’s specific health profile [187,188].
+However, this deep level of personalization raises important concerns. It involves access to
+sensitive data, creating significant privacy and security risks. Furthermore, these models
+can pick up and amplify societal biases present in their training data, possibly leading to
+worse outcomes for already-marginalized groups [189,190]. Their “black box” nature and
+lack of responsibility for mistakes are also major barriers to use in high-stakes areas like
+medicine, where errors can have serious consequences, and clinicians need to understand
+the reasoning behind recommendations [191]. Additionally, the models lack true emotional
+intelligence, which is critical for interactions involving human vulnerability [ 186]. In
+response, researchers are advocating for more transparency with initiatives like the TRIPOD-
+LLM reporting guidelines, which require researchers to clarify their data, methods, and the
+limitations of their models [192].
+4.3.3. Enhancing Building Operations with Generative Models
+While much of the excitement about generative AI centers on the experience of oc-
+cupants, its impact on building operations is equally groundbreaking. One of the biggest
+challenges in building management is the shortage of reliable data, especially for rare but
+important events like equipment failures. Generative models, such as GANs and VAEs,
+can serve as a “digital sparring partner” for other AI systems, generating large amounts of
+realistic, synthetic sensor data to train on [193,194]. This enables developers to simulate a
+variety of scenarios, including equipment breakdowns, to create stronger predictive main-
+tenance and energy forecasting models. This might result in their application in medicine,
+where synthetic patient data is used to train diagnostic models without compromising
+privacy, which is an approach relevant for protecting sensitive occupants or operational
+data in a corporate environment.
+LLMs are also set to become invaluable resources for facility managers. Currently, a
+fault detection system might present a confusing error code. Soon, an LLM could review
+that data and give a clear report in natural language: “Heads up, the energy use for Air
+Handler 3 is up 20% this week, and airflow is down. It is likely a clogged filter that needs
+replacing” [195]. This ability to convert data into practical insights makes expertise accessi-
+ble, similar to how LLMs are used in healthcare to automatically summarize patient notes
+and reduce doctors’ administrative burdens [191]. This significantly lowers the barrier to
+understanding and managing complex building systems. The potential is vast: by automat-
+ically creating building energy models from simple descriptions or supporting decisions
+for retrofitting, LLMs could cut modeling efforts by more than 95% [195]. However, this
+promise is limited by their current and significant unreliability in math- and physics-based
+
+=== PAGE 30 ===
+Sensors 2025, 25, 5265 30 of 44
+reasoning. It is not just about making a calculation error; it reflects an underlying struggle
+with the symbolic logic required in engineering, making them untrustworthy for the precise
+calculations needed in tasks like heat load analysis or structural design [178,195].
+4.3.4. Cloud-to-Edge Deployment Architectures
+Implementing this level of intelligence in a building is not as simple as installing a new
+app. The intense processing power of a large language model cannot fit on a small sensor
+mounted on the wall. The costs, both computational and financial, are too high [177,196].
+The solution is a hybrid structure that acts like a central brain with local responses: a
+cloud-to-edge model (Figure 10). In this arrangement, the more demanding tasks, training,
+fine-tuning, and complex reasoning are handled on powerful servers in the cloud [187]. This
+method is often viewed as the most effective for latency-sensitive, hybrid tasks, ranging
+from smart buildings to industrial automation [197].
+Figure 10. Edge–cloud architecture.
+For a building to react instantly, it cannot wait for data to travel to the cloud and
+back. That is where the local responses come into play. Smaller, specialized models are set
+up on “edge” devices within the building [198]. These agile models are often simplified
+versions of their larger cloud-based counterparts, trained to manage immediate tasks
+with minimal delay [187]. This distribution of work makes for a strong system: the edge
+model takes care of instant commands like “turn on the lights,” ensuring that the system
+functions even without internet access. Meanwhile, the cloud brain analyzes long-term
+patterns and provides new intelligence and updates. This setup can also enhance privacy,
+as sensitive data can be processed locally. However, crafting this decentralized system
+involves essential trade-offs. A federated learning method works well for privacy but can
+be slow and exposed to risks. A serverless architecture is cost-effective for occasional tasks
+but suffers from delays, making it unsuitable for continuous control [ 197]. The hybrid
+
+=== PAGE 31 ===
+Sensors 2025, 25, 5265 31 of 44
+model shows the most promise, but it brings its own challenges in managing data flow,
+defending against a larger potential for security threats, and handling the computational
+demands on devices not made for this level of intelligence [197,198].
+5. Discussion
+An analysis of studies reveals a steady shift from rigid rule-based systems to adaptive
+environments that account for occupant comfort, health, and behavior. AI algorithms are
+the main driver: applying deep reinforcement learning lowers energy consumption by
+10–35% without sacrificing comfort [199]. These gains are enabled by a growing array of
+sensors, connected devices, analytics tools, and user interfaces that form the technological
+foundation of smart buildings.
+The transition from pilot projects to large-scale deployment is hampered by data,
+integration, and ethical issues. AI models require large, high-quality datasets, yet standard
+public datasets are scarce, complicating the objective comparison of solutions [199]. The
+spread of audio and video sensors increases privacy risks [200].
+Data quality is closely tied to broader ethical challenges, including the reproducibility
+crisis. Only a small fraction of key findings can be confirmed by independent studies,
+casting doubt on the reliability of the underlying datasets [201]. The lack of harmonized
+data management practices across research and clinical centers exacerbates scarcity: quality
+control methods vary, making datasets hard to interpret and compare [ 202,203]. Data
+sharing is hindered by concerns over privacy, intellectual property, and the reputational
+risks associated with exposing data quality shortcomings [201,204].
+Recent studies highlight the necessity of aligning smart building systems with frame-
+works like the General Data Protection Regulation (GDPR). GDPR’s “privacy by design”
+principle mandates data anonymization and user consent in occupant monitoring sys-
+tems, emphasizing the need for granular access controls to mitigate re-identification risks
+in HVAC and occupancy datasets [ 202]. Federated learning (FL) has been proposed as
+a privacy-preserving approach, allowing decentralized model training without sharing
+raw data and thereby maintaining occupant anonymity [203]. Cross-border data transfers
+introduce additional complexities, with EU–US Privacy Shield alternatives evaluated post
+invalidation. Hybrid cloud–edge architectures are recommended to localize data processing
+and avoid jurisdictional conflicts [197]. Ethical AI deployment also requires explainability
+and bias mitigation. Explainable AI (XAI) tools like SHAP and LIME can audit black box
+models in building automation, ensuring transparency for stakeholders [205]. Integrating
+XAI with BIM allows occupants to query and understand AI-driven HVAC adjustments,
+providing transparency in automated decision-making [206]. Synthetic data generation,
+for instance via GANs, addresses data scarcity while adhering to privacy laws. Synthetic
+occupancy patterns can retain statistical fidelity without exposing real identities [207].
+The following approaches mitigate these risks. Federated learning trains models on
+distributed devices without transferring sensitive information [ 207]. Synthetic datasets
+generated with GANs and variational auto-encoders enlarge training corpora without using
+real occupant records [207]. Blockchain provides secure, auditable data exchange between
+stakeholders [208]. Unified data models and ontologies enhance system interoperability
+and simplify information interpretation across platforms [209].
+One of the primary cybersecurity risks linked to fine-tuning is the heightened suscep-
+tibility to adversarial attacks. Because fine-tuning can erode the robustness of the original
+pre-trained model, attackers may exploit these weaknesses by injecting minor perturbations
+into inputs that force the model to misclassify or generate harmful outputs. Adversaries can
+engineer inputs that cause a machine learning-based intrusion detection system to ignore
+malicious activity or, conversely, to flood it with false alerts that overwhelm security oper-
+
+=== PAGE 32 ===
+Sensors 2025, 25, 5265 32 of 44
+ations [210]. Deploying fine-tuned models in mission-critical cybersecurity applications
+without strong adversarial defenses can lead to major breaches, data leaks, and operational
+disruptions [210,211].
+One of the key technical challenges lies in integrating modern AI systems with the
+existing infrastructure in buildings. Most current automation systems were not designed
+with openness or compatibility in mind, which makes integration costly and technically
+demanding [206]. Digital twins (DTs) have become a promising solution. By creating virtual
+replicas of real-world buildings, DTs allow researchers and engineers to simulate AI-driven
+management strategies safely before deploying them in actual environments [212]. These
+digital models can merge data from multiple sources—such as Building Automation Sys-
+tems (BAS), IoT devices, and weather forecasts—into one framework. However, building
+and maintaining these models is resource-intensive and becomes more difficult when scal-
+ing across many buildings [213]. Research now points to the value of standard frameworks
+and open-source platforms, which could simplify development and reduce compatibility
+barriers. Using widely accepted communication protocols like BACnet/IP , Modbus TCP , or
+newer ones like Matter also helps unify devices from different vendors [214]. Middleware
+tools and API gateways are essential for bridging the gap between legacy systems and
+modern AI-driven platforms.
+As AI tools grow more complex, understanding how they make decisions becomes
+more difficult, especially with methods like DRL and large-scale language models. This lack
+of transparency, sometimes called the “black box” issue, makes it harder for stakeholders
+to trust the system [208]. An AI system acting autonomously could make decisions that
+are not immediately understandable, raising concerns about comfort, safety, or operational
+reliability.
+To counter this, explainable AI (XAI) methods are gaining traction. Tools like SHAP
+and LIME help break down model predictions and offer insights into why a particular
+decision was made [ 209]. Incorporating human-in-the-loop (HITL) approaches is also
+important—these combine AI automation with oversight from human operators who
+can intervene or validate outcomes when needed [ 214]. Frameworks for testing and
+verifying AI systems are essential to ensure they meet safety and performance requirements
+before being deployed [ 215]. On a broader scale, legal and ethical guidelines tailored
+to AI use in buildings are needed to ensure responsible deployment and increase public
+acceptance [216].
+Future developments must blend engineering, policy, and user-focused design. Suc-
+cessful smart building systems should be open, secure, and easy to use, while always
+centering the needs of the people living and working inside them. Future research should
+explore scalable architectures, fair data governance policies, and technologies that are
+both adaptable and explainable. Continued collaboration between researchers, developers,
+policymakers, and occupants will be essential to ensure that AI in smart buildings improves
+quality of life without introducing new risks.
+A forward-looking roadmap is required to steer innovation in smart building AI while
+maintaining ethical responsibility and practical feasibility. Recent studies converge on
+staged frameworks that coordinate research, development, and policy over clearly defined
+short- and mid-term windows. These frameworks extend beyond technical targets to
+foreground transparency, trust, security, and sustainability. Figure 11 distills the priority
+areas and concrete action steps for the next five years, outlining a clear path toward
+responsible and scalable smart building systems.
+
+=== PAGE 33 ===
+Sensors 2025, 25, 5265 33 of 44
+Figure 11. Roadmap for smart building AI.
+Large-scale smart buildings deploy extensive networks of sensing devices to monitor
+environmental and operational parameters, yet the size and complexity of these networks
+create significant maintenance and optimization challenges. Thermoelectric Generators
+(TEGs) have shown significant potential for powering autonomous sensors by converting
+thermal gradients into electricity, which reduces maintenance requirements and enhances
+sustainability [50]. Similarly, optimal wireless sensor network (WSN) topologies can mini-
+mize energy consumption and improve stability through distributed control, addressing
+scalability challenges in IoT-enabled buildings [ 40]. Accurate device localization and
+optimization in large buildings remain complex due to heterogeneous sensor densities
+and dynamic environmental conditions. Integrating edge computing with Named Data
+Networking (NDN) can reduce latency and improve reliability in data retrieval, enabling
+real-time sensor coordination [43]. Decentralized machine learning frameworks further
+enhance privacy and efficiency in cloud–edge architectures, which is crucial for manag-
+ing distributed sensor networks [42]. Autonomous optimization is another critical focus.
+Continuous calibration frameworks automate the synchronization of a building’s digital
+twin with its physical counterpart by dynamically adjusting model parameters in real time,
+ensuring a high accuracy with minimal human intervention. The system continuously
+ingests sensor data and uses a pre-trained model to estimate unobservable variables like
+
+=== PAGE 34 ===
+Sensors 2025, 25, 5265 34 of 44
+occupant count or equipment heat, updating the digital twin instantly. A real-time valida-
+tion loop compares the model with live data to maintain precision, while the automated
+denoising and handling of missing data enhance resilience. This enables the digital twin
+to self-correct, adapt to changing conditions, and support proactive decisions [ 71]. AI-
+driven surrogate models can predict airflow patterns, optimizing HVAC sensor placement
+and reducing computational overhead [72]. Energy harvesting solutions integrated with
+Building Information Models (BIMs) support intelligent energy management, reducing the
+dependency on external power sources [39].
+Privacy-preserving techniques such as federated learning and blockchain help mit-
+igate security risks while ensuring scalable sensor networks [ 207]. Hybrid cloud–edge
+architectures automate the distribution of computational tasks, with edge devices handling
+lightweight processing and cloud servers managing intensive computations. This setup
+enables real-time autonomous optimization, where local models are continuously trained
+and updates aggregated to refine the global AI model. Automated feedback loops allow
+the system to adapt quickly to changing conditions without human intervention. Privacy
+and data integrity are maintained by keeping raw data on local devices and transmitting
+only anonymized model updates. This approach ensures efficient, secure, and intelligent
+operation across the network [197]. These advancements prioritize sustainability, scalability,
+and autonomy in large-scale smart building systems.
+6. Conclusions
+This review summarizes the current state of research on the application of artificial
+intelligence technologies for proactive comfort and health management in smart buildings.
+The analysis shows that the integration of IoT-based sensor networks, advanced communi-
+cation protocols, and AI-driven data processing forms the foundation of a new generation
+of buildings capable of continuously adapting to changing environmental conditions and
+individual user needs. Through a multi-layered architecture—including sensing, edge and
+cloud computing, actuation systems, and user interfaces—modern buildings are shifting
+from reactive automation to proactive, human-centered ecosystems.
+The review demonstrates that AI methods, particularly supervised and unsupervised
+machine learning, reinforcement learning, and their deep and multi-objective variations,
+significantly enhance the efficiency and adaptability of control strategies. Applications
+include occupancy and thermal comfort prediction, as well as the implementation of energy
+saving policies without compromising user well-being. Digital twin technology amplifies
+these capabilities by enabling safe training, optimization in simulation environments, and
+real-time closed-loop control. Studies report energy savings in the range of 15–35% while
+also improving indoor environmental parameters such as CO2 concentration, temperature
+stability, and air circulation.
+Despite this progress, several challenges remain. Data silos, the lack of standardized
+evaluation methods, and privacy concerns related to personal sensing technologies hinder
+widespread adoption. Moreover, the complexity and resource intensity of deploying
+advanced AI models—especially those involving deep learning and hybrid digital twins—
+require substantial investment and interdisciplinary collaboration. The need for explainable
+AI, privacy-preserving algorithms, and ethical principles is growing as buildings evolve
+into cyber–physical systems that handle increasingly sensitive user data. Future research
+should focus on the development of modular and interoperable platforms that allow
+integration across different building systems and equipment vendors. Equally important is
+the publication of open datasets and the creation of simulation environments that ensure
+the reproducibility and comparability of results. Personalized control strategies, comfort
+
+=== PAGE 35 ===
+Sensors 2025, 25, 5265 35 of 44
+modeling using wearable devices, and self-adaptive intelligent agents are key directions to
+bridge the gap between technical feasibility and practical usability.
+Author Contributions: Conceptualization, B.A., N.T. and T.I.; methodology, B.A., N.T., Z.B., N.I. and
+T.R.; software, B.A., Z.B., A.A., M.M. and B.Z.; validation, N.T., T.I., N.I. and T.R.; formal analysis,
+B.A., N.T., T.I. and Z.B.; investigation, B.A., N.T., Z.B., N.I., T.R. and B.Z.; resources, A.A. and M.M.;
+data curation, N.T., T.I., A.A., M.M. and B.Z.; writing—original draft preparation, Z.B., N.I., T.R.,
+A.A., M.M. and B.Z.; writing—review and editing, B.A., N.T. and T.I.; visualization, N.I., T.R., A.A.,
+M.M. and B.Z.; supervision, B.A., N.T. and Z.B.; project administration, T.I.; funding acquisition, T.I.
+All authors have read and agreed to the published version of the manuscript.
+Funding: This research was funded by the Science Committee of the Ministry of Science and Higher
+Education of the Republic of Kazakhstan (Grant No. AP23488794).
+Institutional Review Board Statement: Not applicable.
+Informed Consent Statement: Not applicable.
+Data Availability Statement: Not applicable.
+Acknowledgments: The research team extend their heartfelt gratitude to Sapargali Dikhanbayev,
+whose inspiration sparked this research and whose invaluable guidance and unwavering support
+were instrumental in bringing this paper to completion. Also, we would like to thank Serik Aibagarov
+and Nurtugan Azatbekuly for their help in preparing this manuscript.
+Conflicts of Interest: The authors declare no conflicts of interest.
+Abbreviations
+The following abbreviations are used in this manuscript:
+AI Artificial Intelligence
+ML Machine Learning
+IEQ Indoor Environmental Quality
+HVAC Heating, Ventilation, and Air Conditioning
+IoT Internet of Things
+DRL Deep Reinforcement Learning
+DT Digital Twin
+DT-B Digital Twin of the Building
+DT-H Digital Twin of the Human
+LLM Large Language Model
+MORL Multi-Objective Reinforcement Learning
+RL Reinforcement Learning
+BIM Building Information Modeling
+PIR Passive Infrared
+mmWave Millimeter Wave
+CSI Channel State Information
+HR Heart Rate
+HRV Heart Rate Variability
+PMV Predicted Mean Vote
+GAN Generative Adversarial Network
+VAE Variational Autoencoder
+CV Computer Vision
+
+=== PAGE 36 ===
+Sensors 2025, 25, 5265 36 of 44
+RNN Recurrent Neural Network
+CNN Convolutional Neural Network
+LSTM Long Short-Term Memory
+SVM Support Vector Machine
+SVR Support Vector Regression
+ANN Artificial Neural Network
+DQN Deep Q-Network
+DDPG Deep Deterministic Policy Gradient
+PPO Proximal Policy Optimization
+SAC Soft Actor-Critic
+XAI Explainable Artificial Intelligence
+XGBoost eXtreme Gradient Boosting
+SHAP SHapley Additive exPlanations
+LIME Local Interpretable Model-Agnostic Explanations
+ETL Extract, Transform, Load
+AutoML Automated Machine Learning
+NDN Named Data Networking
+WSN Wireless Sensor Network
+IIoT Industrial Internet of Things
+LPWAN Low-Power Wide-Area Network
+TEG Thermoplastic Generator
+SDN Software-Defined Networking
+SAX Symbolic Aggregate approXimation
+PCA Principal Component Analysis
+OPTICS Ordering Points to Identify the Clustering Structure
+API Application Programming Interface
+BAS Building Automation System
+TRIPOD-LLM Transparent Reporting of a Multivariable Prediction Model for Individual
+Prognosis or Diagnosis—Large Language Model
+HPC High-Performance Computing
+GPU Graphics Processing Unit
+NLP Natural Language Processing
+DNN Deep Neural Network
+SaaS Software as a Service
+SDK Software Development Kit
+TEG Thermoelectric Generator
+References
+1. González-Torres, M.; Pérez-Lombard, L.; Coronel, J.F.; Maestre, I.R.; Yan, D. A Review on Buildings Energy Information: Trends,
+End-Uses, Fuels and Drivers. Energy Rep. 2022, 8, 626–637. [CrossRef]
+2. Santamouris, M.; Vasilakopoulou, K. Present and Future Energy Consumption of Buildings: Challenges and Opportunities
+towards Decarbonisation. e-Prime Adv. Electr. Eng. Electron. Energy 2021, 1, 100002. [CrossRef]
+3. Lu, M.; Lai, J.H.K. Building Energy: A Review on Consumptions, Policies, Rating Schemes and Standards. Energy Procedia 2019,
+158, 3633–3638. [CrossRef]
+4. Kim, H.; Kang, H.; Choi, H.; Jung, D.; Hong, T. Human-Building Interaction for Indoor Environmental Control: Evolution of
+Technology and Future Prospects. Autom. Constr. 2023, 152, 104938. [CrossRef]
+5. Chaer, I.; Ozarisoy, B.; Elnour Ismail, M.A.; Salari, S.; Zhihui, Y. Energy Efficiency in Educational Buildings: A Systematic Review
+of Smart Technology Integration and Occupant Behaviour. Build. Environ. 2025, 280, 113132. [CrossRef]
+6. Haiyirete, X.; Zhang, W.; Gao, Y. Evolving Trends in Smart Building Research: A Scientometric Analysis.Buildings 2024, 14, 3023.
+[CrossRef]
+7. Aliero, M.S.; Asif, M.; Ghani, I.; Pasha, M.F.; Jeong, S.R. Systematic Review Analysis on Smart Building: Challenges and
+Opportunities. Sustainability 2022, 14, 3009. [CrossRef]
+8. Orfanos, V .A.; Kaminaris, S.D.; Papageorgas, P .; Piromalis, D.; Kandris, D. A Comprehensive Review of IoT Networking
+Technologies for Smart Home Automation Applications. JSAN 2023, 12, 30. [CrossRef]
+
+=== PAGE 37 ===
+Sensors 2025, 25, 5265 37 of 44
+9. Farzaneh, H.; Malehmirchegini, L.; Bejan, A.; Afolabi, T.; Mulumba, A.; Daka, P .P . Artificial Intelligence Evolution in Smart
+Buildings for Energy Efficiency. Appl. Sci. 2021, 11, 763. [CrossRef]
+10. Shah, S.; Iqbal, M.; Aziz, Z.; Rana, T.; Khalid, A.; Cheah, Y.-N.; Arif, M. The Role of Machine Learning and the Internet of Things
+in Smart Buildings for Energy Efficiency. Appl. Sci. 2022, 12, 7882. [CrossRef]
+11. Amangeldy, B.; Tasmurzayev, N.; Nurakhov, Y.; Shinassylov, S.; Bekele, S.D. Development and Evaluation of an Intelligent
+Control System for Sustainable and Efficient Energy Management. WSEAS Trans. Electron. 2023, 14, 135–143. [CrossRef]
+12. Chaudhari, P .; Xiao, Y.; Cheng, M.M.-C.; Li, T. Fundamentals, Algorithms, and Technologies of Occupancy Detection for Smart
+Buildings Using IoT Sensors. Sensors 2024, 24, 2123. [CrossRef]
+13. Khan, I.; Zedadra, O.; Guerrieri, A.; Spezzano, G. Occupancy Prediction in IoT-Enabled Smart Buildings: Technologies, Methods,
+and Future Directions. Sensors 2024, 24, 3276. [CrossRef] [PubMed]
+14. Qaisar, I.; Zhao, Q. Energy Baseline Prediction for Buildings: A Review. Results Control Optim. 2022, 7, 100129. [CrossRef]
+15. Wong, C.H.H.; Cai, M.; Ren, C.; Huang, Y.; Liao, C.; Yin, S. Modelling Building Energy Use at Urban Scale: A Review on Their
+Account for the Urban Environment. Build. Environ. 2021, 205, 108235. [CrossRef]
+16. Metwally, E.A.; Refat Ismail, M.; Farid, A.A. Development of an IoT Occupant-Centric Metrics: A Systematic Literature Review.
+Results Eng. 2024, 23, 102614. [CrossRef]
+17. Jin, X.; Zhang, C.; Xiao, F.; Li, A.; Miller, C. A Review and Reflection on Open Datasets of City-Level Building Energy Use and
+Their Applications. Energy Build. 2023, 285, 112911. [CrossRef]
+18. Ekonomou, G.; Menegaki, A.N. The Role of the Energy Use in Buildings in Front of Climate Change: Reviewing a System’s
+Challenging Future. Energies 2023, 16, 6308. [CrossRef]
+19. Gao, H.; Zhong, H.; Zou, L. Human-Centric IoT Control: A Framework for Quantifying the Impact of Occupant Behaviour on
+Energy Efficiency in Shared Offices. J. Build. Eng. 2025, 93, 112784. [CrossRef]
+20. Jia, M.; Komeily, A.; Wang, Y.; Srinivasan, R.S. Adopting Internet of Things for the Development of Smart Buildings: A Review of
+Enabling Technologies and Applications. Autom. Constr. 2019, 101, 111–126. [CrossRef]
+21. Dong, B.; Prakash, V .; Feng, F.; O’Neill, Z. A Review of Smart Building Sensing System for Better Indoor Environment Control.
+Energy Build. 2019, 199, 29–46. [CrossRef]
+22. Verma, A.; Prakash, S.; Srivastava, V .; Kumar, A.; Mukhopadhyay, S.C. Sensing, Controlling, and IoT Infrastructure in Smart
+Building: A Review. IEEE Sens. J. 2019, 19, 2922409. [CrossRef]
+23. Quang, T.V .; Doan, D.T.; Ngarambe, J.; Ghaffarianhoseini, A.; Ghaffarianhoseini, A.; Zhang, T. AI Management Platform for
+Privacy-Preserving Indoor Air Quality Control: Review and Future Directions. J. Build. Eng. 2025, 91, 111712. [CrossRef]
+24. Djenouri, D.; Laidi, R.; Djenouri, Y.; Balasingham, I. Machine Learning for Smart Building Applications: Review and Taxonomy.
+ACM Comput. Surv. 2019, 52, 1–36. [CrossRef]
+25. Qolomany, B.; Al-Fuqaha, A.; Gupta, A.; Benhaddou, D.; Al Wajidi, S.; Qadir, J.; Fong, A.C. Leveraging Machine Learning and Big
+Data for Smart Buildings: A Comprehensive Survey. IEEE Access 2019, 7, 90316–90356. [CrossRef]
+26. Moghimi, S.M.; Gulliver, T.A.; Chelvan, I.T. Energy Management in Modern Buildings Based on Demand Prediction and Machine
+Learning—A Review. Energies 2024, 17, 555. [CrossRef]
+27. Cespedes-Cubides, A.S.; Jradi, M. A Review of Building Digital Twins to Improve Energy Efficiency in the Building Operational
+Stage. Energy Inform. 2024, 7, 11. [CrossRef]
+28. Yang, A.; Han, M.; Zeng, Q.; Sun, Y. Adopting Building Information Modeling (BIM) for the Development of Smart Buildings: A
+Review of Enabling Applications and Challenges. Adv. Civ. Eng. 2021, 2021, 8811476. [CrossRef]
+29. Arowoiya, V .A.; Moehler, R.C.; Fang, Y. Digital Twin Technology for Thermal Comfort and Energy Efficiency in Buildings: A
+State-of-the-Art and Future Directions. Energy Built Environ. 2024, 5, 641–656. [CrossRef]
+30. Zhou, S.L.; Shah, A.A.; Leung, P .K.; Zhu, X.; Liao, Q. A Comprehensive Review of the Applications of Machine Learning for
+HVAC. DeCarbon 2023, 2, 100023. [CrossRef]
+31. Dai, X.; Liu, J.; Zhang, X. A Review of Studies Applying Machine Learning Models to Predict Occupancy and Window-Opening
+Behaviours in Smart Buildings. Energy Build. 2020, 223, 110159. [CrossRef]
+32. Zhang, L.; Chen, Z. Large Language Model-Based Interpretable Machine Learning Control in Building Energy Systems. Energy
+Build. 2024, 307, 113943. [CrossRef]
+33. O˙zadowicz, A. Generic IoT for Smart Buildings and Field-Level Automation—Challenges, Threats, Approaches, and Solutions.
+Computers 2024, 13, 45. [CrossRef]
+34. Ruiz, I.M. Is IoT Monitoring Key to Improve Building Energy Efficiency? Case Study of a Smart Campus in Spain. Energy Build.
+2023, 288, 3524. [CrossRef]
+35. Yu, L.; Qin, S.; Zhang, M.; Shen, C.; Jiang, T.; Guan, X. A Review of Deep Reinforcement Learning for Smart Building Energy
+Management. IEEE Internet Things J. 2021, 8, 12046–12063. [CrossRef]
+36. Mathumitha, R.; Rathika, P .; Manimala, K. Intelligent Deep Learning Techniques for Energy Consumption Forecasting in Smart
+Buildings: A Review. Artif. Intell. Rev. 2024, 57, 35. [CrossRef]
+
+=== PAGE 38 ===
+Sensors 2025, 25, 5265 38 of 44
+37. Lee, K.; Park, J.S.; Yun, S. A Study on Indoor Air Quality at Daycare Centers Using IoT Environmental Sensors.J. Asian Archit.
+Build. Eng. 2024, 23, 1–13. [CrossRef]
+38. Khasawneh, H.J.; Al Asbahi, R.; Alzariqi, A.W.; Al Qada, D.R.; Bujuk, A.; Nawfal, M.A.; Tareen, M. Industrial IoT-Based
+Submetering Solution for Real-Time Energy Monitoring. Discov. Internet Things 2025, 5, 15. [CrossRef]
+39. Xie, D.; Xie, Q. Internet of Things-Based Study on Online Monitoring System of Building Equipment Energy Saving Optimization
+Control Using Building Information Modeling. Sci. Prog. 2024, 107, 00368504241228130. [CrossRef]
+40. Li, W.; Tang, R.; Wang, S.; Zheng, Z. An Optimal Design Method for Communication Topology of Wireless Sensor Networks to
+Implement Fully Distributed Optimal Control in IoT-Enabled Smart Buildings. Appl. Energy 2023, 349, 121539. [CrossRef]
+41. Diane, A.; Diallo, O.; Ndoye, E.H.M. A Systematic and Comprehensive Review on Low Power Wide Area Network: Characteristics,
+Architecture, Applications and Research Challenges. Discov. Internet Things 2025, 5, 7. [CrossRef]
+42. Alwakeel, A.M. Enhancing IoT Performance in Wireless and Mobile Networks through Named Data Networking (NDN) and
+Edge Computing Integration. Comput. Netw. 2025, 264, 111267. [CrossRef]
+43. Gonçalves, J.G.; Ayub, M.S.; Zhumadillayeva, A.; Dyussekeyev, K.; Ayimbay, S.; Saadi, M.; Lopes Rosa, R.; Rodríguez, D.Z.
+Decentralized Machine Learning Framework for the Internet of Things: Enhancing Security, Privacy, and Efficiency in Cloud-
+Integrated Environments. Electronics 2024, 13, 4185. [CrossRef]
+44. Khalyly, B.E.; Belangour, A.; Banane, M.; Erraissi, A. A Comparative Study of Microservices-Based IoT Platforms. Int. J. Adv.
+Comput. Sci. Appl. 2020, 11, 389–398. [CrossRef]
+45. Saleem, A.D.; Abdulrahman, A.A. Attacks Detection in Internet of Things Using Machine Learning Techniques: A Review. JAETS
+2024, 6, 684–703. [CrossRef]
+46. Javed, A.; Kubler, S.; Malhi, A.; Nurminen, A.; Robert, J.; Framling, K. BIoTope: Building an IoT Open Innovation Ecosystem for
+Smart Cities. IEEE Access 2020, 8, 224318–224342. [CrossRef]
+47. Zyoud, S.; Zyoud, A.H. Advancing Sustainable Cities and Communities with Internet of Things: Global Insights, Trends, and
+Research Priorities for SDG 11. Results Eng. 2025, 26, 104917. [CrossRef]
+48. Zemrane, H.; Abbou, A.N.; Baddi, Y.; Hasbi, A. Internet of Things Smart Factories Ecosystem Based on SDN. Procedia Comput. Sci.
+2020, 175, 723–729. [CrossRef]
+49. Litoussi, M.; Kannouf, N.; El Makkaoui, K.; Ezzati, A.; Fartitchou, M. IoT Security: Challenges and Countermeasures. Procedia
+Comput. Sci. 2020, 177, 503–508. [CrossRef]
+50. Ridwan, M.; Gasulla, M.; Reverter, F. Principle and Applications of Thermoelectric Generators: A Review. Sensors 2025, 25, 2484.
+[CrossRef]
+51. Faraji, A.; Rashidi, M.; Rezaei, F.; Rahnamayiezekavat, P . A Meta-Synthesis Review of Occupant Comfort Assessment in Buildings
+(2002–2022). Sustainability 2023, 15, 4303. [CrossRef]
+52. Shokrollahi, A.; Persson, J.A.; Malekian, R.; Sarkheyli-Hägele, A.; Karlsson, F. Passive Infrared Sensor-Based Occupancy
+Monitoring in Smart Buildings: A Review of Methodologies and Machine Learning Approaches.Sensors 2024, 24, 1533. [CrossRef]
+53. Salman, M.; Caceres-Najarro, L.A.; Seo, Y.-D.; Noh, Y. WiSOM: WiFi-Enabled Self-Adaptive System for Monitoring the Occupancy
+in Smart Buildings. Energy 2024, 294, 130420. [CrossRef]
+54. Chen, J.; Huang, X.; Jiang, H.; Miao, X. Low-Cost and Device-Free Human Activity Recognition Based on Hierarchical Learning
+Model. Sensors 2021, 21, 2359. [CrossRef] [PubMed]
+55. Mehrjouseresht, P .; Hail, R.E.; Karsmakers, P .; Schreurs, D.M.M.-P . Respiration and Heart Rate Monitoring in Smart Homes: An
+Angular-Free Approach with an FMCW Radar. Sensors 2024, 24, 2448. [CrossRef] [PubMed]
+56. Soumya, A.; Krishna Mohan, C.; Cenkeramaddi, L.R. Recent Advances in mmWave-Radar-Based Sensing, Its Applications, and
+Machine Learning Techniques: A Review. Sensors 2023, 23, 8901. [CrossRef] [PubMed]
+57. Kayange, H.; Mun, J.; Park, Y.; Choi, J.; Choi, J. A Hybrid Approach to Modeling Heart Rate Response for Personalized Fitness
+Recommendations Using Wearable Data. Electronics 2024, 13, 3888. [CrossRef]
+58. Suryo, M.S.; Ichinose, M.; Kuroda, Y.; Alkhalaf, H. An Investigation of Indoor Environment Quality on Occupants’ Thermal
+Responses, Health, and Productivity: A Study Based on Physiological Data in Occupied Office Space. Buildings 2024, 14, 3562.
+[CrossRef]
+59. Vitazkova, D.; Kosnacova, H.; Turonova, D.; Foltan, E.; Jagelka, M.; Berki, M.; Micjan, M.; Kokavec, O.; Gerhat, F.; Vavrinsky, E.
+Transforming Sleep Monitoring: Review of Wearable and Remote Devices Advancing Home Polysomnography and Their Role in
+Predicting Neurological Disorders. Biosensors 2025, 15, 117. [CrossRef]
+60. Tartarini, F.; Schiavon, S.; Quintana, M.; Miller, C. Personal Comfort Models Based on a 6-Month Experiment Using Environmental
+Parameters and Data from Wearables. Indoor Air 2022, 32, e13160. [CrossRef]
+61. Abdelrahman, M.M.; Chong, A.; Miller, K. Personal Thermal Comfort Models Using Digital Twins: Preference prediction with
+BIM-extracted spatial–temporal proximity data from Build2Vec. Build. Environ. 2022, 207, 108532. [CrossRef]
+62. Lu, X.; Pang, Z.; Fu, Y.; O’Neill, Z. The Nexus of the Indoor CO2 Concentration and Ventilation Demands Underlying CO2-Based
+Demand-Controlled Ventilation in Commercial Buildings: A Review. Build. Environ. 2022, 218, 109116. [CrossRef]
+
+=== PAGE 39 ===
+Sensors 2025, 25, 5265 39 of 44
+63. Persily, A. Development and Application of an Indoor CO 2 Metric. Indoor Air 2022, 32, e13059. [CrossRef]
+64. Pistochini, T.; Ellis, M.; Meyers, F.; Frasier, A.; Cappa, C.; Bennett, D. Method of test for CO2-based demand control ventilation
+systems: Benchmarking the state-of-the-art and the undervalued potential of proportional-integral control. Energy and Build.
+2023, 301, 113717. [CrossRef]
+65. Bae, Y.; Bhattacharya, S.; Cui, B.; Lee, S.; Li, Y.; Zhang, L.; Im, P .; Adetola, V .; Vrabie, V .; Leach, M.; et al. Sensor Impacts on
+Building and HVAC Controls: A Critical Review for Building Energy Performance. Adv. Appl. Energy 2021, 4, 100068. [CrossRef]
+66. ANSI/ASHRAE Standard 62.1-2022; Ventilation and Acceptable Indoor Air Quality. ASHRAE: Peachtree Corners, GA, USA, 2022.
+67. Sun, K. DMFF: Deep Multimodal Feature Fusion for Occupancy Detection. Build. Environ. 2024, 253, 111355. [CrossRef]
+68. Salman, M.; Andres, L.C.; Seo, Y.D.; Youngtae, N. WiSOM: Wi-Fi CSI-Based Occupancy Monitoring System.Energy 2024, 294,
+130420. [CrossRef]
+69. Opoku, D.-G.J.; Perera, S.; Osei-Kyei, R.; Rashidi, M.; Famakinwa, T.; Bamdad, K. Drivers for Digital Twin Adoption in the
+Construction Industry: A Systematic Literature Review. Buildings 2022, 12, 113. [CrossRef]
+70. Saadatifar, S.; Sawyer, A.O.; Byrne, D. Occupant-Centric Digital Twin: A Case Study on Occupant Engagement in Thermal
+Comfort Decision-Making. Architecture 2024, 4, 390–415. [CrossRef]
+71. Afram, A.; Janabi-Sharifi, F. Theory and Applications of HVAC Control Systems—A Review of Model Predictive Control (MPC).
+Build. Environ. 2014, 72, 343–355. [CrossRef]
+72. Eneyew, D.; Capretz, M.; Bitsumlak, G. Continuous Model Calibration Framework for Smart-Building Digital Twin. Appl. Energy
+2024, 375, 124080. [CrossRef]
+73. Luis-Gómez, J.; Martínez, F.; González-Barberá, A.; Mascarós, J.; Monrós-Andreu, G.; Chiva, S.; Borrás, E.; Martínez-Cuenca, R.
+AI-Driven Surrogate Model for Room Ventilation. Fluids 2025, 10, 163. [CrossRef]
+74. Vazquez-Canteli, J.R.; Nagy, Z. Reinforcement Learning for Demand Response: A Review of Algorithms and Modeling.Appl.
+Energy 2019, 235, 1072–1089. [CrossRef]
+75. Zhao, L.; Yang, T.; Li, W.; Zomaya, A.Y. Deep reinforcement learning-based joint load scheduling for household multi-energy
+system. Appl. Energy 2022, 324, 119346. [CrossRef]
+76. Palley, B.; Poças Martins, J.; Bernardo, H.; Rossetti, R. Integrating Machine Learning and Digital Twins for Enhanced Smart
+Building Operation and Energy Management: A Systematic Review. Urban Sci. 2025, 9, 202. [CrossRef]
+77. Katsoulakis, E.; Wang, Q.; Wu, H.; Shahriyari, L.; Fletcher, R.; Liu, J.; Achenie, L.; Liu, H.; Jackson, P .; Xiao, Y.; et al. Digital Twins
+for Health: A Scoping Review. Npj Digit. Med. 2024, 7, 77. [CrossRef] [PubMed]
+78. Łukaniszyn, M.; Majka, Ł.; Grochowicz, B.; Mikołajewski, D.; Kawala-Sterniuk, A. Digital Twins Generated by Artificial
+Intelligence in Personalized Healthcare. Appl. Sci. 2024, 14, 9404. [CrossRef]
+79. Yang, H.; Ran, M. Personalized Human Thermal Sensation Prediction Based on Bayesian-Optimized Random Forest. Buildings
+2025, 15, 2539. [CrossRef]
+80. Nota, G.; Petraglia, G. The Design of Human-in-the-Loop Cyber-Physical Systems for Monitoring the Ecosystem of Historic
+Villages. Smart Cities 2024, 7, 2966–2994. [CrossRef]
+81. Piras, G.; Agostinelli, S.; Muzi, F. Smart Buildings and Digital Twin to Monitoring the Efficiency and Wellness of Working
+Environments: A Case Study on IoT Integration and Data-Driven Management. Appl. Sci. 2025, 15, 4939. [CrossRef]
+82. ISO 16739-1:2024; Industry Foundation Classes (IFC) for Data Sharing in the Construction and Facility Management Industries—
+Part 1: Data Schema. ISO: Geneva, Switzerland, 2024.
+83. Liu, W.; Lv, Y.; Wang, Q.; Sun, B.; Han, D. A Systematic Review of the Digital Twin Technology in Buildings, Landscape and
+Urban Environment from 2018 to 2024. Buildings 2024, 14, 3475. [CrossRef]
+84. Aragón, A.; Spudys, P .; Pupeikis, D.; Nieto,Ó.; Garcia Alberti, M. Bridging Interoperability Gaps Between LCA and BIM: Analysis
+of Limitations for the Integration of EPD Data in IFC. Buildings 2025, 15, 2760. [CrossRef]
+85. Mêda, P .; Calvetti, D.; Hjelseth, E.; Sousa, H. Incremental Digital Twin Conceptualisations Targeting Data-Driven Circular
+Construction. Buildings 2021, 11, 554. [CrossRef]
+86. Donkers, A.; Yang, D.; de Vries, B.; Baken, N. Semantic Web Technologies for Indoor Environmental Quality: A Review and
+Ontology Design. Buildings 2022, 12, 1522. [CrossRef]
+87. Akbarieh, A.; Jayasinghe, L.B.; Waldmann, D.; Teferle, F.N. BIM-Based End-of-Lifecycle Decision Making and Digital Deconstruc-
+tion: Literature Review. Sustainability 2020, 12, 2670. [CrossRef]
+88. Ciccone, A.; Suglia, P .; Asprone, D.; Salzano, A.; Nicolella, M. Defining a Digital Strategy in a BIM Environment to Manage
+Existing Reinforced Concrete Bridges in the Context of Italian Regulation. Sustainability 2022, 14, 11767. [CrossRef]
+89. Spanò, A.; Patrucco, G.; Sammartano, G.; Perri, S.; Avena, M.; Fillia, E.; Milan, S. Digital Twinning for 20th Century Concrete
+Heritage: HBIM Cognitive Model for Torino Esposizioni Halls. Sensors 2023, 23, 4791. [CrossRef]
+90. Banfi, F. The Evolution of Interactivity, Immersion and Interoperability in HBIM: Digital Model Uses, VR and AR for Built
+Cultural Heritage. ISPRS Int. J. Geo-Inf. 2021, 10, 685. [CrossRef]
+
+=== PAGE 40 ===
+Sensors 2025, 25, 5265 40 of 44
+91. Altohami, A.B.A.; Haron, N.A.; Ales@Alias, A.H.; Law, T.H. Investigating Approaches of Integrating BIM, IoT, and Facility
+Management for Renovating Existing Buildings: A Review. Sustainability 2021, 13, 3930. [CrossRef]
+92. Panah, R.S.; Kioumarsi, M. Application of Building Information Modelling (BIM) in the Health Monitoring and Maintenance
+Process: A Systematic Review. Sensors 2021, 21, 837. [CrossRef]
+93. Liu, Z.; Zhang, M.; Osmani, M. Building Information Modelling (BIM) Driven Sustainable Cultural Heritage Tourism. Buildings
+2023, 13, 1925. [CrossRef]
+94. Paparrizos, J.; Gravano, L. K-Shape. SIGMOD Rec. 2016, 45, 69–76. [CrossRef]
+95. International Energy Agency. Case Study: Artificial Intelligence for Building Energy Management Systems; IEA: Paris, France, 2019;
+Available online: https://www.iea.org/articles/case-study-artificial-intelligence-for-building-energy-management-systems
+(accessed on 21 July 2025).
+96. Ali, D.M.T.E.; Motuzien ˙e, V .; Džiugait˙e-Tum˙enien˙e, R. AI-Driven Innovations in Building Energy Management Systems: A
+Review of Potential Applications and Energy Savings. Energies 2024, 17, 4277. [CrossRef]
+97. Moveh, S.; Merchán-Cruz, E.A.; Ibrahim, A.O.; Elhassan, Z.A.M.; Ramadan Abdelhai, N.M.; Abdelrazig, M.D. Thermodynamic
+Optimization of Building HVAC Systems Through Dynamic Modeling and Advanced Machine Learning. Sustainability 2025, 17,
+1955. [CrossRef]
+98. International Energy Agency (IEA). Buildings—Energy System. Available online: https://www.iea.org/energy-system/buildings
+(accessed on 21 July 2025).
+99. Das, H.P .; Lin, Y.-W.; Agwan, U.; Spangher, L.; Devonport, A.; Yang, Y.; Drgo ˇ na, J.; Chong, A.; Schiavon, S.; Spanos, C. Machine
+Learning for Smart and Energy-Efficient Buildings. Environ. Data Sci. 2024, 3, e43. [CrossRef]
+100. Huotari, M.; Malhi, A.; Främling, K. Machine Learning Applications for Smart Building Energy Utilization: A Survey. Arch.
+Comput. Methods Eng. 2024, 31, 2537–2556. [CrossRef]
+101. Seyedzadeh, S.; Rahimian, F.P .; Glesk, I.; Roper, M. Machine Learning for Estimation of Building Energy Consumption and
+Performance: A Review. Vis. Eng. 2018, 6, 7. [CrossRef]
+102. Li, Q.; Meng, Q.; Cai, J.; Yoshino, H.; Mochida, A. Applying Support Vector Machine to Predict Hourly Cooling Load in the
+Building. Appl. Energy 2009, 86, 2249–2256. [CrossRef]
+103. Ahmad, M.W.; Mourshed, M.; Rezgui, Y. Trees vs. Neurons: Comparison between Random Forest and ANN for High-Resolution
+Prediction of Building Energy Consumption. Energy Build. 2017, 147, 77–89. [CrossRef]
+104. United Nations Environment Programme. 2022 Global Status Report for Buildings and Construction: Towards a Zero-Emission, Efficient
+and Resilient Buildings and Construction Sector; UNEP: Nairobi, Kenya, 2022; Available online: https://www.unep.org/resources/
+report/2022-global-status-report-buildings-and-construction (accessed on 10 July 2025).
+105. Tian, C.; Li, C.; Zhang, G.; Lv, Y. Data Driven Parallel Prediction of Building Energy Consumption Using Generative Adversarial
+Nets. Energy Build. 2019, 186, 230–243. [CrossRef]
+106. Yao, G.; Chen, Y.; Han, C.; Duan, Z. Research on the Decision-Making Method for the Passive Design Parameters of Zero Energy
+Houses in Severe Cold Regions Based on Decision Trees. Energies 2024, 17, 506. [CrossRef]
+107. Zhang, W.; Hu, W.; Wen, Y. Thermal Comfort Modeling for Smart Buildings: A Fine-Grained Deep Learning Approach.IEEE
+Internet Things J. 2019, 6, 2540–2549. [CrossRef]
+108. Kim, T.Y.; Cho, S.B. Predicting Residential Energy Consumption Using CNN-LSTM Neural Networks.Energy 2019, 182, 72–81.
+[CrossRef]
+109. Chaudhuri, T.; Zhai, D.; Soh, Y.C.; Li, H.; Xie, L. Random Forest Based Thermal Comfort Prediction from Gender-Specific
+Physiological Parameters Using Wearable Sensing Technology.Energy Build. 2018, 166, 391–406. [CrossRef]
+110. Rastgoo, A.; Khajavi, H. A Novel Study on Forecasting the Airfoil Self-Noise Using a Hybrid Model Based on the Combination of
+CatBoost and Arithmetic Optimization Algorithm. Expert Syst. Appl. 2023, 229, 120576. [CrossRef]
+111. Mao, Z.; Zhou, B.; Huang, J.; Liu, D.; Yang, Q. Research on Anomaly Detection Model for Power Consumption Data Based on
+Time-Series Reconstruction. Energies 2024, 17, 4810. [CrossRef]
+112. Wang, H.; Chen, Y.; Kang, J.; Ding, Z.; Zhu, H. An XGBoost-Based Predictive Control Strategy for HVAC Systems in Providing
+Day-Ahead Demand Response. Build. Environ. 2023, 238, 110350. [CrossRef]
+113. He, Y.; Ali, A.B.M.; Aminian, S.A.; Sharma, K.; Dixit, S.; Sobti, S.; Ali, R.; Ahemedei, M.; Rajab, H.; Ziaei Mazinan, M.A. Enhancing
+Intelligent HVAC Optimization with Graph Attention Networks and Stacking Ensemble Learning: A Recommender System
+Approach in Shenzhen Qianhai Smart Community. Sci. Rep. 2025, 15, 5119. [CrossRef]
+114. Manjavacas, A.; Campoy-Nieves, A.; Jiménez-Raboso, J.; Molina-Solana, M.; Gómez-Romero, J. An Experimental Evaluation of
+Deep Reinforcement Learning Algorithms for HVAC Control. Artif. Intell. Rev. 2024, 57, 10819. [CrossRef]
+115. Habib, U.; Hayat, K.; Zucker, G. Complex Building’s Energy System Operation Patterns Analysis Using Bag of Words Representa-
+tion with Hierarchical Clustering. Complex Adapt. Syst. Model. 2016, 4, 20. [CrossRef]
+116. Lin, C.-M.; Lin, S.-F.; Liu, H.-Y.; Tseng, K.-Y. Applying the Naïve Bayes Classifier to HVAC Energy Prediction Using Hourly Data.
+Microsyst. Technol. 2019, 28, 121–135. [CrossRef]
+
+=== PAGE 41 ===
+Sensors 2025, 25, 5265 41 of 44
+117. Yang, J.; Ning, C.; Deb, C.; Zhang, F.; Cheong, D.; Lee, S.E.; Sekhar, C.; Tham, K.W. K-Shape Clustering Algorithm for Building
+Energy Usage Patterns Analysis and Forecasting Model Accuracy Improvement. Energy Build. 2017, 146, 27–37. [CrossRef]
+118. Rashid, U.; Saleem, M.F.; Rasool, S.; Abdullah, A.; Mustafa, H.; Iqbal, A. Anomaly Detection Using Clustering (K-Means with
+DBSCAN) and SMO. J. Comput. Biomed. Inform. 2024, 7, 598-0702.
+119. Gunay, H.B.; Shi, Z. Cluster Analysis-Based Anomaly Detection in Building Automation Systems. Energy Build. 2020, 228, 110445.
+[CrossRef]
+120. Huang, Z.; Gou, Z. Gaussian Mixture Model Based Pattern Recognition for Understanding the Long-Term Impact of COVID-19
+on Energy Consumption of Public Buildings. J. Build. Eng. 2023, 72, 106653. [CrossRef]
+121. Xu, Y.; Yan, C.; Shi, J.; Lu, Z.; Niu, X.; Jiang, Y.; Zhu, F. An Anomaly Detection and Dynamic Energy Performance Evaluation
+Method for HVAC Systems Based on Data Mining. Sustain. Energy Technol. Assess. 2021, 44, 101092. [CrossRef]
+122. Jianyuan, W.; Chengcheng, G.; Kechen, L. Anomaly Electricity Detection Method Based on Entropy Weight Method and Isolated
+Forest Algorithm. Front. Energy Res. 2022, 10, 984473. [CrossRef]
+123. Aguilar, J.; Garces-Jimenez, A.; R-Moreno, M.D.; García, R. A Systematic Literature Review on the Use of Artificial Intelligence in
+Energy Self-Management in Smart Buildings. Renew. Sustain. Energy Rev. 2021, 151, 111530. [CrossRef]
+124. Alanne, K.; Sierla, S. An Overview of Machine Learning Applications for Smart Buildings. Sustain. Cities Soc. 2022, 76, 103445.
+[CrossRef]
+125. Wang, Z.; Hong, T. Reinforcement Learning for Building Controls: The Opportunities and Challenges.Appl. Energy 2020, 269,
+115036. [CrossRef]
+126. Chatterjee, A.; Khovalyg, D. Dynamic Indoor Thermal Environment Using Reinforcement Learning: A Comprehensive Review.
+Energy Build. 2023, 244, 110766. [CrossRef]
+127. Al Mindeel, T.; Spentzou, E.; Eftekhari, M. Energy, Thermal Comfort, and Indoor Air Quality: Multi-Objective Optimization
+Studies. Renew. Sustain. Energy Rev. 2024, 202, 114682. [CrossRef]
+128. Stoffel, P .; Maier, L.; Kümpel, A.; Schreiber, T.; Müller, D. Evaluation of Advanced Control Strategies for Building Energy Systems:
+A Quantitative and Qualitative KPI Based Comparison. Energy Build. 2023, 280, 112709. [CrossRef]
+129. Sleiman, S.; Ouf, M.; Luo, W.; Kramer, R.; Zeiler, W.; Borkowski, E.; Hong, T.; Nagy, Z.; Chen, Z. Overview of Occupant Centric
+KPIs for Building Performance and Their Value to Various Building Stakeholders. Energy Build. 2024, 312, 114704. [CrossRef]
+130. Li, H.; Wang, Z.; Hong, T.Occupant Centric Key Performance Indicators to Inform Building Design and Operations; Lawrence Berkeley
+National Laboratory: Berkeley, CA, USA, 2021. Available online: https://eta-publications.lbl.gov/sites/default/files/72._
+occupant-centric_kpis_to_inform_building_design_and_operations.pdf (accessed on 10 July 2025).
+131. Kaggle. CubeMS: Smart Building Energy and IAQ Data. Available online: https://www.kaggle.com/datasets/claytonmiller/
+cubems-smart-building-energy-and-iaq-data (accessed on 10 July 2025).
+132. Kaggle. Smart Building System Dataset. Available online: https://www.kaggle.com/datasets/ranakrc/smart-building-system
+(accessed on 10 July 2025).
+133. OpenEI. Building Energy Data. Available online: https://data.openei.org/submissions/2977 (accessed on 10 July 2025).
+134. LBL. Fault Detection Data Sets. Available online: https://faultdetection.lbl.gov/data/ (accessed on 10 July 2025).
+135. University of Strathclyde. REFIT Electrical Load Measurements (Cleaned Version). Available online: https://pureportal.strath.ac.
+uk/en/datasets/refit-electrical-load-measurements-cleaned-version (accessed on 10 July 2025).
+136. Amasyali, K.; El-Gohary, N.M. A Review of Data-Driven Building Energy Consumption Prediction Studies. Renew. Sustain.
+Energy Rev. 2018, 81, 1192–1205. [CrossRef]
+137. Ji, J.; Yu, H.; Wang, X.; Xu, X. Machine learning application in building energy consumption prediction: A comprehensive review.
+J. Build. Eng. 2025, 104, 112295. [CrossRef]
+138. Yang, T.; Bandyopadhyay, A.; O’Neill, Z.; Wen, J.; Dong, B. From Occupants to Occupants: A Review of the Occupant Information
+Understanding for Building HVAC Occupant-Centric Control. Build. Simul. 2022, 15, 913–932. [CrossRef] [PubMed]
+139. Mateti´ c, I.; Štajduhar, I.; Wolf, I.; Ljubic, S. A Review of Data-Driven Approaches and Techniques for Fault Detection and
+Diagnosis in HVAC Systems. Sensors 2023, 23, 1. [CrossRef] [PubMed]
+140. Yang, L.; Nagy, Z.; Goffin, P .; Schlueter, A. Reinforcement Learning for Optimal Control of Low Exergy Buildings.Appl. Energy
+2015, 156, 577–586. [CrossRef]
+141. Al Sayed, K.; Boodi, A.; Sadeghian Broujeny, R.; Beddiar, K. Reinforcement Learning for HVAC Control in Intelligent Buildings: A
+Technical and Conceptual Review. J. Build. Eng. 2024, 95, 110085. [CrossRef]
+142. Wang, D.; Zheng, W.; Wang, Z.; Wang, Y.; Pang, X.; Wang, W. Comparison of Reinforcement Learning and Model Predictive
+Control for Building Energy System Optimization. Appl. Therm. Eng. 2023, 228, 120430. [CrossRef]
+143. Boutahri, Y.; Tilioua, A. Reinforcement Learning for HVAC Control and Energy Efficiency in Residential Buildings with BOPTEST
+Simulations and Real-Case Validation. Discov. Comput. 2025, 28, 45. [CrossRef]
+
+=== PAGE 42 ===
+Sensors 2025, 25, 5265 42 of 44
+144. Zhang, Z.; Lam, K.P . Practical Implementation and Evaluation of Deep Reinforcement Learning Control for a Radiant Heating
+System. In Proceedings of the 5th Conference on Systems for Built Environment, Shenzen, China, 7–8 November 2018; ACM:
+New York, NY, USA, 2018; pp. 148–157. [CrossRef]
+145. Silvestri, A.; Coraci, D.; Brandi, S.; Capozzoli, A.; Borkowski, E.; Köhler, J.; Wu, D.; Zeilinger, M.N.; Schlueter, A. Real Building
+Implementation of a Deep Reinforcement Learning Controller to Enhance Energy Efficiency and Indoor Temperature Control.
+Appl. Energy 2024, 368, 123447. [CrossRef]
+146. Xu, S.; Fu, Y.; Wang, Y.; Yang, Z.; Huang, C.; O’Neill, Z.; Wang, Z.; Zhu, Q. Efficient and Assured Reinforcement Learning-Based
+Building HVAC Control with Heterogeneous Expert-Guided Training.Sci. Rep. 2025, 15, 91326. [CrossRef]
+147. Mnih, V .; Kavukcuoglu, K.; Silver, D.; Rusu, A.A.; Veness, J.; Bellemare, M.G.; Graves, A.; Riedmiller, M.; Fidjeland, A.K.;
+Ostrovski, G.; et al. Human-Level Control through Deep Reinforcement Learning. Nature 2015, 518, 529–533. [CrossRef]
+148. Li, G.; Ren, L.; Fu, Y.; Yang, Z.; Adetola, V .; Wen, J.; Zhu, Q.; Wu, T.; Candan, K.S.; O’Neill, Z. A Critical Review of Cyber-Physical
+Security for Building Automation Systems. Annu. Rev. Control 2023, 55, 237–254. [CrossRef]
+149. Kasprzyczak, L.; Manowska, A.; D´ zwiarek, M. Cybersecurity Requirements for Industrial Machine Control Systems.Appl. Sci.
+2025, 15, 1267. [CrossRef]
+150. Sutton, R.S.; Barto, A.G. Reinforcement Learning: An Introduction. IEEE Trans. Neural Netw. 1998, 9, 1054. [CrossRef]
+151. Mnih, V .; Badia, A.P .; Mirza, M.; Graves, A.; Lillicrap, T.P .; Harley, T.; Silver, D.; Kavukcuoglu, K. Asynchronous Methods for
+Deep Reinforcement Learning. arXiv 2016, arXiv:1602.01783. [CrossRef]
+152. Wei, T.; Wang, Y.; Zhu, Q. Deep Reinforcement Learning for Building HVAC Control. In Proceedings of the 54th Annual Design
+Automation Conference 2017, Austin, TX, USA, 18–22 June 2017; ACM: New York, NY, USA, 2017. [CrossRef]
+153. Zhang, Z.; Chong, A.; Pan, Y.; Zhang, C.; Lam, K.P . Whole Building Energy Model for HVAC Optimal Control: A Practical
+Framework Based on Deep Reinforcement Learning. Energy Build. 2019, 199, 472–490. [CrossRef]
+154. Valladares, W.; Galindo, M.; Gutiérrez, J.; Wu, W.-C.; Liao, K.-K.; Liao, J.-C.; Lu, K.-C.; Wang, C.-C. Energy Optimization
+Associated with Thermal Comfort and Indoor Air Control via a Deep Reinforcement Learning Algorithm. Build. Environ. 2019,
+155, 105–117. [CrossRef]
+155. Azuatalam, D.; Lee, W.-L.; de Nijs, F.; Liebman, A. Reinforcement Learning for Whole-Building HVAC Control and Demand
+Response. Energy AI 2020, 2, 100020. [CrossRef]
+156. Gao, G.; Li, J.; Wen, Y. DeepComfort: Energy-Efficient Thermal Comfort Control in Buildings via Reinforcement Learning.IEEE
+Internet Things J. 2020, 7, 8472–8484. [CrossRef]
+157. Lu, J.; Mannion, P .; Mason, K. A Multi-Objective Multi-Agent Deep Reinforcement Learning Approach to Residential Appliance
+Scheduling. IET Smart Grid 2022, 5, e12068. [CrossRef]
+158. Liu, X.; Ren, M.; Yang, Z.; Yan, G.; Guo, Y.; Cheng, L.; Wu, C. A Multi-Step Predictive Deep Reinforcement Learning Algorithm
+for HVAC Control Systems in Smart Buildings. Energy 2022, 259, 124857. [CrossRef]
+159. Roijers, D.M.; Vamplew, P .; Whiteson, S.; Dazeley, R. A Survey of Multi-Objective Sequential Decision-Making. arXiv 2014,
+arXiv:1402.0590. [CrossRef]
+160. Milani, S.; Topin, N.; Veloso, M.; Fang, F. Explainable Reinforcement Learning: A Survey and Comparative Review.ACM Comput.
+Surv. 2024, 56, 3616864. [CrossRef]
+161. Brandi, S.; Piscitelli, M.S.; Martellacci, M.; Capozzoli, A. Deep Reinforcement Learning to Optimise Indoor Temperature Control
+and Heating Energy Consumption in Buildings. Energy Build. 2020, 224, 110225. [CrossRef]
+162. Huynh, T.N.Y.; Nguyen, A.T.; Ahn, Y.; Oo, B.L.; Lim, B.T.H. Multi-Objectives Reinforcement Learning for Smart Buildings: A
+Systematic Review of Algorithms, Applications and Future Perspectives. Energy Build. 2025, 345, 116045. [CrossRef]
+163. Clausen, A.; Arendt, K.; Johansen, A.; Sangogboye, F.C.; Kjærgaard, M.B.; Veje, C.T.; Jørgensen, B.N. A Digital Twin Framework
+for Improving Energy Efficiency and Occupant Comfort in Public and Commercial Buildings. Energy Inform. 2021, 4, 153.
+[CrossRef]
+164. Xia, S.; Wei, P .; Liu, Y.; Sonta, A.; Jiang, X. A Multi-Task Deep Reinforcement Learning-Based Recommender System for Co-
+Optimizing Energy, Comfort, and Air Quality in Commercial Buildings with Humans-in-the-Loop. Data Centric Eng. 2024, 5, e26.
+[CrossRef]
+165. Lei, Y.; Zhan, S.; Ono, E.; Peng, Y.; Zhang, Z.; Hasama, T.; Chong, A. A Practical Deep Reinforcement Learning Framework for
+Multivariate Occupant-Centric Control in Buildings. Appl. Energy 2022, 324, 119742. [CrossRef]
+166. Voigt, P .; Von dem Bussche, A.The EU General Data Protection Regulation (GDPR): A Practical Guide; Springer: Cham, Switzerland,
+2021.
+167. Li, B.; Tavakoli, A.; Heydarian, A. Occupant Privacy Perception, Awareness, and Preferences in Smart Office Environments.Sci.
+Rep. 2023, 13, 4073. [CrossRef]
+168. Zaballos, A.; Briones, A.; Massa, A.; Centelles, P .; Caballero, V . A Smart Campus’ Digital Twin for Sustainable Comfort Monitoring.
+Sustainability 2020, 12, 9196. [CrossRef]
+
+=== PAGE 43 ===
+Sensors 2025, 25, 5265 43 of 44
+169. Blad, C.; Bøgh, S.; Kallesøe, C.; Raftery, P . A Laboratory Test of an Offline-Trained Multi-Agent Reinforcement Learning Algorithm
+for Heating Systems. Appl. Energy 2023, 337, 120807. [CrossRef]
+170. Zhang, W.; Quintana, M.; Miller, C. Recommender Systems and Reinforcement Learning for Human-Building Interaction and
+Context-Aware Support: A Text Mining-Driven Review of Scientific Literature. Energy Build. 2025, 329, 115247. [CrossRef]
+171. Bécue, A.; Maia, E.; Feeken, L.; Borchers, P .; Praça, I. A New Concept of Digital Twin Supporting Optimization and Resilience of
+Factories of the Future. Appl. Sci. 2020, 10, 4482. [CrossRef]
+172. Wei, J.; Tay, Y.; Bommasani, R.; Raffel, C.; Zoph, B.; Borgeaud, S.; Yogatama, D.; Bosma, M.; Zhou, D.; Metzler, D.; et al. Emergent
+Abilities of Large Language Models. arXiv 2022, arXiv:2206.07682. [CrossRef]
+173. Varol, A.; Motlagh, N.H.; Leino, M.; Tarkoma, S.; Virkki, J. Creation of AI-Driven Smart Spaces for Enhanced Indoor
+Environments—A Survey. arXiv 2024, arXiv:2412.14708. [CrossRef]
+174. Lu, J.; Tian, X.; Zhang, C.; Zhao, Y.; Zhang, J.; Zhang, W.; Feng, C.; He, J.; Wang, J.; He, F. Evaluation of Large Language Models
+(LLMs) on the Mastery of Knowledge and Skills in the Heating, Ventilation and Air Conditioning (HVAC) Industry.Energy Built
+Environ. 2024, in press. [CrossRef]
+175. Liu, F.; Zhou, H.; Gu, B.; Zou, X.; Huang, J.; Wu, J.; Li, Y.; Chen, S.S.; Hua, Y.; Zhou, P . Application of Large Language Models in
+Medicine. Nat. Rev. Bioeng. 2025, 3, 445–464. [CrossRef]
+176. Fernandes, D.; Garg, S.; Nikkel, M.; Guven, G. A GPT-Powered Assistant for Real-Time Interaction with Building Information
+Models. Buildings 2024, 14, 2499. [CrossRef]
+177. Cao, Y.; He, Y.; Chen, Y.; Chen, M.; You, S.; Qiu, Y.; Liu, M.; Luo, C.; Zheng, C.; Tong, X.; et al. Designing LLM-Simulated
+Immersive Spaces to Enhance Autistic Children’s Social Affordances Understanding in Traffic Settings. In Proceedings of the 30th
+International Conference on Intelligent User Interfaces, Cagliari, Italy, 24–27 March 2025; ACM: Cagliari, Italy, 2025; pp. 519–537.
+[CrossRef]
+178. Ferrara, E. Large Language Models for Wearable Sensor-Based Human Activity Recognition, Health Monitoring, and Behavioral
+Modeling: A Survey of Early Trends, Datasets, and Challenges. Sensors 2024, 24, 5045. [CrossRef] [PubMed]
+179. Para, R.K. Adaptive Personalization through User Linguistic Style Analysis: A Comprehensive Approach. JAIGS 2024, 5, 501–512.
+[CrossRef]
+180. Kirk, H.R.; Vidgen, B.; Röttger, P .; Hale, S.A. The Benefits, Risks and Bounds of Personalizing the Alignment of Large Language
+Models to Individuals. Nat. Mach. Intell. 2024, 6, 383–392. [CrossRef]
+181. Ghebrehiwet, I.; Zaki, N.; Damseh, R.; Mohamad, M.S. Revolutionizing Personalized Medicine with Generative AI: A Systematic
+Review. Artif. Intell. Rev. 2024, 57, 128. [CrossRef]
+182. Jožef Stefan Institute. Meeting Cultural and Linguistic Demands to Accommodate Fine-Tuned LLMs to Local Medical Customs
+and Patient Communication. In Proceedings of ChatGPT in Medicine 2024; Jožef Stefan Institute: Ljubljana, Slovenia, 2024.
+183. Bhat, A.; Mondal, A.; Tripathy, A. LLM Agents for Internet of Things (IoT) Applications. InCS598 JY2—Topics in LLM Agents;
+University of Illinois: Urbana, IL, USA, 2024; Available online: https://openreview.net/forum?id=BikB3f8ByV (accessed on 10
+July 2025).
+184. Li, C.-H.; Jha, N.K. COMFORT: A Continual Fine-Tuning Framework for Foundation Models Targeted at Consumer Healthcare.
+arXiv 2024, arXiv:2409.09549. [CrossRef]
+185. Lai, X.; Chen, J.; Lai, Y.; Huang, S.; Cai, Y.; Sun, Z.; Wang, X.; Pan, K.; Gao, Q.; Huang, C. Using Large Language Models to
+Enhance Exercise Recommendations and Physical Activity in Clinical and Healthy Populations: Scoping Review. JMIR Med.
+Inform. 2025, 13, e59309. [CrossRef]
+186. Baig, M.M.; Hobson, C.; GholamHosseini, H.; Ullah, E.; Afifi, S. Generative AI in Improving Personalized Patient Care Plans:
+Opportunities and Barriers Towards Its Wider Adoption. Appl. Sci. 2024, 14, 10899. [CrossRef]
+187. Clusmann, J.; Kolbinger, F.R.; Muti, H.S.; Carrero, Z.I.; Eckardt, J.-N.; Laleh, N.G.; Löffler, C.M.L.; Schwarzkopf, S.-C.; Unger, M.;
+Veldhuizen, G.P .; et al. The Future Landscape of Large Language Models in Medicine.Commun. Med. 2023, 3, 70. [CrossRef]
+[PubMed]
+188. Gallifant, J.; Afshar, M.; Ameen, S.; Aphinyanaphongs, Y.; Chen, S.; Cacciamani, G.; Demner-Fushman, D.; Dligach, D.; Daneshjou,
+R.; Fernandes, C.; et al. The TRIPOD-LLM Reporting Guideline for Studies Using Large Language Models. Nat. Med. 2025, 31,
+60–69. [CrossRef] [PubMed]
+189. Mishra, A.; Majumder, A.; Kommineni, D.; Joseph, C.A.; Chowdhury, T.; Anumula, S.K. Role of Generative Artificial Intelligence
+in Personalized Medicine: A Systematic Review. Cureus 2025, 17, e82310. [CrossRef] [PubMed]
+190. Liu, M.; Zhang, L.; Chen, J.; Chen, W.-A.; Yang, Z.; Lo, L.J.; Wen, J.; O’nEill, Z. Large Language Models for Building Energy
+Applications: Opportunities and Challenges. Build. Simul. 2025, 18, 225–234. [CrossRef]
+191. Chen, J.; Liu, Z.; Huang, X.; Wu, C.; Liu, Q.; Jiang, G.; Pu, Y.; Lei, Y.; Chen, X.; Wang, X.; et al. When Large Language Models Meet
+Personalization: Perspectives of Challenges and Opportunities. World Wide Web 2024, 27, 42. [CrossRef]
+192. Albshaier, L.; Almarri, S.; Albuali, A. Federated Learning for Cloud and Edge Security: A Systematic Review of Challenges and
+AI Opportunities. Electronics 2025, 14, 1019. [CrossRef]
+
+=== PAGE 44 ===
+Sensors 2025, 25, 5265 44 of 44
+193. Rancea, A.; Anghel, I.; Cioara, T. Edge Computing in Healthcare: Innovations, Opportunities, and Challenges. Future Internet
+2024, 16, 329. [CrossRef]
+194. Boodi, A.; Beddiar, K.; Benamour, M.; Amirat, Y.; Benbouzid, M. Intelligent Systems for Building Energy and Occupant Comfort
+Optimization: A State of the Art Review and Recommendations. Energies 2018, 11, 2604. [CrossRef]
+195. Sankar, B.S.; Gilliland, D.; Rincon, J.; Boulbes, D.R.; Costello, T. Building an Ethical and Trustworthy Biomedical AI Ecosystem for
+the Translational and Clinical Integration of Foundation Models. Bioengineering 2024, 11, 984. [CrossRef]
+196. Sourav, M.S.G.; Yavari, E.; Gao, X.; Wu, C. Occupancy Estimation from Blurred Video: A Multifaceted Approach with Privacy
+Consideration. Sensors 2024, 24, 3739. [CrossRef]
+197. Boulbes, D.R.; Costello, T.; Baggerly, K.; Coombes, K.R. A Survey on Data Reproducibility and the Effect of Publication Process on
+the Ethical Reporting of Laboratory Research. Clin. Cancer Res. 2018, 24, 3447–3455. [CrossRef] [PubMed]
+198. He, K. Is Data Quality Enough for a Clinical Decision?: Apply Machine Learning and Avoid Bias. In Proceedings of the IEEE
+International Conference on Big Data, Boston, MA, USA, 11–14 December 2017; pp. 2612–2619. [CrossRef]
+199. Friedman, L.; Furberg, C.; DeMets, D. Fundamentals of Clinical Trials, 5th ed.; Springer: Cham, Switzerland, 2015. [CrossRef]
+200. Resnik, D.B.; Shamoo, A.E. Reproducibility and Research Integrity. Account. Res. 2017, 24, 116–123. [CrossRef] [PubMed]
+201. Jørgensen, B.N.; Ma, Z.G. Impact of EU Laws on the Adoption of AI and IoT in Advanced Building Energy Management Systems:
+A Review of Regulatory Barriers, Technological Challenges, and Economic Opportunities. Buildings 2025, 15, 2160. [CrossRef]
+202. Islam, M.R.; Ahmed, M.U.; Barua, S.; Begum, S. A Systematic Review of Explainable Artificial Intelligence in Terms of Different
+Application Domains and Tasks. Appl. Sci. 2022, 12, 1353. [CrossRef]
+203. Khan, A.M.; Tariq, M.A.; Rehman, S.K.U.; Saeed, T.; Alqahtani, F.K.; Sherif, M. BIM Integration with XAI Using LIME and MOO
+for Automated Green Building Energy Performance Analysis. Energies 2024, 17, 3295. [CrossRef]
+204. Gosselin, R.; Vieu, L.; Loukil, F.; Benoit, A. Privacy and Security in Federated Learning: A Survey. Appl. Sci. 2022, 12, 9901.
+[CrossRef]
+205. Ghimire, P .; Kim, K.; Acharya, M. Opportunities and Challenges of Generative AI in Construction Industry: Focusing on Adoption
+of Text-Based Models. Buildings 2024, 14, 220. [CrossRef]
+206. Celik, B.G.; Abraham, Y.S.; Attaran, M. Unlocking Blockchain in Construction: A Systematic Review of Applications and Barriers.
+Buildings 2024, 14, 1600. [CrossRef]
+207. Pritoni, M.; Paine, D.; Fierro, G.; Zuo, W. Metadata Schemas and Ontologies for Building Energy Applications: A Critical Review
+and Use Case Analysis. Energies 2021, 14, 2024. [CrossRef]
+208. Apruzzese, G.; Laskov, P .; Montes de Oca, E.; Pescape, A. The Role of Machine Learning in Cybersecurity.Digit. Threats 2023, 4, 8.
+[CrossRef]
+209. Metta, S.; Chang, I.; Parker, J.; Roman, M.P .; Ehuan, A.F. Generative AI in Cybersecurity (Version 1).arXiv 2024, arXiv:2405.01674.
+[CrossRef]
+210. Mohamed, N. Artificial Intelligence and Machine Learning in Cybersecurity: A Deep Dive into State-of-the-Art Techniques and
+Future Paradigms. Knowl. Inf. Syst. 2025, 67, 6969–7055. [CrossRef]
+211. Alnaser, A.A.; Maxi, M.; Elmousalami, H. AI-Powered Digital Twins and Internet of Things for Smart Cities and Sustainable
+Building Environment. Appl. Sci. 2024, 14, 12056. [CrossRef]
+212. Afzal, M.; Li, R.Y.M.; Shoaib, M.; Chan, R.W.; Nazir, S. Delving into the Digital Twin Developments and Applications in the
+Construction Industry: A PRISMA Approach. Sustainability 2023, 15, 16436. [CrossRef]
+213. Serrano, W. Smart or Intelligent Assets or Infrastructure: Technology with a Purpose. Buildings 2023, 13, 131. [CrossRef]
+214. Bhattacharya, M.; Penica, M.; O’Connell, E.; Sharma, P . Human-in-Loop: A Review of Smart Manufacturing Deployments.
+Systems 2023, 11, 35. [CrossRef]
+215. Lee, C.; Lee, S. A Risk Identification Method for Ensuring AI-Integrated System Safety for Remotely Controlled Ships with
+Onboard Seafarers. J. Mar. Sci. Eng. 2024, 12, 1778. [CrossRef]
+216. Yang, L.; Allen, G.; Zhang, Z.; Zhao, Y. Achieving On-Site Trustworthy AI Implementation in the Construction Industry: A
+Framework Across the AI Lifecycle. Buildings 2025, 15, 21. [CrossRef]
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.

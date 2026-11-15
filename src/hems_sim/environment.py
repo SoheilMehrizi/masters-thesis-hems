@@ -33,7 +33,7 @@ def load_schema(config, thermal=False):
     check(schema)
     return schema
 
-def make_environment(config=None, thermal=False):
+def make_environment(config=None, thermal=False, *, render_directory=None, render_session_name=None):
     config = config or configuration()
     os.environ['CITYLEARN_OFFLINE'] = '1'
     import torch
@@ -46,12 +46,14 @@ def make_environment(config=None, thermal=False):
     return CityLearnEnv(load_schema(config, thermal), buildings=[config['building_id']],
                         random_seed=config['random_seed'], simulation_start_time_step=start,
                         simulation_end_time_step=end, episode_time_steps=end-start+1,
-                        interface=config['interface'], render_mode=config['render_mode'])
+                        interface=config['interface'], render_mode=config['render_mode'],
+                        render_directory=render_directory, render_session_name=render_session_name)
 
-def rollout(config=None, hvac=0.2, thermal=False):
+def rollout(config=None, hvac=0.2, thermal=False, *, render_directory=None, render_session_name=None):
     import numpy as np
     config = config or configuration()
-    env = make_environment(config, thermal)
+    env = make_environment(config, thermal, render_directory=render_directory,
+                           render_session_name=render_session_name)
     try:
         observations, _ = env.reset(seed=config['random_seed'])
         rows = []
@@ -75,6 +77,7 @@ def rollout(config=None, hvac=0.2, thermal=False):
                          'observed_temperature_C': float(observations[0][ti])})
             if terminated or truncated:
                 break
-        return {'rows': rows, 'action_names': env.action_names, 'observation_names': env.observation_names}
+        return {'rows': rows, 'action_names': env.action_names, 'observation_names': env.observation_names,
+                'export_directory': str(env.new_folder_path) if env.new_folder_path else None}
     finally:
         env.close()

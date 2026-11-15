@@ -1,0 +1,1192 @@
+
+=== PDF PAGE 1 ===
+Contents lists available at ScienceDirect
+Energy & Buildings
+journal homepage: www.elsevier.com/locate/enbuild
+Digital twin assisted real-time energy management system for smart homes 
+Farid Hamzeh Aghdam
+ a,∗, Mehdi Rasti
+ a,b, Eva Pongracz
+ a, 
+Amjad Anvari-Moghaddam
+ c
+a Water, Energy and Environmental Engineering Research Unit, FI-90014, University of Oulu, P.O.Box 4300, Oulu, Finland
+b Centre for Wireless Communications, University of Oulu, P.O.Box 4300, FI-90014, Oulu, Finland
+c Department of Energy (AAU Energy), Aalborg University, 9220, Aalborg, Denmark
+a r t i c l e  i n f o
+Editor: Jianlei Niu
+Keywords:
+Home energy management system
+Digital twin
+Edge computing
+Smart home
+Renewable energy
+ a b s t r a c t
+The increasing integration of renewable energy sources into modern power systems has ampliﬁed the need for 
+eﬃcient, real-time energy management solutions at the household level. Smart homes, equipped with distributed 
+generation units, energy storage systems, electric vehicles and ﬂexible loads, are emerging as active participants 
+in decentralized energy networks. However, the intermittent nature of renewable generation, dynamic energy 
+pricing, and real-time uncertainties in user behavior pose signiﬁcant challenges for conventional home energy 
+management systems. This paper presents a digital twin-assisted, edge-based real-time home energy manage-
+ment system designed to optimize energy consumption and operational costs in smart homes. The proposed 
+system integrates a real-time digital twin of the home’s energy ecosystem with machine learning-based fore-
+casting models and edge computing infrastructure. Long short-term memory networks are employed to predict 
+key parameters such as photovoltaic generation, EV availability, and appliance demand, while the digital twin 
+continuously updates forecasts and simulations based on real-time data. The proposed framework was evaluated 
+through comprehensive simulations using 15-min and 1-min scheduling resolutions. Results demonstrate signif-
+icant improvements in forecasting accuracy, operational cost reduction, and system responsiveness compared to 
+conventional methods. Speciﬁcally, the proposed framework achieved up to 10% cost savings under a 15-min 
+resolution and further improvements with a 1-min resolution, highlighting the beneﬁts of ﬁne-grained, real-time 
+control. The synergy between digital twins, edge computing, and machine learning oﬀers a scalable, privacy-
+preserving, and responsive energy management framework for future smart homes, contributing to enhanced 
+grid resilience and sustainable energy systems.
+1.  Introduction
+Global primary energy consumption has been steadily increasing, 
+reaching approximately 620 exajoules (EJ) in 2023, with electricity de-
+mand accounting for nearly one-ﬁfth of total energy use and growing at 
+more than 2% annually. Fossil fuels-coal, oil, and natural gas-still sup-
+ply about 80% of this energy, leading to escalating carbon emissions 
+and environmental degradation. There is still persistence on fossil fuels 
+demand, such as coal, in global energy portfolios, particularly in devel-
+oping economies [1]. The global increase in energy demand has led to 
+higher energy prices and increased environmental concerns, primarily 
+due to the rise in carbon emissions from power generation. Integrat-
+ing renewable energy sources (RES) with the power grid has emerged 
+as a sustainable, environmentally friendly solution that can reduce en-
+ergy costs and alleviate environmental pressures, promoting the devel-
+∗ Corresponding author.
+ E-mail address: farid.hamzehaghdam@oulu.ﬁ (F.H. Aghdam).
+opment of sustainable cities, societies, and economies. However, despite 
+its promise, renewable energy is diﬃcult to predict because of its in-
+termittent and unpredictable nature, making it unreliable for both the 
+power grid and individual consumers. To address this, batteries and 
+ﬂexible loads oﬀer potential solutions by mitigating the variability in 
+renewable energy generation and reducing energy costs [2].
+In parallel with the rise of distributed energy resources, the con-
+cept of smart homes has rapidly evolved from futuristic speculation to 
+a practical reality. Enabled by the proliferation of the internet of things 
+(IoT), smart appliances, advanced metering infrastructure, and commu-
+nication networks, modern homes are increasingly equipped with de-
+vices that can autonomously monitor, control, and optimize energy con-
+sumption. These homes are no longer passive energy consumers but ac-
+tive participants in energy markets, capable of generating, storing, and 
+managing their own energy ﬂows while interacting with external grids 
+https://doi.org/10.1016/j.enbuild.2026.116978
+Received 2 July 2025; Received in revised form 24 November 2025; Accepted 6 January 2026
+Energy & Buildings 355 (2026) 116978 
+Available online 13 January 2026 
+0378-7788/© 2026 The Authors. Published by Elsevier B.V. This is an open access article under the CC BY license ( http://creativecommons.org/licenses/by/4.0/ ). 
+
+=== PDF PAGE 2 ===
+F.H. Aghdam et al.
+and utility providers. The advent of smart homes introduces new oppor-
+tunities for enhancing energy eﬃciency, improving user comfort, and 
+supporting the resilience of decentralized power systems [3].
+On the consumer side, eﬀective energy storage and load schedul-
+ing are crucial for managing energy consumption and minimizing costs. 
+This approach, which involves active participation of consumers and 
+utilities in the energy market, contributes to the development of smart 
+power grids. A smart grid is an advanced power network that supports 
+bidirectional power ﬂow and communication, accommodating renew-
+able distributed generation, hybrid generation, distributed energy stor-
+age, and controllable loads that function autonomously within a deﬁned 
+area [4].
+Within this context, home energy management systems (HEMS) 
+have emerged as pivotal technologies, acting as the central intelli-
+gence of smart homes. HEMS enable homeowners to monitor, sched-
+ule, and optimize their energy consumption, helping to reduce oper-
+ational costs, improve grid reliability, and maximize renewable energy 
+self-consumption. Traditionally, HEMS architectures rely on centralized, 
+cloud-based decision-making frameworks. While eﬀective, these sys-
+tems are often constrained by latency, bandwidth limitations, and data 
+privacy concerns. Furthermore, they struggle to handle the real-time 
+uncertainties introduced by renewable generation variability, dynamic 
+pricing, and evolving user behavior [5].
+The modern energy system is increasingly incorporating innovative 
+technologies, which, while enhancing capabilities, also make its struc-
+ture more complex. Emerging smart technologies bring advanced com-
+puting and communication capacities that cannot be represented in the 
+physical layer alone. This complexity requires new approaches to im-
+prove information ﬂow and system management. One promising solu-
+tion is the digital twin (DT), a concept introduced by Grieves in 2002 for 
+product lifecycle management [6]. A DT is a digital model of a physi-
+cal entity that mirrors its behavior in real-time through continuous data 
+interaction. This technology is particularly beneﬁcial for optimizing the 
+management, operation, control, and security of energy systems.
+In parallel, edge computing has gained traction as a complemen-
+tary technology, enhancing data processing speed, reducing latency, and 
+strengthening data privacy by enabling localized decision-making. The 
+synergy between DTs and edge computing can signiﬁcantly enhance 
+HEMS capabilities, facilitating real-time optimization of energy ﬂows 
+within homes equipped with rooftop PV panels, battery storage sys-
+tems, electric vehicles (EV), and ﬂexible appliances [7]. Furthermore, 
+advancements in artiﬁcial intelligence, IoT, and cyber-physical systems 
+have made DTs more relevant, allowing for the real-time collection, pro-
+cessing, and analysis of data to create an accurate virtual representation 
+of physical systems [8]. This virtual model can be used for real-time 
+analysis, control, and decision-making in various industrial sectors, es-
+pecially in power systems. Although still in its early stages, DT tech-
+nology holds potential in numerous areas of power systems, including 
+HEMS.
+1.1.  Literature review and research motivation
+Traditional HEMS frameworks often rely on centralized cloud-based 
+architectures for data processing and decision-making which have been 
+the core of many studies [5,9]. While these systems reduce energy costs 
+by leveraging dynamic pricing and load scheduling, they face limita-
+tions such as latency, bandwidth constraints, and privacy risks due to 
+dependency on external servers [10]. Furthermore, conventional HEMS 
+struggle to handle real-time uncertainties in RES generation and user 
+behavior, which are critical for eﬀective demand-side management.
+Driven by advances in IoT, artiﬁcial intelligence, and high-speed 
+communication, energy systems are undergoing signiﬁcant digital trans-
+formation. Digitalization enables enhanced data acquisition, real-time 
+monitoring, and predictive analytics, promoting more resilient and ef-
+ﬁcient grid operation. Many researchers have been studying digitaliza-
+tion in modern energy sector [11]. Authors in [12–14] have proposed 
+deep reinforcement learning approaches for real-time HEMS, achieving 
+energy cost reductions through appliance scheduling, but without DT 
+integration for scenario testing. Mirshekali et al. [15] review large lan-
+guage models (LLMs) in energy systems, including an LLM interface for 
+HEMS that enhances user interaction and decision-making, representing 
+a novel AI-driven trend in 2025.
+Within the digitalization landscape, the integration of DT technol-
+ogy with HEMS represents a pivotal advancement in optimizing energy 
+usage within smart homes, particularly those equipped with renewable 
+energy sources like PV panels, battery storage, and electric vehicles. 
+This section reviews recent literature to understand the current state of 
+DT applications in HEMS, identify research gaps. The reviewed stud-
+ies demonstrate signiﬁcant progress in applying DTs to energy manage-
+ment, particularly in smart buildings and grids. DT technology, initially 
+conceptualized for industrial applications [16], has gained traction in 
+energy systems for its ability to create real-time virtual replicas of physi-
+cal assets. DTs enable predictive analytics, scenario testing, and adaptive 
+control by integrating IoT data, machine learning (ML), and simulation 
+tools [17].
+DTs oﬀer versatile applications in energy systems, particularly in en-
+hancing forecasting accuracy for loads, system responses, and energy 
+management. The eﬃcacy of these forecasts hinges on the availabil-
+ity of real-time data, as the reliability of predictions directly correlates 
+with the authenticity of input data. Unlike traditional methods reliant 
+on historical datasets, DTs leverage real-time data streams, enabling 
+more precise predictions. This capability is critical for optimizing long-
+term microgrid development, especially in scenarios involving load ex-
+pansion and infrastructure scalability. ML algorithms further augment
+forecasting by addressing complex prediction and diagnostic challenges. 
+For instance, diverse deep learning architectures-such as deep neu-
+ral networks (DNNs) [18], Recurrent-DNNs [19], convolutional neural 
+networks (CNNs) [20], and long short-term memory (LSTM) [21,22] 
+networks-have been deployed across short-, mid-, and long-term fore-
+casting horizons for the demand, generation and price in energy systems. 
+Integrating these ML models with DT frameworks allows real-time data 
+adaptation, signiﬁcantly improving prediction accuracy and operational 
+eﬃciency in energy management.
+Eﬀective energy management in energy systems necessitates robust 
+control systems and precise data acquisition via distributed measure-
+ment devices. However, inherent challenges arise from data estima-
+tion inaccuracies, which can compromise decision-making. DTs miti-
+gate these issues by providing high-ﬁdelity real-time data, thereby en-
+hancing the reliability of energy management systems. Successful DT 
+implementation requires seamless integration of information technol-
+ogy and operational systems, forming a cohesive digital infrastructure. 
+Case studies demonstrate DT applications in renewable energy mon-
+itoring, wind farm optimization, and energy storage scheduling. Ad-
+ditionally, ontologies and semantic web technologies facilitate struc-
+tured DT modeling, enabling adaptable simulations for diverse energy 
+systems. These advancements underscore the transformative potential 
+of DTs in advancing smart grid adaptability and sustainability. Lama-
+teou et al. [4] highlight the role of DTs in smart grids but do not ad-
+dress their integration with household-level HEMS. In the context of 
+smart grids, Saleem et al. [23] integrate IoT with cyber-physical sys-
+tems for building energy management, incorporating DTs to improve 
+eﬃciency. Carvalhosa et al. [24] assess digital transformation maturity 
+in the energy sector using fuzzy logic, highlighting DT-enabled services 
+for smart home energy management as a key adoption area. Aman et al. 
+[25] discuss energy management strategies but overlook the potential 
+of DTs to simulate future scenarios and update control policies dynam-
+ically. Authors in [26] explore the integration of DTs with 6G technol-
+ogy, highlighting the framework and connectivity requirements essen-
+tial for this synergy, present two use cases: DT for home energy man-
+agement and DT for open radio access network (O-RAN). Yet, current 
+research lacks a holistic approach to embedding these technologies into 
+HEMS.
+Energy & Buildings 355 (2026) 116978 
+2 
+
+=== PDF PAGE 3 ===
+F.H. Aghdam et al.
+Nomenclature
+Symbol Description
+𝑃𝑃𝑉,𝑡 PV generation at time 𝑡 (kW)
+𝑃𝑅𝑃𝑉 Rated PV power (kW)
+𝜓𝑡 Solar irradiance at time 𝑡 (W/m2)
+𝜓𝑐 Critical irradiance threshold (W/m2)
+𝜓std Standard irradiance (W/m2)
+𝑃 ch𝑏𝑎𝑡,𝑡,𝑃 dch𝑏𝑎𝑡,𝑡 Battery charging and discharging powers (kW)
+𝛼ch𝑏𝑎𝑡,𝑡,𝛼 dch𝑏𝑎𝑡,𝑡 Battery charging and discharging status 
+(binary)
+SoC𝑏𝑎𝑡,𝑡 Battery state of charge
+𝐸𝑅𝑏𝑎𝑡 Battery rated energy (kWh)
+𝜂ch𝑏𝑎𝑡,𝜂 dch𝑏𝑎𝑡 Battery charging and discharging eﬃciency 
+values
+𝑃 ch𝐸𝑉,𝑡,𝑃 dch𝐸𝑉,𝑡 EV charging and discharging powers (kW)
+SoC𝐸𝑉,𝑡 EV battery state of charge
+𝛼ch𝐸𝑉,𝑡,𝛼 dch𝐸𝑉,𝑡 EV charging and discharging status (binary)
+𝐸𝑅𝐸𝑉 EV rated energy (kWh)
+𝜂ch𝐸𝑉,𝜂 dch𝐸𝑉 EV charging and discharging eﬃciency values
+𝑡𝑓,𝐸𝑉 ,𝑡 0,𝐸𝑉,𝑡𝑓,𝐸𝑉 EV time interval, and arrival and departure 
+times
+𝑃 f ix𝑙,𝑡 Fixed load consumption (kW)
+𝑃𝑅𝑙 Rated ﬁxed-load power (kW)
+𝑃 f lx𝑙,𝑡 Flexible load consumption (kW)
+𝛼f lx𝑙,𝑡 Flexible load operating status
+𝑢𝑙,𝑡,𝑧𝑙,𝑡 Load start and stop indicators
+𝑡Load Fixed-load connection interval
+𝑃ℎ𝑝,𝑡 Heat pump power consumption (kW)
+𝑇𝑖𝑡,𝑇 𝑜𝑡 ,𝑇 min,𝑇 max Indoor, outdoor, minimum and maximum user 
+preference temperatures (°C)
+𝜂 Thermal change eﬃciency
+𝐴 Net thermal conductivity
+𝜔 House dynamic behavior time constant
+𝜆buy𝑡 ,𝜆 sell𝑡 Electricity purchasing and selling prices 
+(e/kWh)
+𝑃 buy𝑢𝑡,𝑡 ,𝑃 sell𝑢𝑡,𝑡 Power bought from and sold to grid (kW)
+𝑜.𝑓. Objective function (total cost)
+𝐶𝑏𝑎𝑡,𝑡,𝐶𝐸𝑉,𝑡 Battery/EV operating cost terms
+𝛿𝑖 Minimum required energy threshold (deep 
+discharge limit)
+Parallel to the rise of DTs, edge computing has been proposed to ad-
+dress latency, privacy, and bandwidth issues in HEMS [27,28]. By shift-
+ing computation closer to the household, edge-based HEMS enable faster 
+response to local conditions, reduced dependency on cloud servers, and 
+enhanced data security. While edge computing has been proposed to en-
+hance data privacy and reduce latency, its synergy with DT frameworks 
+remains underexplored. Recent advancements in edge computing and 
+AI-driven forecasting, have improved the accuracy of load and renew-
+able generation predictions [29].
+These recent works highlight the rapid evolution toward AI-
+enhanced, real-time energy systems but reveal gaps in fully integrated, 
+edge-deployed HEMS at high resolutions. Existing studies often use 
+coarse time resolutions (e.g., hourly intervals) for energy scheduling, 
+which fail to capture rapid ﬂuctuations in PV generation or EV charging 
+patterns [5]. Also the applications of DTs in smart homes still remain 
+unexplored. This gap limits the ability of HEMS to exploit short-term 
+price variations or respond to transient grid conditions. Besides, conven-
+tional HEMS lack robust mechanisms to address real-time uncertainties 
+in RES generation, EV usage, and dynamic pricing. While LSTM mod-
+els improve forecasting, their integration with DTs for continuous error 
+correction and adaptive scheduling is limited.
+The convergence of DTs and HEMS presents unique opportunities for 
+real-time energy optimization in the form of a digital twin-enabled home 
+energy management system (DT-HEMS). This paper discusses the grow-
+ing importance of DTs in managing energy of smart homes. Real-time 
+data on components like home PVs, electric vehicles, and other home 
+equipment is essential for active management, and DTs provide a frame-
+work for eﬃcient decision-making. The scientiﬁc novelty of this study 
+lies in the development of a tightly coupled, real-time DT-HEMS frame-
+work that operates at high temporal resolution and is fully synchronized 
+with the physical environment through continuous data exchange. Un-
+like existing HEMS studies that rely on static forecasting models or of-
+ﬂine optimization, our approach integrates a real-time DT deployed at 
+the edge, a dynamic LSTM-based forecasting layer, and a dual-loop opti-
+mization mechanism capable of responding to minute-level ﬂuctuations 
+in renewable generation, load behavior, and user patterns. This combi-
+nation enables a level of adaptiveness, accuracy, and responsiveness not 
+previously achieved in the literature and demonstrates a practical path-
+way for real-time energy management in next-generation smart homes. 
+It highlights the importance of DTs in enhancing real-time decision-
+making and optimizing the analysis, design, control, and development 
+of HEMS. Table overviews a comparison between the current study and 
+previous research in the ﬁled. In summary, the following items show the 
+contributions of this study:
+• Developing a real-time HEMS framework for a grid-connected smart 
+home equipped with rooftop PV panels, a battery energy storage sys-
+tem, an electric vehicle, and both ﬂexible and non-ﬂexible smart ap-
+pliances.
+• Employing an edge-computing architecture to enable low-latency 
+data processing and real-time decision-making.
+• Designing a DT of the smart home to support predictive analysis and 
+enhance operational decision-making.
+• Integrating an LSTM-based forecasting engine adapted through real-
+time DT feedback, for prediction of PV generation, arrival/departure 
+times and state of charge of EV, ﬁxed-load consumption, and house-
+hold occupancy.
+The rest of the paper is structured as follows: Section 2 deﬁnes sys-
+tem modeling including various equipment within the smart home. The 
+Section 3 includes Energy Management Framework, problem formula-
+tion and solution methodology. The Section 4 is dedicated for DT de-
+velopment of the smart home. Simulations for validating the proposed 
+framework is presented in Section 5 and Section 6 concludes the paper 
+and discusses the future works.
+2.  System model
+In this study, the focus is on a smart home that is connected to the 
+grid for real-time energy optimization within a smart grid system, where 
+two-way communication occurs between the user and the grid station. 
+The smart home features a hybrid setup consisting of power generation 
+sources, a battery as energy storage system (ESS) and an EV, and various 
+smart appliances as loads, as illustrated in Fig. 1. The power generation 
+sources include the utility grid, photovoltaic (PV) panels, and the ESS 
+and EV. The loads are categorized into inﬂexible loads (such as TVs, 
+computers, and lights) and ﬂexible loads (such as air conditioning sys-
+tems, smart fridge, vacuum cleaner, dish washer, washing machine). The 
+HEMS is installed within this grid-connected smart home at the edge of 
+the network and is responsible for gathering the following data:
+• User preferences regarding load (including operation duration, ar-
+rival and departure times of EVs, maximum tolerable delay, etc.), 
+home occupancy status from motion sensors, and thermal discom-
+fort from thermal sensors;
+• Power generation data including PV generation, energy transactions, 
+and related constraints;
+• The status and constraints of the ESS and EV;
+Energy & Buildings 355 (2026) 116978 
+3 
+
+=== PDF PAGE 4 ===
+F.H. Aghdam et al.
+Table 1 
+Comparison of innovative aspects and contributions with selected prior studies.
+ Reference  DT Used  Edge Computing  Real-Time Capabilities  Forecasting Method  Time Resolution  Components Included
+ [4]  Yes  No  Partial (grid-level)  ML-based  Not speciﬁed  Grid components, renewables
+ [5]  No  No (cloud-based)  Limited  Basic optimization  Hourly  PV, loads
+ [9]  No  No  Yes  Basic optimization  15-min  Energy systems, HEMS interface
+ [12]  No  No  Yes  DRL  15-min  Appliances, loads
+ [25]  No  No  Limited  Optimization algorithms  Hourly  Loads, EV
+ [23]  No  Yes  Yes  AI/data-driven  1-min  IoT, cyber-physical
+ [28]  No  Yes  Yes  AI-driven  15–60 min  Loads, storage
+ [30]  No  Yes  Yes  Deep Learning  Not speciﬁed  Appliances, loads
+ This Work  Yes  Yes  Yes  LSTM  1-min & 15-min  PV, battery, EV, ﬂexible/non-ﬂexible loads
+Fig. 1. Overview of DT-HEMS: Physical layer data are fed to DT-HEMS, to analyze the behavior of the system, and perform the scheduling.
+• Pricing signals and utility grid stability constraints.
+The HEMS ensures secure and real-time transmission of all this infor-
+mation through the communication infrastructure vi wireless communi-
+cation. The DT-HEMS then utilizes this data to accurately predict some 
+of the uncertain parameters, and using this updates the HEMS create 
+operation schedules and make management decisions. This procedure 
+is illustrated in Fig. 1.
+In this section mathematical modeling of various equipment within 
+the smart home will be presented. The power generation sources in the 
+smart home is assumed to be rooftop photovoltaic PV panels. Also, it 
+has smart home appliances which can be categorized into two groups 
+including inﬂexible loads and ﬂexible loads. Flexible loads include dish 
+washer, washing machine, HVAC system, water heating system, vacuum 
+cleaner, and smart refrigerator. The ﬁxed loads are lighting, cooking 
+oven and TV. Also, it is assumed that there is a battery as a ﬁxed ESS 
+and EV with V2G capability as dynamic ESS.
+2.1.  PV systems
+Generating electrical energy through PV systems is considered one 
+of the most prevalent and straightforward methods for producing re-
+newable energy. This is because PV systems are smaller in size and less 
+expensive compared to WTs, leading to a signiﬁcant increase in the in-
+stalled capacity of PV panels. The power output of PV units (𝑃𝑃𝑉,𝑡 ) de-
+pends on solar irradiance (𝜓), which is a stochastic phenomenon. The 
+power generated by the PV system is related to solar irradiance as fol-
+Energy & Buildings 355 (2026) 116978 
+4 
+
+=== PDF PAGE 5 ===
+F.H. Aghdam et al.
+lows:
+𝑃𝑃𝑉,𝑡 =
+⎧
+⎪
+⎨
+⎪⎩
+𝑃𝑃𝑉,𝑟 × (
+𝜓 2𝑡
+𝜓𝑠𝑡𝑑 ⋅𝜓𝑐 ) 𝜓𝑡 ≤𝜓𝑐
+𝑃𝑃𝑉,𝑟 × ( 𝜓𝑡𝜓𝑠𝑡𝑑 ) 𝜓𝑐 ≤𝜓𝑡 (1)
+where 𝜓𝑡 is solar irradiance at time 𝑡 (W/m2), 𝜓𝑠𝑡𝑑 is solar irradiation 
+in the standard environment set as 1000 (W/m2), a certain irradiation 
+point set as 150 (W/m2), and 𝑃𝑃𝑉,𝑟  is rated power of the PV panel [31,
+32].
+By eﬃcient forecasting of the solar irradiance, the PV generation can 
+be estimated to be used in energy management system.
+2.2.  Battery
+Eqs. (2) – (9) illustrate the technical constraints of a battery. Eqs. (2) 
+and (3) show its charging and discharging power limitations. Eq. (4) 
+is the constraint for avoiding simultaneous charging and discharging. 
+Eqs. 5 – (8) are the constraints for the state of charge or energy level 
+of the battery system, indicating the change of the state of charge, and 
+its initial and ﬁnal values. Finally, Eq. (9) represents its stored/released 
+power constraints.
+0 ≤𝑃𝑐ℎ𝑏𝑎𝑡,𝑡 ≤𝛼𝑐ℎ𝑏𝑎𝑡,𝑡 ⋅𝑃𝑅𝑏𝑎𝑡 ⋅ 1 −𝑆𝑜𝐶𝑏𝑎𝑡,𝑡−1𝜂𝑐ℎ𝑏𝑎𝑡 ∀𝑡 (2)
+0 ≤𝑃𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 ≤𝛼𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 ⋅𝑃𝑅𝑏𝑎𝑡 ⋅𝑆𝑜𝐶𝑏𝑎𝑡,𝑡−1 ⋅𝜂𝑑𝑐ℎ𝑏𝑎𝑡 ∀𝑡 (3)
+𝛼𝑐ℎ𝑏𝑎𝑡,𝑡 +𝛼𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 ≤ 1 𝛼𝑏𝑎𝑡 ∈ {0, 1} ∀ 𝑡 (4)
+𝑆𝑜𝐶𝑏𝑎𝑡,𝑡 =𝑆𝑜𝐶𝑏𝑎𝑡,𝑡−1 − 1𝐸𝑅𝑏𝑎𝑡 (𝑃𝑑𝑐ℎ𝑏𝑎𝑡,𝑡𝜂𝑑𝑐ℎ𝑏𝑎𝑡 −𝑃𝑐ℎ𝑏𝑎𝑡,𝑡 ⋅𝜂𝑐ℎ𝑏𝑎𝑡) ∀ 𝑡 (5)
+0 ≤𝑆𝑜𝐶𝑏𝑎𝑡,𝑡 ≤ 1 ∀ 𝑡 (6)
+𝑆𝑜𝐶𝑏𝑎𝑡,𝑡0 =𝑆𝑜𝐶𝑏𝑎𝑡,𝑖𝑛𝑡 (7)
+𝑆𝑜𝐶𝑏𝑎𝑡,𝑡𝑓 =𝑆𝑜𝐶𝑏𝑎𝑡,𝑓𝑖𝑛𝑎𝑙 (8)
+𝑃𝑏𝑎𝑡,𝑡 =𝑃𝑐ℎ𝑏𝑎𝑡,𝑡 −𝑃𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 ∀𝑡 (9)
+where 𝛼𝑐ℎ𝑏𝑎𝑡,𝑡 and 𝛼𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 are binary variables indicating operational sta-
+tus of the device at time 𝑡, 𝑆𝑜𝐶𝑏𝑎𝑡,𝑡 is the state of charge of battery at time 
+𝑡 (p.u.), 𝑃𝑐ℎ𝑏𝑎𝑡,𝑡 and 𝑃𝑑𝑐ℎ𝑏𝑎𝑡,𝑡 are charging and discharging power of battery 
+(kW), 𝑃𝑅𝑏𝑎𝑡 is rated power of the device (kW), 𝐸𝑅𝑏𝑎𝑡 is the battery’s rated 
+energy capacity (kWh) and ﬁnally 𝜂𝑐ℎ𝑏𝑎𝑡 and 𝜂𝑑𝑐ℎ𝑏𝑎𝑡  are charging and dis-
+charging eﬃciency values. 𝑃𝑏𝑎𝑡,𝑡 shows the power of the battery, which 
+has a positive value in the charging mode and a negative value in the 
+discharging state.
+2.3.  EV
+Eqs. (10) – (17) illustrate the technical constraints of the EV power 
+transactions with the grid. Eqs. (10) and (11) illustrate the charging and 
+discharging power limitations. Eq. (12) is the constraint for avoiding si-
+multaneous charging and discharging. Eqs. 13 – (16) are the constraints 
+for the state of charge or energy level of the EV battery. Eq. (15) shows 
+the initial estimated state of charge of EV and Eq. (16) forces the EV to 
+be charged to the level as preferred by the user. The ﬁnal state of charge 
+(𝑆𝑜𝐶𝐸𝑉,𝑓𝑖𝑛𝑎𝑙 ) is determined based on the user’s travel preference (i.e., 
+planned driving distance and required energy). Finally, Eq. (17) repre-
+sents its stored/released power constraints. 𝑡𝐸𝑉  is the time intervals that 
+the EV is parked at the smart home. The time interval starts with 𝑡0,𝐸𝑉 , 
+which is the arrival time of the EV and ends with 𝑡𝑓,𝐸𝑉  which is the 
+departure time. The HEMS get notiﬁed via the communication network 
+about these time intervals. The values for the arriving time and also 
+the state of charge of the EV while arriving to the home, are stochastic 
+variables.
+0 ≤𝑃𝑐ℎ𝐸𝑉,𝑡 ≤𝛼𝑐ℎ𝐸𝑉,𝑡 ⋅𝑃𝑅𝐸𝑉 ⋅ 1 −𝑆𝑜𝐶𝐸𝑉,𝑡 −1𝜂𝑐ℎ𝐸𝑉 ∀𝑡 ∈𝑡𝐸𝑉 (10)
+0 ≤𝑃𝑑𝑐ℎ𝐸𝑉,𝑡 ≤𝛼𝑑𝑐ℎ𝐸𝑉,𝑡 ⋅𝑃𝑅𝐸𝑉 ⋅𝑆𝑜𝐶𝐸𝑉,𝑡 −1 ⋅𝜂𝑑𝑐ℎ𝐸𝑉 ∀𝑡 ∈𝑡𝐸𝑉 (11)
+𝛼𝑐ℎ𝐸𝑉,𝑡 +𝛼𝑑𝑐ℎ𝐸𝑉,𝑡 ≤ 1 𝛼𝐸𝑉 ∈ {0, 1} ∀ 𝑡 ∈𝑡𝐸𝑉 (12)
+𝑆𝑜𝐶𝐸𝑉,𝑡 =𝑆𝑜𝐶𝐸𝑉,𝑡 −1 − 1𝑃𝑅𝐸𝑉 (𝑃𝑑𝑐ℎ𝐸𝑉,𝑡𝜂𝑑𝑐ℎ𝐸𝑉 −𝑃𝑐ℎ𝐸𝑉,𝑡 ⋅𝜂𝑐ℎ𝐸𝑉 ) ∀ 𝑡 ∈𝑡𝐸𝑉 (13)
+0 ≤𝑆𝑜𝐶𝐸𝑉,𝑡 ≤ 1 ∀ 𝑡 ∈𝑡𝐸𝑉 (14)
+𝑆𝑜𝐶𝐸𝑉,𝑡 0,𝐸𝑉 =𝑆𝑜𝐶𝐸𝑉,𝑖𝑛𝑡 (15)
+𝑆𝑜𝐶𝐸𝑉,𝑡 𝑓,𝐸𝑉 =𝑆𝑜𝐶𝐸𝑉,𝑓𝑖𝑛𝑎𝑙 (16)
+𝑃𝐸𝑉,𝑡 =𝑃𝑐ℎ𝐸𝑉,𝑡 −𝑃𝑑𝑐ℎ𝐸𝑉,𝑡 ∀𝑡 ∈𝑡𝐸𝑉 (17)
+In above equations, 𝛼𝐸𝑉,𝑡  is a binary variable indicating operational 
+status of the EV at time 𝑡, 𝑆𝑜𝐶𝐸𝑉,𝑡  is the state of charge of the EV at time 
+𝑡 (p.u.), 𝑃𝑐ℎ𝐸𝑉,𝑡  and 𝑃𝑑𝑐ℎ𝐸𝑉,𝑡  are charging and discharging power(kW), 𝑃𝑅𝐸𝑉
+is rated power of the device (kW), 𝐸𝑅𝐸𝑉  is the EV’s rated energy capacity 
+(kWh) and ﬁnally 𝜂𝑐ℎ𝐸𝑉  and 𝜂𝑑𝑐ℎ𝐸𝑉  are charging and discharging eﬃciency 
+values. 𝑃𝐸𝑉,𝑡  shows the power of the battery, which has a positive value 
+in the charging mode and a negative value in the discharging state.
+2.4.  Loads
+The proposed smart home model is assumed to have two types of 
+loads: ﬁxed loads and ﬂexible loads. Fixed loads are the ones which 
+cannot be cut down or shifted while using. This includes TV, cooking 
+oven, smart fridge, and lighting system. The ﬂexible loads, can be pro-
+grammed according to the energy price. They can be shifted from higher 
+price periods to lower price period. This category includes, heat pumps, 
+vacuum cleaner, dish washer, and washing machine. For the ﬁxed loads, 
+the connection time interval is 𝑡𝐿𝑜𝑎𝑑 , and Eq. (18) shows the consumed 
+power, during this interval. In other times, the consumed power of these 
+loads is assumed to be zero.
+𝑃𝑓𝑖𝑥𝑙,𝑡 =𝑃𝑅𝑙 ∀𝑡 ∈𝑡𝐿𝑜𝑎𝑑 (18)
+For ﬂexible loads, constraints related to their operation is expressed 
+via Eqs. (19)–(22). The load shifting include three sets of binary vari-
+ables to indicate status, starting and stopping of the load shifting. While 
+starting the ﬂexible load, it should continue operating until its task is 
+done.
+𝑃𝑓𝑙𝑥𝑙,𝑡 =𝛼𝑓𝑙𝑥𝑙,𝑡 ⋅𝑃𝑓𝑙𝑥𝑙 𝛼𝑙 ∈ {0, 1} ∀ 𝑡 (19)
+𝛼𝑓𝑙𝑥𝑙,𝑡 −𝛼𝑓𝑙𝑥𝑙,𝑡−1 =𝑢𝑙,𝑡 −𝑧𝑙,𝑡 ∀𝑡 (20)
+Energy & Buildings 355 (2026) 116978 
+5 
+
+=== PDF PAGE 6 ===
+F.H. Aghdam et al.
+𝑢𝑙,𝑡 +𝑧𝑙,𝑡 ≤ 1 𝑢𝑙,𝑧𝑙 ∈ {0, 1} ∀ 𝑡 (21)
+𝑡𝑠𝑡+𝑡𝑟𝑒𝑞 −1∑
+𝑡=𝑡𝑠𝑡
+𝛼𝑓𝑙𝑥𝑙,𝑡 ≥𝑡𝑟𝑒𝑞 ⋅𝑢𝑙,𝑡 ∀𝑡 (22)
+In above equations, 𝛼𝑓𝑙𝑥𝑙,𝑡  shows the on/oﬀ status of the ﬂexible load, 
+and 𝑃𝑓𝑙𝑥𝑙  is the rated power of the ﬂexible load (kW). 𝑢𝑙 and 𝑧𝑙 are bi-
+nary ancillary variables indicating the start of operation of the load, 
+and 𝑡𝑟𝑒𝑞 shows the minimum required time of fulling the task of ﬂexible 
+load. Unlike a refrigerator, which is assumed to use electricity without 
+ﬂexibility to keep food and materials fresh and prevent spoilage, a heat 
+pump can operate more ﬂexibly. It adjusts based on human presence 
+and has a wider range of thermal settings. The heat pump system au-
+tomatically adjusts its output power to maintain the most comfortable 
+indoor temperature. Let the actual power of the heat pump be denoted 
+as 𝑃ℎ𝑝,𝑡. The power consumption of the heat pump varies continuously 
+according to constraint (23). The ﬂuctuation of the indoor temperature 
+caused by the heat pump is determined using Eq. (24). 𝜀 is deﬁned in 
+Eq. (25). When the indoor temperature varies between 20°C and 25°C, 
+the smart home is considered to be in a comfortable zone, as modeled 
+in Eq. (26). Here, 𝑇𝑜𝑡 , 𝑇𝑖𝑡 , 𝑇min and 𝑇max, represent the outdoor, indoor, 
+minimum user preference and maximum user preference temperatures, 
+respectively; 𝜂 stands for thermal change eﬃciency, 𝐴 denotes net ther-
+mal conductivity, and 𝜔 represents the system time constant.
+0 ≤𝑃ℎ𝑝,𝑡 ≤𝑃𝑅ℎ𝑝 ∀𝑡 (23)
+𝑇𝑖𝑡+1 =𝜀 ×𝑇𝑖𝑡 + (1 −𝜀) ⋅ (𝑇𝑜𝑡 + 𝜂𝐴 ⋅𝑃ℎ𝑝,𝑡) ∀𝑡 (24)
+𝜀 =𝑒−𝜏∕𝜔 (25)
+𝑇min ≤𝑇𝑖𝑡 ≤𝑇max ∀𝑡 (26)
+3.  Home energy management system and problem formulation
+One of the main features of a smart homes is improved energy eﬃ-
+ciency and better management of available resources. HEMS, often in-
+tegrated with home automation, play a crucial role in regulating energy 
+use within homes. These systems provide consumers with the tools to 
+monitor, control, and optimize their energy consumption. For instance, 
+HEMS can help consumers reduce usage during peak times and take ad-
+vantage of ﬁnancial incentives from utilities. Broad adoption of HEMS 
+by consumers will ultimately result in more eﬃcient consumption pat-
+terns, beneﬁting both the consumers and the utility companies [25].
+This section provides the problem formulation for the real time en-
+ergy management framework for a smart home. The objective function 
+(o.f.) here is to minimize the operational costs which is expressed in 
+terms of Eq. (27). It consists of two terms including the cost of energy 
+transactions with the utility grid 𝐶𝑢𝑡,𝑡, as expressed in Eq. (28), and op-
+erational cost of equipment, 𝐶𝑜𝑝,𝑡, which is assumed to be smart home’s 
+battery and EV’s battery. 𝜆𝑏𝑢𝑦𝑡  and 𝜆𝑠𝑒𝑙𝑙𝑡  are electricity purchase price 
+and feed-in tariﬀ at time 𝑡 (e/kWh), respectively. Batteries operational 
+costs usually depends on the deep discharge, fast charging and sequen-
+tial charging and discharging changes as shown in terms of Eq. (30) 
+[33]. The parameter 𝛿𝑖 indicates the minimum energy stored in the bat-
+tery of home/EV to avoid deep discharge. The power balance equation 
+that should be maintained during the operation is expressed via Eq. (31) 
+including the power transactions with the utility grid, power generation 
+by the local units, power changes of the energy storage and EVs and also 
+power consumption of the smart home equipment.
+𝑚𝑖𝑛 𝑜.𝑓. =
+𝑇𝑓∑
+𝑡=𝑇0
+(𝐶𝑢𝑡,𝑡 +𝐶𝑜𝑝,𝑡) (27)
+𝐶𝑢𝑡𝑡 =𝜆𝑏𝑢𝑦𝑡 .𝑃𝑏𝑢𝑦𝑢𝑡,𝑡 −𝜆𝑠𝑒𝑙𝑙𝑡 .𝑃𝑠𝑒𝑙𝑙𝑢𝑡,𝑡 (28)
+𝐶𝑜𝑝,𝑡 =𝐶𝑏𝑎𝑡,𝑡 +𝐶𝐸𝑉,𝑡 (29)
+𝐶𝑖,𝑡 =𝛼𝑖 ⋅
+[
+(𝑃𝑐ℎ𝑖,𝑡 )2 + (𝑃𝑑𝑐ℎ𝑖,𝑡 )2
+]
++𝛽𝑖 ⋅
+[
+𝑃𝑐ℎ𝑖,𝑡 ⋅𝑃𝑑𝑐ℎ𝑖,𝑡+1 +𝑃𝑑𝑐ℎ𝑖,𝑡 ⋅𝑃𝑐ℎ𝑖,𝑡+1
+]
++𝛾𝑖 ⋅ [min ((𝑆𝑜𝐶𝑖,𝑡 −𝛿𝑖), 0)]2 𝑖 ∈ {𝑏𝑎𝑡,𝐸𝑉 } (30)
+Subject to:
+Eqs. (2)–(26)
+𝑃𝑏𝑢𝑦𝑢𝑡,𝑡 +𝑃𝑃𝑉,𝑡 =𝑃𝑠𝑒𝑙𝑙𝑢𝑡,𝑡 +𝑃𝑏𝑎𝑡,𝑡 +𝑃𝐸𝑉,𝑡
++𝑃𝑓𝑙𝑥𝑙,𝑡 +𝑃𝑓𝑖𝑥𝑙,𝑡 +𝑃ℎ𝑝,𝑡 ∀𝑡 (31)
+The HEMS is implemented at the edge of the network, and it utilizes 
+edge computing principles, where computation and data processing oc-
+cur close to the source of data-within the home-rather than relying solely 
+on centralized cloud servers. This architecture enhances the responsive-
+ness, reliability, and security of the system, as it reduces latency, band-
+width usage, and dependency on external networks. Sensors, and IoT 
+devices within the home collect data and communicate directly with 
+the edge computing unit. Using an edge gateway, router, the data from 
+connected devices, are gathered and the optimization is performed on 
+the edge gateway analyze the data to make real-time decisions about 
+energy management. A user-friendly dashboard or mobile app allows 
+homeowners to monitor energy usage, receive notiﬁcations, and manu-
+ally control devices if needed. This interface provides insights into en-
+ergy consumption patterns, potential savings, and recommendations. By 
+processing data locally, HEMS can make instantaneous decisions, allow-
+ing for quicker responses to changes in energy demand or supply within 
+the home. Also, sensitive energy usage data is processed and stored lo-
+cally, minimizing the risk of data breaches and enhancing privacy. Im-
+plementing HEMS at the edge of the network represents a modern ap-
+proach to managing energy consumption within homes. By leveraging 
+the principles of edge computing, these systems can provide faster, more 
+secure, and more reliable energy management, making them an essential 
+component of future smart homes. This approach not only helps home-
+owners save on energy costs but also contributes to a more resilient and 
+sustainable energy grid [10,28].
+Some parameters associated with the HEMS, are facing uncertainty 
+within the smart home. In order to deal with these, an eﬃcient forecast-
+ing tool is required.
+4.  Digital twin implementation
+A DT is often seen as an interaction between a physical and a vir-
+tual twin, but it actually comprises ﬁve core components as shown in 
+Fig. 2: the physical environment, the data environment, the analytical 
+environment, the virtual environment, and the communication environ-
+ment. The physical twin is measured through the physical environment, 
+which is the physical home in our DT-HEMS, while raw data is stored 
+in the data environment, i.e. edge of network in our platform. The ana-
+lytical environment provides simulations, services, and automation. In 
+DT-HEMS, the forecasting and decision making is done in the analytical 
+environment. Users typically perceive the DT as a model of the physical 
+twin in the virtual environment, often unaware of the other components 
+[17,26]. Key characteristics of DTs include [26]:
+∙ A comprehensive source of data, including digital models and real-
+time data, creating a digital reﬂection of a physical model.
+Energy & Buildings 355 (2026) 116978 
+6 
+
+=== PDF PAGE 7 ===
+F.H. Aghdam et al.
+Fig. 2. Main components of DT.
+∙ The ability to simulate real and potential physical processes 
+throughout an asset’s life cycle.
+∙ The capability to integrate multiple DTs of physical assets, subsys-
+tems, and processes.
+∙ Inclusion of all data aspects about the physical replica, not limited 
+to geometric or technical information but also dynamic information and 
+potential scenarios.
+∙ Tracking and monitoring the physical replica based on sensor data, 
+simulating conditions, predicting future states, and aiding in decision-
+making.
+The concept of DTs has evolved with the advent of real-time connec-
+tivity to online sensors, leading to the emergence of DTs for built en-
+vironments. Considering the diverse systems, assets, and processes that 
+can have a virtual counterpart, it is logical to deﬁne, design, and imple-
+ment a DT based on the speciﬁc system and the services it will provide. 
+By outlining these services, appropriate requirements and speciﬁcations 
+are established, ultimately enabling the development of the DT.
+Based on this approach and the general concept of a DT and its com-
+ponents, a DT-HEMS consists of the following: i) physical twin: The 
+smart home with its existing infrastructure and assets, including local 
+generation, energy storage systems, EVs, grid connection, smart appli-
+ances, sensors, and more. ii) digital twin: The virtual counterpart of the 
+physical system, continuously adapting based on real-time and histori-
+cal measurements through artiﬁcial intelligence or ML algorithms. iii) 
+communication infrastructure: standardized connections and protocols 
+(such as IEC 60870-5, IEC 61850, and IEEE C37.118-2) facilitate inter-
+action and mapping between the twins. Real-time communication with 
+minimal latency is crucial due to the rapid dynamics of power systems. 
+Technologies like cellular network and future 6G, will form the back-
+bone of any DT-HEMS. The communication infrastructure is a key com-
+ponent that requires thorough analysis and evaluation, which is beyond 
+the scope of this document. However, in order to reduce the latency and 
+enhance the privacy, it is assumed that the communications are done via 
+a local private 6G platform.
+The analytical environment in the DT-HEMS, is continuously simu-
+lating the energy behavior of the home by predicting the energy demand 
+of household appliances, including EVs, smart devices, and refrigerators, 
+alongside the generation from rooftop PV panels and utility grid, and 
+performs the decision making for the smart home, in order to reduce 
+the operational costs.
+ML techniques have gained widespread adoption in various fore-
+casting applications, with Long Short-Term Memory (LSTM) networks 
+emerging as a particularly eﬀective tool for time series prediction. LSTM, 
+a specialized form of Recurrent Neural Network (RNN), was introduced 
+by Hochreiter and Schmidhuber in 1997 [34]. Unlike conventional 
+RNNs, which struggle to retain long-term dependencies due to the van-
+ishing gradient problem, LSTM incorporates memory cells that enable it 
+to capture and utilize long-term temporal correlations eﬃciently. These 
+characteristics make LSTM highly suitable for applications such as load 
+forecasting in residential energy systems and the evaluation of smart 
+grid parameters [29,35].
+The fundamental distinction between LSTM and traditional RNNs 
+lies in its ability to selectively store, update, and retrieve information 
+over extended sequences, preventing the loss of critical past informa-
+tion. Standard RNNs suﬀer from exponentially diminishing or growing 
+gradients during backpropagation, which limits their eﬀectiveness in 
+learning long-term dependencies. LSTM mitigates this issue through a 
+structured memory mechanism consisting of three specialized gates: the 
+input gate, forget gate, and output gate.
+• Input Gate: Regulates the amount of new information stored in the 
+memory cell by determining the relevance of incoming data.
+• Forget Gate: Controls the retention of past information by selec-
+tively discarding less relevant historical data, allowing the network 
+to focus on signiﬁcant long-term dependencies.
+Energy & Buildings 355 (2026) 116978 
+7 
+
+=== PDF PAGE 8 ===
+F.H. Aghdam et al.
+• Output Gate: Determines the portion of the memory cell’s current 
+state to be utilized as output and passed to the next time step.
+These gates collectively enable LSTM to process complex tempo-
+ral patterns by dynamically adjusting its memory retention capabili-
+ties. Unlike a basic RNN cell, which merely propagates the hidden state 
+across time steps, an LSTM cell maintains and reﬁnes stored information 
+through its gating mechanisms. This structured approach signiﬁcantly 
+enhances forecasting accuracy in scenarios requiring real-time decision-
+making, such as DT-HEMS. The LSTM-based DT models play a crucial 
+role in forecasting energy demand patterns for various household appli-
+ances, including EVs, refrigerators, and other smart devices, as well as 
+renewable energy generation. By integrating these predictive insights, 
+the DT-HEMS can optimize energy scheduling, reduce operational costs, 
+and enhance grid interaction.
+By leveraging the DT for proactive decision-making, this approach 
+minimizes operational costs, ensures user comfort, and maximizes re-
+newable energy utilization, contributing to the development of smarter, 
+more resilient, and sustainable energy systems.
+A comprehensive review of the LSTM structure and its recent ad-
+vancements is provided by Kong et al. [29]. To introduce the core 
+concepts of LSTM, we follow a similar notation as presented in [29]. 
+Let {𝑥1,𝑥 2, …,𝑥𝑇 } represent an input sequence, where 𝑥𝑡 ∈𝑅𝑘 is a 𝑘-
+dimensional vector at time step 𝑡. To capture temporal dependencies, 
+the LSTM model maintains an internal memory cell state throughout 
+the sequence, which plays a crucial role in information retention and 
+selective forgetting.
+The memory cell state 𝑠𝑡−1 interacts with the hidden state from the 
+previous time step ℎ𝑡−1 and the current input 𝑥𝑡 to decide which elements 
+of the state should be updated, retained, or discarded. LSTM employs a 
+gating mechanism consisting of an input gate 𝑖𝑡, a forget gate 𝑓𝑡, an 
+output gate 𝑜𝑡, and an internal candidate cell state 𝑔𝑡. The mathematical 
+formulations governing the LSTM cell dynamics are given as follows:
+𝑓𝑡 =𝜎(𝑊𝑓𝑥𝑡 +𝑈𝑓ℎ𝑡−1 +𝑏𝑓 ) (32)
+𝑖𝑡 =𝜎(𝑊𝑖𝑥𝑡 +𝑈𝑖ℎ𝑡−1 +𝑏𝑖) (33)
+𝑔𝑡 = tanh(𝑊𝑔𝑥𝑡 +𝑈𝑔ℎ𝑡−1 +𝑏𝑔) (34)
+𝑜𝑡 =𝜎(𝑊𝑜𝑥𝑡 +𝑈𝑜ℎ𝑡−1 +𝑏𝑜) (35)
+𝑠𝑡 =𝑔𝑡⊙𝑖𝑡 +𝑠𝑡−1⊙𝑓𝑡 (36)
+ℎ𝑡 = tanh(𝑠𝑡)⊙𝑜𝑡 (37)
+where:
+• 𝑊𝑓,𝑊𝑖,𝑊𝑔,𝑊𝑜 are weight matrices for the respective input transfor-
+mations.
+• 𝑈𝑓,𝑈𝑖,𝑈𝑔,𝑈𝑜 are weight matrices associated with hidden state trans-
+formations.
+• 𝑏𝑓,𝑏𝑖,𝑏𝑔,𝑏𝑜 are bias terms for each gate.
+• 𝜎(⋅) represents the sigmoid activation function, ensuring values be-
+tween 0 and 1.
+• tanh(⋅) denotes the hyperbolic tangent activation function, used for 
+regulating state updates.
+• ⊙ represents element-wise multiplication.
+At each time step, the forget gate 𝑓𝑡 determines which parts of the 
+previous state 𝑠𝑡−1 should be discarded. The input gate 𝑖𝑡 and candidate 
+cell state 𝑔𝑡 collaboratively decide how much new information should 
+be added to the memory cell. The memory cell state 𝑠𝑡 is then updated 
+by combining retained past information and newly processed inputs. 
+Finally, the output gate 𝑜𝑡 regulates which parts of the updated cell state 
+should be exposed as the hidden state ℎ𝑡, which is passed to the next time 
+step. The inner design of the LSTM cell is shown in Fig. 3.
+In sequential prediction tasks, autoregressive LSTM models are com-
+monly employed to forecast multiple future time steps by recursively 
+feeding each predicted value back into the model as input for the next 
+prediction. While eﬀective for short-term horizons, this approach suf-
+fers from the well-known issue of error accumulation-small prediction 
+inaccuracies at each step can propagate and amplify across the fore-
+casting window, resulting in a signiﬁcant divergence from actual val-
+ues over time. To address this challenge, the integration of a DT oﬀers 
+a compelling advantage. A DT serves as a dynamic, real-time replica 
+of the physical system, enabling continuous synchronization between 
+the virtual and real environments. By incorporating real-time measure-
+ments and continuously updating the LSTM model parameters or inputs, 
+the DT can correct forecast deviations and signiﬁcantly reduce cumula-
+tive errors. This closed-loop feedback mechanism enhances the model’s 
+robustness and reliability, particularly in scenarios requiring accurate 
+multi-step forecasting.
+In this study, an LSTM-based forecasting model is employed for pre-
+dicting PV generation, household occupancy, ﬁxed-load demand, and 
+EV arrival time and state-of-charge. The choice of LSTM is motivated by 
+its well-established ability to capture nonlinear temporal dependencies, 
+long-range correlations, and sequential patterns in multivariate time-
+series data [30]. These characteristics are essential for the short-term 
+forecasting tasks required by the HEMS, where user behavior, weather 
+conditions, and appliance usage exhibit strong temporal patterns and 
+nonlinear dynamics. Although alternative ML models such as Support 
+Vector Regression (SVR), Random Forest (RF), or feedforward neural 
+networks are commonly used for load and generation forecasting, they 
+generally lack internal temporal memory and are less eﬀective at model-
+ing complex sequential dependencies. Since the goal of this manuscript 
+is not to compare forecasting methods but to integrate a reliable predic-
+tor into the DT-HEMS framework, LSTM was selected as a suitable and 
+widely validated approach. This justiﬁcation has now been clariﬁed in 
+the text.
+5.  Simulations and discussions
+To evaluate the performance of the proposed DT-HEMS, a compre-
+hensive simulation environment was developed. The simulated system 
+represents a smart home equipped with various energy resources, in-
+cluding a PV system, a battery energy storage system, and an EV charg-
+ing system and utility connection. The home also includes a set of smart 
+appliances such as a refrigerator, electric oven and stove, air condition-
+ing unit (A/C), dishwasher, washing machine, motion sensors, and light-
+ing, which dynamically contribute to the overall energy demand.
+The DT-HEMS framework integrates real-time forecasting models 
+to predict energy consumption, renewable energy generation, EV ar-
+rival/departure times, and user comfort-based A/C demand. These pre-
+dictions are then utilized to optimize scheduling decisions and minimize 
+operational costs while ensuring user comfort.
+The energy demand dataset used for training the predictive models 
+was collected from historical residential load proﬁles, while renewable 
+energy generation patterns were simulated based on real-world weather 
+data. The decision-making process operates under 1-min, and 15-min 
+scheduling intervals, leveraging DT-driven optimization to enhance sys-
+tem eﬃciency beyond human capability. The electricity price is shown 
+in Fig. 4 which is obtained from Nordpool data [36]. As the electricity 
+price is known for next 24-h, there is no need to perform a forecast-
+ing for that. Besides, the simulation parameters of the smart home is 
+expressed in Table 2.
+5.1.  15-minute time resolution
+The proposed DT-HEMS is evaluated under a 15-min time resolution, 
+enabling ﬁne-grained decision-making for optimal energy scheduling. 
+This resolution is chosen to capture the dynamic behavior of renewable 
+energy sources, EV charging/discharging, and smart appliance usage, 
+ensuring eﬀective real-time management of home energy resources. Ad-
+ditionally, it accounts for the variable energy consumption of smart ap-
+pliances, including ﬂexible loads (e.g., dishwasher, washing machine, 
+Energy & Buildings 355 (2026) 116978 
+8 
+
+=== PDF PAGE 9 ===
+F.H. Aghdam et al.
+Fig. 3. LSTM inner cell design.
+Fig. 4. Day-ahead electricity price [36].
+heat pump) and inﬂexible loads (e.g., refrigerator, lighting). The 15-
+min interval strikes a balance between computational eﬃciency and the 
+need for precise, real-time energy management, making it suitable for 
+practical implementation in smart homes. Figs. 5 to 6 illustrates the 
+predictions performed via DT of the home and also conventional LSTM 
+prediction model for PV generation, EV arrival time, inﬂexible demand 
+of the house and temperature.
+The DT-HEMS leverages real-time forecasting models, primarily 
+based on LSTM networks, to predict critical parameters such as PV gen-
+eration, EV arrival and departure times, and energy demand of smart ap-
+pliances. These predictions are integrated into the optimization frame-
+work. The DT enhances forecasting accuracy and decision making eﬃ-
+ciency by incorporating real-time data updates and historical load pro-
+ﬁles, mitigating error accumulation issues commonly associated with 
+autoregressive LSTM models.
+Compared to a conventional HEMS without DT integration, the pro-
+posed system achieves superior performance due to its ability to proac-
+tively adapt to uncertainties in renewable generation and load demand. 
+The edge-computing architecture further enhances responsiveness by 
+processing data locally, reducing latency and improving data privacy. 
+This closed-loop feedback mechanism ensures robust predictions, as il-
+lustrated in Figs. 5 to 7, which compares the DT-based PV generation 
+predictions against hostoric data, oﬄine LSTM models. The DT predic-
+tion, outperforms the non-DT forecasting with mean square error of 
+0.012 to 0.024 in PV prediction, 0.017 to 0.039 in EV prediction, and 
+0.022 to 0.029 in nonﬂexible demand prediction. Fig. 6 illustrates the 
+Energy & Buildings 355 (2026) 116978 
+9 
+
+=== PDF PAGE 10 ===
+F.H. Aghdam et al.
+Table 2 
+Parameters for the smart home and LSTM model.
+ Parameter  Unit  Value
+ PV and Grid Transactions
+ PV capacity  kW  4
+ Grid Power Capacity  kW  10
+ Flexible Loads
+ Minimum runtime for dishwasher  minutes  60
+ Minimum runtime for washing machine  minutes  60
+ Minimum runtime for cooking oven  minutes  60
+ Maximum runtime for dishwasher  minutes  120
+ Maximum runtime for washing machine  minutes  120
+ Maximum runtime for cooking oven  minutes  120
+ Electric Vehicle (EV)
+ EV battery capacity  kWh  12
+ Maximum EV charging power  kW  3
+ EV battery round-trip eﬃciency  –  0.95
+ Battery Energy Storage System (ESS)
+ Battery capacity  kWh  10
+ Battery max charge/discharge power  kW  5
+ Battery round-trip eﬃciency  –  0.95
+ Initial battery state of charge  kWh  5
+ Minimum state of charge  kWh  1
+ HVAC and Thermal Dynamics
+ Coeﬃcient of performance for heat pump  –  Time-varying depending on outside temperature
+ Overall heat transfer coeﬃcient  kW/°C  0.25
+ Thermal capacitance of house  kWh/°C  2
+ Minimum indoor temperature  °C  19
+ Maximum indoor temperature  °C  23
+ LSTM Model for Prediction
+ Sequence length for input data  time steps  24
+ Number of units in LSTM layer  –  64
+ Number of LSTM layers  –  2
+ Learning rate for training  –  0.001
+ Number of training epochs  –  100
+ Batch size for training  –  32
+ Dropout rate for regularization  –  0.2
+predicted charging and discharging schedules of the EV and according 
+to this the arrival time and remaining 𝑆𝑜𝐶 of the EV can be estimated.
+The DT-HEMS, results in the objective function with the value of 
+3.56 e which shows a drop of about 10% decrement compared to con-
+ventional HEMS that results in 3.93 e for the next 24 h. The simu-
+lation results, depicted in Fig. 8, demonstrate the eﬀectiveness of the 
+DT-HEMS under a 15-min resolution. The system optimally schedules 
+energy transactions with the utility grid, PV generation, and ESS/EV 
+charging-discharging cycles to minimize operational costs while adher-
+ing to user-deﬁned constraints, such as maintaining indoor temperatures 
+between 20°C and 23°C for thermal comfort. The electricity price data, 
+sourced from Nordpool (shown in Fig. 4), is utilized to shift ﬂexible 
+loads to lower-price periods, reducing energy costs. For instance, the 
+operation of the dishwasher and washing machine is deferred to oﬀ-
+peak hours, as determined by the dynamic pricing signals.
+These ﬁndings validate the eﬃcacy of the DT-HEMS in real-time en-
+ergy management and highlight the importance of ﬁne-grained schedul-
+ing for maximizing renewable energy utilization. The 15-min resolu-
+tion provides a practical framework for smart homes, balancing com-
+putational complexity with the need for accurate and timely decision-
+making.
+5.2.  1-minute time resolution
+The proposed DT-HEMS was further evaluated using a 1-min time 
+resolution to assess its performance in capturing rapid ﬂuctuations in 
+energy dynamics. This ﬁner granularity enables the system to respond 
+to minute-by-minute variations in renewable energy generation, and 
+smart appliance energy consumption with exceptional precision. The 
+1-min resolution is particularly advantageous for real-time energy man-
+agement in smart homes, where swift and accurate decision-making is 
+critical for optimizing energy usage under dynamic pricing and ﬂuctu-
+ating environmental conditions.
+The DT’s real-time data integration and continuous model updates 
+ensure high forecasting accuracy, as demonstrated in Figs. 9–11 for PV 
+generation, EV schedules and home appliances demand predictions. The 
+DT enabled prediction, outperforms the non-DT forecasting with mean 
+square error of 0.006 to 0.018 in PV prediction, 0.003 to 0.015 in EV 
+prediction, and 0.005 to 0.015 in nonﬂexible demand prediction. Com-
+paring the results with the Section 5.1, the mean square error in 1 min 
+resolution even in the case of without DT, is better of the 15 min reso-
+lution with the DT. However, it requires more computational hardware.
+The simulation results, illustrated in Fig. 12, highlight the perfor-
+mance of the DT-HEMS under a 1-min resolution. The objective func-
+tion in this case becomes 3.31 e, which shows about 7% decrease in the 
+objective function value of the DT-HEMS under the 15-min resolution 
+discussed in Section 5.1. The ﬁner time granularity allows the system to 
+exploit short-term variations in PV generation, and load demand with 
+greater eﬀectiveness. This improvement stems from the system’s ability 
+to leverage short-term ﬂuctuations in energy supply and demand, which 
+are often smoothed out in coarser time resolutions. Additionally, the 1-
+min resolution enhances user comfort by maintaining tighter control 
+over thermal conditions, as the heat pump adjusts its output more fre-
+quently to keep indoor temperatures within the desired range. Besides, 
+Energy & Buildings 355 (2026) 116978 
+10 
+
+=== PDF PAGE 11 ===
+F.H. Aghdam et al.
+Fig. 5. PV generation prediction in 15-min time resolution.
+Fig. 6. EV arrival time prediction in 15-min time resolution.
+the objective in conventional HEMS becomes, 3.63 e which is almost 
+10% more than of that in the DT-HEMS.
+The 1-min resolution is particularly well-suited for automated HEMS 
+implementations aided by AI and genAI agents. These advanced tools 
+enable faster and more accurate decision-making by rapidly processing 
+large volumes of real-time data and generating optimized schedules. The 
+high temporal resolution aligns seamlessly with the capabilities of AI-
+driven forecasting models, such as the LSTM-based DT, and genAI tools 
+that can dynamically adapt to complex and rapidly changing energy 
+scenarios. This synergy allows the DT-HEMS to make precise, proactive 
+decisions, reducing forecasting errors and enhancing responsiveness to 
+transient events, such as sudden changes in PV output or EV availabil-
+ity. The integration of AI and genAI thus ampliﬁes the beneﬁts of the
+1-min resolution, making it an ideal choice for fully automated, intelli-
+gent energy management systems.
+However, the enhanced performance and AI-driven automation 
+come at the cost of increased computational requirements. The 1-min 
+resolution demands signiﬁcantly higher processing power and memory 
+resources due to the increased frequency of data collection, forecast-
+ing, and optimization cycles. Compared to the 15-min resolution, the 
+1-min resolution requires approximately 10–15 times more computa-
+tional operations per scheduling cycle, which may necessitate advanced 
+hardware or optimized algorithms for practical deployment. The edge-
+computing architecture mitigates some of these challenges by processing 
+data locally, but the computational burden remains a limiting factor for 
+Energy & Buildings 355 (2026) 116978 
+11 
+
+=== PDF PAGE 12 ===
+F.H. Aghdam et al.
+Fig. 7. Kitchen appliances prediction in 15-min time resolution.
+Fig. 8. HEMS results with 15-min time resolution.
+resource-constrained environments.
+These results highlight the trade-oﬀ between performance and com-
+putational complexity in DT-HEMS implementations. The 1-min resolu-
+tion, bolstered by AI and genAI tools, oﬀers superior energy manage-
+ment capabilities, making it ideal for automated smart home systems 
+where precision and responsiveness are paramount. However, its higher 
+resource demands suggest that the 15-min resolution may be more prac-
+tical for applications prioritizing computational eﬃciency. Future work 
+will explore hybrid approaches that dynamically adjust time resolutions 
+based on system requirements and available computational resources, 
+while further leveraging AI and genAI advancements to optimize per-
+formance and scalability.
+6.  Conclusion and future work
+This study presented a digital twin-assisted home energy manage-
+ment system designed to optimize real-time energy usage in smart 
+homes equipped with rooftop PV panels, battery energy storage sys-
+tems, electric vehicles, and a mix of ﬂexible and inﬂexible smart appli-
+ances. By integrating a digital twin, the proposed system eﬀectively ad-
+dresses the challenges posed by the intermittent nature of renewable en-
+ergy sources and dynamic energy pricing. The proposed DT-HEMS lever-
+ages real-time data processing and edge-computing principles to enable 
+precise energy scheduling, cost minimization, and enhanced user com-
+Energy & Buildings 355 (2026) 116978 
+12 
+
+=== PDF PAGE 13 ===
+F.H. Aghdam et al.
+Fig. 9. PV generation prediction in 1-min time resolution.
+Fig. 10. EV arrival time prediction in 1-min time resolution.
+fort. Simulations conducted under 15-min and 1-min time resolutions 
+demonstrated the system’s robust performance. The 1-min resolution 
+further improved performance, and tighter control, owing to its ability 
+to capture rapid ﬂuctuations in energy supply and demand. The integra-
+tion of LSTM models within the DT framework signiﬁcantly enhanced 
+forecasting accuracy, mitigating error accumulation and enabling proac-
+tive decision-making. However, the enhanced performance of the 1-min 
+resolution comes with increased computational demands, requiring ap-
+proximately 10–15 times more processing resources than the 15-min 
+resolution. The edge-computing architecture mitigates latency and pri-
+vacy concerns, but the computational burden highlights the need for a 
+balanced approach in resource-constrained environments. Overall, the 
+DT-HEMS represents a signiﬁcant advancement in smart home energy 
+management, contributing to cost savings, user comfort, and the broader 
+adoption of renewable energy in sustainable energy systems.
+The practical applicability of this research lies in its ability to serve 
+as an intelligent control layer for future smart homes and buildings, 
+where decentralized and automated energy management is essential for 
+balancing demand, reducing costs, and supporting grid ﬂexibility. The 
+proposed DT-HEMS can be integrated with existing building automa-
+tion and smart grid platforms to facilitate real-time coordination with 
+utilities and local energy communities, thereby contributing to the ongo-
+ing digitalization and decarbonization of the energy sector. This adapt-
+ability makes the framework relevant not only for residential users but 
+also for energy service providers seeking scalable and resilient energy 
+management solutions. Beyond the technical performance, the broader 
+applicability of the proposed DT-HEMS must also be considered across 
+diﬀerent contexts. The framework is suitable for both urban and rural 
+environments, as well as individual houses and multi-apartment build-
+ings, provided that minimal sensing and communication infrastructure 
+Energy & Buildings 355 (2026) 116978 
+13 
+
+=== PDF PAGE 14 ===
+F.H. Aghdam et al.
+Fig. 11. Kitchen appliances prediction in 1-min time resolution.
+Fig. 12. HEMS results with 1 min resolution.
+is available. Regional diﬀerences-such as low-solar conditions in north-
+ern Europe or higher cooling loads in southern regions-can be accom-
+modated through the ﬂexible modeling layer of the digital twin, which 
+can be adapted to local climate, grid conditions, and consumption pat-
+terns. Although the system strongly relies on digital infrastructure, oper-
+ational resilience remains essential. During electricity outages, the pres-
+ence of a battery storage system and islanding-capable inverters allows 
+the home to continue functioning in a limited mode, supplying criti-
+cal loads. Moreover, the system can fall back to simpliﬁed rule-based 
+control when communication, software, or hardware disruptions occur, 
+preventing a complete loss of functionality. This hybrid digital-non-
+digital resilience ensures continuity of essential household operations 
+and addresses concerns about over-dependence on digitalization. Con-
+sequently, the proposed DT-HEMS is not only technologically advanced 
+but also adaptable and robust enough to be applied in a wide range of 
+real-world residential and building energy management scenarios.
+While the results conﬁrm the eﬀectiveness of the DT-HEMS, certain 
+limitations must be acknowledged. The computational demand rises no-
+tably with ﬁner temporal resolutions, which may necessitate more ad-
+vanced edge hardware or algorithmic optimizations for real-time im-
+plementation. Furthermore, the system’s performance is closely tied to 
+the accuracy and reliability of the predictive models, any deviation or 
+data scarcity and data errors can reduce scheduling eﬃciency. More-
+over, this study considered a single smart home setup; scaling the pro-
+posed framework to multi-home or community energy systems may in-
+troduce additional challenges such as communication overhead, syn-
+Energy & Buildings 355 (2026) 116978 
+14 
+
+=== PDF PAGE 15 ===
+F.H. Aghdam et al.
+chronization, and coordination complexity. Future research will there-
+fore explore hybrid time-resolution strategies that dynamically adjust 
+computational granularity based on operating conditions, balancing per-
+formance and eﬃciency. In addition, the integration of advanced AI and 
+generative AI tools will be investigated to enhance forecasting accuracy, 
+data augmentation, and adaptive control capabilities. Transformer-
+based and reinforcement learning approaches will be further explored 
+to improve real-time decision-making under uncertainty. Extending the 
+DT-HEMS to neighborhood- or community-level implementations, with
+peer-to-peer energy exchange and coordinated optimization, also rep-
+resents an important direction for future work. Overall, the pro-
+posed DT-HEMS framework demonstrates signiﬁcant potential to enable 
+smarter, more resilient, and cost-eﬀective energy management for next-
+generation sustainable homes and communities.
+Data availability
+The authors do not have permission to share data.
+CRediT authorship contribution statement
+Farid Hamzeh Aghdam: Writing – review & editing, Writing – orig-
+inal draft, Visualization, Validation, Software, Methodology, Investiga-
+tion, Formal analysis, Conceptualization; Mehdi Rasti: Writing – review 
+& editing, Validation, Supervision, Investigation, Formal analysis, Con-
+ceptualization; Eva Pongracz: Writing – review & editing, Supervision, 
+Funding acquisition; Amjad Anvari-Moghaddam: Writing – review & 
+editing, Investigation.
+Declaration of interests
+The authors declare that they have no known competing ﬁnancial 
+interests or personal relationships that could have appeared to inﬂuence 
+the work reported in this paper. 
+Acknowledgment
+This research is supported by the research grant of the University of 
+Oulu & The Research Council of Finland Proﬁ6 336449. 
+References
+[1] G. Aydin, The application of trend analysis for coal demand modeling, Energy 
+Sources Part B Econ. Plann. Policy 10 (2) (2015) 183–191.
+[2] N.L. Panwar, S.C. Kaushik, S. Kothari, Role of renewable energy sources in en-
+vironmental protection: a review, Renew. Sustainable Energy Rev. 15 (3) (2011) 
+1513–1524.
+[3] W. Choi, J. Kim, S. Lee, E. Park, Smart home and internet of things: a bibliometric 
+study, J. Clean. Prod. 301 (2021) 126908.
+[4] C. Lamnatou, D. Chemisana, C. Cristofari, Smart grids and smart technologies in 
+relation to photovoltaics, storage systems, buildings and the environment, Renew. 
+Energy 185 (2022) 1376–1391.
+[5] U. Zafar, S. Bayhan, A. Sanﬁlippo, Home energy management system con-
+cepts, conﬁgurations, and technologies for the smart grid, IEEE Access 8 (2020) 
+119271–119286.
+[6] M. Grieves, Completing the cycle: using PLM information in the sales and service 
+functions [slides], in: SME Management Forum, 2002.
+[7] J.-H. Syu, J.C.-W. Lin, G. Srivastava, K. Yu, A comprehensive survey on artiﬁcial 
+intelligence empowered edge computing on consumer electronics, IEEE Trans. Con-
+sum. Electron. 69 (4) (2023) 1023–1034.
+[8] M. Jafari, A. Kavousi-Fard, T. Chen, M. Karimi, A review on digital twin technology 
+in smart grid, transportation system and smart city: challenges and future, IEEE 
+Access 11 (2023) 17471–17484.
+[9] Z. Huang, F. Wang, Y. Lu, X. Chen, Q. Wu, Optimization model for home energy 
+management system of rural dwellings, Energy 283 (2023) 129039.
+[10] C. Xia, W. Li, X. Chang, F.C. Delicato, T. Yang, A.Y. Zomaya, Edge-based energy man-
+agement for smart homes, in: 2018 IEEE 16th Intl Conf on Dependable, Autonomic 
+and Secure Computing, 16th Intl Conf on Pervasive Intelligence and Computing, 4th 
+Intl Conf on Big Data Intelligence and Computing and Cyber Science and Technology 
+Congress (DASC/PiCom/DataCom/CyberSciTech), IEEE, 2018, pp. 849–856.
+[11] F.H. Aghdam, A. Zavodovski, M. Rasti, E. Pongracz, Navigating the digital landscape: 
+a review of digitalization in smart grids with renewable energy sources, J. Renew. 
+Sustainable Energy 17 (5) (2025) 052706.
+[12] J. Aldahmashi, X. Ma, Real-time energy management in smart homes through deep 
+reinforcement learning, IEEE Access 12 (2024) 43155–43172.
+[13] L. Yu, W. Xie, D. Xie, Y. Zou, D. Zhang, Z. Sun, L. Zhang, Y. Zhang, T. Jiang, Deep 
+reinforcement learning for smart home energy management, IEEE Internet Things 
+J. 7 (4) (2019) 2751–2762.
+[14] N. Kodama, T. Harada, K. Miyazaki, Home energy management algorithm based 
+on deep reinforcement learning using multistep prediction, IEEE Access 9 (2021) 
+153108–153115.
+[15] H. Mirshekali, M.R. Shadi, F.G. Ladani, H.R. Shaker, A review of large language mod-
+els for energy systems: applications, challenges, and future prospects, IEEE Access 
+13 (2025) pp. 163162–163188 https://doi.org/10.1109/ACCESS.2025.3610994.
+[16] M. Grieves, Completing the cycle: using plm information in the sales and service 
+functions [slides], in: SME Management Forum, SME Forum South Orange, NJ, USA, 
+2002.
+[17] F. Tao, M. Zhang, Digital twin shop-ﬂoor: a new shop-ﬂoor paradigm towards smart 
+manufacturing, IEEE Access 5 (2017) 20418–20427.
+[18] Y. He, J. Deng, H. Li, Short-term power load forecasting with deep belief network 
+and copula models, in: 2017 9th International Conference on Intelligent Human-
+Machine Systems and Cybernetics (IHMSC),  1, IEEE, 2017, pp. 191–194.
+[19] G.M.U. Din, A.K. Marnerides, Short term power load forecasting using deep neural 
+networks, in: 2017 International Conference on Computing, Networking and Com-
+munications (ICNC), IEEE, 2017, pp. 594–598.
+[20] C. Tong, J. Li, C. Lang, F. Kong, J. Niu, J.J. Rodrigues, An eﬃcient deep model 
+for day-ahead electricity load forecasting with stacked denoising auto-encoders, J. 
+Parallel Distrib. Comput. 117 (2018) 267–273.
+[21] M. Khodayar, J. Wang, M. Manthouri, Interval deep generative neural net-
+work for wind speed forecasting, IEEE Trans. Smart Grid 10 (4) (2018) 
+3974–3989.
+[22] A. Francisco, N. Mohammadi, J.E. Taylor, Smart city digital twin–enabled energy 
+management: toward real-time urban building energy benchmarking, J. Manage. 
+Eng. 36 (2) (2020) 04019045.
+[23] M.U. Saleem, M.R. Usman, M.A. Yaqub, A. Liotta, A. Asim, Smarter grid in the 5G 
+era: integrating the internet of things with a cyber-physical system, IEEE Access 12 
+(2024) 34002–34018.
+[24] S. Carvalhosa, A. Lucas, C. Neumann, A. Türk, Review of digital transformation in 
+the energy sector: assessing maturity and adoption levels of digital services and 
+products via fuzzy logic, IEEE Access 12 (2024) 60513–60531.
+[25] S. Aman, Y. Simmhan, V.K. Prasanna, Energy management systems: state of the art 
+and emerging trends, IEEE Commun. Mag. 51 (1) (2013) 114–119.
+[26] A. Kharbouch, F.H. Aghdam, N. Gholipoor, M. Rasti, Digital-twin-6G empow-
+ered future smart grid applications, IEEE Wireless Commun. 32 (3) (2025) 
+90–97.
+[27] Y. Liu, C. Yang, L. Jiang, S. Xie, Y. Zhang, Intelligent edge computing for IoT-based 
+energy management in smart cities, IEEE Netw. 33 (2) (2019) 111–117.
+[28] A.C. Baktir, A. Ozgovde, C. Ersoy, How can edge computing beneﬁt from software-
+deﬁned networking: a survey, use cases, and future directions, IEEE Commun. Surv. 
+Tutorials 19 (4) (2017) 2359–2391.
+[29] W. Kong, Z.Y. Dong, Y. Jia, D.J. Hill, Y. Xu, Y. Zhang, Short-term residential load 
+forecasting based on LSTM recurrent neural network, IEEE Trans. Smart Grid 10 (1) 
+(2017) 841–851.
+[30] X. Luo, D. Zhang, X. Zhu, Deep learning based forecasting of photovoltaic power 
+generation by incorporating domain knowledge, Energy 225 (2021) 120240.
+[31] F.H. Aghdam, S. Ghaemi, N.T. Kalantari, Evaluation of loss minimization on the 
+energy management of multi-microgrid based smart distribution network in the 
+presence of emission constraints and clean productions, J. Clean. Prod. 196 (2018) 
+185–201.
+[32] S.S. Reddy, P.R. Bijwe, A.R. Abhyankar, Real-time economic dispatch considering re-
+newable power generation variability and uncertainty over scheduling period, IEEE 
+Syst. J. 9 (4) (2014) 1440–1451.
+[33] F.H. Aghdam, N.T. Kalantari, B. Mohammadi-Ivatloo, A chance-constrained energy 
+management in multi-microgrid systems considering degradation cost of energy stor-
+age elements, J. Energy Storage 29 (2020) 101416.
+[34] S. Hochreiter, J. Schmidhuber, Long short-term memory, Neural Comput. 9 (8) 
+(1997) 1735–1780.
+[35] F.H. Aghdam, A. Zavodovski, A. Adetunji, M. Rasti, E. Pongracz, M.S. Javadi, J.P.S. 
+Catalão, Co-optimization of demand response aggregators and distribution system 
+operator for resilient operation using machine learning based wind generation fore-
+casting: a bilevel approach, Int. J. Electr. Power Energy Syst. 164 (2025) 110399.
+[36] Nord pool day-ahead market data, (https://data.nordpoolgroup.com/auction/
+day-ahead/prices). Accessed: January 2024.
+Energy & Buildings 355 (2026) 116978 
+15 

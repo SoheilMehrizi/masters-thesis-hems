@@ -1,0 +1,393 @@
+{
+  "id": "article-10",
+  "title": {
+    "en": "Digital twin assisted real-time energy management system for smart homes",
+    "fa": "سامانه مدیریت بلادرنگ انرژی خانه با کمک دوقلوی دیجیتال"
+  },
+  "short_title": "Aghdam / DT-HEMS",
+  "sections": [
+    {
+      "id": "questions",
+      "title": {
+        "en": "Problem, objective and hypotheses",
+        "fa": "مسئله، هدف و فرضیه‌ها"
+      },
+      "paragraphs": [
+        {
+          "en": "Aghdam, Rasti, Pongracz and Anvari-Moghaddam propose an edge-based DT-HEMS to integrate forecasting and scheduling under uncertain PV, EV behavior and appliance demand. The objective is lower operating cost with technical/comfort constraints. A numbered hypothesis or research-question list is not explicitly presented.",
+          "fa": "آقدام و همکاران DT-HEMS مبتنی بر لبه را برای ادغام پیش‌بینی و زمان‌بندی در عدم قطعیت خورشید، خودرو و تقاضای وسایل ارائه می‌کنند. هدف هزینه کمتر با قیود فنی و آسایش است. فرضیه یا پرسش شماره‌گذاری‌شده صریح ارائه نشده است.",
+          "pages": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "title": {
+        "en": "Methodology and implementation",
+        "fa": "روش و پیاده‌سازی"
+      },
+      "paragraphs": [
+        {
+          "en": "The physical model includes PV, fixed and shiftable appliances, heat pump, stationary battery and V2G-capable EV. Eqs.1–26 specify generation, mutually exclusive charging/discharging, SOC, uninterrupted appliance cycles and thermal dynamics. Eqs.27–31 minimize grid transaction plus storage operating/degradation costs subject to energy balance.",
+          "fa": "مدل شامل خورشید، بار ثابت و انتقال‌پذیر، پمپ حرارتی، باتری ثابت و خودروی دارای V2G است. معادلات ۱ تا ۲۶ تولید، منع شارژ/تخلیه هم‌زمان، SOC، چرخه پیوسته وسایل و دینامیک حرارتی را تعریف می‌کنند. معادلات ۲۷ تا ۳۱ هزینه تبادل شبکه و کارکرد ذخیره‌ساز را با موازنه انرژی کمینه می‌کنند.",
+          "pages": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "en": "The DT has physical, data, analytical, virtual and communication environments. Real measurements refresh LSTM inputs/parameters to mitigate recursive forecast error. Table 2 specifies input length 24, two LSTM layers of 64 units, learning rate .001, 100 epochs, batch 32, dropout .2. Forecast targets include PV, occupancy, load and EV availability/SOC.",
+          "fa": "دوقلو پنج محیط فیزیکی، داده، تحلیل، مجازی و ارتباط دارد. اندازه‌گیری واقعی ورودی/پارامتر LSTM را برای کاهش انباشت خطا تازه می‌کند. جدول ۲ طول ورودی ۲۴، دو لایه ۶۴واحدی، نرخ ۰٫۰۰۱، صد دوره، دسته ۳۲ و حذف ۰٫۲ را مشخص می‌کند.",
+          "pages": [
+            6,
+            7,
+            8,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": {
+        "en": "Experiments and settings",
+        "fa": "آزمایش و تنظیمات"
+      },
+      "paragraphs": [
+        {
+          "en": "A simulated smart home is evaluated at 15-minute and one-minute scheduling resolutions over a next-24-hour optimization. Historical residential profiles train demand predictors; weather-driven generation and Nordpool day-ahead prices supply inputs. PV capacity is 4 kW, grid 10 kW, battery 10 kWh/5 kW and EV 12 kWh/3 kW; battery/EV round-trip efficiency .95. The paper does not specify a reproducible chronological train/test split or repeated seed count in the simulation section.",
+          "fa": "خانه شبیه‌سازی‌شده در تفکیک ۱۵دقیقه و یک‌دقیقه برای افق ۲۴ ساعت ارزیابی می‌شود. پروفایل تاریخی مسکونی، داده هوا و قیمت روزبعد Nordpool ورودی‌اند. خورشید ۴کیلووات، شبکه ۱۰، باتری ۱۰کیلووات‌ساعت/۵کیلووات و خودرو ۱۲/۳ با بازده ۰٫۹۵ است. تقسیم زمانی بازتولیدپذیر آموزش/آزمون و شمار بذر در بخش شبیه‌سازی مشخص نشده است.",
+          "pages": [
+            8,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baselines",
+      "title": {
+        "en": "Compared baselines",
+        "fa": "خط‌مبناهای مقایسه"
+      },
+      "paragraphs": [
+        {
+          "en": "Forecast figures compare historical/actual behavior, conventional offline LSTM prediction and DT-refreshed prediction. Scheduling compares DT-HEMS with conventional HEMS without DT at each resolution. SVR/RF are discussed as alternatives but are not empirically benchmarked; the authors state forecasting-model comparison is outside the purpose.",
+          "fa": "شکل‌ها رفتار واقعی/تاریخی، LSTM آفلاین و پیش‌بینی تازه‌شده دوقلو را مقایسه می‌کنند. زمان‌بندی DT-HEMS با HEMS معمولی بدون دوقلو در هر تفکیک مقایسه می‌شود. SVR و RF جایگزین‌های بحث‌شده‌اند و آزمایش مستقیم ندارند؛ نویسندگان مقایسه مدل پیش‌بینی را هدف مقاله نمی‌دانند.",
+          "pages": [
+            8,
+            9,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "title": {
+        "en": "Author-stated strengths, limitations and future work",
+        "fa": "قوت، محدودیت و آینده از دید نویسندگان"
+      },
+      "paragraphs": [
+        {
+          "en": "The authors emphasize closed-loop forecast correction, local data processing and finer-resolution scheduling. They report one-minute control requires approximately 10–15 times more computational operations per scheduling cycle, and discuss higher hardware/memory needs. Future work includes adaptive/hybrid temporal resolution and extending scenarios and practical deployment.",
+          "fa": "نویسندگان اصلاح حلقه‌بسته پیش‌بینی، پردازش محلی و زمان‌بندی ریزتر را برجسته می‌کنند. تفکیک یک‌دقیقه حدود ۱۰ تا ۱۵ برابر عملیات محاسباتی بیشتر در هر چرخه و نیاز سخت‌افزار/حافظه بالاتر دارد. تفکیک زمانی تطبیقی/ترکیبی و گسترش سناریوها و استقرار عملی مسیر آینده‌اند.",
+          "pages": [
+            11,
+            12,
+            13,
+            14
+          ]
+        }
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "id": "1",
+      "page": 4,
+      "caption": {
+        "en": "Overview of DT-HEMS",
+        "fa": "نمای کلی DT-HEMS"
+      },
+      "explanation": {
+        "en": "Physical-layer measurements enter the DT; forecasts and schedules return management decisions to the home.",
+        "fa": "اندازه‌گیری فیزیکی وارد دوقلو و پیش‌بینی و برنامه به تصمیم مدیریت خانه تبدیل می‌شوند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "2",
+      "page": 7,
+      "caption": {
+        "en": "Main components of DT",
+        "fa": "اجزای اصلی دوقلو"
+      },
+      "explanation": {
+        "en": "Distinguishes the physical, data, analytical, virtual and communication environments.",
+        "fa": "محیط‌های فیزیکی، داده، تحلیلی، مجازی و ارتباطی را متمایز می‌کند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "3",
+      "page": 9,
+      "caption": {
+        "en": "LSTM inner cell design",
+        "fa": "ساختار سلول LSTM"
+      },
+      "explanation": {
+        "en": "Input, forget and output gates implement the forecast model memory; equations32–37 provide its update rules.",
+        "fa": "دروازه ورودی، فراموشی و خروجی حافظه مدل را می‌سازند؛ معادلات ۳۲ تا ۳۷ قواعد به‌روزرسانی‌اند."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "4",
+      "page": 9,
+      "caption": {
+        "en": "Day-ahead electricity price [36]",
+        "fa": "قیمت برق روزبعد [36]"
+      },
+      "explanation": {
+        "en": "Known Nordpool prices drive shifting; this price profile is an input, not a forecast result.",
+        "fa": "قیمت معلوم Nordpool ورودی انتقال بار است، نه نتیجه پیش‌بینی."
+      },
+      "data": {
+        "en": "No exact curve samples are transcribed; inspect the original figure. Unlabeled values are not estimated.",
+        "fa": "نمونه دقیق منحنی ثبت نشده است؛ شکل اصلی را ببینید. مقادیر بدون برچسب تخمین زده نمی‌شوند."
+      }
+    },
+    {
+      "id": "5",
+      "page": 11,
+      "caption": {
+        "en": "PV prediction at 15-minute resolution",
+        "fa": "پیش‌بینی خورشید در ۱۵دقیقه"
+      },
+      "explanation": {
+        "en": "Compares DT-refreshed and offline forecasts against the PV trace.",
+        "fa": "پیش‌بینی دوقلو و آفلاین با مسیر خورشید مقایسه می‌شود."
+      },
+      "data": {
+        "en": "Text reports MSE .012 (DT) versus .024 (non-DT).",
+        "fa": "متن MSE را ۰٫۰۱۲ برای دوقلو در برابر ۰٫۰۲۴ بدون آن گزارش می‌کند."
+      }
+    },
+    {
+      "id": "6",
+      "page": 11,
+      "caption": {
+        "en": "EV arrival prediction at 15-minute resolution",
+        "fa": "پیش‌بینی ورود خودرو در ۱۵دقیقه"
+      },
+      "explanation": {
+        "en": "EV timing/charging trace supports predicted availability and remaining SOC.",
+        "fa": "مسیر زمان/شارژ خودرو از تخمین دسترس‌پذیری و SOC پشتیبانی می‌کند."
+      },
+      "data": {
+        "en": "Text reports MSE .017 versus .039.",
+        "fa": "متن MSE برابر ۰٫۰۱۷ در برابر ۰٫۰۳۹ گزارش می‌کند."
+      }
+    },
+    {
+      "id": "7",
+      "page": 12,
+      "caption": {
+        "en": "Kitchen appliance prediction at 15-minute resolution",
+        "fa": "پیش‌بینی وسایل آشپزخانه در ۱۵دقیقه"
+      },
+      "explanation": {
+        "en": "Shows household nonflexible-demand prediction comparison.",
+        "fa": "مقایسه پیش‌بینی تقاضای غیرقابل‌انتقال خانه را نمایش می‌دهد."
+      },
+      "data": {
+        "en": "Text reports MSE .022 versus .029.",
+        "fa": "متن MSE برابر ۰٫۰۲۲ در برابر ۰٫۰۲۹ گزارش می‌کند."
+      }
+    },
+    {
+      "id": "8",
+      "page": 12,
+      "caption": {
+        "en": "HEMS results at 15-minute resolution",
+        "fa": "نتایج HEMS در ۱۵دقیقه"
+      },
+      "explanation": {
+        "en": "Schedules show grid, generation, battery/EV and load coordination under the price signal.",
+        "fa": "برنامه هماهنگی شبکه، تولید، باتری/خودرو و بار تحت قیمت نشان داده می‌شود."
+      },
+      "data": {
+        "en": "Reported 24-hour objective: €3.56 DT versus €3.93 conventional HEMS; authors call the reduction about 10%.",
+        "fa": "هدف ۲۴ساعته ۳٫۵۶یورو برای دوقلو و ۳٫۹۳ برای معمولی است؛ نویسندگان کاهش را حدود ۱۰٪ می‌نامند."
+      }
+    },
+    {
+      "id": "9",
+      "page": 13,
+      "caption": {
+        "en": "PV prediction at one-minute resolution",
+        "fa": "پیش‌بینی خورشید در یک‌دقیقه"
+      },
+      "explanation": {
+        "en": "Fine-resolution PV comparison.",
+        "fa": "مقایسه خورشید در تفکیک ریز."
+      },
+      "data": {
+        "en": "MSE .006 versus .018.",
+        "fa": "MSE برابر ۰٫۰۰۶ در برابر ۰٫۰۱۸."
+      }
+    },
+    {
+      "id": "10",
+      "page": 13,
+      "caption": {
+        "en": "EV arrival prediction at one-minute resolution",
+        "fa": "پیش‌بینی ورود خودرو در یک‌دقیقه"
+      },
+      "explanation": {
+        "en": "Fine-resolution EV availability prediction.",
+        "fa": "پیش‌بینی دسترس‌پذیری خودرو در تفکیک ریز."
+      },
+      "data": {
+        "en": "MSE .003 versus .015.",
+        "fa": "MSE برابر ۰٫۰۰۳ در برابر ۰٫۰۱۵."
+      }
+    },
+    {
+      "id": "11",
+      "page": 14,
+      "caption": {
+        "en": "Kitchen appliance prediction at one-minute resolution",
+        "fa": "پیش‌بینی وسایل در یک‌دقیقه"
+      },
+      "explanation": {
+        "en": "Fine-resolution fixed-demand comparison.",
+        "fa": "مقایسه بار ثابت در تفکیک ریز."
+      },
+      "data": {
+        "en": "MSE .005 versus .015.",
+        "fa": "MSE برابر ۰٫۰۰۵ در برابر ۰٫۰۱۵."
+      }
+    },
+    {
+      "id": "12",
+      "page": 14,
+      "caption": {
+        "en": "HEMS results at one-minute resolution",
+        "fa": "نتایج HEMS در یک‌دقیقه"
+      },
+      "explanation": {
+        "en": "Schedules demonstrate the finer temporal coordination.",
+        "fa": "برنامه‌ها هماهنگی زمانی ریزتر را نشان می‌دهند."
+      },
+      "data": {
+        "en": "Objective €3.31 DT versus €3.63 conventional; authors report about 7% below 15-minute DT objective.",
+        "fa": "هدف ۳٫۳۱یورو برای دوقلو در برابر ۳٫۶۳ معمولی؛ حدود ۷٪ کمتر از دوقلوی ۱۵دقیقه‌ای گزارش شده است."
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "page": 4,
+      "title": {
+        "en": "Prior-work comparison",
+        "fa": "مقایسه کارهای پیشین"
+      },
+      "summary": {
+        "en": "Compares DT, edge computing, real-time capability, forecasting, resolution and device coverage; it is a literature comparison, not a controlled experiment.",
+        "fa": "دوقلو، لبه، بلادرنگی، پیش‌بینی، تفکیک و تجهیزات مقایسه می‌شوند؛ این مرور ادبیات است و آزمایش کنترل‌شده نیست."
+      }
+    },
+    {
+      "id": "2",
+      "page": 10,
+      "title": {
+        "en": "Home and LSTM parameters",
+        "fa": "پارامتر خانه و LSTM"
+      },
+      "summary": {
+        "en": "PV4kW; battery10kWh/5kW; EV12kWh/3kW; LSTM24-step input,2×64 units,100epochs,batch32. Table lists 19–23°C limits while §5.1 discusses20–23°C and model §2 discusses20–25°C; preserve these source differences.",
+        "fa": "خورشید۴؛ باتری۱۰/۵؛ خودرو۱۲/۳؛ ورودی LSTM۲۴گام، دو لایه۶۴، صد دوره و دسته۳۲. حدود دما در جدول۱۹–۲۳، بخش۵٫۱ برابر۲۰–۲۳ و مدل۲۰–۲۵ است؛ اختلاف منبع حفظ می‌شود."
+      }
+    }
+  ],
+  "role": {
+    "importance": {
+      "en": "Residential DT forecasting/control is established prior art directly overlapping our DT-HEMS setting.",
+      "fa": "کنترل و پیش‌بینی دوقلوی مسکونی پیشینه مستقیم محیط پروژه ماست.",
+      "pages": [
+        1,
+        6
+      ]
+    },
+    "contribution": {
+      "en": "Provides device constraints, synchronized-forecast workflow and a time-resolution/cost tradeoff, but not five-family causal diagnosis.",
+      "fa": "قیود تجهیز، گردش پیش‌بینی همگام و مصالحه زمان/هزینه می‌دهد؛ تشخیص علّی پنج‌خانواده‌ای ارائه نمی‌کند.",
+      "pages": [
+        5,
+        6,
+        10
+      ]
+    },
+    "employment": {
+      "en": "Use as a specification source for battery/EV constraints and a forecast-refresh ablation. Re-express dynamics and timing for hourly Alameda rather than copy one-minute scores.",
+      "fa": "برای مشخصات قیود باتری/خودرو و حذف مؤلفه تازه‌سازی پیش‌بینی استفاده شود؛ دینامیک برای Alameda ساعتی بازتعریف شود.",
+      "pages": [
+        5,
+        8,
+        10
+      ]
+    },
+    "baseline": {
+      "en": "Conditional adapted control/Twin baseline, not a mandatory full reproduction. Prioritize an equivalent no-refresh versus refresh controller if this isolates our contribution.",
+      "fa": "خط‌مبنای اقتباسی مشروط کنترل/دوقلو است؛ بازتولید کامل الزام ندارد. مقایسه کنترل‌گر همسان با و بدون تازه‌سازی در صورت ارتباط اولویت دارد.",
+      "pages": [
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  "bibliography_start_page": 15,
+  "critical": [
+    {
+      "en": "Reviewer observation: differing published comfort bounds and equations require unit/time-step checking before implementation. Simulation claims about edge privacy/latency should not be read as measured deployment guarantees.",
+      "fa": "ملاحظه مرورگر: حدود آسایش متفاوت و معادلات پیش از پیاده‌سازی به بررسی واحد/گام زمانی نیاز دارند. ادعای شبیه‌سازی درباره حریم خصوصی/تأخیر تضمین اندازه‌گیری‌شده استقرار نیست.",
+      "pages": [
+        6,
+        10,
+        11
+      ]
+    }
+  ],
+  "key_results": [
+    {
+      "en": "DT objective €3.56 at15min and €3.31 at1min; conventional €3.93 and €3.63.",
+      "fa": "هدف دوقلو در۱۵دقیقه۳٫۵۶ و دریک‌دقیقه۳٫۳۱یورو و معمولی۳٫۹۳ و۳٫۶۳ است.",
+      "pages": [
+        10,
+        11
+      ]
+    }
+  ],
+  "coverage_notes": {
+    "en": "Main article and its embedded figures/tables reviewed. Original pages retain full equations and tables. Bibliography is source transcription; cited works were not independently reviewed.",
+    "fa": "متن اصلی و شکل‌ها و جدول‌های درون آن بررسی شده‌اند. معادلات و جدول‌های کامل در صفحات اصلی حفظ شده‌اند. کتاب‌نامه استخراج منبع است و آثار ارجاع‌شده مستقلاً مرور نشده‌اند."
+  }
+}
