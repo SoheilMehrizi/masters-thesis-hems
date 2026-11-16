@@ -1,0 +1,26 @@
+{
+  "deliverable": "A:\\projects\\masters-thesis-hems\\docs\\proposals\\HEMS_Proposal_FA.docx",
+  "pages": 3,
+  "renderer": "Microsoft Word PDF export with packaged render_docx.py PNG rasterization",
+  "visual_review": "All three final page PNGs inspected; RTL alignment, mixed-script runs, table, bibliography, footer and page fit checked.",
+  "sources": "Agreed P0 version 1.0 documents, reviewed local article reports and full-text extractions.",
+  "selected_reference_count": 7,
+  "reference_dois": [
+    "10.1016/j.apenergy.2026.127976",
+    "10.1016/j.enbuild.2024.114378",
+    "10.1016/j.buildenv.2026.115265",
+    "10.1016/j.enbuild.2026.117763",
+    "10.1016/j.buildenv.2025.114104",
+    "10.3390/en19163817",
+    "10.1016/j.rineng.2026.109857"
+  ],
+  "checks": [
+    "Two deliberate page breaks",
+    "Three rendered A4 pages",
+    "Persian RTL paragraphs with logical start alignment",
+    "Authors and page fields present",
+    "Seven DOIs match library inventory",
+    "No missing-text replacement characters"
+  ],
+  "sha256": "550cd6c1827e7c400bd28f2f18c413e0c597a3890809e0fa01b6f3e413562e53"
+}

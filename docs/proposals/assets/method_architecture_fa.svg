@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1480" viewBox="0 0 1800 1480">
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#314b61"/></marker></defs>
+<rect width="1800" height="1480" fill="white"/>
+<rect x="100" y="40" width="680" height="125" rx="16" fill="#edf4f8" stroke="#728aa0" stroke-width="2.5"/>
+<text x="440.0" y="91.38" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">شواهد مجاز و پیش‌بینی‌های صادرشده</text>
+<text x="440.0" y="135.38" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">داده زمان‌دار و تاریخچه محدود</text>
+<rect x="1020" y="40" width="680" height="125" rx="16" fill="#edf4f8" stroke="#728aa0" stroke-width="2.5"/>
+<text x="1360.0" y="91.38" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">ساکن و ترجیحات تأییدشده</text>
+<text x="1360.0" y="135.38" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">قیود سخت و اولویت‌های نرم</text>
+<rect x="550" y="230" width="700" height="135" rx="16" fill="#e8f1f5" stroke="#325d78" stroke-width="2.5"/>
+<text x="900.0" y="287.4" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="35" font-weight="400" fill="#142a3a">هماهنگ‌کننده و عامل‌های زبانی</text>
+<text x="900.0" y="331.4" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="35" font-weight="400" fill="#142a3a">تفسیر درخواست و هدایت ابزارها</text>
+<polyline points="440,165 440,195 720,195 720,230" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<polyline points="1360,165 1360,195 1080,195 1080,230" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="100" y="440" width="680" height="210" rx="16" fill="#f2f6fa" stroke="#728aa0" stroke-width="2.5"/>
+<text x="440.0" y="512.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">ابزار دوقلوهای دیجیتال</text>
+<text x="440.0" y="556.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">مرجع با پارامترهای ثابت</text>
+<text x="440.0" y="600.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">عملیاتی نسخه‌بندی‌شده</text>
+<rect x="1020" y="440" width="680" height="210" rx="16" fill="#f2f6fa" stroke="#728aa0" stroke-width="2.5"/>
+<text x="1360.0" y="512.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">ابزار مدل علّی ساختاری پویا</text>
+<text x="1360.0" y="556.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">علت‌های رقیب و عدم‌قطعیت</text>
+<text x="1360.0" y="600.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">ناشناخته یا امتناع از تشخیص</text>
+<polyline points="720,365 720,400 440,400 440,440" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<polyline points="1080,365 1080,400 1360,400 1360,440" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="550" y="720" width="700" height="120" rx="16" fill="#e9f3ef" stroke="#4a7b65" stroke-width="2.5"/>
+<text x="900.0" y="769.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">تشخیص و طرح اصلاحی شرطی</text>
+<text x="900.0" y="813.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">انتخاب با شواهد و آزمون دوقلو</text>
+<polyline points="440,650 440,685 720,685 720,720" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<polyline points="1360,650 1360,685 1080,685 1080,720" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="100" y="920" width="680" height="130" rx="16" fill="#f2f6fa" stroke="#728aa0" stroke-width="2.5"/>
+<text x="440.0" y="974.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">بهینه‌ساز عددی مقید</text>
+<text x="440.0" y="1018.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">افق لغزان و مدل خطی یا قطعه‌ای</text>
+<rect x="1020" y="920" width="680" height="130" rx="16" fill="#f6f1e8" stroke="#9a8052" stroke-width="2.5"/>
+<text x="1360.0" y="974.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">اعتبارسنج مستقل</text>
+<text x="1360.0" y="1018.56" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="400" fill="#142a3a">ایمنی و اختیار و تازگی نسخه</text>
+<polyline points="900,840 900,880 440,880 440,920" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<polyline points="780,985 1020,985" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<text x="900" y="962" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="28" font-weight="400" fill="#142a3a">برنامه</text>
+<rect x="550" y="1150" width="700" height="130" rx="16" fill="#e9f3ef" stroke="#4a7b65" stroke-width="2.5"/>
+<text x="900.0" y="1203.88" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">اجرای گام معتبر در خانه شبیه‌سازی‌شده</text>
+<text x="900.0" y="1247.88" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="32" font-weight="400" fill="#142a3a">مشاهده و تأیید پیامد واقعی</text>
+<polyline points="1360,1050 1360,1100 900,1100 900,1150" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<polyline points="550,1215 40,1215 40,102 100,102" fill="none" stroke="#4a7b65" stroke-width="3.5" marker-end="url(#arrow)" stroke-dasharray="12 9"/>
+<text x="295" y="1180" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="28" font-weight="400" fill="#355e4b">بازخورد اجرای واقعی</text>
+<rect x="100" y="1360" width="1600" height="90" rx="16" fill="#faf6f3" stroke="#aa8270" stroke-width="2.5" stroke-dasharray="12 8"/>
+<text x="900.0" y="1415.54" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="31" font-weight="400" fill="#142a3a">ارزیاب مستقل   حقیقت تزریق و آینده واقعی فقط برای ارزیابی</text>
+<polyline points="900,1280 900,1360" fill="none" stroke="#aa8270" stroke-width="3.5" marker-end="url(#arrow)" stroke-dasharray="12 9"/>
+</svg>

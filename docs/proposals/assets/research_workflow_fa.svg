@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1580" viewBox="0 0 1800 1580">
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#314b61"/></marker></defs>
+<rect width="1800" height="1580" fill="white"/>
+<rect x="165" y="25" width="1450" height="145" rx="16" fill="#e9f3ef" stroke="#5c7b68" stroke-width="2.5"/>
+<text x="850" y="79" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">تثبیت مسئله و طراحی پژوهش</text>
+<text x="850" y="134" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">P0 مصوب   پرسش‌ها و سناریوها و قراردادها</text>
+<circle cx="1665" cy="97" r="43" fill="#284f68"/>
+<text x="1665" y="110" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۱</text>
+<polyline points="900,170 900,211" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="217" width="1450" height="145" rx="16" fill="#edf3fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="271" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">بازتولید و اعتبارسنجی شبیه‌ساز</text>
+<text x="850" y="326" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">گام بعد P1.4   اندازه‌گذاری و زمان و کانال‌ها</text>
+<circle cx="1665" cy="289" r="43" fill="#284f68"/>
+<text x="1665" y="302" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۲</text>
+<polyline points="900,362 900,403" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="409" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="463" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">ساخت و اعتبارسنجی سناریوهای افت</text>
+<text x="850" y="518" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">کنترل سالم   علت منفرد   هم‌زمانی و زنجیره</text>
+<circle cx="1665" cy="481" r="43" fill="#284f68"/>
+<text x="1665" y="494" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۳</text>
+<polyline points="900,554 900,595" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="601" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="655" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">پیاده‌سازی هسته روش</text>
+<text x="850" y="710" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">ترجیحات   بهینه‌ساز   دوقلوها   مدل علّی   اجرا</text>
+<circle cx="1665" cy="673" r="43" fill="#284f68"/>
+<text x="1665" y="686" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۴</text>
+<polyline points="900,746 900,787" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="793" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="847" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">پیاده‌سازی مبناها و حذف مؤلفه‌ها</text>
+<text x="850" y="902" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">شواهد و سناریو و حدود اختیار قابل مقایسه</text>
+<circle cx="1665" cy="865" r="43" fill="#284f68"/>
+<text x="1665" y="878" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۵</text>
+<polyline points="900,938 900,979" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="985" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="1039" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">پایلوت مستقل و تثبیت مانیفست</text>
+<text x="850" y="1094" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">شدت و آستانه و تکرار و بودجه پیش از آزمون</text>
+<circle cx="1665" cy="1057" r="43" fill="#284f68"/>
+<text x="1665" y="1070" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۶</text>
+<polyline points="900,1130 900,1171" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="1177" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="1231" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">اجرای آزمون نهایی کنارگذاشته‌شده</text>
+<text x="850" y="1286" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">بازیابی   پیشگیری   مدیریت ناممکنی</text>
+<circle cx="1665" cy="1249" r="43" fill="#284f68"/>
+<text x="1665" y="1262" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۷</text>
+<polyline points="900,1322 900,1363" fill="none" stroke="#314b61" stroke-width="3.5" marker-end="url(#arrow)"/>
+<rect x="165" y="1369" width="1450" height="145" rx="16" fill="#f6f8fa" stroke="#8296a8" stroke-width="2.5"/>
+<text x="850" y="1423" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="36" font-weight="700" fill="#142a3a">تحلیل زوجی و گزارش پژوهش</text>
+<text x="850" y="1478" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="29" font-weight="400" fill="#425666">فاصله عدم‌قطعیت   شکست‌ها   محدودیت‌ها   بازتولید</text>
+<circle cx="1665" cy="1441" r="43" fill="#284f68"/>
+<text x="1665" y="1454" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Vazirmatn, Tahoma, sans-serif" font-size="37" font-weight="700" fill="white">۸</text>
+</svg>

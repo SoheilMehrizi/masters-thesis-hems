@@ -1,6 +1,6 @@
 # HEMS research project — contributor and agent context
 
-Last updated: 2026-11-15. This file provides a portable handoff for collaborators
+Last updated: 2026-11-16. This file provides a portable handoff for collaborators
 and coding agents. Read it before changing this repository. It summarizes the
 current project; it does not resolve the open P0 research decisions.
 
@@ -9,16 +9,91 @@ scripts live in `agent/scripts/`; see `agent/README.md` for the tooling map.
 
 ## Research objective and status
 
-**Digital-Twin-Guided Diagnostic Adaptation for Fast and Reliable
-Preference-Aware Home Energy Management Using LLM-Based Multi-Agent Systems.**
+**Causal Diagnosis and Digital-Twin-Guided Adaptation for Preference-Aware
+Home Energy Management with LLM Agents.**
 
 The proposed research investigates whether evidence-grounded diagnosis and
 Digital Twin tests can select effective interventions faster and with fewer
 constraint violations under changing preferences and operational degradation.
 These are research questions, not demonstrated results.
 
-Current focus is **P0: research specification and implementation literature**.
-P1.1–P1.3 have saved validation evidence. P1.4 is deferred until the P0 review;
+**P0 design is complete**, confirmed on 2026-11-16. **Next task: P1.4,
+reproduce and verify fixed annual equipment sizing.**
+The [research specification](../docs/RESEARCH_SPECIFICATION.md) records confirmed
+decisions separately from open questions. On 2026-11-16, the researcher confirmed
+causal diagnosis and corrective intervention as the central contribution, Jev as
+an optional later efficiency component, and one multi-device home with cooperating
+agents as the initial scope. Efficiency should guide implementation without
+presuming resource ceilings. The title above and a natural-language preference
+interface were subsequently confirmed. Requests are translated into confirmed
+hard constraints and soft priorities. For the first example, 23°C is the target
+with a hard 22.5–23.5°C occupied-home band. Ask for a missing EV departure deadline
+and confirm the charge target. Report infeasibility and request permission before
+relaxing resident hard requirements; physical/equipment safety limits remain
+enforced. Initial devices are HVAC, EV charging, PV, stationary battery and fixed
+loads. Validated HVAC/EV scheduling may run automatically within unchanged
+requirements. LLM agents interpret, diagnose and select interventions; a numerical
+constrained optimizer computes schedules and an independent validator checks them.
+An explicit Dynamic SCM with diagnostic tools and a frozen Reference Twin plus
+versioned Operational Twin are confirmed. The default soft objective is electricity
+cost, overridden by explicitly confirmed resident priorities; other outcomes are
+reported separately. Battery scheduling within unchanged limits is now authorized
+after independent validation (P04-D001). Operational Twin candidate fitting/testing
+is automatic; promotion requires approval initially (P04-D002). Active probes need
+an explicitly approved bounded policy, not yet numerically specified (P04-D003).
+Executable contracts and numerical parameters remain validation artifacts.
+P04-D004–D006 confirm receding-horizon/event-triggered execution, independently
+validated deterministic fallback with explicit reporting, and bounded conditional
+multi-step interventions with stepwise validation. P04-D007–D009 confirm linear/
+piecewise-linear LP/MILP scheduling with independent validation, immediate scoring
+of active-band violations without implicit grace, and interval monitoring with
+event-triggered LLM diagnosis. The consolidated P0.4 interface/lifecycle/unit-time
+contract was confirmed in P04-D010; exact schemas and numerical mappings remain
+validation gates. P0.5 design is complete in docs/EVALUATION_SPECIFICATION.md.
+P05-D001–D003 confirm verified recovery success rate as primary with violations/
+overhead reported separately; four core methods (full, diagnosis-free LLM,
+optimizer-only, rule-based HEMS); and no-SCM/no-Twin-ranking/passive-only/single-
+action ablations. Probing remains conditional on bounded-policy approval.
+P05-D004–D006 confirm adapted Bayesian-network and rule diagnostic baselines,
+hierarchical core/topology comparisons supplementary, and separated development/
+held-out evaluation with selected generalization cases. Detailed scoring,
+statistical reporting and experiment manifests were subsequently confirmed in
+P05-D007–D009: separate reactive/prevention suites, paired differences with 95%
+intervals and pilot-selected repeats, and frozen manifests with complete run/
+approval logs. P05-D010 records final endpoint/hypothesis/protocol approval;
+P0.1–P0.5 design is complete. Pilot-selected numerical settings, source-specific
+baseline fidelity, executable schemas and simulator audits remain mandatory gates.
+P0.1 was confirmed complete on 2026-11-16 (D017); P0.2 design is complete in
+`docs/DEGRADATION_SPECIFICATION.md`.
+The linked P0 companion specifications record agreed design and remaining
+implementation/validation gates.
+Initial P0.2 decisions: explicit confirmed preference updates (inferred changes
+later); degradation coverage for HVAC, EV, stationary battery and PV from the
+start; healthy/isolated cases followed by selected simultaneous and cascading
+cases. Confirmed mechanisms include HVAC capacity, EV charging-power, battery
+discharge-power and PV-output derating, plus battery energy-capacity and efficiency
+losses. Begin with abrupt persistent cases, then selected gradual/temporary cases;
+include recoverable and infeasible cases with matched controls. Numeric severities
+remain deferred to validated pilots. Battery state/efficiency semantics are
+confirmed in P02-D010: preserve kWh at
+capacity-compatible onset states; derate both charging and discharging efficiency. Confirmed non-equipment coverage:
+PV, outdoor-temperature and fixed-load forecast errors; Operational Twin thermal
+and battery-efficiency mismatch; delayed/missing plan delivery and stale versions
+with independent validation retained. See P02-D007–D012. Selected combinations are confirmed subject to simulator
+validation. Pilot-based numeric selection and a frozen manifest remain mandatory
+P2 gates. P0.3 design is recorded in docs/INFORMATION_ACCESS_SPECIFICATION.md.
+P03-D001–D003 confirm evaluator-only hidden truth/future realizations; the initial
+temperature, occupancy, EV/charge, battery-charge, power and execution-log channel
+categories subject to validation; and exact approved measurements followed by
+selected noise/missing-data/delay tests. P03-D004–D006 confirm a shared timestamped
+evidence store with role-specific views, Twin state estimation from permitted
+observations/history, and competing hypotheses, unknown outcomes and abstention.
+P03-D007–D008 confirm declared future plans with clarification, current observations,
+and bounded recent history plus logged bounded retrieval; numeric budgets require
+pilots and freezing before comparison. P0.3 and P0.4 designs are complete;
+the component contracts are recorded in docs/COMPONENT_CONTRACTS.md. Frozen
+Reference Twin parameters are distinct from its observation-based state updates.
+P1.1–P1.3 have saved validation evidence. The P0 review is complete; P1.4 is next;
 it requires reproducing fixed annual equipment sizing, not just loading ratings.
 The literature library covers 29 unique local articles and 293 visual evidence
 views. A literature report being available does not complete a P0 decision.
@@ -51,7 +126,8 @@ existing work and do not replace the research direction without discussion.
 - Candidate comparisons include rule-based control, MPC/MILP, direct LLM
   scheduling, adapted LA-UPAHEM and agentic HEMS, Bayesian/rule diagnosis,
   diagnosis-free planning, passive-only diagnosis, and single-action intervention.
-  Final baseline selection and reproduction fidelity remain open.
+  P0.5 confirms the core and adapted diagnostic baselines; additional named-paper
+  reproductions remain candidates. Source-specific fidelity records are required.
 - Intended evaluation includes diagnosis/calibration/abstention, recovery,
   violations, energy cost, comfort, unnecessary interventions, latency, tokens,
   and computational cost. Freeze splits, seeds, budgets, and protocols before
@@ -173,5 +249,6 @@ Simulator recreation also needs the original archive under `exports/`; consult
 `README.md`. A checkout alone does not include the recovered simulation data.
 
 On handoff, report completed work, checks/evidence, unresolved decisions, and the
-next task. **Next research task: P0.1, consolidate the agreed specification and
-unresolved choices before proceeding to P1.4.**
+next task. **P0 design is complete. Next task: P1.4, reproduce and verify fixed
+annual equipment sizing.** Preserve source artifacts and document comparison
+against recovered reference ratings; loading the ratings alone is insufficient.

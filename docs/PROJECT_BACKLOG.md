@@ -1,6 +1,6 @@
 # Research implementation backlog
 
-Updated: 2026-11-13
+Updated: 2026-11-16
 
 Track completion by changing `- [ ]` to `- [x]`. Complete work task by task, following the researcher's instructions. This checklist records the full research scope; it does not authorize implementation or finalize unresolved methodological choices.
 
@@ -10,11 +10,13 @@ Checked items have saved verification evidence. Unchecked items are pending or n
 
 P1.1–P1.3 are complete according to [saved setup validation](../reports/setup_validation.md) and [implementation notes](../reports/implementation_notes.md). These checks were not rerun when this backlog was created. The complete simulator milestone remains open.
 
-**Current focus: P0 — research specification and implementation literature review.** The researcher requested specification review before P1.4 on 2026-11-13. Begin with P0.1; keep P0 tasks unchecked until their specifications are agreed.
+**P0 design is complete**, confirmed by the researcher on 2026-11-16. **Next task: P1.4 — reproduce and verify fixed annual equipment sizing.** Numeric experiment manifests and implementation validation gates remain mandatory.
+
+P0.1 is complete following researcher confirmation of the [versioned research specification](RESEARCH_SPECIFICATION.md). Confirmed: causal diagnosis/corrective intervention is central; Jev is optional; the first study uses one home with HVAC, EV charging, PV, stationary battery and fixed loads. LLMs interpret, diagnose using an explicit Dynamic SCM, and select interventions; a constrained optimizer computes schedules with independent validation. Use a frozen Reference Twin and versioned Operational Twin. Default to electricity-cost minimization unless explicitly confirmed resident priorities override it. Validated HVAC/EV rescheduling is automatic within unchanged requirements. The selected title, natural-language input, occupied-home 22.5–23.5°C example band, EV clarification and infeasibility negotiation are recorded. The companion P0.2–P0.5 designs are also complete; exact numerical settings and executable components remain subject to their recorded validation gates.
 
 The [interactive literature library](literature/index.html) now contains analyses of all 29 unique local articles, including six Jev decision-model studies and their [roles in our research and baseline recommendations](literature/research-map.html). This literature deliverable supports P0; it does not finalize specification choices or mark P0 tasks complete.
 
-**Next simulator task after P0 review: P1.4 — reproduce and verify fixed annual equipment sizing.**
+**Next simulator task: P1.4 — reproduce and verify fixed annual equipment sizing.**
 
 Acceptance: trace the original full-year sizing procedure; reproduce and compare HVAC, PV, and battery ratings against the recovered reference; verify that episode resets and seasonal windows retain the frozen ratings; document discrepancies and evidence. Loading the recorded ratings alone does not complete this task.
 
@@ -24,13 +26,23 @@ Before checking an implementation task, its scoped behavior must work, relevant 
 
 ## P0 — Research specification
 
-- [ ] P0.1 Consolidate agreed research decisions and unresolved choices in a versioned specification.
-- [ ] P0.2 Formalize all five degradation families, including simultaneous and cascading causes.
-- [ ] P0.3 Define observed, latent, and evaluator-only variables and access boundaries.
-- [ ] P0.4 Define component interfaces, data contracts, units, and time semantics.
-- [ ] P0.5 Define hypotheses, metrics, and model/experiment versioning.
+- [x] P0.1 Consolidate agreed research decisions and unresolved choices in a versioned specification.
+- [x] P0.2 Formalize all five degradation families, including simultaneous and cascading causes.
+- [x] P0.3 Define observed, latent, and evaluator-only variables and access boundaries.
+- [x] P0.4 Define component interfaces, data contracts, units, and time semantics.
+- [x] P0.5 Define hypotheses, metrics, and model/experiment versioning.
+
+P0.5 completed design decisions P05-D001–D010: verified recovery success rate as primary; four core methods, four ablations and two adapted diagnostic baselines; hierarchical core with supplementary topology studies; separated development/held-out evaluation; separate reactive/prevention suites; paired effects with 95% intervals and pilot-based repeats; frozen manifests and complete run/approval logs. Completion evidence: [agreed evaluation specification v1.0](EVALUATION_SPECIFICATION.md) and final researcher confirmation P05-D010. Endpoint formulas and directional hypotheses are agreed; numeric protocol, statistical implementation and baseline fidelity remain required before evaluation.
+
+P0.4 completed design decisions P04-D001–D010: automatic validated battery scheduling within unchanged limits; automatic isolated Operational Twin candidate fitting/testing with approval before active promotion initially; active probes only under an explicitly approved bounded policy; receding-horizon/event-triggered execution; validated deterministic fallback with explicit failure reporting; bounded conditional multi-step plans; linear/piecewise-linear LP/MILP scheduling; immediate scoring of active-band violations without implicit grace; deterministic monitoring with event-triggered LLM diagnosis. Completion evidence: [agreed component contracts v1.0](COMPONENT_CONTRACTS.md) and researcher consolidated confirmation (P04-D010). Executable schemas, audited clock/channel mapping and numerical settings remain later validation gates.
+
+P0.3 completed design decisions P03-D001–D008 are recorded in the [agreed information access policy](INFORMATION_ACCESS_SPECIFICATION.md): evaluator-only hidden truth/future realizations; validated measurement categories; exact observations followed by selected robustness tests; shared timestamped evidence with role-specific views; observation/history-based Twin state estimation; competing hypotheses, unknown outcomes and abstention. Declared future plans with clarification and bounded recent history plus logged bounded retrieval are confirmed. Completion evidence: linked v1.0 policy and researcher answers. Channel mappings, leakage checks and pilot-selected numeric budgets remain mandatory validation gates. P0.5 is also complete; next implementation task is P1.4.
 
 Deliverable: agreed research specification and architecture contracts. Existing conceptual decisions are inputs to this work, not decisions to reopen automatically.
+
+P0.1 completion evidence: [research specification v1.0](RESEARCH_SPECIFICATION.md), D001–D017; researcher confirmed scope, question and recovery definition on 2026-11-16. Companion P0.2–P0.5 designs are now agreed; remaining realization details are explicitly gated. Agreed design: [P0.2 degradation scenarios](DEGRADATION_SPECIFICATION.md).
+
+P0.2 completed design decisions P02-D001–D012: use explicit confirmed preference updates; cover HVAC capacity, EV charging-power, battery discharge-power and PV-output derating plus battery energy-capacity and efficiency losses initially. Progress from healthy/isolated scenarios to selected simultaneous/cascading cases; begin with abrupt persistent changes, then selected gradual/temporary cases. Include recoverable and infeasible cases with matched controls. Forecasts cover PV, outdoor temperature and fixed loads; model mismatch covers thermal response and battery efficiency; coordination covers delayed/missing delivery and stale versions with validation enabled. Battery accounting and selected combinations are confirmed in the linked v1.0 design. Numeric severities and timing require independent pilots and a frozen P2 manifest before evaluation (P02-D012). P0.2 completion records design agreement, not implementation. Access policy: [P0.3](INFORMATION_ACCESS_SPECIFICATION.md), also complete.
 
 ## P1 — CityLearn simulator reproduction
 

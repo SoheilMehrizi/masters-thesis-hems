@@ -1,4 +1,10 @@
-# Reproducible CityLearn HEMS research setup
+# Digital-Twin-Guided Diagnostic Adaptation for Fast and Reliable Preference-Aware Home Energy Management Using LLM-Based Multi-Agent Systems
+
+
+
+
+
+## Reproducible CityLearn HEMS research setup
 
 Project navigation: [research proposal](docs/HEMS_Research_Landing_Final_Title_Updated.html),
 [literature library](docs/literature/index.html), and
@@ -13,7 +19,7 @@ This project implements P1.1–P1.3: CityLearn 3.2.0 at commit
 Alameda package, and bounded validation of building
 `resstock-amy2018-2021-release-1-102040` and its LSTM thermal model.
 
-## Start using the installed environment
+### Start using the installed environment
 
 Open PowerShell and run:
 
@@ -182,7 +188,7 @@ No NREL-PySAM installation is needed: the recovered scenarios contain fixed
 device ratings and the previously sized PV profile. PySAM would be required
 for relevant future autosizing work, which is outside this setup.
 
-## Scientific boundaries
+### Scientific boundaries
 
 The original Alameda dataset, recovered custom scenario and frozen sizing
 scenario are distinct artifacts. EV schedules and tariff inputs are synthetic;
@@ -206,7 +212,7 @@ setup result as evidence of a causal forecasting evaluation.
 No fault framework, controller, digital twin service, causal model or LLM agent
 is implemented. Later P1 tasks require separate authorization.
 
-## References
+### References
 
 - [Official release](https://github.com/citylearn-project/CityLearn/releases/tag/v3.2.0)
 - [Schema reference](https://www.citylearn.net/guides/schema_reference.html)

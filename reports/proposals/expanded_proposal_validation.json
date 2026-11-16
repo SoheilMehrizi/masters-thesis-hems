@@ -1,0 +1,11 @@
+{
+  "deliverable": "A:\\projects\\masters-thesis-hems\\docs\\proposals\\HEMS_Proposal_FA_Expanded.docx",
+  "pages": 7,
+  "embedded_diagrams": 2,
+  "tables": 5,
+  "hyperlinked_references": 7,
+  "render_backend": "Microsoft Word export plus packaged render_docx.py rasterizer",
+  "visual_review": "All seven final page PNGs inspected for Persian shaping/RTL alignment, diagrams, labels/arrows, table fit, headings, citations and page numbering.",
+  "design_authority": "Agreed P0 specifications; no new simulator results claimed.",
+  "sha256": "10104b06a7c184a42ea4a9227b4669604e27588aa27783ede6585a01d53fa20e"
+}
